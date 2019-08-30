@@ -13,6 +13,7 @@
     <PackageProjectUrl>https://github.com/Infarh/MathCore.DSP</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Infarh/MathCore.DSP</RepositoryUrl>
     <PackageTags>DSP, Signal processing</PackageTags>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -20,7 +21,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MathCore" Version="0.0.3" />
+    <PackageReference Include="MathCore" Version="0.0.4" />
   </ItemGroup>
 
   <ItemGroup>
