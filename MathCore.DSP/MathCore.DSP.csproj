@@ -3,13 +3,16 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.0.1</Version>
+    <Version>0.0.2</Version>
     <Authors>Shmachilin P.A.</Authors>
     <Description>Библиотека алгоритмов цифровой обработки сигналов</Description>
     <PackageLicenseFile>license.txt</PackageLicenseFile>
-    <AssemblyVersion>0.0.0.1</AssemblyVersion>
-    <FileVersion>0.0.0.1</FileVersion>
+    <AssemblyVersion>0.0.0.2</AssemblyVersion>
+    <FileVersion>0.0.0.2</FileVersion>
     <PackageReleaseNotes>Использовать на свой страх и риск</PackageReleaseNotes>
+    <PackageProjectUrl>https://github.com/Infarh/MathCore.DSP</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Infarh/MathCore.DSP</RepositoryUrl>
+    <PackageTags>DSP, Signal processing</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -18,6 +21,13 @@
 
   <ItemGroup>
     <PackageReference Include="MathCore" Version="0.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\license.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
