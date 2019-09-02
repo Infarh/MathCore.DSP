@@ -2,13 +2,12 @@
 using System.Linq;
 using MathCore.DSP.Filters;
 using MathCore.DSP.Signals;
-using MathCore.DSP.Tests.Service;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace MathCore.DSP.Tests.Filters
 {
     [TestClass]
-    public class ButterworthLowPassTests : UnitTest
+    public class ButterworthLowPassTests : MathCore.Tests.UnitTest
     {
         [TestMethod]
         public void CreationTest()

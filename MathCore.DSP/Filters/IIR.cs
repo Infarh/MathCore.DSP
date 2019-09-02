@@ -34,12 +34,15 @@ namespace MathCore.DSP.Filters
             _A = A;
         }
 
-        public override double Process(double sample, double[] state) => state.FilterSample(_A, _B, sample);
+        public override double Process(double Sample, double[] state) => state.FilterSample(_A, _B, Sample);
 
-        public override double Process(double sample) => Process(sample, State);
+        public override double Process(double Sample) => Process(Sample, State);
 
         public override Complex GetTransmissionCoefficient(double f) => DoubleArrayDSPExtensions.GetTransmissionCoefficient(_A, _B, f);
 
+        /// <summary>Последовательное соединение фильтра с другим <see cref="IIR"/></summary>
+        /// <param name="filter">Соединяемый фильтр</param>
+        /// <returns>Фильтр, представляющий собой результат последовательного соединения двух фильтров</returns>
         public IIR ConnectionSerialTo([NotNull] IIR filter)
         {
             if (filter is null) throw new ArgumentNullException(nameof(filter));
@@ -49,6 +52,9 @@ namespace MathCore.DSP.Filters
             return new IIR(b, a);
         }
 
+        /// <summary>Параллельное соединение фильтра с другим <see cref="IIR"/></summary>
+        /// <param name="filter">Соединяемый фильтр</param>
+        /// <returns>Фильтр, представляющий собой результат параллельного соединения двух фильтров</returns>
         public IIR ConnectionParallelTo([NotNull] IIR filter)
         {
             if (filter is null) throw new ArgumentNullException(nameof(filter));

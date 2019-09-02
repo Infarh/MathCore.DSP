@@ -3,23 +3,24 @@ using System.Linq;
 
 namespace MathCore.DSP.Filters
 {
-    public abstract class AnalogBasedFilter : IIR
-    {
-        protected AnalogBasedFilter(double[] B, double[] A) : base(B, A) { }
-    }
-
-    public abstract class ButterworthFilter : AnalogBasedFilter
-    {
-        protected ButterworthFilter(double[] B, double[] A) : base(B, A) { }
-    }
-
+    /// <summary>Низкочастотный фильтр Баттерворта</summary>
     public class ButterworthLowPass : ButterworthFilter
     {
+        /// <summary>Конфигурация низкочастотного фильтра Баттерворта, содержащая набор коэффициентов прямой и обратной связи</summary>
         private struct ButterworthLowPassConfiguration
         {
+            /// <summary>Коэффициенты прямой связи фильтра</summary>
             public readonly double[] A;
+
+            /// <summary>Коэффициенты обратной связи фильтра</summary>
             public readonly double[] B;
 
+            /// <summary>Инициализация новой конфигурации низкочастотного фильтра Баттерворта</summary>
+            /// <param name="fp">Граничная частота пропускания</param>
+            /// <param name="fs">Граничная частота подавления</param>
+            /// <param name="dt">Период дискретизации</param>
+            /// <param name="Gp">Допустимое затухание в полосе пропускания</param>
+            /// <param name="Gs">Допустимое затухание в полосе подавления</param>
             public ButterworthLowPassConfiguration(double fp, double fs, double dt, double Gp, double Gs)
             {
                 if(!(fp < fs)) throw new InvalidOperationException("Частота пропускания должна быть меньше частоты подавления");
@@ -63,8 +64,8 @@ namespace MathCore.DSP.Filters
                     poles[i + 1] = new Complex(sin, -cos);
                 }
 
-                var translated_poles = poles.Select(p => p * Wp).ToArray();
-                var z_poles = translated_poles.Select(p => ToZ(p, dt)).ToArray();
+                var translated_poles = poles.ToArray(p => p * Wp);
+                var z_poles = translated_poles.ToArray(p => ToZ(p, dt));
                 var kz = GetNomalizeCoefficient(translated_poles, dt);
                 var WpN = Math.Pow(Wp, N);
                 var k = WpN * kz / eps_p;

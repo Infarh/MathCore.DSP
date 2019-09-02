@@ -5,12 +5,19 @@ using MathCore.Annotations;
 
 namespace MathCore.DSP.Signals.Operations
 {
+    /// <summary>Сигнал результата бинарной операции</summary>
     public abstract class BinaryOperationResultSignal : OperationResultSignal
     {
+        /// <summary>Функция бинарной операции над отсчётами двух сигналов</summary>
         [NotNull] private readonly Func<double, double, double> _Function;
+
+        /// <summary>Первый операнд-сигнал бинарной операции</summary>
         [NotNull] public DigitalSignal Signal1 { get; }
+
+        /// <summary>Второй операнд-сигнал бинарной операции</summary>
         [NotNull] public DigitalSignal Signal2 { get; }
 
+        /// <summary>Число отсчётов (вычисляется как число отсчётов первого сигнала)</summary>
         public override int SamplesCount => Signal1.SamplesCount;
 
         public override double this[int n]
@@ -19,6 +26,10 @@ namespace MathCore.DSP.Signals.Operations
             set => throw new NotSupportedException();
         }
 
+        /// <summary>Инициализация нового цифрового сигнала бинарной операции</summary>
+        /// <param name="Signal1">Первый сигнал-операнд операции</param>
+        /// <param name="Signal2">Второй сигнал-операнд операции</param>
+        /// <param name="Function">Функция, вычисляемая от каждой пары отсчётов сигналов</param>
         protected BinaryOperationResultSignal([NotNull] DigitalSignal Signal1, [NotNull] DigitalSignal Signal2, [NotNull] Func<double, double, double> Function) : base(Signal1.dt)
         {
             this.Signal1 = Signal1 ?? throw new ArgumentNullException(nameof(Signal1));

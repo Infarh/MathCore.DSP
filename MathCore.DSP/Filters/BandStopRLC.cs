@@ -2,11 +2,14 @@
 
 namespace MathCore.DSP.Filters
 {
+    /// <summary>Полосозадерживающий RLC-фильтр</summary>
     public class BandStopRLC : IIR
     {
-        public BandStopRLC(double f0, double DeltaF, double dt)
-            : this(Math.Tan(Math.PI * f0 * dt), Math.PI * DeltaF * dt)
-        { }
+        /// <summary>Инициализация нового экземпляра <see cref="BandStopRLC"/></summary>
+        /// <param name="f0">Частота резонанса</param>
+        /// <param name="DeltaF">Полоса частот по уровню 0.707</param>
+        /// <param name="dt">Период дискретизации</param>
+        public BandStopRLC(double f0, double DeltaF, double dt) : this(Math.Tan(Math.PI * f0 * dt), Math.PI * DeltaF * dt) { }
 
         private BandStopRLC(double w0, double dw)
             : base(

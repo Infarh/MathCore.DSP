@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using MathCore.Annotations;
 using MathCore.DSP.Filters;
 using MathCore.DSP.Signals;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -11,26 +8,18 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace MathCore.DSP.Tests.Filters
 {
     [TestClass]
-    public class BandStopRLCTests
+    public class BandStopRLCTests : MathCore.Tests.UnitTest
     {
-        [DebuggerStepThrough, NotNull]
-        public static IComparer GetComparer(double tolerance = 1e-14) => new LambdaComparer<double>((x1, x2) =>
-        {
-            var delta = x2 - x1;
-            if (Math.Abs(delta) < tolerance) delta = 0;
-            return Math.Sign(delta);
-        });
-
         [TestMethod]
         public void CreationTest()
         {
             const double fd = 1000;
             const double dt = 1 / fd;
             const double f0 = 30;
-            const double Df = 10;
+            const double delta_f = 10;
 
             var w = Math.Tan(Math.PI * f0 * dt);
-            var dw = Math.PI * Df * dt;
+            const double dw = Math.PI * delta_f * dt;
 
             var expected_b0 = w * w + 1;
             var expected_b1 = 2 * (w * w - 1);
@@ -40,7 +29,7 @@ namespace MathCore.DSP.Tests.Filters
             var expected_a1 = 2 * (w * w - 1);
             var expected_a2 = w * w - dw + 1;
 
-            var rlc = new BandStopRLC(f0, Df, dt);
+            var rlc = new BandStopRLC(f0, delta_f, dt);
 
             var a = rlc.A;
             var b = rlc.B;
@@ -60,9 +49,9 @@ namespace MathCore.DSP.Tests.Filters
             const double fd = 1000;
             const double dt = 1 / fd;
             const double f0 = 30;
-            const double Df = 10;
+            const double delta_f = 10;
 
-            var rlc = new BandStopRLC(f0, Df, dt);
+            var rlc = new BandStopRLC(f0, delta_f, dt);
 
             var a = rlc.A;
             var b = rlc.B;
@@ -97,7 +86,7 @@ namespace MathCore.DSP.Tests.Filters
             const double fd = 1000;
             const double dt = 1 / fd;
             const double f0 = 30;
-            const double Df = 10;
+            const double delta_f = 10;
             const double eps = 0.048;
 
             const double A0 = Consts.sqrt_2;
@@ -106,7 +95,7 @@ namespace MathCore.DSP.Tests.Filters
             var x0_power = x0.Power;
             Assert.AreEqual(1, x0_power, eps);
 
-            var rlc = new BandStopRLC(f0, Df, dt);
+            var rlc = new BandStopRLC(f0, delta_f, dt);
 
             var y0 = rlc.Process(x0);
 
@@ -121,7 +110,7 @@ namespace MathCore.DSP.Tests.Filters
             const double fd = 1000;
             const double dt = 1 / fd;
             const double f0 = 30;
-            const double Df = 10;
+            const double delta_f = 10;
             const double eps = 2.59e-3;
 
             var x0 = new SamplesDigitalSignal(dt, 1024, t => 1 * Math.Cos(2 * Math.PI * 0 * t));
@@ -129,7 +118,7 @@ namespace MathCore.DSP.Tests.Filters
             var x0_power = x0.Power;
             Assert.AreEqual(1, x0_power, eps);
 
-            var rlc = new BandStopRLC(f0, Df, dt);
+            var rlc = new BandStopRLC(f0, delta_f, dt);
 
             var y0 = rlc.Process(x0);
 
@@ -144,7 +133,7 @@ namespace MathCore.DSP.Tests.Filters
             const double fd = 1000;
             const double dt = 1 / fd;
             const double f0 = 30;
-            const double Df = 10;
+            const double delta_f = 10;
             const double eps = 2.31e-5;
 
             var x0 = new SamplesDigitalSignal(dt, 1024, t => 1 * Math.Cos(2 * Math.PI * fd / 2 * t));
@@ -152,7 +141,7 @@ namespace MathCore.DSP.Tests.Filters
             var x0_power = x0.Power;
             Assert.AreEqual(1, x0_power, eps);
 
-            var rlc = new BandStopRLC(f0, Df, dt);
+            var rlc = new BandStopRLC(f0, delta_f, dt);
 
             var y0 = rlc.Process(x0);
 
@@ -167,9 +156,9 @@ namespace MathCore.DSP.Tests.Filters
             const double fd = 1000;
             const double dt = 1 / fd;
             const double f0 = 30;
-            const double Df = 10;
+            const double delta_f = 10;
 
-            var rlc = new BandStopRLC(f0, Df, dt);
+            var rlc = new BandStopRLC(f0, delta_f, dt);
 
             var c = rlc.GetTransmissionCoefficient(f0, dt);
 
@@ -183,9 +172,9 @@ namespace MathCore.DSP.Tests.Filters
             const double fd = 1000;
             const double dt = 1 / fd;
             const double f0 = 30;
-            const double Df = 10;
+            const double delta_f = 10;
 
-            var rlc = new BandStopRLC(f0, Df, dt);
+            var rlc = new BandStopRLC(f0, delta_f, dt);
 
             var c = rlc.GetTransmissionCoefficient(0, dt);
 
@@ -198,9 +187,9 @@ namespace MathCore.DSP.Tests.Filters
             const double fd = 1000;
             const double dt = 1 / fd;
             const double f0 = 30;
-            const double Df = 10;
+            const double delta_f = 10;
 
-            var rlc = new BandStopRLC(f0, Df, dt);
+            var rlc = new BandStopRLC(f0, delta_f, dt);
 
             var c = rlc.GetTransmissionCoefficient(fd / 2, dt);
 

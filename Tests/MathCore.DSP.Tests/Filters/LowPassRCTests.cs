@@ -1,34 +1,22 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using MathCore.Annotations;
 using MathCore.DSP.Filters;
 using MathCore.DSP.Signals;
-using MathCore.DSP.Tests.Service;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace MathCore.DSP.Tests.Filters
 {
     [TestClass]
-    public class LowPassRCTests
+    public class LowPassRCTests : MathCore.Tests.UnitTest
     {
-        [DebuggerStepThrough, NotNull]
-        public static IComparer GetComparer(double tolerance = 1e-14) => new LambdaComparer<double>((x1, x2) =>
-        {
-            var delta = x2 - x1;
-            if (Math.Abs(delta) < tolerance) delta = 0;
-            return Math.Sign(delta);
-        });
-
         [TestMethod]
         public void CreationTest()
         {
             const double fd = 100;
             const double dt = 1 / fd;
             const double f0 = 10;
-            const double eps = 3e-3;
+            //const double eps = 3e-3;
 
             var rc = new LowPassRC(f0, dt);
 

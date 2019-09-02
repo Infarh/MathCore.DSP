@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using MathCore.DSP.Fourier;
-using MathCore.DSP.Tests.Service;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace MathCore.DSP.Tests.Fourier
@@ -9,11 +8,9 @@ namespace MathCore.DSP.Tests.Fourier
     [TestClass]
     public sealed class FFT_Test
     {
-        private static Random RndGenerator;
-
         /* ------------------------------------------------------------------------------------------ */
 
-        public TestContext TestContext { get; set; }
+        //public TestContext TestContext { get; set; }
 
         #region Additional test attributes
 
@@ -28,12 +25,10 @@ namespace MathCore.DSP.Tests.Fourier
         //[ClassCleanup] public static void MyClassCleanup() { }
 
         //Use TestInitialize to run code before running each test
-        [TestInitialize]
-        public void MyTestInitialize() => RndGenerator = new Random();
+        //[TestInitialize] public void MyTestInitialize() { }
 
         //Use TestCleanup to run code after each test has run
-        [TestCleanup]
-        public void MyTestCleanup() => RndGenerator = null;
+        //[TestCleanup] public void MyTestCleanup() { }
 
         #endregion
 

@@ -7,8 +7,7 @@ namespace MathCore.DSP.Filters
     {
         private static double[] GetImpulseResponse(int D)
         {
-            if(D < 1)
-                throw new ArgumentOutOfRangeException(nameof(D), "Длина линии задержки должна быть больше 1");
+            if(D < 1) throw new ArgumentOutOfRangeException(nameof(D), "Длина линии задержки должна быть больше 1");
 
             var result = new double[D + 1];
             result[0] = 1;

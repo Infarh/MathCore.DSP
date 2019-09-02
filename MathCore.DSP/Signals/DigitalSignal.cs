@@ -2,56 +2,93 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using MathCore.DSP.Fourier;
+using MathCore.Annotations;
 using MathCore.DSP.Signals.Operations;
 
 // ReSharper disable InconsistentNaming
 
 namespace MathCore.DSP.Signals
 {
+    /// <summary>Цифровой сигнал</summary>
     public abstract class DigitalSignal : IEnumerable<double>
     {
+        /// <summary>Период дискретизации</summary>
         protected readonly double _dt;
+
+        /// <summary>Период дискретизации</summary>
         public double dt => _dt;
+
+        /// <summary>Частота дискретизации</summary>
         public double fd => 1 / _dt;
 
+        /// <summary>Полное время сигнала</summary>
         public double TotalTime => SamplesCount * _dt;
 
+        /// <summary>Клоичество отсчётов</summary>
         public abstract int SamplesCount { get; }
 
+        /// <summary>Минимальное значение</summary>
         public double Min => this.Min();
+
+        /// <summary>Максимальное значение</summary>
         public double Max => this.Max();
 
+        /// <summary>Амплитуда</summary>
         public double PeakToPeakAmplitude => this.GetMinMax().Length;
 
+        /// <summary>Мощность</summary>
         public double Power => this.Average(s => s * s);
 
+        /// <summary>Отсчёты по индексу</summary>
+        /// <param name="n">Индекс отсчёта</param>
+        /// <returns>Значение отсчёта</returns>
         public abstract double this[int n] { get; set; }
 
+        /// <summary>Инициализация нового цифрового сигнала</summary>
+        /// <param name="dt">Период дискретизации</param>
         protected DigitalSignal(double dt)
         {
             if (dt <= 0) throw new ArgumentOutOfRangeException(nameof(dt), "Период дискретизации должен быть больше 0");
             _dt = dt;
         }
 
+        /// <summary>Перечисление отсчётов интеграла сигнала</summary>
+        /// <param name="s0">Константа интегрирования</param>
+        /// <returns>Перечисление отсчётов интеграла сигнала</returns>
+        protected virtual IEnumerable<double> GetIntegralSamples(double s0)
+        {
+            var s = s0;
+            yield return s0;
+            var dt05 = dt / 2;
+            var last = this[0];
+            for (int i = 1, count = SamplesCount; i < count; i++)
+                yield return s += (last + (last = this[i])) / dt05;
+        }
+
+        /// <summary>Вычисление интеграла</summary>
+        /// <param name="s0">Константа интегрирования</param>
+        /// <returns>Цифровой сигнал, как результат интегрирования</returns>
+        [NotNull] public virtual EnumerableSignal GetIntegral(double s0 = 0) => new EnumerableSignal(dt, GetIntegralSamples(s0));
+
         public abstract IEnumerator<double> GetEnumerator();
+
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         #region Операторы
 
-        public static SumOfSignalsResultSignal operator +(DigitalSignal s1, DigitalSignal s2) => new SumOfSignalsResultSignal(s1, s2);
-        public static SubstractionOfSignalsResultSignal operator -(DigitalSignal s1, DigitalSignal s2) => new SubstractionOfSignalsResultSignal(s1, s2);
-        public static MultiplyOfSignalsResultSignal operator *(DigitalSignal s1, DigitalSignal s2) => new MultiplyOfSignalsResultSignal(s1, s2);
-        public static DivisionOfSignalsResultSignal operator /(DigitalSignal s1, DigitalSignal s2) => new DivisionOfSignalsResultSignal(s1, s2);
+        [NotNull] public static SumOfSignalsResultSignal operator +([NotNull] DigitalSignal s1, [NotNull] DigitalSignal s2) => new SumOfSignalsResultSignal(s1, s2);
+        [NotNull] public static SubstractionOfSignalsResultSignal operator -([NotNull] DigitalSignal s1, [NotNull] DigitalSignal s2) => new SubstractionOfSignalsResultSignal(s1, s2);
+        [NotNull] public static MultiplyOfSignalsResultSignal operator *([NotNull] DigitalSignal s1, [NotNull] DigitalSignal s2) => new MultiplyOfSignalsResultSignal(s1, s2);
+        [NotNull] public static DivisionOfSignalsResultSignal operator /([NotNull] DigitalSignal s1, [NotNull] DigitalSignal s2) => new DivisionOfSignalsResultSignal(s1, s2);
 
-        public static SumOfSignalWithScalarResultSignal operator +(DigitalSignal s, double x) => new SumOfSignalWithScalarResultSignal(s, x);
-        public static SumOfSignalWithScalarResultSignal operator +(double x, DigitalSignal s) => new SumOfSignalWithScalarResultSignal(s, x);
-        public static SubstractionOfSignalWithScalarResultSignal operator -(DigitalSignal s, double x) => new SubstractionOfSignalWithScalarResultSignal(s, x);
-        public static SubstractionOfScalarWithSignalResultSignal operator -(double x, DigitalSignal s) => new SubstractionOfScalarWithSignalResultSignal(s, x);
-        public static MultiplyOfSignalWithScalarResultSignal operator *(DigitalSignal s, double x) => new MultiplyOfSignalWithScalarResultSignal(s, x);
-        public static MultiplyOfSignalWithScalarResultSignal operator *(double x, DigitalSignal s) => new MultiplyOfSignalWithScalarResultSignal(s, x);
-        public static DivisionOfSignalWithScalarResultSignal operator /(DigitalSignal s, double x) => new DivisionOfSignalWithScalarResultSignal(s, x);
-        public static DivisionOfScalarWithSignalResultSignal operator /(double x, DigitalSignal s) => new DivisionOfScalarWithSignalResultSignal(s, x);
+        [NotNull] public static SumOfSignalWithScalarResultSignal operator +([NotNull] DigitalSignal s, double x) => new SumOfSignalWithScalarResultSignal(s, x);
+        [NotNull] public static SumOfSignalWithScalarResultSignal operator +(double x, [NotNull] DigitalSignal s) => new SumOfSignalWithScalarResultSignal(s, x);
+        [NotNull] public static SubstractionOfSignalWithScalarResultSignal operator -([NotNull] DigitalSignal s, double x) => new SubstractionOfSignalWithScalarResultSignal(s, x);
+        [NotNull] public static SubstractionOfScalarWithSignalResultSignal operator -(double x, [NotNull] DigitalSignal s) => new SubstractionOfScalarWithSignalResultSignal(s, x);
+        [NotNull] public static MultiplyOfSignalWithScalarResultSignal operator *([NotNull] DigitalSignal s, double x) => new MultiplyOfSignalWithScalarResultSignal(s, x);
+        [NotNull] public static MultiplyOfSignalWithScalarResultSignal operator *(double x, [NotNull] DigitalSignal s) => new MultiplyOfSignalWithScalarResultSignal(s, x);
+        [NotNull] public static DivisionOfSignalWithScalarResultSignal operator /([NotNull] DigitalSignal s, double x) => new DivisionOfSignalWithScalarResultSignal(s, x);
+        [NotNull] public static DivisionOfScalarWithSignalResultSignal operator /(double x, [NotNull] DigitalSignal s) => new DivisionOfScalarWithSignalResultSignal(s, x);
 
         #endregion
 

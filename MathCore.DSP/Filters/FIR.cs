@@ -19,9 +19,9 @@ namespace MathCore.DSP.Filters
             : base((ImpulseResponse ?? throw new ArgumentNullException(nameof(ImpulseResponse))).Length) 
             => _ImpulseResponse = ImpulseResponse;
 
-        public override double Process(double sample, double[] state) => state.FilterSample(_ImpulseResponse, sample);
+        public override double Process(double Sample, double[] state) => state.FilterSample(_ImpulseResponse, Sample);
 
-        public override double Process(double sample) => Process(sample, State);
+        public override double Process(double Sample) => Process(Sample, State);
 
         public override Complex GetTransmissionCoefficient(double f) => _ImpulseResponse.GetTransmissionCoefficient(f);
     }

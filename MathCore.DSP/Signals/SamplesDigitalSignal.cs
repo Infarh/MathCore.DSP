@@ -6,8 +6,10 @@ using MathCore.Annotations;
 
 namespace MathCore.DSP.Signals
 {
+    /// <summary>Цифровой сигнал на основе массива отсчётов</summary>
     public class SamplesDigitalSignal : DigitalSignal, IEquatable<SamplesDigitalSignal>
     {
+        /// <summary>Массив отсчётов</summary>
         [NotNull] private readonly double[] _Samples;
 
         public override int SamplesCount => _Samples.Length;
@@ -18,6 +20,7 @@ namespace MathCore.DSP.Signals
             set => _Samples[n] = value;
         }
 
+        /// <summary>Отсчёты сигнала</summary>
         [NotNull] public double[] Samples => _Samples;
 
         public SamplesDigitalSignal(double dt, [NotNull] double[] Samples) : base(dt) => _Samples = Samples ?? throw new ArgumentNullException(nameof(Samples));
@@ -27,14 +30,29 @@ namespace MathCore.DSP.Signals
         public SamplesDigitalSignal(double dt, [NotNull] IEnumerable<double> Samples) : this(dt, (Samples ?? throw new ArgumentNullException(nameof(Samples))).ToArray()) { }
         public SamplesDigitalSignal(double dt, [NotNull] IEnumerable<int> Samples) : this(dt, (Samples ?? throw new ArgumentNullException(nameof(Samples))).Select(v => (double)v).ToArray()) { }
 
+        protected  override IEnumerable<double> GetIntegralSamples(double s0)
+        {
+            var dt05 = dt / 2;
+            var s = s0;
+            yield return s0;
+            var last = _Samples[0];
+            for (int i = 1, count = _Samples.Length; i < count; i++)
+                yield return s += (last + (last = _Samples[i])) / dt05;
+        }
+
+        /// <summary>Вычисление интеграла</summary>
+        /// <param name="s0">Константа интегрирования</param>
+        /// <returns>Цифровой сигнал, как результат интегрирования</returns>
         [NotNull]
-        public SamplesDigitalSignal GetIntegral(double s0 = 0)
+        public SamplesDigitalSignal GetIntegralSampled(double s0 = 0)
         {
             var samples = new double[_Samples.Length];
             var dt05 = _dt / 2;
+            var s = s0;
+            var last = _Samples[0];
             samples[0] = s0;
             for (int i = 1, count = samples.Length; i < count; i++)
-                samples[i] = samples[i - 1] + (_Samples[i - 1] + _Samples[i]) / dt05;
+                samples[i] = s += (last + (last = _Samples[i])) / dt05;
 
             return new SamplesDigitalSignal(_dt, samples);
         }
