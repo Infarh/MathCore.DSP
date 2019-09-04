@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 
 namespace MathCore.DSP.Fourier
 {
-
     [Copyright("alglib", url = "alglib.sources.ru")]
     public static class fft
     {
@@ -201,23 +199,6 @@ namespace MathCore.DSP.Fourier
         *************************************************************************/
         public static double[] FFT_Real_Inverse(Complex[] f, int n)
         {
-
-            Contract.Requires(n > 0, "FFTR1DInv: incorrect N!");
-            Contract.Requires(f.Length > (int)Math.Floor(n / (double)2), "FFTR1DInv: Length(F)<Floor(N/2)+1!");
-            //Contract.Requires(math.isfinite(f[0].x), "FFTR1DInv: F contains infinite or NAN values!");
-
-            //for(var i = 1; i < (int)Math.Floor(n / (double)2); i++)
-            //{
-            //    Contract.Assert(math.isfinite(f[i].x) && math.isfinite(f[i].y), "FFTR1DInv: F contains infinite or NAN values!");
-            //}
-            //Contract.Assert(math.isfinite(f[(int)Math.Floor(n / (double)2)].x),
-            //          "FFTR1DInv: F contains infinite or NAN values!");
-            //if(n % 2 != 0)
-            //{
-            //    Contract.Assert(math.isfinite(f[(int)Math.Floor(n / (double)2)].y),
-            //              "FFTR1DInv: F contains infinite or NAN values!");
-            //}
-
             //
             // Special case: N=1, FFT is just identity transform.
             // After this block we assume that N is strictly greater than 1.
@@ -267,8 +248,6 @@ namespace MathCore.DSP.Fourier
 
         //private static void FFT_Real_InternalEven(ref double[] a, int n, ref double[] buf, FT_Base.ftplan plan)
         //{
-        //    Contract.Assert(n > 0 && n % 2 == 0, "FFTR1DEvenInplace: incorrect N!");
-
         //    //
         //    // Special cases:
         //    // * N=2
@@ -322,8 +301,6 @@ namespace MathCore.DSP.Fourier
 
         //private static void FFT_Real_Inverse_InternalEven(ref double[] a, int n, ref double[] buf, FT_Base.ftplan plan)
         //{
-        //    Contract.Assert(n > 0 && n % 2 == 0, "FFTR1DInvInternalEven: incorrect N!");
-
         //    //
         //    // Special cases:
         //    // * N=2
@@ -423,15 +400,12 @@ namespace MathCore.DSP.Fourier
                 FT_BaseGeneratePlanRec(n, c_FT_BaseCfftTask, plan, ref plan_size, ref pre_computed_size, ref plan_array_size,
                                       ref tmp_mem_size, ref stack_mem_size, stack_ptr);
 
-                Contract.Assert(stack_ptr == 0, "Internal error in FTBaseGenerateComplexFFTPlan: stack ptr!");
-
                 plan.StackBuffer = new double[Math.Max(stack_mem_size, 1)];
                 plan.TempBuffer = new double[Math.Max(tmp_mem_size, 1)];
                 plan.PreComputed = new double[Math.Max(pre_computed_size, 1)];
                 stack_ptr = 0;
 
                 FT_BasePrecomputedPlanRec(plan, 0, stack_ptr);
-                Contract.Assert(stack_ptr == 0, "Internal error in FTBaseGenerateComplexFFTPlan: stack ptr!");
             }
 
 
@@ -452,15 +426,12 @@ namespace MathCore.DSP.Fourier
                             ftbasegenerateplanrec(n, ftbaserffttask, plan, ref plansize, ref precomputedsize, ref planarraysize,
                                                   ref tmpmemsize, ref stackmemsize, stackptr);
 
-                            Contract.Assert(stackptr == 0, "Internal error in FTBaseGenerateRealFFTPlan: stack ptr!");
-
                             plan.stackbuf = new double[Math.Max(stackmemsize, 1)];
                             plan.tmpbuf = new double[Math.Max(tmpmemsize, 1)];
                             plan.precomputed = new double[Math.Max(precomputedsize, 1)];
 
                             stackptr = 0;
                             ftbaseprecomputeplanrec(plan, 0, stackptr);
-                            Contract.Assert(stackptr == 0, "Internal error in FTBaseGenerateRealFFTPlan: stack ptr!");
                         }
             */
 
@@ -482,15 +453,12 @@ namespace MathCore.DSP.Fourier
                             ftbasegenerateplanrec(n, ftbaserfhttask, plan, ref plansize, ref precomputedsize, ref planarraysize,
                                                   ref tmpmemsize, ref stackmemsize, stackptr);
 
-                            Contract.Assert(stackptr == 0, "Internal error in FTBaseGenerateRealFHTPlan: stack ptr!");
-
                             plan.stackbuf = new double[Math.Max(stackmemsize, 1)];
                             plan.tmpbuf = new double[Math.Max(tmpmemsize, 1)];
                             plan.precomputed = new double[Math.Max(precomputedsize, 1)];
                             stackptr = 0;
 
                             ftbaseprecomputeplanrec(plan, 0, stackptr);
-                            Contract.Assert(stackptr == 0, "Internal error in FTBaseGenerateRealFHTPlan: stack ptr!");
                         }
             */
 
@@ -808,8 +776,8 @@ namespace MathCore.DSP.Fourier
                         t1x = a1x + a2x;
                         t1y = a1y + a2y;
 
-                        a0x = a0x + t1x;
-                        a0y = a0y + t1y;
+                        a0x += t1x;
+                        a0y += t1y;
 
                         m1x = c1 * t1x;
                         m1y = c1 * t1y;
@@ -956,7 +924,7 @@ namespace MathCore.DSP.Fourier
                         a2x = A[Aoffset + 2];
 
                         t1x = a1x + a2x;
-                        a0x = a0x + t1x;
+                        a0x += t1x;
 
                         m1x = c1 * t1x;
                         m2y = c2 * (a2x - a1x);
@@ -1066,9 +1034,9 @@ namespace MathCore.DSP.Fourier
                     plan.StackBuffer[offsb + 0] = x * bx - y * -by;
                     plan.StackBuffer[offsb + 1] = x * -by + y * bx;
 
-                    offsp = offsp + 2;
-                    offsa = offsa + 2;
-                    offsb = offsb + 2;
+                    offsp += 2;
+                    offsa += 2;
+                    offsb += 2;
                 }
 
                 FT_BaseExecutePlanRec(ref plan.StackBuffer, StackPtr, plan, plan.plan[EntryOffset + 5], StackPtr + 2 * 2 * m);
@@ -1086,8 +1054,8 @@ namespace MathCore.DSP.Fourier
                     plan.StackBuffer[offsb + 0] = x * bx - y * by;
                     plan.StackBuffer[offsb + 1] = -(x * by + y * bx);
 
-                    offsb = offsb + 2;
-                    offsp = offsp + 2;
+                    offsb += 2;
+                    offsp += 2;
                 }
 
                 FT_BaseExecutePlanRec(ref plan.StackBuffer, StackPtr, plan, plan.plan[EntryOffset + 5], StackPtr + 2 * 2 * m);
@@ -1107,9 +1075,9 @@ namespace MathCore.DSP.Fourier
                     A[offsa + 0] = x * bx - y * -by;
                     A[offsa + 1] = x * -by + y * bx;
 
-                    offsp = offsp + 2;
-                    offsa = offsa + 2;
-                    offsb = offsb + 2;
+                    offsp += 2;
+                    offsa += 2;
+                    offsb += 2;
                 }
             }
 
@@ -1288,7 +1256,7 @@ namespace MathCore.DSP.Fourier
                     FFT_AarrayResize(ref plan.plan, ref PlanArraySize, 8 * PlanArraySize);
                 var entryoffset = PlanSize;
                 const int esize = c_FT_BbasePlanEntrySize;
-                PlanSize = PlanSize + esize;
+                PlanSize += esize;
 
                 //
                 // if N=1, generate empty plan and exit
@@ -1357,9 +1325,9 @@ namespace MathCore.DSP.Fourier
                         plan.plan[entryoffset + 6] = -1;
                         plan.plan[entryoffset + 7] = PreComputedSize;
 
-                        if (n == 3) PreComputedSize = PreComputedSize + 2;
+                        if (n == 3) PreComputedSize += 2;
 
-                        if (n == 5) PreComputedSize = PreComputedSize + 5;
+                        if (n == 5) PreComputedSize += 5;
                         return;
                     }
                     //
@@ -1378,7 +1346,7 @@ namespace MathCore.DSP.Fourier
                     plan.plan[entryoffset + 4] = m;
                     plan.plan[entryoffset + 5] = PlanSize;
 
-                    StackPtr = StackPtr + 2 * 2 * m;
+                    StackPtr += 2 * 2 * m;
                     StackMemorySize = Math.Max(StackMemorySize, StackPtr);
 
                     FT_BaseGeneratePlanRec(m, c_FT_BaseCfftTask, plan, ref PlanSize, ref PreComputedSize,
@@ -1445,9 +1413,9 @@ namespace MathCore.DSP.Fourier
                     plan.plan[entryoffset + 6] = -1;
                     plan.plan[entryoffset + 7] = PreComputedSize;
 
-                    if (n == 3) PreComputedSize = PreComputedSize + 2;
+                    if (n == 3) PreComputedSize += 2;
 
-                    if (n == 5) PreComputedSize = PreComputedSize + 5;
+                    if (n == 5) PreComputedSize += 5;
                     return;
                 }
                 return;
@@ -1606,8 +1574,8 @@ namespace MathCore.DSP.Fourier
                     {
                         tmpx = twbasexm1 + twrowxm1 * twbasexm1 - twrowy * twbasey;
                         tmpy = twbasey + twrowxm1 * twbasey + twrowy * twbasexm1;
-                        twrowxm1 = twrowxm1 + tmpx;
-                        twrowy = twrowy + tmpy;
+                        twrowxm1 += tmpx;
+                        twrowy += tmpy;
                     }
                 }
             }
@@ -1672,8 +1640,8 @@ namespace MathCore.DSP.Fourier
                         {
                             b[idx1 + 0] = a[idx2 + 0];
                             b[idx1 + 1] = a[idx2 + 1];
-                            idx1 = idx1 + m2;
-                            idx2 = idx2 + 2;
+                            idx1 += m2;
+                            idx2 += 2;
                         }
                     }
                     return;
@@ -1689,7 +1657,6 @@ namespace MathCore.DSP.Fourier
                     var n1 = n / 2;
                     if (n - n1 >= 8 && n1 % 8 != 0)
                         n1 += 8 - n1 % 8;
-                    Contract.Assert(n - n1 > 0);
                     FFTicltRec(ref a, astart, astride, ref b, bstart, bstride, m, n1);
                     FFTicltRec(ref a, astart + 2 * n1, astride, ref b, bstart + 2 * n1 * bstride, bstride, m, n - n1);
                 }
@@ -1704,7 +1671,6 @@ namespace MathCore.DSP.Fourier
                     var m1 = m / 2;
                     if (m - m1 >= 8 && m1 % 8 != 0)
                         m1 += 8 - m1 % 8;
-                    Contract.Assert(m - m1 > 0);
                     FFTicltRec(ref a, astart, astride, ref b, bstart, bstride, m1, n);
                     FFTicltRec(ref a, astart + 2 * m1 * astride, astride, ref b, bstart + 2 * m1, bstride, m - m1, n);
                 }
@@ -1732,8 +1698,8 @@ namespace MathCore.DSP.Fourier
                         for (var j = 0; j <= n - 1; j++)
                         {
                             b[idx1] = a[idx2];
-                            idx1 = idx1 + bstride;
-                            idx2 = idx2 + 1;
+                            idx1 += bstride;
+                            idx2 += 1;
                         }
                     }
                     return;
@@ -1749,7 +1715,6 @@ namespace MathCore.DSP.Fourier
                     var n1 = n / 2;
                     if (n - n1 >= 8 && n1 % 8 != 0)
                         n1 += 8 - n1 % 8;
-                    Contract.Assert(n - n1 > 0);
                     FFTirltRec(ref a, astart, astride, ref b, bstart, bstride, m, n1);
                     FFTirltRec(ref a, astart + n1, astride, ref b, bstart + n1 * bstride, bstride, m, n - n1);
                 }
@@ -1764,7 +1729,6 @@ namespace MathCore.DSP.Fourier
                     var m1 = m / 2;
                     if (m - m1 >= 8 && m1 % 8 != 0)
                         m1 += 8 - m1 % 8;
-                    Contract.Assert(m - m1 > 0);
                     FFTirltRec(ref a, astart, astride, ref b, bstart, bstride, m1, n);
                     FFTirltRec(ref a, astart + m1 * astride, astride, ref b, bstart + m1, bstride, m - m1, n);
                 }
@@ -1779,7 +1743,6 @@ namespace MathCore.DSP.Fourier
             *************************************************************************/
             private static void FT_BaseFindSmoothRec(int n, int seed, int leastfactor, ref int best)
             {
-                Contract.Assert(FT_BaseMaxSmoothFactor <= 5, "FTBaseFindSmoothRec: internal error!");
                 if (seed >= n)
                 {
                     best = Math.Min(best, seed);
@@ -1819,7 +1782,6 @@ namespace MathCore.DSP.Fourier
             *************************************************************************/
             private static void RefFHT(ref double[] a, int n, int offs)
             {
-                Contract.Assert(n > 0, "RefFHTR1D: incorrect N!");
                 var buf = new double[n];
                 var pin = Consts.pi2 / n;
                 for (var i = 0; i < n; i++)

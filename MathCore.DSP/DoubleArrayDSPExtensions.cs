@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using MathCore.Annotations;
 
@@ -21,10 +20,6 @@ namespace MathCore.DSP
 
         public static double FilterSample([NotNull] this double[] State, [NotNull] double[] ImpulseResponse, double Sample)
         {
-            Contract.Ensures(State != null);
-            Contract.Ensures(ImpulseResponse != null);
-            Contract.Ensures(State.Length == ImpulseResponse.Length);
-
             var result = 0d;
 
             for (var i = State.Length - 1; i >= 1; i--)
@@ -72,14 +67,6 @@ namespace MathCore.DSP
 
         public static double FilterSample([NotNull] this double[] State, [NotNull] double[] A, [NotNull] double[] B, double Sample)
         {
-            Contract.Requires(State != null);
-            Contract.Requires(A != null);
-            Contract.Requires(B != null);
-            Contract.Requires(A.Length >= B.Length);
-            Contract.Requires(A.Length > 2);
-            Contract.Requires(B.Length > 1);
-            Contract.Requires(A[0] != 0);
-
             var a0 = 1 / A[0];
 
             var result = 0d;
