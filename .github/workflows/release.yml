@@ -9,15 +9,16 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
-    
+
     steps:
     - uses: actions/checkout@v1
-    - name: Use .NET Core 3.0.100-preview8-013656
+    - name: Use .NET 2.2.108
       uses: actions/setup-dotnet@v1
+      with:
         dotnet-version: 3.0.100-preview8-013656
     - name: dotnet build and test
       run: |
-        dotnet build -c Debug
+        dotnet build --configuration Debug
         dotnet test
         
   build:
