@@ -197,7 +197,7 @@ namespace MathCore.DSP.Tests.Filters
             Assert.That.Value(transmission_0.Abs).AreEqual(1, 2.23e-16);
             Assert.That.Value(transmission_fp.Abs).GreaterOrEqualsThen(Gp);
             Assert.That.Value(transmission_fs.Abs).LessOrEqualsThen(Gs);
-            Assert.That.Value(transmission_fd05.Abs).AreEqual(0);
+            Assert.That.Value(transmission_fd05.Abs).AreEqual(0, 4.27e-34);
         }
 
         [TestMethod]

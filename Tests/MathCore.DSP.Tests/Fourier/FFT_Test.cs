@@ -72,7 +72,7 @@ namespace MathCore.DSP.Tests.Fourier
             Assert.That.Value(spectrum_abs[samples_count-4]).AreEqual(4, 2.67e-15);
             Assert.That.Value(spectrum_abs[samples_count-1]).AreEqual(1, 5.23e-15);
             Assert.That.Value(spectrum_abs.Sum()).AreEqual(23, 3.56e-15);
-            spectrum_arg.Foreach(v => Assert.That.Value(v).AreEqual(0, 1.44e-13));
+            spectrum_arg.Foreach(v => Assert.That.Value(v).AreEqual(0, 1.47e-13));
 
             var sp = fft.FFT(signal);
             Clear(sp);
