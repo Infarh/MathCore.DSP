@@ -120,7 +120,7 @@ namespace MathCore.DSP.Tests.Filters
             Assert.That.Value(Pp[2].Im).AreEqual(-0.997076970459406, 5.56e-16);
 
             Assert.That.Value(Pp[3].Re).AreEqual(-0.223929681527417, 3.34e-16);
-            Assert.That.Value(Pp[3].Im).AreEqual(0.715628507541036, 1.12e-16);
+            Assert.That.Value(Pp[3].Im).AreEqual(0.715628507541036, 2.23e-16);
             Assert.That.Value(Pp[4].Re).AreEqual(-0.223929681527417, 2.78e-16);
             Assert.That.Value(Pp[4].Im).AreEqual(-0.715628507541036, 1.12e-16);
 
