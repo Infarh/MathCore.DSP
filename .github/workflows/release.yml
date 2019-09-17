@@ -8,7 +8,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, windows-latest, macOS-latest]
 
     steps:
     - uses: actions/checkout@v1
@@ -18,8 +18,8 @@ jobs:
         dotnet-version: 3.0.100-preview8-013656
     - name: dotnet build and test
       run: |
-        dotnet build --configuration Debug
-        dotnet test
+        dotnet build --nologo --configuration Debug
+        dotnet test --nologo
         
   build:
 
@@ -32,4 +32,4 @@ jobs:
       with:
         dotnet-version: 3.0.100-preview8-013656
     - name: Build with dotnet
-      run: dotnet build --configuration Release
+      run: dotnet build --nologo --configuration Release
