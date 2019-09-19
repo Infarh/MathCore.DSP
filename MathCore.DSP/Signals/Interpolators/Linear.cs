@@ -2,6 +2,7 @@
 
 namespace MathCore.DSP.Signals.Interpolators
 {
+    /// <summary>Линейный интерполятор</summary>
     [Serializable]
     public class Linear : Interpolator
     {
