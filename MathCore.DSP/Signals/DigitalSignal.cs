@@ -70,6 +70,27 @@ namespace MathCore.DSP.Signals
         /// <returns>Цифровой сигнал, как результат интегрирования</returns>
         [NotNull] public virtual EnumerableSignal GetIntegral(double s0 = 0) => new EnumerableSignal(dt, GetIntegralSamples(s0));
 
+        public virtual double[] GetSamples() => this.ToArray();
+
+        /// <summary>Копирование отсчётов сигнала в массив</summary>
+        /// <param name="Destination">Массив места назначения</param>
+        /// <param name="Index">НАчальный индекс в массиве места назначения</param>
+        /// <param name="Length">Длина копируемого участка</param>
+        public virtual void CopyTo([NotNull] double[] Destination, int Index, int Length)
+        {
+            var destination_length = Destination.Length;
+            if(Index >= destination_length || Length < 1) return;
+            var i = Index;
+            var count = Length;
+            foreach (var sample in this)
+            {
+                Destination[i] = sample;
+                i++;
+                count--;
+                if(i >= destination_length || count == 0) break;
+            }
+        }
+
         public abstract IEnumerator<double> GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
