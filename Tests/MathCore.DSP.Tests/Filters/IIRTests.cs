@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace MathCore.DSP.Tests.Filters
 {
     [TestClass]
-    public class IIRTests : MathCore.Tests.UnitTest
+    public class IIRTests : UnitTest
     {
         [TestMethod]
         public void ImpulseResponseTest()
@@ -68,7 +68,7 @@ namespace MathCore.DSP.Tests.Filters
                 var HCR = CR.GetTransmissionCoefficient(f, dt);
                 var delta = HRC * HCR - H;
                 const double eps = 1.25e-15;
-                Assert.That.Value(delta.Abs).AreEqual(0, eps);
+                Assert.That.Value(delta.Abs).IsEqual(0, eps);
             }
 
             CheckTransmissionCoefficient(0);
@@ -86,8 +86,8 @@ namespace MathCore.DSP.Tests.Filters
             Assert.AreEqual(0, H0.Arg);
             Assert.AreEqual(-Math.PI / 2, Hfd05.Arg);
 
-            Assert.That.Value(Hf0RC.Abs).AreEqual(Consts.sqrt_2_inv, 9.35e-4);
-            Assert.That.Value(Hf0CR.Abs).AreEqual(Consts.sqrt_2_inv, 9.35e-4);
+            Assert.That.Value(Hf0RC.Abs).IsEqual(Consts.sqrt_2_inv, 9.35e-4);
+            Assert.That.Value(Hf0CR.Abs).IsEqual(Consts.sqrt_2_inv, 9.35e-4);
         }
 
         [TestMethod]
@@ -128,7 +128,7 @@ namespace MathCore.DSP.Tests.Filters
                 var HCR = CR.GetTransmissionCoefficient(f, dt);
                 var delta = (HRC + HCR) / 2 - H;
                 const double eps = 1.25e-15;
-                Assert.That.Value(delta.Abs).AreEqual(0, eps);
+                Assert.That.Value(delta.Abs).IsEqual(0, eps);
             }
 
             CheckTransmissionCoefficient(0);

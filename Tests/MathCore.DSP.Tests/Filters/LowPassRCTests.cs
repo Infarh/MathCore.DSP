@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace MathCore.DSP.Tests.Filters
 {
     [TestClass]
-    public class LowPassRCTests : MathCore.Tests.UnitTest
+    public class LowPassRCTests : UnitTest
     {
         [TestMethod]
         public void CreationTest()
@@ -110,7 +110,7 @@ namespace MathCore.DSP.Tests.Filters
 
             var c = rc.GetTransmissionCoefficient(f, dt);
 
-            Assert.That.Value(c.Abs).AreEqual(1);
+            Assert.That.Value(c.Abs).IsEqual(1);
         }
 
         [TestMethod]
@@ -126,8 +126,8 @@ namespace MathCore.DSP.Tests.Filters
 
             var c = rc.GetTransmissionCoefficient(f, dt);
 
-            Assert.That.Value(c.Abs).AreEqual(Consts.sqrt_2_inv, eps);
-            Assert.That.Value(c.Arg * Consts.ToDeg).AreEqual(-45, eps);
+            Assert.That.Value(c.Abs).IsEqual(Consts.sqrt_2_inv, eps);
+            Assert.That.Value(c.Arg * Consts.ToDeg).IsEqual(-45, eps);
         }
 
         [TestMethod]

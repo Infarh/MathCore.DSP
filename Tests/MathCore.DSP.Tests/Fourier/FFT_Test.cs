@@ -63,30 +63,30 @@ namespace MathCore.DSP.Tests.Fourier
             Clear(spectrum);
             var spectrum_abs = spectrum.ToAbs() ?? throw new AssertInconclusiveException();
             var spectrum_arg = spectrum.ToArgDeg() ?? throw new AssertInconclusiveException();
-            Assert.That.Value(spectrum_abs.Length).AreEqual(samples_count);
-            Assert.That.Value(spectrum_abs[0]).AreEqual(1, 6.45e-15);
-            Assert.That.Value(spectrum_abs[1]).AreEqual(1, 5.56e-15);
-            Assert.That.Value(spectrum_abs[4]).AreEqual(4, 1.79e-15);
-            Assert.That.Value(spectrum_abs[6]).AreEqual(6, 3.56e-15);
-            Assert.That.Value(spectrum_abs[samples_count - 6]).AreEqual(6, 4.45e-15);
-            Assert.That.Value(spectrum_abs[samples_count-4]).AreEqual(4, 2.67e-15);
-            Assert.That.Value(spectrum_abs[samples_count-1]).AreEqual(1, 5.23e-15);
-            Assert.That.Value(spectrum_abs.Sum()).AreEqual(23, 3.56e-15);
-            spectrum_arg.Foreach(v => Assert.That.Value(v).AreEqual(0, 1.47e-13));
+            Assert.That.Value(spectrum_abs.Length).IsEqual(samples_count);
+            Assert.That.Value(spectrum_abs[0]).IsEqual(1, 6.45e-15);
+            Assert.That.Value(spectrum_abs[1]).IsEqual(1, 5.56e-15);
+            Assert.That.Value(spectrum_abs[4]).IsEqual(4, 1.79e-15);
+            Assert.That.Value(spectrum_abs[6]).IsEqual(6, 3.56e-15);
+            Assert.That.Value(spectrum_abs[samples_count - 6]).IsEqual(6, 4.45e-15);
+            Assert.That.Value(spectrum_abs[samples_count-4]).IsEqual(4, 2.67e-15);
+            Assert.That.Value(spectrum_abs[samples_count-1]).IsEqual(1, 5.23e-15);
+            Assert.That.Value(spectrum_abs.Sum()).IsEqual(23, 3.56e-15);
+            spectrum_arg.Foreach(v => Assert.That.Value(v).IsEqual(0, 1.47e-13));
 
             var sp = fft.FFT(signal);
             Clear(sp);
             sp.ToAbsArgDeg(out var sp_abs, out var sp_arg);
-            Assert.That.Value(sp_abs.Length).AreEqual(samples_count);
-            Assert.That.Value(sp_abs[0]).AreEqual(1, 6.45e-15);
-            Assert.That.Value(sp_abs[1]).AreEqual(1, 5.56e-15);
-            Assert.That.Value(sp_abs[4]).AreEqual(4, 1.79e-15);
-            Assert.That.Value(sp_abs[6]).AreEqual(6, 3.56e-15);
-            Assert.That.Value(sp_abs[samples_count - 6]).AreEqual(6, 4.45e-15);
-            Assert.That.Value(sp_abs[samples_count - 4]).AreEqual(4, 2.67e-15);
-            Assert.That.Value(sp_abs[samples_count - 1]).AreEqual(1, 5.23e-15);
-            Assert.That.Value(sp_abs.Sum()).AreEqual(23, 3.56e-15);
-            sp_arg.Foreach(v => Assert.That.Value(v).AreEqual(0, 1.44e-13));
+            Assert.That.Value(sp_abs.Length).IsEqual(samples_count);
+            Assert.That.Value(sp_abs[0]).IsEqual(1, 6.45e-15);
+            Assert.That.Value(sp_abs[1]).IsEqual(1, 5.56e-15);
+            Assert.That.Value(sp_abs[4]).IsEqual(4, 1.79e-15);
+            Assert.That.Value(sp_abs[6]).IsEqual(6, 3.56e-15);
+            Assert.That.Value(sp_abs[samples_count - 6]).IsEqual(6, 4.45e-15);
+            Assert.That.Value(sp_abs[samples_count - 4]).IsEqual(4, 2.67e-15);
+            Assert.That.Value(sp_abs[samples_count - 1]).IsEqual(1, 5.23e-15);
+            Assert.That.Value(sp_abs.Sum()).IsEqual(23, 3.56e-15);
+            sp_arg.Foreach(v => Assert.That.Value(v).IsEqual(0, 1.44e-13));
         }
 
     }

@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace MathCore.DSP.Tests.Filters
 {
     [TestClass]
-    public class BandPassRLCTests : MathCore.Tests.UnitTest
+    public class BandPassRLCTests : UnitTest
     {
         [TestMethod]
         public void CreationTest()
@@ -226,7 +226,7 @@ namespace MathCore.DSP.Tests.Filters
 
             var y = rlc.ProcessIndividual(s);
             y.FourierTransform().ToAbsArg(out var abs_Y, out var arg_Y);
-            Assert.That.Value(abs_Y[0]).AreEqual(0, 1.68e-3);
+            Assert.That.Value(abs_Y[0]).IsEqual(0, 1.68e-3);
             var abs_Y_25 = abs_Y[25];
             var abs_Y_30 = abs_Y[30];
             var abs_Y_35 = abs_Y[35];
@@ -243,9 +243,9 @@ namespace MathCore.DSP.Tests.Filters
             var K30 = abs_Y_30 / abs_S_30;
             var K35 = abs_Y_35 / abs_S_35;
 
-            Assert.That.Value(K25).AreEqual(H_25_abs, 0.042);
-            Assert.That.Value(K30).AreEqual(H_30_abs, 0.062);
-            Assert.That.Value(K35).AreEqual(H_35_abs, 0.045);
+            Assert.That.Value(K25).IsEqual(H_25_abs, 0.042);
+            Assert.That.Value(K30).IsEqual(H_30_abs, 0.062);
+            Assert.That.Value(K35).IsEqual(H_35_abs, 0.045);
 
             var arg_Y_25 = arg_Y[25];
             var arg_Y_30 = arg_Y[30];
@@ -259,9 +259,9 @@ namespace MathCore.DSP.Tests.Filters
             var Arg30 = arg_S_30 - arg_Y_30;
             var Arg35 = arg_S_35 - arg_Y_35;
 
-            Assert.That.Value(Arg25).AreEqual(H_25_arg, 1.82e-2);
-            Assert.That.Value(Arg30).AreEqual(H_30_arg, 1.71e-2);
-            Assert.That.Value(Arg35).AreEqual(H_35_arg, 1.66e-2);
+            Assert.That.Value(Arg25).IsEqual(H_25_arg, 1.82e-2);
+            Assert.That.Value(Arg30).IsEqual(H_30_arg, 1.71e-2);
+            Assert.That.Value(Arg35).IsEqual(H_35_arg, 1.66e-2);
         }
     }
 }

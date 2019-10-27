@@ -3,13 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.0.4</Version>
+    <Version>0.0.5</Version>
     <Authors>Shmachilin P.A.</Authors>
     <Description>Библиотека алгоритмов цифровой обработки сигналов</Description>
     <PackageLicenseFile>license.txt</PackageLicenseFile>
-    <AssemblyVersion>0.0.0.4</AssemblyVersion>
-    <FileVersion>0.0.0.4</FileVersion>
-    <PackageReleaseNotes>Доработка интерфейса цифрового сигнала, подписывание сборки строгим именем</PackageReleaseNotes>
+    <AssemblyVersion>0.0.0.5</AssemblyVersion>
+    <FileVersion>0.0.0.5</FileVersion>
+    <PackageReleaseNotes>Обновление пакетов</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/Infarh/MathCore.DSP</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Infarh/MathCore.DSP</RepositoryUrl>
     <PackageTags>DSP, Signal processing</PackageTags>
@@ -24,7 +24,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MathCore" Version="0.0.8" />
+    <PackageReference Include="MathCore" Version="0.0.10" />
   </ItemGroup>
 
   <ItemGroup>

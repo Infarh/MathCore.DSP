@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace MathCore.DSP.Tests.Filters
 {
     [TestClass]
-    public class ButterworthLowPassTests : MathCore.Tests.UnitTest
+    public class ButterworthLowPassTests : UnitTest
     {
         [TestMethod]
         public void CreationTest()
@@ -31,23 +31,23 @@ namespace MathCore.DSP.Tests.Filters
             var eps_p = Math.Sqrt(Math.Pow(10, Rp / 10) - 1);
             var eps_s = Math.Sqrt(Math.Pow(10, Rs / 10) - 1);
 
-            Assert.That.Value(eps_p).AreEqual(0.508847139909588, 4.441e-16);
-            Assert.That.Value(eps_s).AreEqual(31.606961258558215);
+            Assert.That.Value(eps_p).IsEqual(0.508847139909588, 4.441e-16);
+            Assert.That.Value(eps_s).IsEqual(31.606961258558215);
 
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            Assert.That.Value(Gp).AreEqual(0.891250938133746, 4.45e-16);
-            Assert.That.Value(Gs).AreEqual(0.0316227766016838, 4.45e-16);
+            Assert.That.Value(Gp).IsEqual(0.891250938133746, 4.45e-16);
+            Assert.That.Value(Gs).IsEqual(0.0316227766016838, 4.45e-16);
 
-            Assert.That.Value(0.891250938133746.In_dB()).AreEqual(-1, 4.67e-15);
-            Assert.That.Value(0.0316227766016838.In_dB()).AreEqual(-30);
+            Assert.That.Value(0.891250938133746.In_dB()).IsEqual(-1, 4.67e-15);
+            Assert.That.Value(0.0316227766016838.In_dB()).IsEqual(-30);
 
             var Fp = DigitalFilter.ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
             var Fs = DigitalFilter.ToAnalogFrequency(fs, dt);  // Частота подавления аналогового протипа
 
-            Assert.That.Value(Fp).AreEqual(0.051712575763384, 2.5e-16);
-            Assert.That.Value(Fs).AreEqual(0.219057986225303, 3.89e-16);
+            Assert.That.Value(Fp).IsEqual(0.051712575763384, 2.5e-16);
+            Assert.That.Value(Fs).IsEqual(0.219057986225303, 3.89e-16);
 
             var Wp = Consts.pi2 * Fp;
             var Ws = Consts.pi2 * Fs;
@@ -55,25 +55,25 @@ namespace MathCore.DSP.Tests.Filters
             var k_eps = eps_s / eps_p;
             var k_W = Ws / Wp;
 
-            Assert.That.Value(k_eps).GreaterThen(0);
-            Assert.That.Value(k_W).GreaterThen(0);
+            Assert.That.Value(k_eps).GreaterThan(0);
+            Assert.That.Value(k_W).GreaterThan(0);
 
             var double_n = Math.Log(k_eps) / Math.Log(k_W);
             // Порядок фильтра
             var N = (int)double_n;
             if (double_n - N > 0) N += 1;
 
-            Assert.That.Value(N).AreEqual(3);
+            Assert.That.Value(N).IsEqual(3);
 
             var L = N / 2;
             var r = N % 2;
 
-            Assert.That.Value(L).AreEqual(1);
-            Assert.That.Value(r).AreEqual(1);
-            Assert.That.Value(2 * L + r).AreEqual(N);
+            Assert.That.Value(L).IsEqual(1);
+            Assert.That.Value(r).IsEqual(1);
+            Assert.That.Value(2 * L + r).IsEqual(N);
 
             var alpha = Math.Pow(eps_p, -1d / N);
-            Assert.That.Value(alpha).AreEqual(1.252576388181026, 4.45e-16);
+            Assert.That.Value(alpha).IsEqual(1.252576388181026, 4.45e-16);
 
             var th0 = Math.PI / N;
 
@@ -88,91 +88,91 @@ namespace MathCore.DSP.Tests.Filters
                 poles[i + 1] = new Complex(sin, -cos);
             }
 
-            Assert.That.Value(poles[0].Re).AreEqual(-1.252576388181026, 4.45e-16);
-            Assert.That.Value(poles[0].Im).AreEqual(0);
+            Assert.That.Value(poles[0].Re).IsEqual(-1.252576388181026, 4.45e-16);
+            Assert.That.Value(poles[0].Im).IsEqual(0);
 
-            Assert.That.Value(poles[1].Re).AreEqual(-0.626288194090513, 4.45e-16);
-            Assert.That.Value(poles[1].Im).AreEqual(1.084762972345327, 4.45e-16);
+            Assert.That.Value(poles[1].Re).IsEqual(-0.626288194090513, 4.45e-16);
+            Assert.That.Value(poles[1].Im).IsEqual(1.084762972345327, 4.45e-16);
 
-            Assert.That.Value(poles[2].Re).AreEqual(-0.626288194090513, 4.45e-16);
-            Assert.That.Value(poles[2].Im).AreEqual(-1.084762972345327, 4.45e-16);
+            Assert.That.Value(poles[2].Re).IsEqual(-0.626288194090513, 4.45e-16);
+            Assert.That.Value(poles[2].Im).IsEqual(-1.084762972345327, 4.45e-16);
 
             var translated_poles = poles.Select(p => p * Wp).ToArray();
 
-            Assert.That.Value(translated_poles[0].Re).AreEqual(-0.40698673955629);
-            Assert.That.Value(translated_poles[0].Im).AreEqual(0);
+            Assert.That.Value(translated_poles[0].Re).IsEqual(-0.40698673955629);
+            Assert.That.Value(translated_poles[0].Im).IsEqual(0);
 
-            Assert.That.Value(translated_poles[1].Re).AreEqual(-0.203493369778145, 1.12e-16);
-            Assert.That.Value(translated_poles[1].Im).AreEqual(0.352460855459148, 4.45e-16);
+            Assert.That.Value(translated_poles[1].Re).IsEqual(-0.203493369778145, 1.12e-16);
+            Assert.That.Value(translated_poles[1].Im).IsEqual(0.352460855459148, 4.45e-16);
 
-            Assert.That.Value(translated_poles[2].Re).AreEqual(-0.203493369778145, 1.12e-16);
-            Assert.That.Value(translated_poles[2].Im).AreEqual(-0.352460855459148, 4.45e-16);
+            Assert.That.Value(translated_poles[2].Re).IsEqual(-0.203493369778145, 1.12e-16);
+            Assert.That.Value(translated_poles[2].Im).IsEqual(-0.352460855459148, 4.45e-16);
 
             var z_poles = translated_poles.Select(p => DigitalFilter.ToZ(p, dt)).ToArray();
 
-            Assert.That.Value(z_poles[0].Re).AreEqual(0.421477504919999, 2.23e-16);
-            Assert.That.Value(z_poles[0].Im).AreEqual(0);
+            Assert.That.Value(z_poles[0].Re).IsEqual(0.421477504919999, 2.23e-16);
+            Assert.That.Value(z_poles[0].Im).IsEqual(0);
 
-            Assert.That.Value(z_poles[1].Re).AreEqual(0.530553579281761, 2.23e-16);
-            Assert.That.Value(z_poles[1].Im).AreEqual(0.4482452811345, 4.45e-16);
+            Assert.That.Value(z_poles[1].Re).IsEqual(0.530553579281761, 2.23e-16);
+            Assert.That.Value(z_poles[1].Im).IsEqual(0.4482452811345, 4.45e-16);
 
-            Assert.That.Value(z_poles[2].Re).AreEqual(0.530553579281761, 2.23e-16);
-            Assert.That.Value(z_poles[2].Im).AreEqual(-0.4482452811345, 4.45e-16);
+            Assert.That.Value(z_poles[2].Re).IsEqual(0.530553579281761, 2.23e-16);
+            Assert.That.Value(z_poles[2].Im).IsEqual(-0.4482452811345, 4.45e-16);
 
-            Assert.That.Value(z_poles[0].Abs).LessThen(1);
-            Assert.That.Value(z_poles[1].Abs).LessThen(1);
-            Assert.That.Value(z_poles[2].Abs).LessThen(1);
+            Assert.That.Value(z_poles[0].Abs).LessThan(1);
+            Assert.That.Value(z_poles[1].Abs).LessThan(1);
+            Assert.That.Value(z_poles[2].Abs).LessThan(1);
 
             var kz = DigitalFilter.GetNomalizeCoefficient(translated_poles, dt);
-            Assert.That.Value(kz).AreEqual(0.451944218734017, 1.12e-16);
+            Assert.That.Value(kz).IsEqual(0.451944218734017, 1.12e-16);
 
             var WpN = Math.Pow(Wp, N);
-            Assert.That.Value(WpN).AreEqual(0.034302685030762, 2.78e-16);
+            Assert.That.Value(WpN).IsEqual(0.034302685030762, 2.78e-16);
 
             var k = WpN * kz / eps_p;
-            Assert.That.Value(k).AreEqual(0.030466713814018, 4.1e-16);
+            Assert.That.Value(k).IsEqual(0.030466713814018, 4.1e-16);
 
             var b = new double[N + 1];
             for (var i = 0; i < b.Length; i++)
                 b[i] = k * SpecialFunctions.BinomialCoefficient(N, i);
 
-            Assert.That.Value(b[0]).AreEqual(1 * k);
-            Assert.That.Value(b[1]).AreEqual(3 * k);
-            Assert.That.Value(b[2]).AreEqual(3 * k);
-            Assert.That.Value(b[3]).AreEqual(1 * k);
+            Assert.That.Value(b[0]).IsEqual(1 * k);
+            Assert.That.Value(b[1]).IsEqual(3 * k);
+            Assert.That.Value(b[2]).IsEqual(3 * k);
+            Assert.That.Value(b[3]).IsEqual(1 * k);
 
             var a_complex = Polynom.Array.GetCoefficientsInverted(z_poles);
-            Assert.That.Value(a_complex.Length).AreEqual(4);
+            Assert.That.Value(a_complex.Length).IsEqual(4);
 
-            Assert.That.Value(a_complex[0].Im).AreEqual(0);
-            Assert.That.Value(a_complex[1].Im).AreEqual(0);
-            Assert.That.Value(a_complex[2].Im).AreEqual(0, 2.78e-1);
-            Assert.That.Value(a_complex[3].Im).AreEqual(0);
+            Assert.That.Value(a_complex[0].Im).IsEqual(0);
+            Assert.That.Value(a_complex[1].Im).IsEqual(0);
+            Assert.That.Value(a_complex[2].Im).IsEqual(0, 2.78e-1);
+            Assert.That.Value(a_complex[3].Im).IsEqual(0);
 
             var a = a_complex.ToRe();
 
-            Assert.That.Value(a[0]).AreEqual(1);
-            Assert.That.Value(a[1]).AreEqual(-1.482584663483521, 6.67e-16);
-            Assert.That.Value(a[2]).AreEqual(0.929643730192138, 1.12e-16);
-            Assert.That.Value(a[3]).AreEqual(-0.203325356196476, 3.1e-16);
+            Assert.That.Value(a[0]).IsEqual(1);
+            Assert.That.Value(a[1]).IsEqual(-1.482584663483521, 6.67e-16);
+            Assert.That.Value(a[2]).IsEqual(0.929643730192138, 1.12e-16);
+            Assert.That.Value(a[3]).IsEqual(-0.203325356196476, 3.1e-16);
 
             var filter = new ButterworthLowPass(fp, fs, dt, Gp, Gs);
 
             var A = filter.A;
             var B = filter.B;
 
-            Assert.That.Value(A.Count).AreEqual(a.Length);
-            Assert.That.Value(B.Count).AreEqual(b.Length);
+            Assert.That.Value(A.Count).IsEqual(a.Length);
+            Assert.That.Value(B.Count).IsEqual(b.Length);
 
-            Assert.That.Value(A[0]).AreEqual(a[0], 5.56e-17);
-            Assert.That.Value(A[1]).AreEqual(a[1], 2.23e-16);
-            Assert.That.Value(A[2]).AreEqual(a[2], 5.56e-17);
-            Assert.That.Value(A[3]).AreEqual(a[3], 5.56e-17);
+            Assert.That.Value(A[0]).IsEqual(a[0], 5.56e-17);
+            Assert.That.Value(A[1]).IsEqual(a[1], 2.23e-16);
+            Assert.That.Value(A[2]).IsEqual(a[2], 5.56e-17);
+            Assert.That.Value(A[3]).IsEqual(a[3], 5.56e-17);
 
-            Assert.That.Value(B[0]).AreEqual(b[0], 1.39e-17);
-            Assert.That.Value(B[1]).AreEqual(b[1], 2.78e-17);
-            Assert.That.Value(B[2]).AreEqual(b[2], 2.78e-17);
-            Assert.That.Value(B[3]).AreEqual(b[3], 1.39e-17);
+            Assert.That.Value(B[0]).IsEqual(b[0], 1.39e-17);
+            Assert.That.Value(B[1]).IsEqual(b[1], 2.78e-17);
+            Assert.That.Value(B[2]).IsEqual(b[2], 2.78e-17);
+            Assert.That.Value(B[3]).IsEqual(b[3], 1.39e-17);
         }
 
         [TestMethod]
@@ -194,10 +194,10 @@ namespace MathCore.DSP.Tests.Filters
             var transmission_fs = filter.GetTransmissionCoefficient(fs, dt);
             var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2, dt);
 
-            Assert.That.Value(transmission_0.Abs).AreEqual(1, 2.23e-16);
-            Assert.That.Value(transmission_fp.Abs).GreaterOrEqualsThen(Gp);
-            Assert.That.Value(transmission_fs.Abs).LessOrEqualsThen(Gs);
-            Assert.That.Value(transmission_fd05.Abs).AreEqual(0, 4.27e-34);
+            Assert.That.Value(transmission_0.Abs).IsEqual(1, 2.23e-16);
+            Assert.That.Value(transmission_fp.Abs).GreaterOrEqualsThan(Gp);
+            Assert.That.Value(transmission_fs.Abs).LessOrEqualsThan(Gs);
+            Assert.That.Value(transmission_fd05.Abs).IsEqual(0, 4.27e-34);
         }
 
         [TestMethod]
@@ -234,7 +234,7 @@ namespace MathCore.DSP.Tests.Filters
                 0.000296747318716
             };
             var impulse_response = filter.GetImpulseResponse(expected_impulse_response.Length, 1e-10).ToArray();
-            Assert.That.Value(impulse_response.Length).AreEqual(expected_impulse_response.Length);
+            Assert.That.Value(impulse_response.Length).IsEqual(expected_impulse_response.Length);
             CollectionAssert.AreEqual(expected_impulse_response, impulse_response, GetComparer(8.44e-10));
         }
 
@@ -264,10 +264,10 @@ namespace MathCore.DSP.Tests.Filters
             var y_fs = filter.ProcessIndividual(s_fs);
             var y_fd05 = filter.ProcessIndividual(s_fd05);
 
-            Assert.That.Value(y_0.Power).AreEqual(s_0.Power, 2.81e-3);
-            Assert.That.Value(y_fp.Power).AreEqual(s_0.Power * Gp * Gp, 3.2e-3);
-            Assert.That.Value(y_fs.Power).AreEqual(s_fs.Power * Gs * Gs, 1.84e-4);
-            Assert.That.Value(y_fd05.Power).AreEqual(0, 1.33e-4);
+            Assert.That.Value(y_0.Power).IsEqual(s_0.Power, 2.81e-3);
+            Assert.That.Value(y_fp.Power).IsEqual(s_0.Power * Gp * Gp, 3.2e-3);
+            Assert.That.Value(y_fs.Power).IsEqual(s_fs.Power * Gs * Gs, 1.84e-4);
+            Assert.That.Value(y_fd05.Power).IsEqual(0, 1.33e-4);
         }
     }
 }

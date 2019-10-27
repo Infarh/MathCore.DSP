@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace MathCore.DSP.Tests.Filters
 {
     [TestClass]
-    public class HighPassRCTests : MathCore.Tests.UnitTest
+    public class HighPassRCTests : UnitTest
     {
         [TestMethod]
         public void CreationTest()
@@ -36,10 +36,10 @@ namespace MathCore.DSP.Tests.Filters
             //Assert.AreEqual(1, a0 / a0);
             Assert.AreEqual((w0 - 1) / (w0 + 1), a1 / a0);
 
-            Assert.That.Value(b0).AreEqual(1);
-            Assert.That.Value(b1).AreEqual(-1);
-            Assert.That.Value(a0).AreEqual(w0 + 1);
-            Assert.That.Value(a1).AreEqual(w0 - 1);
+            Assert.That.Value(b0).IsEqual(1);
+            Assert.That.Value(b1).IsEqual(-1);
+            Assert.That.Value(a0).IsEqual(w0 + 1);
+            Assert.That.Value(a1).IsEqual(w0 - 1);
         }
 
         [TestMethod]
@@ -114,7 +114,7 @@ namespace MathCore.DSP.Tests.Filters
 
             var c = rc.GetTransmissionCoefficient(f, dt);
 
-            Assert.That.Value(c.Abs).AreEqual(0);
+            Assert.That.Value(c.Abs).IsEqual(0);
         }
 
         [TestMethod]
@@ -130,8 +130,8 @@ namespace MathCore.DSP.Tests.Filters
 
             var c = rc.GetTransmissionCoefficient(f, dt);
 
-            Assert.That.Value(c.Abs).AreEqual(Consts.sqrt_2_inv, 1e-14);
-            Assert.That.Value(c.Arg * Consts.ToDeg).AreEqual(45);
+            Assert.That.Value(c.Abs).IsEqual(Consts.sqrt_2_inv, 1e-14);
+            Assert.That.Value(c.Arg * Consts.ToDeg).IsEqual(45);
         }
     }
 }

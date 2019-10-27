@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace MathCore.DSP.Tests.Filters
 {
     [TestClass]
-    public class BandStopRLCTests : MathCore.Tests.UnitTest
+    public class BandStopRLCTests : UnitTest
     {
         [TestMethod]
         public void CreationTest()
