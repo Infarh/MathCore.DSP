@@ -24,7 +24,7 @@ namespace MathCore.DSP.Filters
         /// <summary>Расчёт нормирующего множителя (приводящего системную-передаточную функцию к виду с максимумом в 1</summary>
         /// <param name="poles">Набор полюсов</param>
         /// <param name="dt">Период дискретизации</param>
-        /// <returns>Нормирующий мнжоитель</returns>
+        /// <returns>Нормирующий множитель</returns>
         public static double GetNomalizeCoefficient([NotNull] IEnumerable<Complex> poles, double dt)
         {
             if (poles is null) throw new ArgumentNullException(nameof(poles));

@@ -1,4 +1,5 @@
 ﻿using System;
+using MathCore.Annotations;
 
 namespace MathCore.DSP.Fourier
 {
@@ -9,12 +10,13 @@ namespace MathCore.DSP.Fourier
     {
         /// <summary>Выполнить преобразование Фурье для вещественного массива</summary>
         /// <param name="s">Массив вещественных значений отсчётов</param>
-        /// <param name="IsInverse">Выполнить обратное преобразвоание</param>
+        /// <param name="IsInverse">Выполнить обратное преобразование</param>
         /// <returns>Спектр</returns>
-        public static Spectrum GetFourierTransformation(this double[] s, bool IsInverse = false)
+        [NotNull]
+        public static Spectrum GetFourierTransformation([NotNull] this double[] s, bool IsInverse = false)
         {
             var N = s.Length;
-            var w = exp.GetCoefficients(N, IsInverse);
+            var w = Exp.GetCoefficients(N, IsInverse);
 
             return m =>
             {
@@ -24,8 +26,8 @@ namespace MathCore.DSP.Fourier
                 {
                     var val = s[n];
                     var ww = w[n * m % N];
-                    P += val * ww.cos;
-                    Q += val * ww.sin;
+                    P += val * ww._Cos;
+                    Q += val * ww._Sin;
                 }
 
                 return new Complex(P / N, Q / N);
@@ -34,12 +36,13 @@ namespace MathCore.DSP.Fourier
 
         /// <summary>Выполнить преобразование Фурье для комплексного массива</summary>
         /// <param name="s">Массив комплексных значений отсчётов</param>
-        /// <param name="IsInverse">Выполнить обратное преобразвоание</param>
+        /// <param name="IsInverse">Выполнить обратное преобразование</param>
         /// <returns>Спектр</returns>
-        public static Spectrum GetFourierTransformation(this Complex[] s, bool IsInverse = false)
+        [NotNull]
+        public static Spectrum GetFourierTransformation([NotNull] this Complex[] s, bool IsInverse = false)
         {
             var N = s.Length;
-            var w = exp.GetCoefficients(N, IsInverse);
+            var w = Exp.GetCoefficients(N, IsInverse);
 
             return m =>
             {
@@ -49,8 +52,8 @@ namespace MathCore.DSP.Fourier
                 {
                     var (re, im) = s[n];
                     var ww = w[n * m % N];
-                    var sin = ww.sin;
-                    var cos = ww.cos;
+                    var sin = ww._Sin;
+                    var cos = ww._Cos;
                     P += re * cos - im * sin;
                     Q += im * cos + re * sin;
                 }

@@ -5,10 +5,21 @@ using MathCore.Annotations;
 
 namespace MathCore.DSP
 {
+    /// <summary>Методы-расширения для вещественных массивов</summary>
     public static class DoubleArrayDSPExtensions
     {
+        /// <summary>Вычислить значение коэффициента передачи фильтра, заданного импульсной характеристикой</summary>
+        /// <param name="ImpulseResponse">Массив отсчётов импульсной характеристики</param>
+        /// <param name="f">Частота вычисления коэффициента передачи</param>
+        /// <param name="dt">Период дискретизации импульсной характеристики</param>
+        /// <returns>Комплексное значение коэффициента передачи фильтра с указанной импульсной характеристикой</returns>
         public static Complex GetTransmissionCoefficient([NotNull] this double[] ImpulseResponse, double f, double dt)
             => ImpulseResponse.GetTransmissionCoefficient(f * dt);
+
+        /// <summary>Вычислить значение коэффициента передачи фильтра, заданного импульсной характеристикой</summary>
+        /// <param name="ImpulseResponse">Массив отсчётов импульсной характеристики</param>
+        /// <param name="f">Нормированная частота вычисления коэффициента передачи</param>
+        /// <returns>Комплексное значение коэффициента передачи фильтра с указанной импульсной характеристикой</returns>
         public static Complex GetTransmissionCoefficient([NotNull] this double[] ImpulseResponse, double f)
         {
             var e = Complex.Exp(-2 * Math.PI * f);
@@ -18,6 +29,11 @@ namespace MathCore.DSP
             return result;
         }
 
+        /// <summary>Вычисление выходного значения фильтра, заданного вектором состояния и импульсной характеристикой</summary>
+        /// <param name="State">Вектор состояния фильтра</param>
+        /// <param name="ImpulseResponse">Массив значений импульсной характеристики</param>
+        /// <param name="Sample">Значение входного отсчёта фильтра</param>
+        /// <returns>Значение выходного отсчёта фильтра</returns>
         public static double FilterSample([NotNull] this double[] State, [NotNull] double[] ImpulseResponse, double Sample)
         {
             var result = 0d;

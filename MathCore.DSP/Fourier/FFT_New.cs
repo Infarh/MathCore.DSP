@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using MathCore.Annotations;
 
 namespace MathCore.DSP.Fourier
 {
@@ -25,7 +26,8 @@ namespace MathCore.DSP.Fourier
         /// Алгоритмическая сложность O(N*logN) для любых N
         /// </remarks>
         [Copyright("29.05.2009 by Bochkanov Sergey", url = "alglib.sources.ru")]
-        public static Complex[] FFT(Complex[] x)
+        [NotNull]
+        public static Complex[] FFT([NotNull] Complex[] x)
         {
             var N = x.Length;
             if (N == 1) return new[] { x[0] };
@@ -64,7 +66,8 @@ namespace MathCore.DSP.Fourier
         /// </summary>
         /// <param name="y">Массив значений спектра</param>
         [Copyright("29.05.2009 by Bochkanov Sergey", url = "alglib.sources.ru")]
-        public static Complex[] FFT_Complex_Inverse(Complex[] y)
+        [NotNull]
+        public static Complex[] FFT_Complex_Inverse([NotNull] Complex[] y)
         {
             var N = y.Length;
 
@@ -386,7 +389,7 @@ namespace MathCore.DSP.Fourier
               -- ALGLIB --
                  Copyright 01.05.2009 by Bochkanov Sergey
             *************************************************************************/
-            public static void FTBaseGenerateComplexFFTPlan(int n, FT_Plan plan)
+            public static void FTBaseGenerateComplexFFTPlan(int n, [NotNull] FT_Plan plan)
             {
 
                 var plan_array_size = 1;

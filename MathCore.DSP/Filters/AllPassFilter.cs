@@ -1,6 +1,6 @@
 ﻿namespace MathCore.DSP.Filters
 {
-    /// <summary>Всепропускающий фильльт</summary>
+    /// <summary>Всепропускающий фильтр</summary>
     // http://www.dsplib.ru/content/allpass/allpass.html
     public class AllPassFilter : IIR
     {

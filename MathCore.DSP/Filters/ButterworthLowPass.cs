@@ -26,9 +26,6 @@ namespace MathCore.DSP.Filters
                 if(!(fp < fs)) throw new InvalidOperationException("Частота пропускания должна быть меньше частоты подавления");
                 if(!(fp < 1/ (2 * dt))) throw new InvalidOperationException();
 
-                //double wp = Consts.pi2 * fp * dt; // 0.628318 рад/с
-                //double ws = Consts.pi2 * fs * dt; // 1.884955 рад/с
-
                 var Rp = -Gp.In_dB();
                 var Rs = -Gs.In_dB();
 
@@ -37,16 +34,14 @@ namespace MathCore.DSP.Filters
 
 
                 var Fp = ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
-                var Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового протипа
+                var Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового пропита
 
                 var Wp = Consts.pi2 * Fp;
-                //var Ws = Consts.pi2 * Fs;
 
                 var k_eps = eps_s / eps_p;
                 var k_W = Fs / Fp;
 
                 var N = (int)Math.Ceiling(Math.Log(k_eps) / Math.Log(k_W));
-                //var L = N / 2;
                 var r = N % 2;
 
                 var alpha = Math.Pow(eps_p, -1d / N);

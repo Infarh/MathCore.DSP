@@ -6,7 +6,7 @@ namespace MathCore.DSP.Filters
     /// <summary>Комбинационный фильтр</summary>
     public abstract class CombinationFilter : Filter
     {
-        /// <summary>ПЕрвый фильтр в комбинации</summary>
+        /// <summary>Первый фильтр в комбинации</summary>
         [NotNull] public Filter Filter1 { get; }
         /// <summary>Второй фильтр в комбинации</summary>
         [NotNull] public Filter Filter2 { get; }

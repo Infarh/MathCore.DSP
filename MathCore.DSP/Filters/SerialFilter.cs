@@ -1,12 +1,14 @@
-﻿namespace MathCore.DSP.Filters
+﻿using MathCore.Annotations;
+
+namespace MathCore.DSP.Filters
 {
     /// <summary>Последовательный комбинационный фильтр</summary>
     public class SerialFilter : CombinationFilter
     {
-        /// <summary>Инициализация нового последовательного кобинационного фильтра</summary>
+        /// <summary>Инициализация нового последовательного комбинационного фильтра</summary>
         /// <param name="Filter1">Первый фильтр в комбинации</param>
         /// <param name="Filter2">Второй фильтр в комбинации</param>
-        public SerialFilter(Filter Filter1, Filter Filter2) : base(Filter1, Filter2) { }
+        public SerialFilter([NotNull] Filter Filter1, [NotNull] Filter Filter2) : base(Filter1, Filter2) { }
 
         public override double Process(double Sample) => Filter2.Process(Filter1.Process(Sample));
 

@@ -11,6 +11,9 @@ namespace MathCore.DSP.Filters
         /// <param name="dt">Период дискретизации</param>
         public BandStopRLC(double f0, double DeltaF, double dt) : this(Math.Tan(Math.PI * f0 * dt), Math.PI * DeltaF * dt) { }
 
+        /// <summary>Инициализация нового экземпляра <see cref="BandStopRLC"/></summary>
+        /// <param name="w0">Обобщённая центральная частота</param>
+        /// <param name="dw">Обобщённая полоса частот</param>
         private BandStopRLC(double w0, double dw)
             : base(
                 A: new[] { w0 * w0 + dw + 1, 2 * (w0 * w0 - 1), w0 * w0 - dw + 1 },
