@@ -18,11 +18,6 @@ namespace MathCore.DSP.Signals.Interpolators
             var y2 = Values[x2];
 
             return (y2 - y1) * (pos - x1) / (x2 - x1) + y1;
-
-            //int x1 = (int)pos, x2 = x1 + 1;
-            //double y1 = Values[x1], y2 = Values[x2];
-            //var k = (y2 - y1) / (x2 - x1);
-            //return k * (pos - x1) + y1;
         }
 
         public override double SetValue(double[] Values, double pos, double Value) => throw new NotSupportedException();

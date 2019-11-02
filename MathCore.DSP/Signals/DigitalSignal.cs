@@ -24,7 +24,7 @@ namespace MathCore.DSP.Signals
         /// <summary>Полное время сигнала</summary>
         public double TotalTime => SamplesCount * _dt;
 
-        /// <summary>Клоичество отсчётов</summary>
+        /// <summary>Количество отсчётов</summary>
         public abstract int SamplesCount { get; }
 
         /// <summary>Минимальное значение</summary>
@@ -74,7 +74,7 @@ namespace MathCore.DSP.Signals
 
         /// <summary>Копирование отсчётов сигнала в массив</summary>
         /// <param name="Destination">Массив места назначения</param>
-        /// <param name="Index">НАчальный индекс в массиве места назначения</param>
+        /// <param name="Index">Начальный индекс в массиве места назначения</param>
         /// <param name="Length">Длина копируемого участка</param>
         public virtual void CopyTo([NotNull] double[] Destination, int Index, int Length)
         {

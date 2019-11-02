@@ -57,7 +57,7 @@ namespace MathCore.DSP.Signals
             return new SamplesDigitalSignal(_dt, samples);
         }
 
-        public override double[] GetSamples() => _Samples;
+        [NotNull] public override double[] GetSamples() => _Samples;
 
         public override void CopyTo(double[] Destination, int Index, int Length) => Array.Copy(_Samples, 0, Destination, Index, Length);
 

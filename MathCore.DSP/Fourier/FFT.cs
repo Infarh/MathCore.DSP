@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MathCore.Annotations;
 
 namespace MathCore.DSP.Fourier
 {
@@ -8,6 +9,7 @@ namespace MathCore.DSP.Fourier
     {
         /// <summary>Прямое преобразование отсчётов функции в спектр</summary>
         /// <param name="Values">Массив отсчётов функции</param>
+        [NotNull]
         public static Complex[] FastFourierTransform(this double[] Values)
         {
             var N = Values.Length;
@@ -29,30 +31,31 @@ namespace MathCore.DSP.Fourier
 
         /// <summary>Прямое преобразование отсчётов функции в спектр</summary>
         /// <param name="Values">Массив отсчётов функции</param>
-        public static Complex[] FastFourierTransform(this Complex[] Values)
+        [NotNull]
+        public static Complex[] FastFourierTransform([NotNull] this Complex[] Values)
         {
-            var lv_N = Values.Length;
-            if(!lv_N.IsPowerOf2())
+            var length = Values.Length;
+            if(!length.IsPowerOf2())
             {
-                var lv_Log2 = Math.Log(lv_N, 2);
-                lv_Log2 -= Math.Round(lv_Log2);
-                lv_N += (int)Math.Pow(2, lv_Log2);
+                var length_log2 = Math.Log(length, 2);
+                length_log2 -= Math.Round(length_log2);
+                length += (int)Math.Pow(2, length_log2);
             }
 
-            var lv_Spectrum = new double[lv_N * 2];
-            var lv_I = Values.Length;
-            for(var i = 0; i < lv_I; i++)
+            var spectrum = new double[length * 2];
+            var values_length = Values.Length;
+            for(var i = 0; i < values_length; i++)
             {
-                lv_Spectrum[2 * i] = Values[i].Re;
-                lv_Spectrum[2 * i + 1] = Values[i].Im;
+                spectrum[2 * i] = Values[i].Re;
+                spectrum[2 * i + 1] = Values[i].Im;
             }
 
-            fft(ref lv_Spectrum, false);
+            fft(ref spectrum, false);
 
-            var Spectrum = new Complex[lv_N];
-            lv_I = Spectrum.Length;
-            for(var i = 0; i < lv_I; i++)
-                Spectrum[i] = new Complex(lv_Spectrum[2 * i], lv_Spectrum[2 * i + 1]);
+            var Spectrum = new Complex[length];
+            values_length = Spectrum.Length;
+            for(var i = 0; i < values_length; i++)
+                Spectrum[i] = new Complex(spectrum[2 * i], spectrum[2 * i + 1]);
 
 
             return Spectrum;
@@ -62,31 +65,29 @@ namespace MathCore.DSP.Fourier
         /// <param name="Spectrum">Массив отсчётов спектра</param>
         public static Complex[] FastFurierInverse(this Complex[] Spectrum)
         {
-            var lv_N = Spectrum.Length;
-            if(!lv_N.IsPowerOf2())
+            var spectrum_length = Spectrum.Length;
+            if(!spectrum_length.IsPowerOf2())
             {
-                var lv_Log2 = Math.Log(lv_N, 2);
-                lv_Log2 -= Math.Round(lv_Log2);
-                lv_N += (int)Math.Pow(2, lv_Log2);
+                var spectrum_length_log2 = Math.Log(spectrum_length, 2);
+                spectrum_length_log2 -= Math.Round(spectrum_length_log2);
+                spectrum_length += (int)Math.Pow(2, spectrum_length_log2);
             }
 
-            var lv_DoubleValues = new double[lv_N * 2];
-            var lv_I = Spectrum.Length;
-            for(var i = 0; i < lv_I; i++)
+            var values = new double[spectrum_length * 2];
+            for(var i = 0; i < spectrum_length; i++)
             {
-                lv_DoubleValues[2 * i] = Spectrum[i].Re;
-                lv_DoubleValues[2 * i + 1] = Spectrum[i].Im;
+                values[2 * i] = Spectrum[i].Re;
+                values[2 * i + 1] = Spectrum[i].Im;
             }
 
-            fft(ref lv_DoubleValues, true);
+            fft(ref values, true);
 
-            var lv_ComplexValues = new Complex[lv_N];
-            lv_I = lv_ComplexValues.Length;
-            for(var i = 0; i < lv_I; i++)
-                lv_ComplexValues[i] = new Complex(lv_DoubleValues[2 * i], lv_DoubleValues[2 * i + 1]);
+            var complex_values = new Complex[spectrum_length];
+            var complex_values_length = complex_values.Length;
+            for(var i = 0; i < complex_values_length; i++)
+                complex_values[i] = new Complex(values[2 * i], values[2 * i + 1]);
 
-
-            return lv_ComplexValues;
+            return complex_values;
         }
 
         private static void fft(ref double[] Values, bool IsInverse)
@@ -123,11 +124,11 @@ namespace MathCore.DSP.Fourier
             }
 
             var m_max = 2;
-            var thetta0 = Consts.pi2 * i_sign;
+            var theta0 = Consts.pi2 * i_sign;
             while(n > m_max)
             {
                 var i_step = m_max << 1;
-                var theta = thetta0 / m_max;
+                var theta = theta0 / m_max;
                 var w_pr = Math.Sin(.5 * theta);
                 w_pr *= -2 * w_pr;
                 var w_pi = Math.Sin(theta);
@@ -159,12 +160,10 @@ namespace MathCore.DSP.Fourier
                 Values[i - 1] = Values[i - 1] / N;
         }
 
-        /// <summary>
-        /// Целочисленное преобразование Фурье
-        /// </summary>
+        /// <summary>Целочисленное преобразование Фурье</summary>
         /// <param name="a">Массив целых чисел</param>
         /// <param name="invert">Обратное преобразование</param>
-        public static void FFT_int(this int[] a, bool invert = false)
+        public static void FFT_int([NotNull] this int[] a, bool invert = false)
         {
             var n = a.Length;
 
@@ -259,8 +258,12 @@ namespace MathCore.DSP.Fourier
         }
         private static double[] Recursive_FFTInternal(double[] a, int n)
         {
-            if(n == 1) return a;
-            if(n == 2) return new[] { a[0] + a[1], a[0] - a[1] };
+            switch (n)
+            {
+                case 1: return a;
+                case 2: return new[] { a[0] + a[1], a[0] - a[1] };
+            }
+
             var n2 = n / 2;
 
             var even = new double[n2];
@@ -286,7 +289,8 @@ namespace MathCore.DSP.Fourier
             return y;
         }
 
-        public static Task<double[]> Recursive_FFTAsync(double[] a, int MinAsyncLength = 256)
+        [NotNull, ItemNotNull]
+        public static Task<double[]> Recursive_FFTAsync([NotNull] double[] a, int MinAsyncLength = 256)
         {
             var n = a.Length;
             if(!n.IsPowerOf2())
@@ -294,7 +298,7 @@ namespace MathCore.DSP.Fourier
             return Recursive_FFTInternalAsync(a, n, MinAsyncLength);
         }
 
-        private static async Task<double[]> Recursive_FFTInternalAsync(double[] a, int n, int MinAsyncLength = 256)
+        private static async Task<double[]> Recursive_FFTInternalAsync([NotNull] double[] a, int n, int MinAsyncLength = 256)
         {
             switch(n)
             {

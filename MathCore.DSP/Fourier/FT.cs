@@ -10,9 +10,27 @@ namespace MathCore.DSP.Fourier
     {
         /* -------------------------------------------------------------------------------------------- */
 
-        public static Complex W(int N) => Complex.Exp(-Consts.pi2 / N);
+        /// <summary>Коэффициент прямого преобразования Фурье</summary>
+        /// <param name="N">Число спектральных составляющих</param>
+        /// <returns>Комплексное значение коэффициента Фурье</returns>
+        public static Complex W(int N) => Complex.Exp(1d / N, -Consts.pi2 / N);
 
-        public static Complex W(int k, int N) => Complex.Exp(-Consts.pi2 * k / N);
+        /// <summary>Коэффициент обратного преобразования Фурье</summary>
+        /// <param name="N">Число спектральных составляющих</param>
+        /// <returns>Комплексное значение обратного коэффициента Фурье</returns>
+        public static Complex Winv(int N) => Complex.Exp(Consts.pi2 / N);
+
+        /// <summary>Коэффициент прямого преобразования Фурье для спектральной составляющей</summary>
+        /// <param name="k">Номер спектральной составляющей</param>
+        /// <param name="N">Число спектральных составляющих</param>
+        /// <returns>Комплексное значение коэффициента Фурье</returns>
+        public static Complex W(int k, int N) => Complex.Exp(1d / N, -Consts.pi2 * k / N);
+
+        /// <summary>Коэффициент обратного преобразования Фурье для спектральной составляющей</summary>
+        /// <param name="k">Номер спектральной составляющей</param>
+        /// <param name="N">Число спектральных составляющих</param>
+        /// <returns>Комплексное значение обратного коэффициента Фурье</returns>
+        public static Complex Winv(int k, int N) => Complex.Exp(1d / N, -Consts.pi2 * k / N);
 
         /* -------------------------------------------------------------------------------------------- */
 
@@ -31,7 +49,7 @@ namespace MathCore.DSP.Fourier
 
             var N = Values.Length;
             var spectrum = new Complex[N];
-            var w = exp.GetCoefficients(N, IsInverse);
+            var w = Exp.GetCoefficients(N, IsInverse);
 
             for (var m = 0; m < N; m++)
             {
@@ -42,8 +60,8 @@ namespace MathCore.DSP.Fourier
                     var v = Values[n];
                     var i = m * n % N;
                     var ww = w[i];
-                    p += v * ww.cos;
-                    q += v * ww.sin;
+                    p += v * ww._Cos;
+                    q += v * ww._Sin;
                 }
                 spectrum[m] = new Complex(p / N, q / N);
             }
@@ -62,7 +80,7 @@ namespace MathCore.DSP.Fourier
 
             var N = Values.Length;
             var spectrum = new Complex[N];
-            var w = exp.GetCoefficients(N, IsInverse);
+            var w = Exp.GetCoefficients(N, IsInverse);
 
             for (var m = 0; m < N; m++)
             {
@@ -73,8 +91,8 @@ namespace MathCore.DSP.Fourier
                     var v = Values[n];
                     var i = m * n % N;
                     var ww = w[i];
-                    p += v * ww.cos;
-                    q += v * ww.sin;
+                    p += v * ww._Cos;
+                    q += v * ww._Sin;
                 }
                 spectrum[m] = new Complex(p / N, q / N);
                 progress?.Invoke((double)m / N);
@@ -94,7 +112,7 @@ namespace MathCore.DSP.Fourier
 
             var spectrum = new Complex[Values.Length];
             var N = spectrum.Length;
-            var w = exp.GetCoefficients(N, Inverse);
+            var w = Exp.GetCoefficients(N, Inverse);
 
             for (var m = 0; m < N; m++)
             {
@@ -107,8 +125,8 @@ namespace MathCore.DSP.Fourier
                     var im = v.Im;
                     var i = n * m % N;
                     var ww = w[i];
-                    P += re * ww.cos - im * ww.sin;
-                    Q += im * ww.cos + re * ww.sin;
+                    P += re * ww._Cos - im * ww._Sin;
+                    Q += im * ww._Cos + re * ww._Sin;
                 }
                 spectrum[m] = Inverse ? new Complex(P, Q) : new Complex(P / N, Q / N);
             }
@@ -125,7 +143,7 @@ namespace MathCore.DSP.Fourier
 
             var spectrum = new Complex[Values.Length];
             var N = spectrum.Length;
-            var w = exp.GetCoefficients(N, Inverse);
+            var w = Exp.GetCoefficients(N, Inverse);
 
             for (var m = 0; m < N; m++)
             {
@@ -138,8 +156,8 @@ namespace MathCore.DSP.Fourier
                     var im = v.Im;
                     var i = n * m % N;
                     var ww = w[i];
-                    P += re * ww.cos - im * ww.sin;
-                    Q += im * ww.cos + re * ww.sin;
+                    P += re * ww._Cos - im * ww._Sin;
+                    Q += im * ww._Cos + re * ww._Sin;
                 }
 
                 progress?.Invoke((double)m / N);

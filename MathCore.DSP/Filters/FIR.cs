@@ -11,7 +11,7 @@ namespace MathCore.DSP.Filters
         private readonly double[] _ImpulseResponse;
 
         /// <summary>Импульсная характеристика</summary>
-        public ReadOnlyCollection<double> ImpulseResponse => Array.AsReadOnly(_ImpulseResponse);
+        [NotNull] public ReadOnlyCollection<double> ImpulseResponse => Array.AsReadOnly(_ImpulseResponse);
 
         /// <summary>Инициализация нового цифрового фильтра с конечной импульсной характеристикой</summary>
         /// <param name="ImpulseResponse">Отсчёты импульсной характеристики фильтра</param>

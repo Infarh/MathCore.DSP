@@ -9,7 +9,7 @@ namespace MathCore.DSP.Filters
     public static class DigitalFilterExtension
     {
         /// <summary>Получить импульсную характеристику фильтра</summary>
-        /// <param name="filter">Объект фильтра, для которого требуется получтиь импульсную характеристику</param>
+        /// <param name="filter">Объект фильтра, для которого требуется получить импульсную характеристику</param>
         /// <param name="MaxSamples">Максимальное количество отсчётов (если меньше 0, то число отсчётов ограничивается по точности)</param>
         /// <param name="Accuracity">Точность вычисления по мощности (энергии)</param>
         /// <returns>Последовательность отсчётов импульсной характеристики</returns>

@@ -2,10 +2,10 @@
 
 namespace MathCore.DSP.Filters
 {
-    /// <summary>Цифровой ФВЧ на основе C-R цепочки с билинейным преобразованием</summary>
+    /// <summary>Цифровой ФВЧ на основе RС-цепочки с билинейным преобразованием</summary>
     public class HighPassRC : IIR
     {
-        /// <summary>Инициализация нового цифрового ФВЧ на основе CR-цепочики с билинейным преобразованием</summary>
+        /// <summary>Инициализация нового цифрового ФВЧ на основе RС-цепочки с билинейным преобразованием</summary>
         /// <param name="f0">Частота среза</param>
         /// <param name="dt">Период дискретизации</param>
         public HighPassRC(double f0, double dt) : this(Math.Tan(Math.PI * f0 * dt)) { }

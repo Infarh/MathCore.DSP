@@ -57,7 +57,7 @@ namespace MathCore.DSP.Signals
         public override EnumerableSignal GetIntegral(double s0 = 0) => new EnumerableSignal(_dt, GetIntegralSamples(_Samples, _dt, s0));
 
 
-        /// <summary>Преобразвоание в цифровой сигнал на основе массива отсчётов</summary>
+        /// <summary>Преобразование в цифровой сигнал на основе массива отсчётов</summary>
         /// <returns>Сигнал на основе массива отсчётов</returns>
         public SamplesDigitalSignal ToSamplesSignal() => new SamplesDigitalSignal(_dt, _Samples);
 

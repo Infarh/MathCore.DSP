@@ -7,19 +7,21 @@ namespace MathCore.DSP.Filters
     /// <summary>Фильтр с бесконечной импульсной характеристикой</summary>
     public class IIR : DigitalFilter
     {
-        /// <summary>Массив кооэффициентов полинома числителя</summary>
+        /// <summary>Массив коэффициентов полинома числителя</summary>
         [NotNull] private readonly double[] _B;
         /// <summary>Массив коэффициентов полинома знаменателя</summary>
         [NotNull] private readonly double[] _A;
 
-        /// <summary>Массив кооэффициентов полинома числителя</summary>
+        /// <summary>Массив коэффициентов полинома числителя</summary>
+        [NotNull]
         public ReadOnlyCollection<double> B => Array.AsReadOnly(_B);
 
         /// <summary>Массив коэффициентов полинома знаменателя</summary>
+        [NotNull]
         public ReadOnlyCollection<double> A => Array.AsReadOnly(_A);
 
         /// <summary>Инициализация нового цифрового фильтра с бесконечной импульсной характеристикой</summary>
-        /// <param name="B">Массив кооэффициентов полинома числителя</param>
+        /// <param name="B">Массив коэффициентов полинома числителя</param>
         /// <param name="A">Массив коэффициентов полинома знаменателя</param>
         public IIR([NotNull] double[] B, [NotNull] double[] A)
             : base(
@@ -43,6 +45,7 @@ namespace MathCore.DSP.Filters
         /// <summary>Последовательное соединение фильтра с другим <see cref="IIR"/></summary>
         /// <param name="filter">Соединяемый фильтр</param>
         /// <returns>Фильтр, представляющий собой результат последовательного соединения двух фильтров</returns>
+        [NotNull]
         public IIR ConnectionSerialTo([NotNull] IIR filter)
         {
             if (filter is null) throw new ArgumentNullException(nameof(filter));
@@ -55,6 +58,7 @@ namespace MathCore.DSP.Filters
         /// <summary>Параллельное соединение фильтра с другим <see cref="IIR"/></summary>
         /// <param name="filter">Соединяемый фильтр</param>
         /// <returns>Фильтр, представляющий собой результат параллельного соединения двух фильтров</returns>
+        [NotNull]
         public IIR ConnectionParallelTo([NotNull] IIR filter)
         {
             if (filter is null) throw new ArgumentNullException(nameof(filter));

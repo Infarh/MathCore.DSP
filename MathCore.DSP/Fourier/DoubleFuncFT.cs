@@ -1,4 +1,5 @@
 ﻿using System;
+using MathCore.Annotations;
 
 namespace MathCore.DSP.Fourier
 {
@@ -7,15 +8,16 @@ namespace MathCore.DSP.Fourier
 
     public static class DoubleFuncFT
     {
-        /// <summary>Выполнить преобразвоание Фурье</summary>
-        /// <param name="s">Вечественная функция</param>
+        /// <summary>Выполнить преобразование Фурье</summary>
+        /// <param name="s">Вещественная функция</param>
         /// <param name="t1">Начало интервала</param>
         /// <param name="t2">Конец интервала</param>
         /// <param name="IsInverse">Обратное преобразование</param>
         /// <param name="dt">Шаг численного расчёта</param>
         /// <returns>Спектр</returns>
-        public static DoubleSpectrum GetFurierTransformation(
-            this Func<double, double> s,
+        [NotNull]
+        public static DoubleSpectrum GetFourierTransformation(
+            [NotNull] this Func<double, double> s,
             double t1,
             double t2,
             bool IsInverse = false,
@@ -51,15 +53,16 @@ namespace MathCore.DSP.Fourier
             };
         }
 
-        /// <summary>Выполнить преобразвоание Фурье</summary>
+        /// <summary>Выполнить преобразование Фурье</summary>
         /// <param name="s">Комплексная функция</param>
         /// <param name="t1">Начало интервала</param>
         /// <param name="t2">Конец интервала</param>
         /// <param name="IsInverse">Обратное преобразование</param>
         /// <param name="dt">Шаг численного расчёта</param>
         /// <returns>Спектр</returns>
-        public static DoubleSpectrum GetFurierTransformation(
-            this Func<double, Complex> s,
+        [NotNull]
+        public static DoubleSpectrum GetFourierTransformation(
+            [NotNull] this Func<double, Complex> s,
             double t1, 
             double t2,
             bool IsInverse = false,
@@ -89,8 +92,16 @@ namespace MathCore.DSP.Fourier
             };
         }
 
-        public static IntSpectrum GetFurierSpectrum(
-            this Func<double, double> s,
+        /// <summary>Спектр по целочисленным значением частот</summary>
+        /// <param name="s">Вещественная функция</param>
+        /// <param name="t1">Начало интервала</param>
+        /// <param name="t2">Конец интервала</param>
+        /// <param name="IsInverse">Обратное преобразование</param>
+        /// <param name="dt">Шаг численного расчёта</param>
+        /// <returns>Спектр по целочисленным значениям частот</returns>
+        [NotNull]
+        public static IntSpectrum GetFourierSpectrum(
+            [NotNull] this Func<double, double> s,
             double t1,
             double t2,
             bool IsInverse = false,
@@ -105,9 +116,18 @@ namespace MathCore.DSP.Fourier
             return ss.GetFourierTransformation(IsInverse);
         }
 
-        public static IntSpectrum GetFurierSpectrum(
-            this Func<double, Complex> s,
-            double t1, double t2,
+        /// <summary>Спектр по целочисленным значением частот</summary>
+        /// <param name="s">Комплексная функция</param>
+        /// <param name="t1">Начало интервала</param>
+        /// <param name="t2">Конец интервала</param>
+        /// <param name="IsInverse">Обратное преобразование</param>
+        /// <param name="dt">Шаг численного расчёта</param>
+        /// <returns>Спектр по целочисленным значениям частот</returns>
+        [NotNull]
+        public static IntSpectrum GetFourierSpectrum(
+            [NotNull] this Func<double, Complex> s,
+            double t1, 
+            double t2,
             bool IsInverse = false,
             double dt = 1e-4)
         {
