@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{7614
 		..\BuildAndPublish.bat = ..\BuildAndPublish.bat
 		..\BuildAndTest.bat = ..\BuildAndTest.bat
 		..\BuildRelease.bat = ..\BuildRelease.bat
-		..\license.txt = ..\license.txt
+		license.txt = license.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C1AA67F3-31C6-4C42-884D-BBC39CBD555E}"
