@@ -16,10 +16,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Use .NET 3.0.100-preview8-013656
+    - name: Use .NET 3.0.100
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.0.100-preview8-013656
+        dotnet-version: 3.0.100
     - name: dotnet build and test
       run: |
         dotnet build --nologo --configuration Debug
@@ -27,13 +27,16 @@ jobs:
         
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
     
     steps:
     - uses: actions/checkout@v1
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.0.100-preview8-013656
-    - name: Build with dotnet
+        dotnet-version: 3.0.100
+    - name: Build on ${{ matrix.os }}
       run: dotnet build --nologo --configuration Release
