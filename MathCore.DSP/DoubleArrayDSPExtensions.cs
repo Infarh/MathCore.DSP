@@ -67,20 +67,42 @@ namespace MathCore.DSP
         public static Complex GetTransmissionCoefficient([NotNull] double[] A, [NotNull] double[] B, double f, double dt)
             => GetTransmissionCoefficient(A, B, f * dt);
 
+        /// <summary>Расчёт коэффициента передачи рекуррентного фильтра, заданного массивами своих коэффициентов для указанной частоты</summary>
+        /// <param name="A">Массив коэффициентов обратных связей</param>
+        /// <param name="B">Массив коэффициентов прямых связей</param>
+        /// <param name="f">Частота, на которой требуется рассчитать коэффициент передачи фильтра</param>
+        /// <returns>Значение комплексного коэффициента передачи рекуррентного фильтра на заданной частоте</returns>
         public static Complex GetTransmissionCoefficient([NotNull] double[]A, [NotNull] double[]B, double f)
         {
             var e = Complex.Exp(-2 * Math.PI * f);
 
-            Complex Sum(double[] V, Complex exp)
+            static Complex Sum(double[] V, Complex exp)
             {
-                Complex sum = V[V.Length - 1];
-                for (var i = V.Length - 2; i >= 0; i--) sum = sum * exp + V[i];
-                return sum;
+                var sum_re = V[V.Length - 1];
+                var sum_im = 0d;
+                var (exp_re, exp_im) = exp;
+
+                for (var i = V.Length - 2; i >= 0; i--)
+                {
+                    var s_re = sum_re * exp_re - sum_im * exp_im + V[i];
+                    var s_im = sum_re * exp_im + sum_im * exp_re;
+
+                    sum_re = s_re;
+                    sum_im = s_im;
+
+                }
+                return new Complex(sum_re, sum_im);
             }
 
             return Sum(B, e) / Sum(A, e);
         }
 
+        /// <summary>Выполнение фильтрации очередного отсчёта цифрового сигнала с помощью коэффициентов рекуррентного фильтра</summary>
+        /// <param name="State">Вектор состояния фильтра</param>
+        /// <param name="A">Вектор коэффициентов обратных связей</param>
+        /// <param name="B">Вектор коэффициентов прямых связей</param>
+        /// <param name="Sample">Фильтруемый отсчёт</param>
+        /// <returns>Обработанное значение</returns>
         public static double FilterSample([NotNull] this double[] State, [NotNull] double[] A, [NotNull] double[] B, double Sample)
         {
             var a0 = 1 / A[0];
@@ -129,7 +151,7 @@ namespace MathCore.DSP
             return samples.Select(sample => FilterSample(State, A, B, sample));
         }
 
-        [NotNull] public static IEnumerable<double> FilterIIR(this IEnumerable<double> samples, [NotNull] double[] A, [NotNull] double[] B)
+        [NotNull] public static IEnumerable<double> FilterIIR([NotNull] this IEnumerable<double> samples, [NotNull] double[] A, [NotNull] double[] B)
             => samples.FilterIIR(A, B, new double[A.Length]);
     }
 }
