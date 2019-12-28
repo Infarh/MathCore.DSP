@@ -24,7 +24,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MathCore" Version="0.0.12" />
+    <PackageReference Include="MathCore" Version="0.0.14" />
   </ItemGroup>
 
 </Project>

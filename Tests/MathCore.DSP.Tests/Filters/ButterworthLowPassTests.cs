@@ -119,9 +119,9 @@ namespace MathCore.DSP.Tests.Filters
             Assert.That.Value(z_poles[2].Re).IsEqual(0.530553579281761, 2.23e-16);
             Assert.That.Value(z_poles[2].Im).IsEqual(-0.4482452811345, 4.45e-16);
 
-            Assert.That.Value(z_poles[0].Abs).LessThan(1);
-            Assert.That.Value(z_poles[1].Abs).LessThan(1);
-            Assert.That.Value(z_poles[2].Abs).LessThan(1);
+            Assert.That.Value(z_poles[0].Abs).LessThen(1);
+            Assert.That.Value(z_poles[1].Abs).LessThen(1);
+            Assert.That.Value(z_poles[2].Abs).LessThen(1);
 
             var kz = DigitalFilter.GetNomalizeCoefficient(translated_poles, dt);
             Assert.That.Value(kz).IsEqual(0.451944218734017, 1.12e-16);
@@ -149,7 +149,7 @@ namespace MathCore.DSP.Tests.Filters
             Assert.That.Value(a_complex[2].Im).IsEqual(0, 2.78e-1);
             Assert.That.Value(a_complex[3].Im).IsEqual(0);
 
-            var a = a_complex.ToRe();
+            var a = a_complex.ToRe() ?? throw new AssertFailedException("Отсутствует ссылка на массив вещественных значений");
 
             Assert.That.Value(a[0]).IsEqual(1);
             Assert.That.Value(a[1]).IsEqual(-1.482584663483521, 6.67e-16);
