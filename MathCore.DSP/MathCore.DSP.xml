@@ -4,12 +4,58 @@
         <name>MathCore.DSP</name>
     </assembly>
     <members>
+        <member name="T:MathCore.DSP.DoubleArrayDSPExtensions">
+            <summary>Методы-расширения для вещественных массивов</summary>
+        </member>
+        <member name="M:MathCore.DSP.DoubleArrayDSPExtensions.GetTransmissionCoefficient(System.Double[],System.Double,System.Double)">
+            <summary>Вычислить значение коэффициента передачи фильтра, заданного импульсной характеристикой</summary>
+            <param name="ImpulseResponse">Массив отсчётов импульсной характеристики</param>
+            <param name="f">Частота вычисления коэффициента передачи</param>
+            <param name="dt">Период дискретизации импульсной характеристики</param>
+            <returns>Комплексное значение коэффициента передачи фильтра с указанной импульсной характеристикой</returns>
+        </member>
+        <member name="M:MathCore.DSP.DoubleArrayDSPExtensions.GetTransmissionCoefficient(System.Double[],System.Double)">
+            <summary>Вычислить значение коэффициента передачи фильтра, заданного импульсной характеристикой</summary>
+            <param name="ImpulseResponse">Массив отсчётов импульсной характеристики</param>
+            <param name="f">Нормированная частота вычисления коэффициента передачи</param>
+            <returns>Комплексное значение коэффициента передачи фильтра с указанной импульсной характеристикой</returns>
+        </member>
+        <member name="M:MathCore.DSP.DoubleArrayDSPExtensions.FilterSample(System.Double[],System.Double[],System.Double)">
+            <summary>Вычисление выходного значения фильтра, заданного вектором состояния и импульсной характеристикой</summary>
+            <param name="State">Вектор состояния фильтра</param>
+            <param name="ImpulseResponse">Массив значений импульсной характеристики</param>
+            <param name="Sample">Значение входного отсчёта фильтра</param>
+            <returns>Значение выходного отсчёта фильтра</returns>
+        </member>
+        <member name="M:MathCore.DSP.DoubleArrayDSPExtensions.GetTransmissionCoefficient(System.Double[],System.Double[],System.Double)">
+            <summary>Расчёт коэффициента передачи рекуррентного фильтра, заданного массивами своих коэффициентов для указанной частоты</summary>
+            <param name="A">Массив коэффициентов обратных связей</param>
+            <param name="B">Массив коэффициентов прямых связей</param>
+            <param name="f">Частота, на которой требуется рассчитать коэффициент передачи фильтра</param>
+            <returns>Значение комплексного коэффициента передачи рекуррентного фильтра на заданной частоте</returns>
+        </member>
+        <member name="M:MathCore.DSP.DoubleArrayDSPExtensions.FilterSample(System.Double[],System.Double[],System.Double[],System.Double)">
+            <summary>Выполнение фильтрации очередного отсчёта цифрового сигнала с помощью коэффициентов рекуррентного фильтра</summary>
+            <param name="State">Вектор состояния фильтра</param>
+            <param name="A">Вектор коэффициентов обратных связей</param>
+            <param name="B">Вектор коэффициентов прямых связей</param>
+            <param name="Sample">Фильтруемый отсчёт</param>
+            <returns>Обработанное значение</returns>
+        </member>
         <member name="T:MathCore.DSP.Filters.AllPassFilter">
-            <summary>Всепропускающий фильльт</summary>
+            <summary>Всепропускающий фильтр</summary>
         </member>
         <member name="M:MathCore.DSP.Filters.AllPassFilter.#ctor(System.Double)">
             <summary>Инициализация нового экземпляра <see cref="T:MathCore.DSP.Filters.AllPassFilter"/></summary>
             <param name="k">Коэффициент передачи</param>
+        </member>
+        <member name="T:MathCore.DSP.Filters.AnalogBasedFilter">
+            <summary>Цифровой фильтр на основе аналогового прототипа</summary>
+        </member>
+        <member name="M:MathCore.DSP.Filters.AnalogBasedFilter.#ctor(System.Double[],System.Double[])">
+            <summary>Инициализация параметров цифрового фильтра на базе аналогового прототипа</summary>
+            <param name="B">Коэффициенты полинома числителя</param>
+            <param name="A">Коэффициенты полинома знаменателя</param>
         </member>
         <member name="T:MathCore.DSP.Filters.BandPassRLC">
             <summary>Полосопропускающий RLC-фильтр</summary>
@@ -20,6 +66,11 @@
             <param name="DeltaF">Полоса частот по уровню 0.707</param>
             <param name="dt">Период дискретизации</param>
         </member>
+        <member name="M:MathCore.DSP.Filters.BandPassRLC.#ctor(System.Double,System.Double)">
+            <summary>Инициализация нового экземпляра <see cref="T:MathCore.DSP.Filters.BandPassRLC"/> по обобщённым параметрам</summary>
+            <param name="w0">Обобщённая центральная частота</param>
+            <param name="dw">Обобщённая полоса частот</param>
+        </member>
         <member name="T:MathCore.DSP.Filters.BandStopRLC">
             <summary>Полосозадерживающий RLC-фильтр</summary>
         </member>
@@ -28,6 +79,19 @@
             <param name="f0">Частота резонанса</param>
             <param name="DeltaF">Полоса частот по уровню 0.707</param>
             <param name="dt">Период дискретизации</param>
+        </member>
+        <member name="M:MathCore.DSP.Filters.BandStopRLC.#ctor(System.Double,System.Double)">
+            <summary>Инициализация нового экземпляра <see cref="T:MathCore.DSP.Filters.BandStopRLC"/></summary>
+            <param name="w0">Обобщённая центральная частота</param>
+            <param name="dw">Обобщённая полоса частот</param>
+        </member>
+        <member name="T:MathCore.DSP.Filters.ButterworthFilter">
+            <summary>Фильтр Баттерворта</summary>
+        </member>
+        <member name="M:MathCore.DSP.Filters.ButterworthFilter.#ctor(System.Double[],System.Double[])">
+            <summary>Инициализация фильтра Баттерворта</summary>
+            <param name="B">Коэффициенты полинома числителя</param>
+            <param name="A">Коэффициенты полинома знаменателя</param>
         </member>
         <member name="T:MathCore.DSP.Filters.ButterworthLowPass">
             <summary>Низкочастотный фильтр Баттерворта</summary>
@@ -60,15 +124,20 @@
         <member name="T:MathCore.DSP.Filters.CombFilter">
             <summary>Гребенчатый фильтр</summary>
         </member>
+        <member name="M:MathCore.DSP.Filters.CombFilter.GetImpulseResponse(System.Int32)">
+            <summary>Импульсная характеристика гребенчатого фильтра</summary>
+            <param name="DelayLineLength">Длина линии задержки</param>
+            <returns>Массив значений импульсной характеристики гребенчатого фильтра</returns>
+        </member>
         <member name="M:MathCore.DSP.Filters.CombFilter.#ctor(System.Int32)">
-            <summary>Новый гребенчатый фильтр</summary>
+            <summary>Инициализация нового гребенчатого фильтра</summary>
             <param name="D">Задержка</param>
         </member>
         <member name="T:MathCore.DSP.Filters.CombinationFilter">
             <summary>Комбинационный фильтр</summary>
         </member>
         <member name="P:MathCore.DSP.Filters.CombinationFilter.Filter1">
-            <summary>ПЕрвый фильтр в комбинации</summary>
+            <summary>Первый фильтр в комбинации</summary>
         </member>
         <member name="P:MathCore.DSP.Filters.CombinationFilter.Filter2">
             <summary>Второй фильтр в комбинации</summary>
@@ -97,7 +166,7 @@
             <summary>Расчёт нормирующего множителя (приводящего системную-передаточную функцию к виду с максимумом в 1</summary>
             <param name="poles">Набор полюсов</param>
             <param name="dt">Период дискретизации</param>
-            <returns>Нормирующий мнжоитель</returns>
+            <returns>Нормирующий множитель</returns>
         </member>
         <member name="F:MathCore.DSP.Filters.DigitalFilter.State">
             <summary>Вектор состояния</summary>
@@ -145,16 +214,16 @@
         </member>
         <member name="M:MathCore.DSP.Filters.DigitalFilterExtension.GetImpulseResponse(MathCore.DSP.Filters.DigitalFilter,System.Int32,System.Double)">
             <summary>Получить импульсную характеристику фильтра</summary>
-            <param name="filter">Объект фильтра, для которого требуется получтиь импульсную характеристику</param>
+            <param name="filter">Объект фильтра, для которого требуется получить импульсную характеристику</param>
             <param name="MaxSamples">Максимальное количество отсчётов (если меньше 0, то число отсчётов ограничивается по точности)</param>
             <param name="Accuracity">Точность вычисления по мощности (энергии)</param>
             <returns>Последовательность отсчётов импульсной характеристики</returns>
         </member>
-        <member name="T:MathCore.DSP.Filters.ExponetialLowPassRC">
-            <summary>Цифровой ФНЧ на основе R-C цепочки</summary>
+        <member name="T:MathCore.DSP.Filters.ExponentialLowPassRC">
+            <summary>Цифровой ФНЧ на основе RC-цепочки</summary>
         </member>
-        <member name="M:MathCore.DSP.Filters.ExponetialLowPassRC.#ctor(System.Double,System.Double)">
-            <summary>Инициализация нового цифрового ФНЧ на основе RC-цепочики</summary>
+        <member name="M:MathCore.DSP.Filters.ExponentialLowPassRC.#ctor(System.Double,System.Double)">
+            <summary>Инициализация нового цифрового ФНЧ на основе RC-цепочки</summary>
             <param name="f0">Частота среза</param>
             <param name="dt">Период дискретизации</param>
         </member>
@@ -222,10 +291,10 @@
             <param name="ImpulseResponse">Отсчёты импульсной характеристики фильтра</param>
         </member>
         <member name="T:MathCore.DSP.Filters.HighPassRC">
-            <summary>Цифровой ФВЧ на основе C-R цепочки с билинейным преобразованием</summary>
+            <summary>Цифровой ФВЧ на основе RС-цепочки с билинейным преобразованием</summary>
         </member>
         <member name="M:MathCore.DSP.Filters.HighPassRC.#ctor(System.Double,System.Double)">
-            <summary>Инициализация нового цифрового ФВЧ на основе CR-цепочики с билинейным преобразованием</summary>
+            <summary>Инициализация нового цифрового ФВЧ на основе RС-цепочки с билинейным преобразованием</summary>
             <param name="f0">Частота среза</param>
             <param name="dt">Период дискретизации</param>
         </member>
@@ -233,20 +302,20 @@
             <summary>Фильтр с бесконечной импульсной характеристикой</summary>
         </member>
         <member name="F:MathCore.DSP.Filters.IIR._B">
-            <summary>Массив кооэффициентов полинома числителя</summary>
+            <summary>Массив коэффициентов полинома числителя</summary>
         </member>
         <member name="F:MathCore.DSP.Filters.IIR._A">
             <summary>Массив коэффициентов полинома знаменателя</summary>
         </member>
         <member name="P:MathCore.DSP.Filters.IIR.B">
-            <summary>Массив кооэффициентов полинома числителя</summary>
+            <summary>Массив коэффициентов полинома числителя</summary>
         </member>
         <member name="P:MathCore.DSP.Filters.IIR.A">
             <summary>Массив коэффициентов полинома знаменателя</summary>
         </member>
         <member name="M:MathCore.DSP.Filters.IIR.#ctor(System.Double[],System.Double[])">
             <summary>Инициализация нового цифрового фильтра с бесконечной импульсной характеристикой</summary>
-            <param name="B">Массив кооэффициентов полинома числителя</param>
+            <param name="B">Массив коэффициентов полинома числителя</param>
             <param name="A">Массив коэффициентов полинома знаменателя</param>
         </member>
         <member name="M:MathCore.DSP.Filters.IIR.ConnectionSerialTo(MathCore.DSP.Filters.IIR)">
@@ -266,10 +335,10 @@
             <summary>Инициализация нового интегратора</summary>
         </member>
         <member name="T:MathCore.DSP.Filters.LowPassRC">
-            <summary>Цифровой ФНЧ на основе R-C цепочки с билинейным преобразованием</summary>
+            <summary>Цифровой ФНЧ на основе RC-цепочки с билинейным преобразованием</summary>
         </member>
         <member name="M:MathCore.DSP.Filters.LowPassRC.#ctor(System.Double,System.Double)">
-            <summary>Инициализация нового цифрового ФНЧ на основе RC-цепочики с билинейным преобразованием</summary>
+            <summary>Инициализация нового цифрового ФНЧ на основе RC-цепочки с билинейным преобразованием</summary>
             <param name="f0">Частота среза</param>
             <param name="dt">Период дискретизации</param>
         </member>
@@ -277,7 +346,7 @@
             <summary>Параллельный комбинационный фильтр</summary>
         </member>
         <member name="M:MathCore.DSP.Filters.ParallelFilter.#ctor(MathCore.DSP.Filters.Filter,MathCore.DSP.Filters.Filter)">
-            <summary>Инициализация нового параллельного кобинационного фильтра</summary>
+            <summary>Инициализация нового параллельного комбинационного фильтра</summary>
             <param name="Filter1">Первый фильтр в комбинации</param>
             <param name="Filter2">Второй фильтр в комбинации</param>
         </member>
@@ -285,7 +354,7 @@
             <summary>Последовательный комбинационный фильтр</summary>
         </member>
         <member name="M:MathCore.DSP.Filters.SerialFilter.#ctor(MathCore.DSP.Filters.Filter,MathCore.DSP.Filters.Filter)">
-            <summary>Инициализация нового последовательного кобинационного фильтра</summary>
+            <summary>Инициализация нового последовательного комбинационного фильтра</summary>
             <param name="Filter1">Первый фильтр в комбинации</param>
             <param name="Filter2">Второй фильтр в комбинации</param>
         </member>
@@ -295,32 +364,106 @@
         <member name="M:MathCore.DSP.Fourier.DoubleArrayFT.GetFourierTransformation(System.Double[],System.Boolean)">
             <summary>Выполнить преобразование Фурье для вещественного массива</summary>
             <param name="s">Массив вещественных значений отсчётов</param>
-            <param name="IsInverse">Выполнить обратное преобразвоание</param>
+            <param name="IsInverse">Выполнить обратное преобразование</param>
             <returns>Спектр</returns>
         </member>
         <member name="M:MathCore.DSP.Fourier.DoubleArrayFT.GetFourierTransformation(MathCore.Complex[],System.Boolean)">
             <summary>Выполнить преобразование Фурье для комплексного массива</summary>
             <param name="s">Массив комплексных значений отсчётов</param>
-            <param name="IsInverse">Выполнить обратное преобразвоание</param>
+            <param name="IsInverse">Выполнить обратное преобразование</param>
             <returns>Спектр</returns>
         </member>
-        <member name="M:MathCore.DSP.Fourier.DoubleFuncFT.GetFurierTransformation(System.Func{System.Double,System.Double},System.Double,System.Double,System.Boolean,System.Double)">
-            <summary>Выполнить преобразвоание Фурье</summary>
-            <param name="s">Вечественная функция</param>
+        <member name="M:MathCore.DSP.Fourier.DoubleFuncFT.GetFourierTransformation(System.Func{System.Double,System.Double},System.Double,System.Double,System.Boolean,System.Double)">
+            <summary>Выполнить преобразование Фурье</summary>
+            <param name="s">Вещественная функция</param>
             <param name="t1">Начало интервала</param>
             <param name="t2">Конец интервала</param>
             <param name="IsInverse">Обратное преобразование</param>
             <param name="dt">Шаг численного расчёта</param>
             <returns>Спектр</returns>
         </member>
-        <member name="M:MathCore.DSP.Fourier.DoubleFuncFT.GetFurierTransformation(System.Func{System.Double,MathCore.Complex},System.Double,System.Double,System.Boolean,System.Double)">
-            <summary>Выполнить преобразвоание Фурье</summary>
+        <member name="M:MathCore.DSP.Fourier.DoubleFuncFT.GetFourierTransformation(System.Func{System.Double,MathCore.Complex},System.Double,System.Double,System.Boolean,System.Double)">
+            <summary>Выполнить преобразование Фурье</summary>
             <param name="s">Комплексная функция</param>
             <param name="t1">Начало интервала</param>
             <param name="t2">Конец интервала</param>
             <param name="IsInverse">Обратное преобразование</param>
             <param name="dt">Шаг численного расчёта</param>
             <returns>Спектр</returns>
+        </member>
+        <member name="M:MathCore.DSP.Fourier.DoubleFuncFT.GetFourierSpectrum(System.Func{System.Double,System.Double},System.Double,System.Double,System.Boolean,System.Double)">
+            <summary>Спектр по целочисленным значением частот</summary>
+            <param name="s">Вещественная функция</param>
+            <param name="t1">Начало интервала</param>
+            <param name="t2">Конец интервала</param>
+            <param name="IsInverse">Обратное преобразование</param>
+            <param name="dt">Шаг численного расчёта</param>
+            <returns>Спектр по целочисленным значениям частот</returns>
+        </member>
+        <member name="M:MathCore.DSP.Fourier.DoubleFuncFT.GetFourierSpectrum(System.Func{System.Double,MathCore.Complex},System.Double,System.Double,System.Boolean,System.Double)">
+            <summary>Спектр по целочисленным значением частот</summary>
+            <param name="s">Комплексная функция</param>
+            <param name="t1">Начало интервала</param>
+            <param name="t2">Конец интервала</param>
+            <param name="IsInverse">Обратное преобразование</param>
+            <param name="dt">Шаг численного расчёта</param>
+            <returns>Спектр по целочисленным значениям частот</returns>
+        </member>
+        <member name="T:MathCore.DSP.Fourier.ElementaryFilter">
+            <summary>Элементарный фильтр Фурье</summary>
+        </member>
+        <member name="F:MathCore.DSP.Fourier.ElementaryFilter._ReValue">
+            <summary>Действительное значение</summary>
+        </member>
+        <member name="F:MathCore.DSP.Fourier.ElementaryFilter._ImValue">
+            <summary>Мнимое значение</summary>
+        </member>
+        <member name="F:MathCore.DSP.Fourier.ElementaryFilter._N">
+            <summary>Размер выборки</summary>
+        </member>
+        <member name="F:MathCore.DSP.Fourier.ElementaryFilter._M">
+            <summary>Количество спектральных компонент в спектре</summary>
+        </member>
+        <member name="F:MathCore.DSP.Fourier.ElementaryFilter._dPhi">
+            <summary>Дискрет фазы</summary>
+        </member>
+        <member name="F:MathCore.DSP.Fourier.ElementaryFilter._SamplesIndex">
+            <summary>Индекс отсчёта</summary>
+        </member>
+        <member name="P:MathCore.DSP.Fourier.ElementaryFilter.Value">
+            <summary>Значение фильтра</summary>
+        </member>
+        <member name="M:MathCore.DSP.Fourier.ElementaryFilter.#ctor(System.Int32,System.Int32)">
+            <summary>Инициализация нового элементарного фильтра преобразования Фурье</summary>
+            <param name="N">Размер выборки</param>
+            <param name="M">Размер спектра</param>
+        </member>
+        <member name="M:MathCore.DSP.Fourier.ElementaryFilter.Initialize">
+            <summary>Инициализация фильтра (сброс состояния)</summary>
+        </member>
+        <member name="M:MathCore.DSP.Fourier.ElementaryFilter.Process(System.Double)">
+            <summary>Обработка очередного значения</summary>
+            <param name="value">Значение обрабатываемого отсчёта</param>
+        </member>
+        <member name="T:MathCore.DSP.Fourier.Exp">
+            <summary>Комплексное экспоненциальное значение</summary>
+        </member>
+        <member name="F:MathCore.DSP.Fourier.Exp._Sin">
+            <summary>Синусная составляющая</summary>
+        </member>
+        <member name="F:MathCore.DSP.Fourier.Exp._Cos">
+            <summary>Косинусная составляющая</summary>
+        </member>
+        <member name="M:MathCore.DSP.Fourier.Exp.#ctor(System.Double,System.Double)">
+            <summary>Инициализация нового комплексного экспоненциального значения</summary>
+            <param name="Sin">Синусная составляющая</param>
+            <param name="Cos">Косинусная составляющая</param>
+        </member>
+        <member name="M:MathCore.DSP.Fourier.Exp.GetCoefficients(System.Int32,System.Boolean)">
+            <summary>Рассчитать массив комплексных экспоненциальных коэффициентов</summary>
+            <param name="N"></param>
+            <param name="IsInverse"></param>
+            <returns></returns>
         </member>
         <member name="T:MathCore.DSP.Fourier.FFT">
             <summary>Быстрое преобразование Фурье</summary>
@@ -338,9 +481,7 @@
             <param name="Spectrum">Массив отсчётов спектра</param>
         </member>
         <member name="M:MathCore.DSP.Fourier.FFT.FFT_int(System.Int32[],System.Boolean)">
-            <summary>
-            Целочисленное преобразование Фурье
-            </summary>
+            <summary>Целочисленное преобразование Фурье</summary>
             <param name="a">Массив целых чисел</param>
             <param name="invert">Обратное преобразование</param>
         </member>
@@ -380,6 +521,28 @@
         <member name="T:MathCore.DSP.Fourier.FT">
             <summary>Класс преобразования Фурье</summary>
         </member>
+        <member name="M:MathCore.DSP.Fourier.FT.W(System.Int32)">
+            <summary>Коэффициент прямого преобразования Фурье</summary>
+            <param name="N">Число спектральных составляющих</param>
+            <returns>Комплексное значение коэффициента Фурье</returns>
+        </member>
+        <member name="M:MathCore.DSP.Fourier.FT.Winv(System.Int32)">
+            <summary>Коэффициент обратного преобразования Фурье</summary>
+            <param name="N">Число спектральных составляющих</param>
+            <returns>Комплексное значение обратного коэффициента Фурье</returns>
+        </member>
+        <member name="M:MathCore.DSP.Fourier.FT.W(System.Int32,System.Int32)">
+            <summary>Коэффициент прямого преобразования Фурье для спектральной составляющей</summary>
+            <param name="k">Номер спектральной составляющей</param>
+            <param name="N">Число спектральных составляющих</param>
+            <returns>Комплексное значение коэффициента Фурье</returns>
+        </member>
+        <member name="M:MathCore.DSP.Fourier.FT.Winv(System.Int32,System.Int32)">
+            <summary>Коэффициент обратного преобразования Фурье для спектральной составляющей</summary>
+            <param name="k">Номер спектральной составляющей</param>
+            <param name="N">Число спектральных составляющих</param>
+            <returns>Комплексное значение обратного коэффициента Фурье</returns>
+        </member>
         <member name="M:MathCore.DSP.Fourier.FT.FourierTransform(System.Double[],System.Boolean)">
             <summary>Прямое преобразование отсчётов функции в спектр</summary>
             <param name="Values">Массив отсчётов функции</param>
@@ -417,7 +580,7 @@
             <summary>Полное время сигнала</summary>
         </member>
         <member name="P:MathCore.DSP.Signals.DigitalSignal.SamplesCount">
-            <summary>Клоичество отсчётов</summary>
+            <summary>Количество отсчётов</summary>
         </member>
         <member name="P:MathCore.DSP.Signals.DigitalSignal.Min">
             <summary>Минимальное значение</summary>
@@ -450,6 +613,12 @@
             <param name="s0">Константа интегрирования</param>
             <returns>Цифровой сигнал, как результат интегрирования</returns>
         </member>
+        <member name="M:MathCore.DSP.Signals.DigitalSignal.CopyTo(System.Double[],System.Int32,System.Int32)">
+            <summary>Копирование отсчётов сигнала в массив</summary>
+            <param name="Destination">Массив места назначения</param>
+            <param name="Index">Начальный индекс в массиве места назначения</param>
+            <param name="Length">Длина копируемого участка</param>
+        </member>
         <member name="T:MathCore.DSP.Signals.EnumerableSignal">
             <summary>Цифровой сигнал на основе последовательности (потенциально бесконечной) отсчётов</summary>
         </member>
@@ -470,8 +639,30 @@
             <returns>Цифровой сигнал, как результат интегрирования</returns>
         </member>
         <member name="M:MathCore.DSP.Signals.EnumerableSignal.ToSamplesSignal">
-            <summary>Преобразвоание в цифровой сигнал на основе массива отсчётов</summary>
+            <summary>Преобразование в цифровой сигнал на основе массива отсчётов</summary>
             <returns>Сигнал на основе массива отсчётов</returns>
+        </member>
+        <member name="T:MathCore.DSP.Signals.Interpolators.Bilinear">
+            <summary>Билинейный интерполятор</summary>
+        </member>
+        <member name="T:MathCore.DSP.Signals.Interpolators.Interpolator">
+            <summary>Интерполятор</summary>
+        </member>
+        <member name="M:MathCore.DSP.Signals.Interpolators.Interpolator.GetValue(System.Double[],System.Double)">
+            <summary>Получить значение</summary>
+            <param name="Values">Массив значений</param>
+            <param name="pos">Положение в массиве</param>
+            <returns>Интерполированное значение</returns>
+        </member>
+        <member name="M:MathCore.DSP.Signals.Interpolators.Interpolator.SetValue(System.Double[],System.Double,System.Double)">
+            <summary>Установить значение</summary>
+            <param name="Values">Массив значений</param>
+            <param name="pos">Положение в массиве</param>
+            <param name="Value">Устанавливаемое значение</param>
+            <returns>Установленное значение</returns>
+        </member>
+        <member name="T:MathCore.DSP.Signals.Interpolators.Linear">
+            <summary>Линейный интерполятор</summary>
         </member>
         <member name="T:MathCore.DSP.Signals.Operations.BinaryOperationResultSignal">
             <summary>Сигнал результата бинарной операции</summary>
@@ -498,22 +689,37 @@
             <summary>Сигнал-результат скалярной операции между сигналом и вещественным числом</summary>
         </member>
         <member name="F:MathCore.DSP.Signals.Operations.BinaryScalarOperationResultSignal._Value">
-            <summary>Вещественное число, учавствующее в операции с сигналом</summary>
+            <summary>Вещественное число, участвующее в операции с сигналом</summary>
         </member>
         <member name="F:MathCore.DSP.Signals.Operations.BinaryScalarOperationResultSignal._Function">
             <summary>Функция операции над отсчётами сигнала</summary>
         </member>
         <member name="P:MathCore.DSP.Signals.Operations.BinaryScalarOperationResultSignal.Signal">
-            <summary>Сигнал, учавствующий в операции</summary>
+            <summary>Сигнал, участвующий в операции</summary>
         </member>
         <member name="P:MathCore.DSP.Signals.Operations.BinaryScalarOperationResultSignal.SamplesCount">
             <summary>Количество отсчётов</summary>
         </member>
         <member name="M:MathCore.DSP.Signals.Operations.BinaryScalarOperationResultSignal.#ctor(MathCore.DSP.Signals.DigitalSignal,System.Double,MathCore.DSP.Signals.Operations.BinaryScalarOperationResultSignal.SignalCombinator)">
-            <summary>Инициализация нового результирующего сигнала для сиграла и числа</summary>
+            <summary>Инициализация нового результирующего сигнала для сигнала и числа</summary>
             <param name="Signal">Исходный сигнал</param>
             <param name="Value">Вещественное число</param>
             <param name="Function">Функция, вызываемая для каждого отсчёта сигнала (первый аргумент) и вещественного числа (второй аргумент)</param>
+        </member>
+        <member name="T:MathCore.DSP.Signals.Operations.DivisionOfScalarWithSignalResultSignal">
+            <summary>Сигнал, как результат операции деления сигнала на число</summary>
+        </member>
+        <member name="T:MathCore.DSP.Signals.Operations.DivisionOfSignalsResultSignal">
+            <summary>Сигнал, как результат операции деления сигнала на сигнал</summary>
+        </member>
+        <member name="T:MathCore.DSP.Signals.Operations.DivisionOfSignalWithScalarResultSignal">
+            <summary>Сигнал, как результат бинарной операции между сигналом и числом</summary>
+        </member>
+        <member name="T:MathCore.DSP.Signals.Operations.MultiplyOfSignalsResultSignal">
+            <summary>Сигнал, как результат операции умножения двух сигналов</summary>
+        </member>
+        <member name="T:MathCore.DSP.Signals.Operations.MultiplyOfSignalWithScalarResultSignal">
+            <summary>Сигнал, как результат операции умножения сигнала на число</summary>
         </member>
         <member name="T:MathCore.DSP.Signals.Operations.OperationResultSignal">
             <summary>Сигнал - результат операции над сигналами</summary>
@@ -521,6 +727,18 @@
         <member name="M:MathCore.DSP.Signals.Operations.OperationResultSignal.#ctor(System.Double)">
             <summary>Инициализация нового результирующего сигнала</summary>
             <param name="dt">Период дискретизации</param>
+        </member>
+        <member name="T:MathCore.DSP.Signals.Operations.SubstractionOfScalarWithSignalResultSignal">
+            <summary>Сигнал, как результат операции вычитания числа из сигнала</summary>
+        </member>
+        <member name="T:MathCore.DSP.Signals.Operations.SubstractionOfSignalsResultSignal">
+            <summary>Сигнал, как результат операции вычитания сигнала из сигнала</summary>
+        </member>
+        <member name="T:MathCore.DSP.Signals.Operations.SumOfSignalsResultSignal">
+            <summary>Сигнал, как результат операции сложения сигналов</summary>
+        </member>
+        <member name="T:MathCore.DSP.Signals.Operations.SumOfSignalWithScalarResultSignal">
+            <summary>Сигнал, как результат операции сложения сигнала с числом</summary>
         </member>
         <member name="T:MathCore.DSP.Signals.SamplesDigitalSignal">
             <summary>Цифровой сигнал на основе массива отсчётов</summary>
