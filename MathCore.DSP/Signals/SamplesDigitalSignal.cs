@@ -1,22 +1,29 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MathCore.Annotations;
+using Suppress = System.Diagnostics.CodeAnalysis.SuppressMessageAttribute;
 // ReSharper disable InconsistentNaming
 // ReSharper disable UnusedMember.Global
 // ReSharper disable ConvertToAutoPropertyWhenPossible
+// ReSharper disable LoopCanBeConvertedToQuery
+// ReSharper disable ForCanBeConvertedToForeach
 
 namespace MathCore.DSP.Signals
 {
     /// <summary>Цифровой сигнал на основе массива отсчётов</summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays")]
+    [Suppress("Performance", "CA1819:Properties should not return arrays")]
     public class SamplesDigitalSignal : DigitalSignal, IEquatable<SamplesDigitalSignal>, IIndexableRef<double>
     {
         /// <summary>Массив отсчётов</summary>
         [NotNull] private readonly double[] _Samples;
 
+        /// <inheritdoc />
+        /// <summary>Число элементов массива</summary>
         public override int SamplesCount => _Samples.Length;
 
+        /// <inheritdoc />
+        /// <summary>Возвращает, или записывает значение элемента массива с указанным индексом</summary>
         public override double this[int n]
         {
             get => _Samples[n];
@@ -26,9 +33,16 @@ namespace MathCore.DSP.Signals
         /// <inheritdoc />
         ref double IIndexableRef<double>.this[int n] => ref _Samples[n];
 
-        /// <summary>Отсчёты сигнала</summary>
-        [NotNull]
-        public double[] Samples => _Samples;
+        /// <inheritdoc />
+        public override IEnumerable<SignalSample> Samples
+        {
+            get
+            {
+                var count = _Samples.Length;
+                for(var i = 0; i < count; i++)
+                    yield return new SignalSample(i * _dt + _t0, _Samples[i]);
+            }
+        }
 
         public SamplesDigitalSignal(double dt, [NotNull] double[] Samples) : base(dt) => _Samples = Samples ?? throw new ArgumentNullException(nameof(Samples));
 
@@ -37,6 +51,7 @@ namespace MathCore.DSP.Signals
         public SamplesDigitalSignal(double dt, [NotNull] IEnumerable<double> Samples) : this(dt, (Samples ?? throw new ArgumentNullException(nameof(Samples))).ToArray()) { }
         public SamplesDigitalSignal(double dt, [NotNull] IEnumerable<int> Samples) : this(dt, (Samples ?? throw new ArgumentNullException(nameof(Samples))).Select(v => (double)v).ToArray()) { }
 
+        /// <inheritdoc />
         protected override IEnumerable<double> GetIntegralSamples(double s0)
         {
             var dt05 = dt / 2;
@@ -64,8 +79,10 @@ namespace MathCore.DSP.Signals
             return new SamplesDigitalSignal(_dt, samples);
         }
 
-        [NotNull] public override double[] GetSamples() => _Samples;
+        /// <inheritdoc />
+        public override double[] GetSamples() => _Samples;
 
+        /// <inheritdoc />
         public override void CopyTo(double[] Destination, int Index, int Length) => Array.Copy(_Samples, 0, Destination, Index, Length);
 
         #region Override Object
@@ -99,6 +116,7 @@ namespace MathCore.DSP.Signals
             unchecked
             {
                 var hash = _dt.GetHashCode() * 397;
+                hash = (hash * 397) ^ _t0.GetHashCode();
                 for (var i = 0; i < _Samples.Length; i++)
                     hash = (hash * 397) ^ _Samples[i].GetHashCode();
                 return hash;
@@ -110,6 +128,8 @@ namespace MathCore.DSP.Signals
         /// <inheritdoc />
         public override IEnumerator<double> GetEnumerator() => ((IEnumerable<double>)_Samples).GetEnumerator();
 
+        /// <summary>Массив неявного преобразования типа <see cref="SamplesDigitalSignal"/> к массиву <see cref="double"/></summary>
+        /// <param name="s">Сигнал</param>
         [NotNull] public static implicit operator double[]([NotNull] SamplesDigitalSignal s) => s._Samples;
     }
 }

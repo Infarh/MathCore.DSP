@@ -14,19 +14,22 @@ namespace MathCore.DSP.Signals
         /// <summary>Количество отсчётов</summary>
         public override int SamplesCount => _Samples.Count();
 
+        /// <inheritdoc />
         public override double this[int n]
         {
             get => _Samples switch
             {
                 double[] array => array[n],
+                List<double> list => list[n],
                 IList<double> list => list[n],
-                _ => _Samples.Skip(n).First()
-            };
+                _ => _Samples.ElementAt(n)
+        };
             set
             {
                 switch (_Samples)
                 {
                     case double[] array: array[n] = value; break;
+                    case List<double> list: list[n] = value; break;
                     case IList<double> list: list[n] = value; break;
                     default: throw new NotSupportedException();
                 }

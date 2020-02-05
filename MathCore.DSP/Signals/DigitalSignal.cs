@@ -18,11 +18,17 @@ namespace MathCore.DSP.Signals
         /// <summary>Период дискретизации</summary>
         protected readonly double _dt;
 
+        /// <summary>Смещение начала сигнала во времени</summary>
+        protected readonly double _t0;
+
         /// <summary>Период дискретизации</summary>
         public double dt => _dt;
 
         /// <summary>Частота дискретизации</summary>
         public double fd => 1 / _dt;
+
+        /// <summary>Начальное смещение сигнала во времени</summary>
+        public double t0 => _t0;
 
         /// <summary>Полное время сигнала</summary>
         public virtual double TotalTime => SamplesCount * _dt;
@@ -43,38 +49,26 @@ namespace MathCore.DSP.Signals
         public virtual double Power => this.Average(s => s * s);
 
         /// <summary>Среднее значение отсчётов сигнала</summary>
-        public virtual double Average => this.Average();
+        public virtual double Average => GetSamples().Average();
 
         /// <summary>Дисперсия значений сигнала</summary>
-        public virtual double Variance
-        {
-            get
-            {
-                var count = 0;
-                var average = 0.0;
-                foreach (var sample in this)
-                {
-                    average += sample;
-                    count++;
-                }
-
-                if (count < 2) return 0;
-                average /= count;
-                var variance = 0.0;
-                foreach (var sample in this)
-                {
-                    var v = sample - average;
-                    variance += v * v;
-                }
-
-                return variance / (count - 1);
-            }
-        }
+        public virtual double Variance => GetSamples().Dispersion();
 
         /// <summary>Отсчёты по индексу</summary>
         /// <param name="n">Индекс отсчёта</param>
         /// <returns>Значение отсчёта</returns>
         public abstract double this[int n] { get; set; }
+
+        /// <summary>Отсчёты сигнала</summary>
+        public virtual IEnumerable<SignalSample> Samples
+        {
+            get
+            {
+                var t = _t0;
+                foreach (var sample in GetSamples())
+                    yield return new SignalSample(t += _dt, sample);
+            }
+        }
 
         /// <summary>Инициализация нового цифрового сигнала</summary>
         /// <param name="dt">Период дискретизации</param>
