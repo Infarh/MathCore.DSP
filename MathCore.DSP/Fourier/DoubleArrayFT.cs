@@ -1,10 +1,8 @@
-﻿using System;
-using MathCore.Annotations;
+﻿using MathCore.Annotations;
+using Spectrum = System.Func<int, MathCore.Complex>;
 
 namespace MathCore.DSP.Fourier
 {
-    using Spectrum = Func<int, Complex>;
-
     /// <summary>Методы-расширения для вещественного и комплексного массивов</summary>
     public static class DoubleArrayFT
     {
@@ -26,8 +24,8 @@ namespace MathCore.DSP.Fourier
                 {
                     var val = s[n];
                     var ww = w[n * m % N];
-                    P += val * ww._Cos;
-                    Q += val * ww._Sin;
+                    P += val * ww.Cos;
+                    Q += val * ww.Sin;
                 }
 
                 return new Complex(P / N, Q / N);
@@ -52,8 +50,8 @@ namespace MathCore.DSP.Fourier
                 {
                     var (re, im) = s[n];
                     var ww = w[n * m % N];
-                    var sin = ww._Sin;
-                    var cos = ww._Cos;
+                    var sin = ww.Sin;
+                    var cos = ww.Cos;
                     P += re * cos - im * sin;
                     Q += im * cos + re * sin;
                 }

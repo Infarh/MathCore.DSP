@@ -1,6 +1,7 @@
 ﻿
 using System;
 using MathCore.Annotations;
+// ReSharper disable InconsistentNaming
 
 namespace MathCore.DSP.Fourier
 {
@@ -8,15 +9,15 @@ namespace MathCore.DSP.Fourier
     internal struct Exp
     {
         /// <summary>Синусная составляющая</summary>
-        public readonly double _Sin;
+        public readonly double Sin;
 
         /// <summary>Косинусная составляющая</summary>
-        public readonly double _Cos;
+        public readonly double Cos;
 
         /// <summary>Инициализация нового комплексного экспоненциального значения</summary>
         /// <param name="Sin">Синусная составляющая</param>
         /// <param name="Cos">Косинусная составляющая</param>
-        public Exp(double Sin, double Cos) { _Sin = Sin; _Cos = Cos; }
+        public Exp(double Sin, double Cos) { this.Sin = Sin; this.Cos = Cos; }
 
         /// <summary>Рассчитать массив комплексных экспоненциальных коэффициентов</summary>
         /// <param name="N"></param>

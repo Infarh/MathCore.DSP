@@ -59,6 +59,7 @@ namespace MathCore.DSP.Signals
 
         /// <summary>Преобразование в цифровой сигнал на основе массива отсчётов</summary>
         /// <returns>Сигнал на основе массива отсчётов</returns>
+        [NotNull]
         public SamplesDigitalSignal ToSamplesSignal() => new SamplesDigitalSignal(_dt, _Samples);
 
         public override IEnumerator<double> GetEnumerator() => _Samples.GetEnumerator();

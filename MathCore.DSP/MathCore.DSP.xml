@@ -563,6 +563,7 @@
             <summary>Прямое преобразование отсчётов функции в спектр</summary>
             <param name="Values">Массив отсчётов функции</param>
             <param name="Inverse">Обратное преобразование</param>
+            <param name="progress">Метод индикации прогресса выполнения</param>
         </member>
         <member name="T:MathCore.DSP.Signals.DigitalSignal">
             <summary>Цифровой сигнал</summary>
@@ -594,6 +595,12 @@
         <member name="P:MathCore.DSP.Signals.DigitalSignal.Power">
             <summary>Мощность</summary>
         </member>
+        <member name="P:MathCore.DSP.Signals.DigitalSignal.Average">
+            <summary>Среднее значение отсчётов сигнала</summary>
+        </member>
+        <member name="P:MathCore.DSP.Signals.DigitalSignal.Variance">
+            <summary>Дисперсия значений сигнала</summary>
+        </member>
         <member name="P:MathCore.DSP.Signals.DigitalSignal.Item(System.Int32)">
             <summary>Отсчёты по индексу</summary>
             <param name="n">Индекс отсчёта</param>
@@ -613,11 +620,21 @@
             <param name="s0">Константа интегрирования</param>
             <returns>Цифровой сигнал, как результат интегрирования</returns>
         </member>
+        <member name="M:MathCore.DSP.Signals.DigitalSignal.GetSamples">
+            <summary>Получить отсчёты сигнала в виде массива</summary>
+            <returns>Массив отсчётов сигнала</returns>
+        </member>
         <member name="M:MathCore.DSP.Signals.DigitalSignal.CopyTo(System.Double[],System.Int32,System.Int32)">
             <summary>Копирование отсчётов сигнала в массив</summary>
             <param name="Destination">Массив места назначения</param>
             <param name="Index">Начальный индекс в массиве места назначения</param>
             <param name="Length">Длина копируемого участка</param>
+        </member>
+        <member name="M:MathCore.DSP.Signals.DigitalSignal.GetEnumerator">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.DSP.Signals.DigitalSignal.System#Collections#IEnumerable#GetEnumerator">
+            <inheritdoc />
         </member>
         <member name="T:MathCore.DSP.Signals.EnumerableSignal">
             <summary>Цифровой сигнал на основе последовательности (потенциально бесконечной) отсчётов</summary>
@@ -746,6 +763,9 @@
         <member name="F:MathCore.DSP.Signals.SamplesDigitalSignal._Samples">
             <summary>Массив отсчётов</summary>
         </member>
+        <member name="P:MathCore.DSP.Signals.SamplesDigitalSignal.MathCore#IIndexableRef{System#Double}#Item(System.Int32)">
+            <inheritdoc />
+        </member>
         <member name="P:MathCore.DSP.Signals.SamplesDigitalSignal.Samples">
             <summary>Отсчёты сигнала</summary>
         </member>
@@ -753,6 +773,21 @@
             <summary>Вычисление интеграла</summary>
             <param name="s0">Константа интегрирования</param>
             <returns>Цифровой сигнал, как результат интегрирования</returns>
+        </member>
+        <member name="M:MathCore.DSP.Signals.SamplesDigitalSignal.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.DSP.Signals.SamplesDigitalSignal.Equals(MathCore.DSP.Signals.SamplesDigitalSignal)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.DSP.Signals.SamplesDigitalSignal.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.DSP.Signals.SamplesDigitalSignal.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.DSP.Signals.SamplesDigitalSignal.GetEnumerator">
+            <inheritdoc />
         </member>
     </members>
 </doc>

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using MathCore.Annotations;
+#pragma warning disable 1591
 
 namespace MathCore.DSP.Fourier
 {
     [Copyright("alglib", url = "alglib.sources.ru")]
+#pragma warning disable IDE1006 // Стили именования
     public static class fft
+#pragma warning restore IDE1006 // Стили именования
     {
         /// <summary>
         /// Быстрое комплексное одномерное преобразование Фурье
@@ -112,7 +115,8 @@ namespace MathCore.DSP.Fourier
         /// <param name="x">Массив входных значений</param>
         /// <value>Массив комплексных значений спектра</value>
         [SuppressMessage("ReSharper", "TooWideLocalVariableScope")]
-        public static Complex[] FFT(double[] x)
+        [NotNull]
+        public static Complex[] FFT([NotNull] double[] x)
         {
             var N = x.Length;
             switch (N)
@@ -200,7 +204,8 @@ namespace MathCore.DSP.Fourier
           -- ALGLIB --
              Copyright 01.06.2009 by Bochkanov Sergey
         *************************************************************************/
-        public static double[] FFT_Real_Inverse(Complex[] f, int n)
+        [NotNull]
+        public static double[] FFT_Real_Inverse([NotNull] Complex[] f, int n)
         {
             //
             // Special case: N=1, FFT is just identity transform.
@@ -498,7 +503,7 @@ namespace MathCore.DSP.Fourier
                  Copyright 01.05.2009 by Bochkanov Sergey
             *************************************************************************/
 
-            private static void FT_BaseExecutePlanRec(ref double[] A, int Aoffset, FT_Plan plan, int EntryOffset, int StackPtr)
+            private static void FT_BaseExecutePlanRec(ref double[] A, int Aoffset, [NotNull] FT_Plan plan, int EntryOffset, int StackPtr)
             {
                 if (plan.plan[EntryOffset + 3] == FFT_EmptyPlan)
                     return;
@@ -1431,7 +1436,7 @@ namespace MathCore.DSP.Fourier
               -- ALGLIB --
                  Copyright 01.05.2009 by Bochkanov Sergey
             *************************************************************************/
-            private static void FT_BasePrecomputedPlanRec(FT_Plan plan, int entryoffset, int stackptr)
+            private static void FT_BasePrecomputedPlanRec([NotNull] FT_Plan plan, int entryoffset, int stackptr)
             {
 
                 if (plan.plan[entryoffset + 3] == FFT_CooleyTukeyPlan ||
@@ -1766,7 +1771,7 @@ namespace MathCore.DSP.Fourier
               -- ALGLIB --
                  Copyright 01.05.2009 by Bochkanov Sergey
             *************************************************************************/
-            private static void FFT_AarrayResize(ref int[] a, ref int asize, int newasize)
+            private static void FFT_AarrayResize([NotNull] ref int[] a, ref int asize, int newasize)
             {
                 var tmp = new int[asize];
                 for (var i = 0; i <= asize - 1; i++)
@@ -1814,10 +1819,10 @@ namespace MathCore.DSP.Fourier
 
                 public FT_Plan()
                 {
-                    plan = new int[0];
-                    PreComputed = new double[0];
-                    TempBuffer = new double[0];
-                    StackBuffer = new double[0];
+                    plan = Array.Empty<int>();
+                    PreComputed = Array.Empty<double>();
+                    TempBuffer = Array.Empty<double>();
+                    StackBuffer = Array.Empty<double>();
                 }
             }
 

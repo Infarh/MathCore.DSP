@@ -2,6 +2,7 @@
 using System.Linq;
 using MathCore.DSP.Filters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+// ReSharper disable InconsistentNaming
 
 namespace MathCore.DSP.Tests.Filters
 {
@@ -9,15 +10,15 @@ namespace MathCore.DSP.Tests.Filters
     public class EllipticLowPassTests : UnitTest
     {
         [TestMethod]
-        public void Ctreation_Test()
+        public void Creation_Test()
         {
             const double fp = 100 / Math.PI / 2;
             const double fs = 150 / Math.PI / 2;
             const double fd = 100;
             const double dt = 1 / fd;
 
-            const double wp = 2 * Math.PI * fp / fd; // 1
-            const double ws = 2 * Math.PI * fs / fd; // 1.5
+            //const double wp = 2 * Math.PI * fp / fd; // 1
+            //const double ws = 2 * Math.PI * fs / fd; // 1.5
 
             var Fp = DigitalFilter.ToAnalogFrequency(fp, dt);
             var Fs = DigitalFilter.ToAnalogFrequency(fs, dt);
@@ -130,17 +131,17 @@ namespace MathCore.DSP.Tests.Filters
             Assert.That.Value(P0[1].Re).IsEqual(0);
             Assert.That.Value(P0[1].Im).IsEqual(-1.346819766817674, 4.45e-16);
 
-            var numirator_coefficients = Polynom.Array.GetCoefficients(P0);
-            var denomirator_coefficients = Polynom.Array.GetCoefficients(Pp);
+            var numerator_coefficients = Polynom.Array.GetCoefficients(P0);
+            var denominator_coefficients = Polynom.Array.GetCoefficients(Pp);
 
-            Assert.That.Value(numirator_coefficients.Length).IsEqual(5);
-            Assert.That.Value(denomirator_coefficients.Length).IsEqual(6);
+            Assert.That.Value(numerator_coefficients.Length).IsEqual(5);
+            Assert.That.Value(denominator_coefficients.Length).IsEqual(6);
 
-            var (B, numirator_coefficients_im) = numirator_coefficients;
-            var (A, denomirator_coefficients_im) = denomirator_coefficients;
+            var (B, numerator_coefficients_im) = numerator_coefficients;
+            var (A, denominator_coefficients_im) = denominator_coefficients;
 
-            CollectionAssert.That.Collection(numirator_coefficients_im).ElementsAreEqualTo(0);
-            CollectionAssert.That.Collection(denomirator_coefficients_im).ElementsAreEqualTo(0, 5.56e-17);
+            CollectionAssert.That.Collection(numerator_coefficients_im).ElementsAreEqualTo(0);
+            CollectionAssert.That.Collection(denominator_coefficients_im).ElementsAreEqualTo(0, 5.56e-17);
 
             CollectionAssert.AreEqual(new[]
             {

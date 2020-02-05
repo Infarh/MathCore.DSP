@@ -60,8 +60,8 @@ namespace MathCore.DSP.Fourier
                     var v = Values[n];
                     var i = m * n % N;
                     var ww = w[i];
-                    p += v * ww._Cos;
-                    q += v * ww._Sin;
+                    p += v * ww.Cos;
+                    q += v * ww.Sin;
                 }
                 spectrum[m] = new Complex(p / N, q / N);
             }
@@ -91,8 +91,8 @@ namespace MathCore.DSP.Fourier
                     var v = Values[n];
                     var i = m * n % N;
                     var ww = w[i];
-                    p += v * ww._Cos;
-                    q += v * ww._Sin;
+                    p += v * ww.Cos;
+                    q += v * ww.Sin;
                 }
                 spectrum[m] = new Complex(p / N, q / N);
                 progress?.Invoke((double)m / N);
@@ -125,8 +125,8 @@ namespace MathCore.DSP.Fourier
                     var im = v.Im;
                     var i = n * m % N;
                     var ww = w[i];
-                    P += re * ww._Cos - im * ww._Sin;
-                    Q += im * ww._Cos + re * ww._Sin;
+                    P += re * ww.Cos - im * ww.Sin;
+                    Q += im * ww.Cos + re * ww.Sin;
                 }
                 spectrum[m] = Inverse ? new Complex(P, Q) : new Complex(P / N, Q / N);
             }
@@ -136,6 +136,7 @@ namespace MathCore.DSP.Fourier
         /// <summary>Прямое преобразование отсчётов функции в спектр</summary>
         /// <param name="Values">Массив отсчётов функции</param>
         /// <param name="Inverse">Обратное преобразование</param>
+        /// <param name="progress">Метод индикации прогресса выполнения</param>
         [NotNull]
         public static Complex[] FourierTransform([NotNull] this Complex[] Values, bool Inverse, [CanBeNull] Action<double> progress)
         {
@@ -151,13 +152,14 @@ namespace MathCore.DSP.Fourier
                 var Q = 0.0;
                 for (var n = 0; n < N; n++)
                 {
+                    // ReSharper disable once UseDeconstruction
                     var v = Values[n];
                     var re = v.Re;
                     var im = v.Im;
                     var i = n * m % N;
                     var ww = w[i];
-                    P += re * ww._Cos - im * ww._Sin;
-                    Q += im * ww._Cos + re * ww._Sin;
+                    P += re * ww.Cos - im * ww.Sin;
+                    Q += im * ww.Cos + re * ww.Sin;
                 }
 
                 progress?.Invoke((double)m / N);

@@ -4,10 +4,6 @@ namespace MathCore.DSP
 {
     class Program
     {
-        static void Main(string[] args)
-        {
-
-            Console.ReadLine();
-        }
+        static void Main() => Console.ReadLine();
     }
 }

@@ -1,11 +1,10 @@
 ﻿using System;
 using MathCore.Annotations;
+using IntSpectrum = System.Func<int, MathCore.Complex>;
+using DoubleSpectrum = System.Func<double, MathCore.Complex>;
 
 namespace MathCore.DSP.Fourier
 {
-    using IntSpectrum = Func<int, Complex>;
-    using DoubleSpectrum = Func<double, Complex>;
-
     public static class DoubleFuncFT
     {
         /// <summary>Выполнить преобразование Фурье</summary>

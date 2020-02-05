@@ -4,12 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using MathCore.Annotations;
 using MathCore.DSP.Signals.Operations;
+// ReSharper disable UnusedMember.Global
+// ReSharper disable VirtualMemberNeverOverridden.Global
 
 // ReSharper disable InconsistentNaming
 
 namespace MathCore.DSP.Signals
 {
     /// <summary>Цифровой сигнал</summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Стиль", "IDE1006:Стили именования")]
     public abstract class DigitalSignal : IEnumerable<double>
     {
         /// <summary>Период дискретизации</summary>
@@ -22,22 +25,51 @@ namespace MathCore.DSP.Signals
         public double fd => 1 / _dt;
 
         /// <summary>Полное время сигнала</summary>
-        public double TotalTime => SamplesCount * _dt;
+        public virtual double TotalTime => SamplesCount * _dt;
 
         /// <summary>Количество отсчётов</summary>
         public abstract int SamplesCount { get; }
 
         /// <summary>Минимальное значение</summary>
-        public double Min => this.Min();
+        public virtual double Min => this.Min();
 
         /// <summary>Максимальное значение</summary>
-        public double Max => this.Max();
+        public virtual double Max => this.Max();
 
         /// <summary>Амплитуда</summary>
-        public double PeakToPeakAmplitude => this.GetMinMax().Length;
+        public virtual double PeakToPeakAmplitude => this.GetMinMax().Length;
 
         /// <summary>Мощность</summary>
-        public double Power => this.Average(s => s * s);
+        public virtual double Power => this.Average(s => s * s);
+
+        /// <summary>Среднее значение отсчётов сигнала</summary>
+        public virtual double Average => this.Average();
+
+        /// <summary>Дисперсия значений сигнала</summary>
+        public virtual double Variance
+        {
+            get
+            {
+                var count = 0;
+                var average = 0.0;
+                foreach (var sample in this)
+                {
+                    average += sample;
+                    count++;
+                }
+
+                if (count < 2) return 0;
+                average /= count;
+                var variance = 0.0;
+                foreach (var sample in this)
+                {
+                    var v = sample - average;
+                    variance += v * v;
+                }
+
+                return variance / (count - 1);
+            }
+        }
 
         /// <summary>Отсчёты по индексу</summary>
         /// <param name="n">Индекс отсчёта</param>
@@ -70,7 +102,9 @@ namespace MathCore.DSP.Signals
         /// <returns>Цифровой сигнал, как результат интегрирования</returns>
         [NotNull] public virtual EnumerableSignal GetIntegral(double s0 = 0) => new EnumerableSignal(dt, GetIntegralSamples(s0));
 
-        public virtual double[] GetSamples() => this.ToArray();
+        /// <summary>Получить отсчёты сигнала в виде массива</summary>
+        /// <returns>Массив отсчётов сигнала</returns>
+        [NotNull] public virtual double[] GetSamples() => this.ToArray();
 
         /// <summary>Копирование отсчётов сигнала в массив</summary>
         /// <param name="Destination">Массив места назначения</param>
@@ -79,7 +113,7 @@ namespace MathCore.DSP.Signals
         public virtual void CopyTo([NotNull] double[] Destination, int Index, int Length)
         {
             var destination_length = Destination.Length;
-            if(Index >= destination_length || Length < 1) return;
+            if (Index >= destination_length || Length < 1) return;
             var i = Index;
             var count = Length;
             foreach (var sample in this)
@@ -87,12 +121,14 @@ namespace MathCore.DSP.Signals
                 Destination[i] = sample;
                 i++;
                 count--;
-                if(i >= destination_length || count == 0) break;
+                if (i >= destination_length || count == 0) break;
             }
         }
 
+        /// <inheritdoc />
         public abstract IEnumerator<double> GetEnumerator();
 
+        /// <inheritdoc />
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         #region Операторы
