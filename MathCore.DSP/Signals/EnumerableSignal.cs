@@ -39,7 +39,8 @@ namespace MathCore.DSP.Signals
         /// <summary>Инициализация нового цифрового сигнал на основе перечисления отсчётов</summary>
         /// <param name="dt">Период дискретизации</param>
         /// <param name="Samples">Перечисление отсчётов сигнала</param>
-        public EnumerableSignal(double dt, [NotNull] IEnumerable<double> Samples) : base(dt) => _Samples = Samples ?? throw new ArgumentNullException(nameof(Samples));
+        /// <param name="t0">Смещение сигнала во времени</param>
+        public EnumerableSignal(double dt, [NotNull] IEnumerable<double> Samples, double t0 = 0) : base(dt, t0) => _Samples = Samples ?? throw new ArgumentNullException(nameof(Samples));
 
         private static IEnumerable<double> GetIntegralSamples(IEnumerable<double> samples, double dt, double s0)
         {
@@ -65,6 +66,7 @@ namespace MathCore.DSP.Signals
         [NotNull]
         public SamplesDigitalSignal ToSamplesSignal() => new SamplesDigitalSignal(_dt, _Samples);
 
+        /// <inheritdoc />
         public override IEnumerator<double> GetEnumerator() => _Samples.GetEnumerator();
     }
 }

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using MathCore.Annotations;
+
 // ReSharper disable UnusedType.Global
 
 // ReSharper disable InconsistentNaming

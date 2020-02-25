@@ -72,10 +72,12 @@ namespace MathCore.DSP.Signals
 
         /// <summary>Инициализация нового цифрового сигнала</summary>
         /// <param name="dt">Период дискретизации</param>
-        protected DigitalSignal(double dt)
+        /// <param name="t0">Смещение сигнала во времени</param>
+        protected DigitalSignal(double dt, double t0 = 0)
         {
             if (dt <= 0) throw new ArgumentOutOfRangeException(nameof(dt), "Период дискретизации должен быть больше 0");
             _dt = dt;
+            _t0 = t0;
         }
 
         /// <summary>Перечисление отсчётов интеграла сигнала</summary>
