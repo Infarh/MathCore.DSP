@@ -29,4 +29,8 @@
     <PackageReference Include="MathCore" Version="0.0.20" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Signals\Implementations\Samples\Base\" />
+  </ItemGroup>
+
 </Project>
