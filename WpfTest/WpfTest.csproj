@@ -14,6 +14,12 @@
   <ItemGroup>
     <PackageReference Include="MathCore.WPF" Version="0.0.3" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.5" />
+    <PackageReference Include="NAudio" Version="1.10.0" />
+    <PackageReference Include="OxyPlot.Wpf" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MathCore.DSP\MathCore.DSP.csproj" />
   </ItemGroup>
 
 </Project>
