@@ -1,11 +1,11 @@
-﻿namespace WpfTest.Services.Interfaces
+﻿using System.Collections.Generic;
+using WpfTest.Models;
+
+namespace WpfTest.Services.Interfaces
 {
     internal interface IAudioService
     {
-    }
-
-    internal interface ISignalProcessingService
-    {
-
+        IEnumerable<Device> GetInputDevices();
+        IEnumerable<Device> GetOutputDevices();
     }
 }
