@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using MathCore.WPF.ViewModels;
+﻿using MathCore.WPF.ViewModels;
 
 namespace WpfTest.ViewModels
 {

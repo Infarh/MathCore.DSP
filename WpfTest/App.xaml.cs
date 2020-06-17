@@ -3,6 +3,7 @@ using System.Windows;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WpfTest.Services;
 using WpfTest.ViewModels;
 
 namespace WpfTest
@@ -17,7 +18,10 @@ namespace WpfTest
                .ConfigureAppConfiguration((host, cfg) => cfg.AddJsonFile("appconfig.json", true, true))
                .ConfigureServices(ConfigureServices);
 
-        private static void ConfigureServices(HostBuilderContext host, IServiceCollection services) => services.AddSingleton<MainWindowViewModel>();
+        private static void ConfigureServices(HostBuilderContext host, IServiceCollection services) => services
+           .RegisterServices()
+           .RegisterViewModels()
+        ;
 
         protected override async void OnStartup(StartupEventArgs e)
         {
