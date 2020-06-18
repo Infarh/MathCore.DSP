@@ -40,8 +40,13 @@
                     <fa:ImageAwesome Height="14" Icon="Solid_Download"/>
                 </Button>
             </ToolBar>
-            <ToolBar Band="1" Header="Запись">
-                <Button fa:Awesome.Content="Regular_Registered" Foreground="Red" Command="{Binding RecordSignalCommand}"/>
+            <ToolBar Band="1">
+                <Button Command="{Binding RecordSignalCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Запись"/>
+                        <fa:ImageAwesome Icon="Regular_PlayCircle" Height="12" Foreground="Red" Margin="3,0,0,0"/>
+                    </StackPanel>
+                </Button>
                 <Button fa:Awesome.Content="Solid_StopCircle" Foreground="DarkBlue" Command="{Binding RecordCancelCommand}"/>
                 <Label Content="Длина"/>
                 <TextBox Width="60" TextAlignment="Right" Text="{Binding SignalTimeLength}"/>

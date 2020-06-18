@@ -130,6 +130,7 @@ namespace WpfTest.ViewModels
             }
             _RecordingCancellation = null;
             RecordingProgress = 0;
+            CommandManager.InvalidateRequerySuggested();
         }
 
         private ICommand _RecordCancelCommand;
