@@ -6,6 +6,8 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:fa="http://schemas.fontawesome.com/icons/"
         xmlns:l="clr-namespace:WpfTest"
+        xmlns:oxy="http://oxyplot.org/wpf"
+        xmlns:signals="clr-namespace:MathCore.DSP.Signals;assembly=MathCore.DSP"
         DataContext="{Binding MainWindowModel, Source={StaticResource Locator}}"
         Title="{Binding Title}"
         Width="800" Height="450">
@@ -38,7 +40,48 @@
                     <fa:ImageAwesome Height="14" Icon="Solid_Download"/>
                 </Button>
             </ToolBar>
+            <ToolBar Band="1" Header="Запись">
+                <Button fa:Awesome.Content="Regular_Registered" Foreground="Red" Command="{Binding RecordSignalCommand}"/>
+                <Button fa:Awesome.Content="Solid_StopCircle" Foreground="DarkBlue" Command="{Binding RecordCancelCommand}"/>
+                <Label Content="Длина"/>
+                <TextBox Width="60" TextAlignment="Right" Text="{Binding SignalTimeLength}"/>
+                <TextBlock Text="с" VerticalAlignment="Center"/>
+            </ToolBar>
         </ToolBarTray>
-        <Grid></Grid>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <StatusBarItem.Style>
+                    <Style TargetType="StatusBarItem">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RecordingProgress}" Value="0">
+                                <Setter Property="Visibility" Value="Hidden"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StatusBarItem.Style>
+                <StackPanel Orientation="Horizontal">
+                    <ProgressBar Height="15" Width="130" Value="{Binding RecordingProgress, Mode=OneWay}" Maximum="1"/>
+                    <TextBlock Text="{Binding RecordingProgress, StringFormat=p1}" Margin="4,0,0,0"/>
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>
+        <Grid>
+            <Grid.Resources>
+                <ResourceDictionary Source="../Templates/SignalTemplates.xaml"/>
+            </Grid.Resources>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <oxy:Plot>
+                <oxy:LineSeries ItemsSource="{Binding RecordedSignal.Samples}" 
+                                StrokeThickness="1" Color="Red"
+                                DataFieldX="Time" DataFieldY="Value"/>
+            </oxy:Plot>
+        </Grid>
     </DockPanel>
 </Window>
