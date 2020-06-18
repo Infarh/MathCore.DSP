@@ -1,4 +1,7 @@
 ﻿using System;
+// ReSharper disable UnusedType.Global
+// ReSharper disable NotAccessedField.Local
+// ReSharper disable InconsistentNaming
 
 namespace MathCore.DSP.Fourier
 {
@@ -12,7 +15,9 @@ namespace MathCore.DSP.Fourier
         /// <summary>Размер выборки</summary>
         private readonly int _N;
         /// <summary>Количество спектральных компонент в спектре</summary>
+#pragma warning disable IDE0052 // Удалить непрочитанные закрытые члены
         private readonly int _M;
+#pragma warning restore IDE0052 // Удалить непрочитанные закрытые члены
         /// <summary>Дискрет фазы</summary>
         private readonly double _dPhi;
         /// <summary>Индекс отсчёта</summary>

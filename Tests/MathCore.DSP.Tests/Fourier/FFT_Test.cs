@@ -34,11 +34,12 @@ namespace MathCore.DSP.Tests.Fourier
 
         /* ------------------------------------------------------------------------------------------ */
 
-        private static void Clear(double[] array, double threshold = 1e-10)
-        {
-            for (var i = 0; i < array.Length; i++)
-                if (array[i] < threshold) array[i] = 0;
-        }
+        //private static void Clear(double[] array, double threshold = 1e-10)
+        //{
+        //    for (var i = 0; i < array.Length; i++)
+        //        if (array[i] < threshold) array[i] = 0;
+        //}
+
         private static void Clear(Complex[] array, double threshold = 1e-10)
         {
             for (var i = 0; i < array.Length; i++)

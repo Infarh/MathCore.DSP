@@ -4,6 +4,7 @@ using System.Linq;
 using MathCore.DSP.Filters;
 using MathCore.DSP.Signals;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+// ReSharper disable InconsistentNaming
 
 namespace MathCore.DSP.Tests.Filters
 {
@@ -98,7 +99,7 @@ namespace MathCore.DSP.Tests.Filters
         }
 
         [TestMethod]
-        public void TransmissionCoefficientAtZerroFrequency()
+        public void TransmissionCoefficientAtZeroFrequency()
         {
             const double fd = 100;
             const double dt = 1 / fd;
@@ -136,11 +137,11 @@ namespace MathCore.DSP.Tests.Filters
             const double fd = 100;
             const double dt = 1 / fd;
             const double f0 = 10;
-            const double eps = 1e-14;
-            const double f = f0;
+            //const double eps = 1e-14;
+            //const double f = f0;
             const int samples_count = 100;
-            const double total_time = dt * samples_count;
-            const double df = 1 / total_time;
+            //const double total_time = dt * samples_count;
+            //const double df = 1 / total_time;
 
             var rc = new LowPassRC(f0, dt);
 

@@ -10,7 +10,7 @@ namespace MathCore.DSP.Fourier
         /// <summary>Прямое преобразование отсчётов функции в спектр</summary>
         /// <param name="Values">Массив отсчётов функции</param>
         [NotNull]
-        public static Complex[] FastFourierTransform(this double[] Values)
+        public static Complex[] FastFourierTransform([NotNull] this double[] Values)
         {
             var N = Values.Length;
             if(!N.IsPowerOf2()) N = 1 << ((int)Math.Log(N, 2) + 1);
@@ -63,7 +63,8 @@ namespace MathCore.DSP.Fourier
 
         /// <summary>Обратное преобразование отсчётов спектра в отсчёты сигнала</summary>
         /// <param name="Spectrum">Массив отсчётов спектра</param>
-        public static Complex[] FastFurierInverse(this Complex[] Spectrum)
+        [NotNull]
+        public static Complex[] FastFurierInverse([NotNull] this Complex[] Spectrum)
         {
             var spectrum_length = Spectrum.Length;
             if(!spectrum_length.IsPowerOf2())
@@ -90,7 +91,9 @@ namespace MathCore.DSP.Fourier
             return complex_values;
         }
 
-        private static void fft(ref double[] Values, bool IsInverse)
+#pragma warning disable IDE1006 // Стили именования
+        private static void fft([NotNull] ref double[] Values, bool IsInverse)
+#pragma warning restore IDE1006 // Стили именования
         {
             var N = Values.Length / 2;
             if(!N.IsPowerOf2())
@@ -244,12 +247,12 @@ namespace MathCore.DSP.Fourier
 
         private static int ReverseMod(int n, int mod)
         {
-            var d = EuclidEx(n, mod, out var x, out var y);
+            var d = EuclidEx(n, mod, out var x, out _);
             return d == 1 ? x : 0;
         }
 
 
-        public static double[] Recursive_FFT(double[] a)
+        public static double[] Recursive_FFT([NotNull] double[] a)
         {
             var n = a.Length;
             if(!n.IsPowerOf2())
@@ -298,6 +301,7 @@ namespace MathCore.DSP.Fourier
             return Recursive_FFTInternalAsync(a, n, MinAsyncLength);
         }
 
+        [ItemNotNull]
         private static async Task<double[]> Recursive_FFTInternalAsync([NotNull] double[] a, int n, int MinAsyncLength = 256)
         {
             switch(n)

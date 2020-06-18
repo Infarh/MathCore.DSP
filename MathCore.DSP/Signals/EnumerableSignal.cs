@@ -14,19 +14,22 @@ namespace MathCore.DSP.Signals
         /// <summary>Количество отсчётов</summary>
         public override int SamplesCount => _Samples.Count();
 
+        /// <inheritdoc />
         public override double this[int n]
         {
             get => _Samples switch
             {
                 double[] array => array[n],
+                List<double> list => list[n],
                 IList<double> list => list[n],
-                _ => _Samples.Skip(n).First()
-            };
+                _ => _Samples.ElementAt(n)
+        };
             set
             {
                 switch (_Samples)
                 {
                     case double[] array: array[n] = value; break;
+                    case List<double> list: list[n] = value; break;
                     case IList<double> list: list[n] = value; break;
                     default: throw new NotSupportedException();
                 }
@@ -36,7 +39,8 @@ namespace MathCore.DSP.Signals
         /// <summary>Инициализация нового цифрового сигнал на основе перечисления отсчётов</summary>
         /// <param name="dt">Период дискретизации</param>
         /// <param name="Samples">Перечисление отсчётов сигнала</param>
-        public EnumerableSignal(double dt, [NotNull] IEnumerable<double> Samples) : base(dt) => _Samples = Samples ?? throw new ArgumentNullException(nameof(Samples));
+        /// <param name="t0">Смещение сигнала во времени</param>
+        public EnumerableSignal(double dt, [NotNull] IEnumerable<double> Samples, double t0 = 0) : base(dt, t0) => _Samples = Samples ?? throw new ArgumentNullException(nameof(Samples));
 
         private static IEnumerable<double> GetIntegralSamples(IEnumerable<double> samples, double dt, double s0)
         {
@@ -59,8 +63,10 @@ namespace MathCore.DSP.Signals
 
         /// <summary>Преобразование в цифровой сигнал на основе массива отсчётов</summary>
         /// <returns>Сигнал на основе массива отсчётов</returns>
+        [NotNull]
         public SamplesDigitalSignal ToSamplesSignal() => new SamplesDigitalSignal(_dt, _Samples);
 
+        /// <inheritdoc />
         public override IEnumerator<double> GetEnumerator() => _Samples.GetEnumerator();
     }
 }
