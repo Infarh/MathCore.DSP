@@ -8,8 +8,8 @@ namespace MathCore.DSP.Signals
 {
     public readonly struct SignalSample : IEquatable<SignalSample>
     {
-        public readonly double Time;
-        public readonly double Value;
+        public double Time { get; }
+        public double Value {get;}
 
         public SignalSample(double Time, double Value)
         {

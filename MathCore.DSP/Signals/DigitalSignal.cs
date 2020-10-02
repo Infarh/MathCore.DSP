@@ -45,13 +45,13 @@ namespace MathCore.DSP.Signals
         /// <summary>Амплитуда</summary>
         public virtual double PeakToPeakAmplitude => this.GetMinMax().Length;
 
-        /// <summary>Мощность</summary>
+        /// <summary>Мощность - средняя сумма квадратов амплитуд отсчётов</summary>
         public virtual double Power => this.Average(s => s * s);
 
-        /// <summary>Среднее значение отсчётов сигнала</summary>
+        /// <summary>Среднее значение отсчётов сигнала - постоянная составляющая</summary>
         public virtual double Average => GetSamples().Average();
 
-        /// <summary>Дисперсия значений сигнала</summary>
+        /// <summary>Дисперсия значений сигнала - средняя сумма квадратов отсчётов без квадрата среднего значения</summary>
         public virtual double Variance => GetSamples().Dispersion();
 
         /// <summary>Отсчёты по индексу</summary>

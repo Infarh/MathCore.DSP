@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleTest", "Tests\Consol
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathCore.DSP.Tests", "Tests\MathCore.DSP.Tests\MathCore.DSP.Tests.csproj", "{B92826FA-3130-431E-953C-5A6E9F3489D3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfTest", "WpfTest\WpfTest.csproj", "{C129E8A4-1A28-4B06-BFC4-D7840A8BD77D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{B92826FA-3130-431E-953C-5A6E9F3489D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B92826FA-3130-431E-953C-5A6E9F3489D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B92826FA-3130-431E-953C-5A6E9F3489D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C129E8A4-1A28-4B06-BFC4-D7840A8BD77D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C129E8A4-1A28-4B06-BFC4-D7840A8BD77D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C129E8A4-1A28-4B06-BFC4-D7840A8BD77D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C129E8A4-1A28-4B06-BFC4-D7840A8BD77D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +50,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{9E507C80-64A5-49F2-9B58-0833908A10EB} = {C1AA67F3-31C6-4C42-884D-BBC39CBD555E}
 		{B92826FA-3130-431E-953C-5A6E9F3489D3} = {C1AA67F3-31C6-4C42-884D-BBC39CBD555E}
+		{C129E8A4-1A28-4B06-BFC4-D7840A8BD77D} = {C1AA67F3-31C6-4C42-884D-BBC39CBD555E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6BE66C71-515C-48D4-B800-5F3E6CF13654}
