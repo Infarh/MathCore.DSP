@@ -18,5 +18,7 @@ namespace WpfTest.Services.Interfaces
 
         [ItemNotNull]
         Task<DigitalSignal> GetSignalAsync([NotNull] Device device, int SamplesCount, int SamplesRate = 44100, int BitsCount = 16, IProgress<double> Progress = null, CancellationToken Cancel = default);
+
+        Task PlaySignalAsync(DigitalSignal Signal, Device device, IProgress<double> Progress = null, CancellationToken Cancel = default);
     }
 }

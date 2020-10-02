@@ -11,6 +11,72 @@ namespace NAudio.Wave
 {
     public static class WaveInExtensions
     {
+        private class WaveInDataLoader
+        {
+            private WaveIn _Input;
+            [CanBeNull] private readonly IProgress<double> _Progress;
+            private readonly TaskCompletionSource<DigitalSignal> _TaskSource = new TaskCompletionSource<DigitalSignal>();
+            List<short> samples;
+            short[] buffer;
+            private int SamplesCount;
+
+
+            public WaveInDataLoader(WaveIn Input, int SamplesCount, [CanBeNull] IProgress<double> Progress, CancellationToken Cancel)
+            {
+                _Input = Input;
+                _Progress = Progress;
+                this.SamplesCount = SamplesCount;
+                samples = new List<short>(SamplesCount);
+                var samples_rate = _Input.WaveFormat.SampleRate;
+                buffer = new short[_Input.BufferMilliseconds * samples_rate / 1000];
+                _Input.DataAvailable += DataAvailable;
+                _Input.RecordingStopped += OnRecordingStop;
+            }
+
+            private void OnRecordingStop(object? Sender, StoppedEventArgs E) => _TaskSource.TrySetResult(null);
+
+            private void DataAvailable(object? Sender, WaveInEventArgs e)
+            {
+                var recorded = e.BytesRecorded / 2;
+                var current_count = samples.Count;
+                var capacity = samples.Capacity;
+                var necessary_count = capacity - current_count;
+                _Progress?.Report((double)current_count / capacity);
+                if (necessary_count == 0)
+                {
+                    _Input.StopRecording();
+                    return;
+                }
+                if (necessary_count >= recorded && recorded == buffer.Length)
+                {
+                    Buffer.BlockCopy(e.Buffer, 0, buffer, 0, e.BytesRecorded);
+                    samples.AddRange(buffer);
+                    return;
+                }
+
+                Buffer.BlockCopy(e.Buffer, 0, buffer, 0, Math.Min(necessary_count * 2, e.Buffer.Length));
+                for (var i = 0; i < necessary_count && i < buffer.Length; i++)
+                    samples.Add(buffer[i]);
+                _Input.StopRecording();
+            }
+
+            public Task<DigitalSignal> GetSignal()
+            {
+                var last_buffer_length = -1;
+                var samples_rate = _Input.WaveFormat.SampleRate;
+                if (_Input.BufferMilliseconds > SamplesCount * 1000 / samples_rate)
+                {
+                    last_buffer_length = _Input.BufferMilliseconds;
+                    _Input.BufferMilliseconds = SamplesCount * 1000 / samples_rate;
+                }
+
+
+                return _TaskSource.Task;
+            }
+
+            
+        }
+
         [ItemNotNull]
         public static async Task<DigitalSignal> GetSignalMono(
             [NotNull] this WaveIn input, 

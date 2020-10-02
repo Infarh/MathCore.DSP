@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -48,6 +46,37 @@ namespace WpfTest.Services
             };
 
             return await input.GetSignalMono(SamplesCount, Progress, Cancel).ConfigureAwait(true);
+        }
+
+        public Task PlaySignalAsync(DigitalSignal Signal, Device device, IProgress<double> Progress = null, CancellationToken Cancel = default)
+        {
+            using var output = new WaveOut
+            {
+                DeviceNumber = device.Index
+            };
+
+            var tcs = new TaskCompletionSource<object>();
+
+            output.PlaybackStopped += (s, e) => tcs.SetResult(null);
+
+            var provider = new BufferedWaveProvider(new WaveFormat(44100, 16, 1));
+
+            var buffer = new byte[Signal.SamplesCount * 2];
+
+
+            //provider.
+
+            output.Init(provider);
+
+            if (Cancel.CanBeCanceled)
+            {
+                Cancel.Register(() => output.Stop());
+                Cancel.Register(() => tcs.TrySetCanceled());
+            }
+
+            output.Play();
+
+            return tcs.Task;
         }
     }
 }
