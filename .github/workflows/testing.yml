@@ -13,7 +13,7 @@ jobs:
       - name: Use .NET 3.1.402
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 3.1.304
+          dotnet-version: 3.1.402
           
       - name: Building
         run: dotnet build -c Debug
