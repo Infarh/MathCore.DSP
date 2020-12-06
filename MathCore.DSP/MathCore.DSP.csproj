@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <LnagVersion>preview</LnagVersion>
     <Version>0.0.7.2</Version>
     <PackageReleaseNotes>
       Мелкие исправления (обновления версий пакетов)
@@ -31,7 +32,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MathCore" Version="0.0.32.1" />
+    <PackageReference Include="MathCore" Version="0.0.36" />
   </ItemGroup>
 
   <ItemGroup>

@@ -74,13 +74,14 @@ namespace MathCore.DSP
         /// <returns>Значение комплексного коэффициента передачи рекуррентного фильтра на заданной частоте</returns>
         public static Complex GetTransmissionCoefficient([NotNull] double[]A, [NotNull] double[]B, double f)
         {
-            var e = Complex.Exp(-2 * Math.PI * f);
+            //var p = new Complex(0, 2 * Math.PI * f);
+            var p = Complex.Exp(-2 * Math.PI * f);
 
-            static Complex Sum(double[] V, Complex exp)
+            static Complex Sum(double[] V, Complex p)
             {
                 var sum_re = V[V.Length - 1];
                 var sum_im = 0d;
-                var (exp_re, exp_im) = exp;
+                var (exp_re, exp_im) = p;
 
                 for (var i = V.Length - 2; i >= 0; i--)
                 {
@@ -94,7 +95,7 @@ namespace MathCore.DSP
                 return new Complex(sum_re, sum_im);
             }
 
-            return Sum(B, e) / Sum(A, e);
+            return Sum(B, p) / Sum(A, p);
         }
 
         /// <summary>Выполнение фильтрации очередного отсчёта цифрового сигнала с помощью коэффициентов рекуррентного фильтра</summary>

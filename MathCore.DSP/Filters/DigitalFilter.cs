@@ -21,20 +21,19 @@ namespace MathCore.DSP.Filters
         /// <returns>Полюс в z-плоскости</returns>
         public static Complex ToZ(Complex p, double dt) => (2 / dt + p) / (2 / dt - p);
 
-        /// <summary>Расчёт нормирующего множителя (приводящего системную-передаточную функцию к виду с максимумом в 1</summary>
+        /// <summary>Расчёт нормирующего множителя (приводящего системную-передаточную функцию к виду с максимумом в 1)</summary>
         /// <param name="poles">Набор полюсов</param>
         /// <param name="dt">Период дискретизации</param>
         /// <returns>Нормирующий множитель</returns>
-        public static double GetNomalizeCoefficient([NotNull] IEnumerable<Complex> poles, double dt)
+        public static double GetNormalizeCoefficient([NotNull] IEnumerable<Complex> poles, double dt)
         {
             if (poles is null) throw new ArgumentNullException(nameof(poles));
 
-            var result = new Complex(1);
             var k = 2 / dt;
-            result = poles.Aggregate(result, (current, p0) => current * (k - p0));
-            var (re, im) = result;
-            if (Math.Abs(im / re) > 1e-15) throw new InvalidOperationException("Комплексный результат");
-            return 1 / re;
+            var (re, im) = poles.Aggregate(Complex.Real, (current, p0) => current * (k - p0));
+            return (im / re).Abs() <= 1e-15 
+                ? 1 / re 
+                : throw new InvalidOperationException("Комплексный результат");
         }
 
         /// <summary>Вектор состояния</summary>

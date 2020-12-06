@@ -12,14 +12,13 @@ namespace MathCore.DSP.Tests.Filters
         [TestMethod]
         public void CreationTest()
         {
+            const double fd = 0.5;    // Гц // Частота дискретизации
+            const double dt = 1 / fd; // 2с // Период дискретизации
+
             const double fp = 0.05;    // Гц // Граничная частота полосы пропускания
             const double fs = 0.15;    // Гц // Граничная частота полосы запирания
 
             Assert.IsTrue(fp < fs);
-
-            const double fd = 0.5;    // Гц // Частота дискретизации
-            const double dt = 1 / fd; // 2с // Период дискретизации
-
             Assert.IsTrue(fp < fd / 2);
 
             //const double wp = Consts.pi2 * fp * dt; // 0.628318530717959 рад/с
@@ -28,8 +27,8 @@ namespace MathCore.DSP.Tests.Filters
             const double Rp = 1;  // Неравномерность в полосе пропускания (дБ)
             const double Rs = 30; // Неравномерность в полосе пропускания (дБ)
 
-            var eps_p = Math.Sqrt(Math.Pow(10, Rp / 10) - 1);
-            var eps_s = Math.Sqrt(Math.Pow(10, Rs / 10) - 1);
+            var eps_p = (10d.Pow(Rp / 10) - 1).Sqrt();
+            var eps_s = (10d.Pow(Rs / 10) - 1).Sqrt();
 
             Assert.That.Value(eps_p).IsEqual(0.508847139909588, 4.441e-16);
             Assert.That.Value(eps_s).IsEqual(31.606961258558215);
@@ -97,7 +96,7 @@ namespace MathCore.DSP.Tests.Filters
             Assert.That.Value(poles[2].Re).IsEqual(-0.626288194090513, 4.45e-16);
             Assert.That.Value(poles[2].Im).IsEqual(-1.084762972345327, 4.45e-16);
 
-            var translated_poles = poles.Select(p => p * Wp).ToArray();
+            var translated_poles = poles.ToArray(p => p * Wp);
 
             Assert.That.Value(translated_poles[0].Re).IsEqual(-0.40698673955629);
             Assert.That.Value(translated_poles[0].Im).IsEqual(0);
@@ -108,7 +107,7 @@ namespace MathCore.DSP.Tests.Filters
             Assert.That.Value(translated_poles[2].Re).IsEqual(-0.203493369778145, 1.12e-16);
             Assert.That.Value(translated_poles[2].Im).IsEqual(-0.352460855459148, 4.45e-16);
 
-            var z_poles = translated_poles.Select(p => DigitalFilter.ToZ(p, dt)).ToArray();
+            var z_poles = translated_poles.ToArray(p => DigitalFilter.ToZ(p, dt));
 
             Assert.That.Value(z_poles[0].Re).IsEqual(0.421477504919999, 2.23e-16);
             Assert.That.Value(z_poles[0].Im).IsEqual(0);
@@ -123,10 +122,10 @@ namespace MathCore.DSP.Tests.Filters
             Assert.That.Value(z_poles[1].Abs).LessThan(1);
             Assert.That.Value(z_poles[2].Abs).LessThan(1);
 
-            var kz = DigitalFilter.GetNomalizeCoefficient(translated_poles, dt);
+            var kz = DigitalFilter.GetNormalizeCoefficient(translated_poles, dt);
             Assert.That.Value(kz).IsEqual(0.451944218734017, 1.12e-16);
 
-            var WpN = Math.Pow(Wp, N);
+            var WpN = Wp.Pow(N);
             Assert.That.Value(WpN).IsEqual(0.034302685030762, 2.78e-16);
 
             var k = WpN * kz / eps_p;
@@ -216,26 +215,27 @@ namespace MathCore.DSP.Tests.Filters
 
             double[] expected_impulse_response =
             {
-                0.030466713814017,
-                0.136569624089457,
-                0.265552982138031,
-                0.303405053082752,
-                0.230722080773791,
-                0.11400006758795,
-                0.016215356906167,
-                -0.035027159443255,
-                -0.043826129927865,
-                -0.029116175709228,
-                -0.009546418330117,
-                0.004003333309531,
-                0.008889991716749,
-                0.007517462759302,
-                0.003694729105447,
-                0.000296747318716
+                +0.030466713814017603,
+                +0.13656962408945683,
+                +0.2655529821380315,
+                +0.30340505314308713,
+                +0.2307220811985055,
+                +0.11400006843107224,
+                +0.016215357391036463,
+                -0.03502715933548784,
+                -0.04382613004741935,
+                -0.029116175888075326,
+                -0.00954641846221929,
+                +0.004003333255633864,
+                +0.008889991723286804,
+                +0.007517462792239407,
+                +0.0036947291372435315,
+                +0.0002967473365659246
             };
             var impulse_response = filter.GetImpulseResponse(expected_impulse_response.Length, 1e-10).ToArray();
-            Assert.That.Value(impulse_response.Length).IsEqual(expected_impulse_response.Length);
-            CollectionAssert.AreEqual(expected_impulse_response, impulse_response, GetComparer(8.44e-10));
+
+            Assert.That.Collection(impulse_response)
+               .IsEqualTo(expected_impulse_response);
         }
 
         [TestMethod]
@@ -252,21 +252,31 @@ namespace MathCore.DSP.Tests.Filters
 
             var filter = new ButterworthLowPass(fp, fs, dt, Gp, Gs);
 
-            const int count = 1024;
-            var s_0 = new SamplesDigitalSignal(dt, Enumerable.Repeat(1d, count));
+            const int samples_count = 1024;
+            // Сигнал s0(t) = 1
+            var s_0 = new SamplesDigitalSignal(dt, Enumerable.Repeat(1d, samples_count));
+
+            // Гармонические сигналы разной частоты и амплитудой = √2
             const double a0 = Consts.sqrt_2;
-            var s_fp = new SamplesDigitalSignal(dt, count, t => a0 * Math.Cos(2 * Math.PI * fp * t));
-            var s_fs = new SamplesDigitalSignal(dt, count, t => a0 * Math.Cos(2 * Math.PI * fs * t));
-            var s_fd05 = new SamplesDigitalSignal(dt, count, t => a0 * Math.Cos(2 * Math.PI * fd / 2 * t));
+            // Сигнал с частотой равной частоте пропускания (граничной частоте фильтра)
+            var s_fp = new SamplesDigitalSignal(dt, samples_count, t => a0 * Math.Cos(2 * Math.PI * fp * t));
+            // Сигнал с частотой равной частоте заграждения
+            var s_fs = new SamplesDigitalSignal(dt, samples_count, t => a0 * Math.Cos(2 * Math.PI * fs * t));
+            // Сигнал с частотой равной половине частоты дискретизации
+            var s_fd05 = new SamplesDigitalSignal(dt, samples_count, t => a0 * Math.Cos(2 * Math.PI * fd / 2 * t));
 
             var y_0 = filter.ProcessIndividual(s_0);
             var y_fp = filter.ProcessIndividual(s_fp);
             var y_fs = filter.ProcessIndividual(s_fs);
             var y_fd05 = filter.ProcessIndividual(s_fd05);
 
+            // Постоянный сигнал не должен измениться своей мощности
             Assert.That.Value(y_0.Power).IsEqual(s_0.Power, 2.81e-3);
+            // На граничной частоте сигнал должен быть ослаблен на коэффициент Gp (на Gp^2 по мощности)
             Assert.That.Value(y_fp.Power).IsEqual(s_0.Power * Gp * Gp, 3.2e-3);
+            // На частоте заграждения сигнал должен быть ослаблен на коэффициент Gs (на Gs^2 по мощности)
             Assert.That.Value(y_fs.Power).IsEqual(s_fs.Power * Gs * Gs, 1.84e-4);
+            // На частоте в половину частоты дискретизации сигнал должен быть подавлен
             Assert.That.Value(y_fd05.Power).IsEqual(0, 1.33e-4);
         }
     }
