@@ -1,14 +1,23 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
+
+using static MathCore.DSP.Filters.DigitalFilter;
+using static MathCore.Polynom.Array;
+using static MathCore.SpecialFunctions.EllipticJacobi;
+
+// ReSharper disable InconsistentNaming
 
 namespace MathCore.DSP.Filters
 {
     public class EllipticLowPassFilter : EllipticFilter
     {
         /// <summary>Полный эллиптический интеграл</summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static double K(double k) => SpecialFunctions.EllipticJacobi.FullEllipticIntegral(k);
 
         /// <summary>Полный комплиментарный эллиптический интеграл</summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static double T(double k) => SpecialFunctions.EllipticJacobi.FullEllipticIntegralComplimentary(k);
 
         /// <summary>Инициализация коэффициентов передаточной функции Эллиптического фильтра</summary>
@@ -23,78 +32,79 @@ namespace MathCore.DSP.Filters
             if (!(fp < fs)) throw new InvalidOperationException("Частота пропускания должна быть меньше частоты подавления");
             if (!(fp < 1 / (2 * dt))) throw new InvalidOperationException();
 
-            var Fp = DigitalFilter.ToAnalogFrequency(fp, dt);
-            var Fs = DigitalFilter.ToAnalogFrequency(fs, dt);
+            var Rp = -Gp.In_dB();
+            var Rs = -Gs.In_dB();
 
-            const double Rp = 1;
-            const double Rs = 45;
+            // Рассчитываем частоты цифрового фильтра
+            var Fp = ToAnalogFrequency(fp, dt);
+            var Fs = ToAnalogFrequency(fs, dt);
 
-            var eps_p = Math.Sqrt(Math.Pow(10, Rp / 10) - 1);
-            var eps_s = Math.Sqrt(Math.Pow(10, Rs / 10) - 1);
+            // Круговые частоты
+            var Wp = Consts.pi2 * Fp;
 
-            //var k_eps = eps_s / eps_p;
-            //var k_W = Fs / Fp;
-            //Assert.That.Value(k_eps).IsEqual(349.46669702542425);
-            //Assert.That.Value(k_W).IsEqual(1.705275881518411, 2.23e-16);
+            // Допуск на АЧХ в интервале пропускания
+            var eps_p = (Math.Pow(10, Rp / 10) - 1).Sqrt();
+            // Допуск на АЧХ в интервале подавления
+            var eps_s = (Math.Pow(10, Rs / 10) - 1).Sqrt();
 
             var k_W = fp / fs;
             var k_eps = eps_p / eps_s;
 
-            var K_w = SpecialFunctions.EllipticJacobi.FullEllipticIntegral(k_W);
-            var T_w = SpecialFunctions.EllipticJacobi.FullEllipticIntegralComplimentary(k_W);
-            var K_eps = SpecialFunctions.EllipticJacobi.FullEllipticIntegral(k_eps);
-            var T_eps = SpecialFunctions.EllipticJacobi.FullEllipticIntegralComplimentary(k_eps);
+            var K_w = FullEllipticIntegral(k_W);
+            var T_w = FullEllipticIntegralComplimentary(k_W);
+            var K_eps = FullEllipticIntegral(k_eps);
+            var T_eps = FullEllipticIntegralComplimentary(k_eps);
 
             // Оценка снизу порядка фильтра
-            var double_N = T_eps * K_w / K_eps / T_w;
+            var double_N = T_eps * K_w / (K_eps * T_w);
 
             var N = (int)Math.Ceiling(double_N); // Порядок фильтра
 
-            var L = N / 2;
-            var r = N % 2;
+            var L = N / 2;  // Число комплексно сопряжённых полюсов
+            var r = N % 2;  // Число (0 или 1) действительных полюсов - (чётность фильтра)
 
             // Эллиптический модуль
-            double U(int i) => (2 * i - 1d) / N;
-            var u = new double[L];
-            for (var i = 0; i < L; i++)
-                u[i] = U(i + 1);
+            var u = Enumerable.Range(1, L).ToArray(i => (2 * i - 1d) / N);
 
             var m = (1 - k_eps * k_eps).Sqrt();
-
-            var kp = m.Power(N) * u.Aggregate(1d, (P, ui) => P * SpecialFunctions.EllipticJacobi.sn_uk(ui, m).Power(4));
-
+            var kp = m.Power(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Power(4));
             k_W = (1 - kp * kp).Sqrt();
+            var v0_complex = sn_inverse((0, 1 / eps_p), k_eps) / N;
 
-            var im_pz = new double[L];
-            for (var i = 0; i < L; i++)
-                im_pz[i] = 1 / (k_W * SpecialFunctions.EllipticJacobi.cd_uk(u[i], k_W));
+            var zeros = new Complex[N - r]; // Массив нулей (на r меньше числа полюсов)
+            var poles = new Complex[N];     // Массив полюсов
 
-            var v0_complex = SpecialFunctions.EllipticJacobi.sn_inverse(new Complex(0, 1 / eps_p), k_eps) / N;
-
-            var Pp = new Complex[N];
-            var P0 = new Complex[N - r];
-
-            if (r != 0) Pp[0] = Complex.i * SpecialFunctions.EllipticJacobi.sn_uk(v0_complex, k_W);
+            // Если фильтр нечётный, то первым полюсом будет действительный полюс
+            if (r != 0) poles[0] = Complex.i * sn_uk(v0_complex, k_W);
             for (var i = 0; i < L; i++)
             {
-                var (p_im, p_re) = SpecialFunctions.EllipticJacobi.cd_uk(u[i] - v0_complex, k_W);
+                // Меняем местами действительную и мнимую часть вместо домножения на комплексную единицу
+                var (p_im, p_re) = cd_uk(u[i] - v0_complex, k_W);
 
-                Pp[r + 2 * i] = new Complex(-p_re, p_im);
-                Pp[r + 2 * i + 1] = new Complex(-p_re, -p_im);
+                poles[r + 2 * i] = (-p_re, p_im);
+                poles[r + 2 * i + 1] = poles[r + 2 * i].ComplexConjugate;
 
-                var p0_im = 1 / (k_W * SpecialFunctions.EllipticJacobi.cd_uk(u[i], k_W));
-                P0[2 * i] = new Complex(0, p0_im);
-                P0[2 * i + 1] = new Complex(0, -p0_im);
+                var p0_im = 1 / (k_W * cd_uk(u[i], k_W));
+                zeros[2 * i] = (0, p0_im);
+                zeros[2 * i + 1] = zeros[2 * i].ComplexConjugate;
             }
 
+            var z_zeros = zeros.ToArray(z => ToZ(z * Wp, dt));
+            var z_poles = poles.ToArray(z => ToZ(z * Wp, dt));
 
-            var B = Polynom.Array.GetCoefficientsInverted(P0).ToRe();
-            var A = Polynom.Array.GetCoefficientsInverted(Pp).ToRe();
+            if (r > 0)
+            {
+                Array.Resize(ref z_zeros, z_zeros.Length + 1);
+                Array.Copy(z_zeros, 0, z_zeros, 1, z_zeros.Length - 1);
+                z_zeros[0] = -1;
+            }
 
-            var norm_k = B![B.Length - 1] / A![A.Length - 1];
+            var G_norm = (r > 0 ? 1 : 1 / (1 + eps_p * eps_p).Sqrt())
+                / (z_zeros.Aggregate(Complex.Real, (Z, z) => Z * (1 - z))
+                    / z_poles.Aggregate(Complex.Real, (Z, z) => Z * (1 - z))).Abs;
 
-            for (int i = 0, count = B.Length; i < count; i++)
-                B[i] /= norm_k;
+            var B = GetCoefficientsInverted(z_zeros).ToArray(b => b * G_norm).ToRe();
+            var A = GetCoefficientsInverted(z_poles).ToRe();
 
             return (A, B);
         }

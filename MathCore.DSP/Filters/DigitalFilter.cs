@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using MathCore.Annotations;
 using MathCore.DSP.Signals;
 
@@ -15,11 +16,23 @@ namespace MathCore.DSP.Filters
         /// <returns>Значение на оси частот аналогового прототипа</returns>
         public static double ToAnalogFrequency(double DigitalFrequency, double dt) => Math.Tan(Math.PI * DigitalFrequency * dt) / (Math.PI * dt);
 
+        /// <summary>Преобразование частоты аналогового  прототипа в частоту цифрового фильтра</summary>
+        /// <param name="AnalogFrequency">Значение на оси частот аналогового фильтра</param>
+        /// <param name="dt">Период дискретизации</param>
+        /// <returns>Значение на оси частот цифрового фильтра</returns>
+        public static double ToDigitalFrequency(double AnalogFrequency, double dt) => Math.Atan(Math.PI * AnalogFrequency * dt) / (Math.PI * dt);
+
         /// <summary>Преобразование полюса из p-плоскости в z-плоскость</summary>
         /// <param name="p">Полюс p-плоскости</param>
         /// <param name="dt">Период дискретизации</param>
         /// <returns>Полюс в z-плоскости</returns>
         public static Complex ToZ(Complex p, double dt) => (2 / dt + p) / (2 / dt - p);
+
+        /// <summary>Преобразование полюса из z-плоскости в p-плоскость</summary>
+        /// <param name="z">Полюс z-плоскости</param>
+        /// <param name="dt">Период дискретизации</param>
+        /// <returns>Полюс в p-плоскости</returns>
+        public static Complex ToP(Complex z, double dt) => 2 / dt * (z - 1) / (z + 1);
 
         /// <summary>Расчёт нормирующего множителя (приводящего системную-передаточную функцию к виду с максимумом в 1)</summary>
         /// <param name="poles">Набор полюсов</param>
@@ -31,8 +44,8 @@ namespace MathCore.DSP.Filters
 
             var k = 2 / dt;
             var (re, im) = poles.Aggregate(Complex.Real, (current, p0) => current * (k - p0));
-            return (im / re).Abs() <= 1e-15 
-                ? 1 / re 
+            return (im / re).Abs() <= 1e-15
+                ? 1 / re
                 : throw new InvalidOperationException("Комплексный результат");
         }
 
