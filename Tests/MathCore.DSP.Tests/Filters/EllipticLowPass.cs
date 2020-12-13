@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 using MathCore.DSP.Filters;
+using MathCore.DSP.Signals;
 using MathCore.DSP.Tests.Service;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -52,7 +52,7 @@ namespace MathCore.DSP.Tests.Filters
             // Допуск на АЧХ в интервале пропускания
             var eps_p = (Math.Pow(10, Rp / 10) - 1).Sqrt().AssertThanValue().IsEqual(0.50884713990958752).ActualValue;
             // Допуск на АЧХ в интервале подавления
-            var eps_s = (Math.Pow(10, Rs / 10) - 1).Sqrt().AssertThanValue().IsEqual(177.82512927503748).ActualValue;   
+            var eps_s = (Math.Pow(10, Rs / 10) - 1).Sqrt().AssertThanValue().IsEqual(177.82512927503748).ActualValue;
 
             //var k_eps = eps_s / eps_p;
             //var k_W = Fs / Fp;
@@ -259,8 +259,8 @@ namespace MathCore.DSP.Tests.Filters
             Assert.That.Value(Hd).IsEqual(0, eps);                 // Коэффициент передачи на частоте, равной половине частоты дискретизации (соответствующей бесконечно большой частоте) должен быть равен нулю
 
             #endregion
-            
-            var filter = new EllipticLowPassFilter(fp, fs, dt, Gp, Gs);
+
+            var filter = new DSP.Filters.EllipticLowPass(fp, fs, dt, Gp, Gs);
 
             Assert.That.Collection(filter.A).IsEqualTo(A, 1e-15);
             Assert.That.Collection(filter.B).IsEqualTo(B, 1e-16);
@@ -281,7 +281,7 @@ namespace MathCore.DSP.Tests.Filters
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            var filter = new EllipticLowPassFilter(fp, fs, dt, Gp, Gs);
+            var filter = new DSP.Filters.EllipticLowPass(fp, fs, dt, Gp, Gs);
 
             var transmission_0 = filter.GetTransmissionCoefficient(0, dt);
             var transmission_fp = filter.GetTransmissionCoefficient(fp, dt);
@@ -292,12 +292,98 @@ namespace MathCore.DSP.Tests.Filters
             var transmission_fp_abs = transmission_fp.Abs;
             var transmission_fs_abs = transmission_fs.Abs;
             var transmission_fd05_abs = transmission_fd05.Abs;
-            
+
             const double eps = 2.18e-14;
             Assert.That.Value(transmission_0_abs).IsEqual(1, eps);
-            Assert.That.Value(transmission_fp_abs).GreaterOrEqualsThan(Gp);
+            Assert.That.Value(transmission_fp_abs).IsEqual(Gp, eps);
             Assert.That.Value(transmission_fs_abs).LessOrEqualsThan(Gs);
             Assert.That.Value(transmission_fd05_abs).IsEqual(0, eps);
+        }
+
+        [TestMethod]
+        public void ImpulseResponse()
+        {
+            const double pi2 = 2 * Math.PI;
+
+            const double fd = 5000;      // Гц // Частота дискретизации
+            const double dt = 1 / fd;    // с  // Период дискретизации
+            const double fp = fd / pi2;  // Гц // Граничная частота полосы пропускания
+            const double fs = 1.5 * fp;  // Гц // Граничная частота полосы запирания
+            const double Rp = 1;  // Неравномерность в полосе пропускания (дБ)
+            const double Rs = 45; // Неравномерность в полосе пропускания (дБ)
+            var Gp = (-Rp).From_dB();
+            var Gs = (-Rs).From_dB();
+
+            var filter = new DSP.Filters.EllipticLowPass(fp, fs, dt, Gp, Gs);
+
+            double[] expected_impulse_response =
+            {
+                +0.02316402765395902,
+                +0.07890235175222579,
+                +0.16227581269333505,
+                +0.2485315665700753 ,
+                +0.2805442139435834 ,
+                +0.22795965026314102,
+                +0.10322811584198478,
+                -0.03550289833716826,
+                -0.11558449693089311,
+                -0.09973469008670285,
+                -0.01432462412676058,
+                +0.07033262928146783,
+                +0.09354381942841251,
+                +0.0480481590295324 ,
+                -0.02081136468031311,
+                -0.05692503754813389
+            };
+            var impulse_response = filter.GetImpulseResponse(expected_impulse_response.Length, 1e-10).ToArray();
+
+            const double eps = 9.4e-7;
+            Assert.That.Collection(impulse_response)
+               .IsEqualTo(expected_impulse_response, eps);
+        }
+
+        [TestMethod]
+        public void SignallProcessing()
+        {
+            const double pi2 = 2 * Math.PI;
+
+            const double fd = 5000;      // Гц // Частота дискретизации
+            const double dt = 1 / fd;    // с  // Период дискретизации
+            const double fp = fd / pi2;  // Гц // Граничная частота полосы пропускания
+            const double fs = 1.5 * fp;  // Гц // Граничная частота полосы запирания
+            const double Rp = 1;  // Неравномерность в полосе пропускания (дБ)
+            const double Rs = 45; // Неравномерность в полосе пропускания (дБ)
+            var Gp = (-Rp).From_dB();
+            var Gs = (-Rs).From_dB();
+
+            var filter = new DSP.Filters.EllipticLowPass(fp, fs, dt, Gp, Gs);
+
+            const int samples_count = 1024;
+            // Сигнал s0(t) = 1
+            var s_0 = new SamplesDigitalSignal(dt, Enumerable.Repeat(1d, samples_count));
+
+            // Гармонические сигналы разной частоты и амплитудой = √2
+            const double a0 = Consts.sqrt_2;
+            // Сигнал с частотой равной частоте пропускания (граничной частоте фильтра)
+            var s_fp = new SamplesDigitalSignal(dt, samples_count, t => a0 * Math.Cos(2 * Math.PI * fp * t));
+            // Сигнал с частотой равной частоте заграждения
+            var s_fs = new SamplesDigitalSignal(dt, samples_count, t => a0 * Math.Cos(2 * Math.PI * fs * t));
+            // Сигнал с частотой равной половине частоты дискретизации
+            var s_fd05 = new SamplesDigitalSignal(dt, samples_count, t => a0 * Math.Cos(2 * Math.PI * fd / 2 * t));
+
+            var y_0 = filter.ProcessIndividual(s_0);
+            var y_fp = filter.ProcessIndividual(s_fp);
+            var y_fs = filter.ProcessIndividual(s_fs);
+            var y_fd05 = filter.ProcessIndividual(s_fd05);
+
+            // Постоянный сигнал не должен измениться своей мощности
+            Assert.That.Value(y_0.Power).IsEqual(s_0.Power, 3.94e-003);
+            // На граничной частоте сигнал должен быть ослаблен на коэффициент Gp (на Gp^2 по мощности)
+            Assert.That.Value(y_fp.Power).IsEqual(s_0.Power * Gp * Gp, 2.26e-2);
+            // На частоте заграждения сигнал должен быть ослаблен на коэффициент Gs (на Gs^2 по мощности)
+            Assert.That.Value(y_fs.Power).LessOrEqualsThan(s_fs.Power * Gs * Gs, 2.34e-4);
+            // На частоте в половину частоты дискретизации сигнал должен быть подавлен
+            Assert.That.Value(y_fd05.Power).IsEqual(0, 1.57e-4);
         }
     }
 }

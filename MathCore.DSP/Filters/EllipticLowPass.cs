@@ -10,15 +10,15 @@ using static MathCore.SpecialFunctions.EllipticJacobi;
 
 namespace MathCore.DSP.Filters
 {
-    public class EllipticLowPassFilter : EllipticFilter
+    public class EllipticLowPass : EllipticFilter
     {
         /// <summary>Полный эллиптический интеграл</summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static double K(double k) => SpecialFunctions.EllipticJacobi.FullEllipticIntegral(k);
+        private static double K(double k) => FullEllipticIntegral(k);
 
         /// <summary>Полный комплиментарный эллиптический интеграл</summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static double T(double k) => SpecialFunctions.EllipticJacobi.FullEllipticIntegralComplimentary(k);
+        private static double T(double k) => FullEllipticIntegralComplimentary(k);
 
         /// <summary>Инициализация коэффициентов передаточной функции Эллиптического фильтра</summary>
         /// <param name="fp">Частота пропускания</param>
@@ -121,7 +121,7 @@ namespace MathCore.DSP.Filters
         /// <param name="dt">Период дискретизации</param>
         /// <param name="Gp">Затухание в полосе пропускания (0.891250938 = -1 дБ)</param>
         /// <param name="Gs">Затухание в полосе заграждения (0.005623413 = -45 дБ)</param>
-        public EllipticLowPassFilter(double fp, double fs, double dt, double Gp = 0.891250938, double Gs = 0.005623413)
+        public EllipticLowPass(double fp, double fs, double dt, double Gp = 0.891250938, double Gs = 0.005623413)
             : this(Initialize(fp, fs, dt, Gp, Gs))
         {
             this.fp = fp;
@@ -133,6 +133,6 @@ namespace MathCore.DSP.Filters
 
         /// <summary>Инициализация нового Эллиптического фильтра</summary>
         /// <param name="config">Кортеж, содержащий массив коэффициентов полинома числителя и знаменателя</param>
-        private EllipticLowPassFilter((double[] A, double[] B) config) : base(config.B, config.A) { }
+        private EllipticLowPass((double[] A, double[] B) config) : base(config.B, config.A) { }
     }
 }

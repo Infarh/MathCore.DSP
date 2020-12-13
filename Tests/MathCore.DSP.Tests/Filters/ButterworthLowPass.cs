@@ -174,7 +174,7 @@ namespace MathCore.DSP.Tests.Filters
             var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2, dt);
 
             Assert.That.Value(transmission_0.Abs).IsEqual(1, 2.23e-16);
-            Assert.That.Value(transmission_fp.Abs).GreaterOrEqualsThan(Gp);
+            Assert.That.Value(transmission_fp.Abs).IsEqual(Gp, 6.67e-016);
             Assert.That.Value(transmission_fs.Abs).LessOrEqualsThan(Gs);
             Assert.That.Value(transmission_fd05.Abs).IsEqual(0, 4.27e-34);
         }
