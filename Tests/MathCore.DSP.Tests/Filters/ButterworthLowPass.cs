@@ -239,11 +239,11 @@ namespace MathCore.DSP.Tests.Filters
             // Гармонические сигналы разной частоты и амплитудой = √2
             const double a0 = Consts.sqrt_2;
             // Сигнал с частотой равной частоте пропускания (граничной частоте фильтра)
-            var s_fp = new SamplesDigitalSignal(dt, samples_count, t => a0 * Math.Cos(2 * Math.PI * fp * t));
+            var s_fp = MathSamplesSignal.Cos(a0, fp, 0, dt, samples_count);
             // Сигнал с частотой равной частоте заграждения
-            var s_fs = new SamplesDigitalSignal(dt, samples_count, t => a0 * Math.Cos(2 * Math.PI * fs * t));
+            var s_fs = MathSamplesSignal.Cos(a0, fs, 0, dt, samples_count);
             // Сигнал с частотой равной половине частоты дискретизации
-            var s_fd05 = new SamplesDigitalSignal(dt, samples_count, t => a0 * Math.Cos(2 * Math.PI * fd / 2 * t));
+            var s_fd05 = MathSamplesSignal.Cos(a0, fd / 2, 0, dt, samples_count);
 
             var y_0 = filter.ProcessIndividual(s_0);
             var y_fp = filter.ProcessIndividual(s_fp);
