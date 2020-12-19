@@ -16,7 +16,9 @@ jobs:
           dotnet-version: 5.0.101
           
       - name: Building
-        run: dotnet build -c Debug
+        run: |
+          dotnet build MathCore.DSP/MathCore.DS.csproj --nologo -c Debug
+          dotnet build Tests/MathCore.DSP.Tests/MathCore.DSP.Tests.csproj --nologo -c Debug
           
       - name: Run Tests
-        run: dotnet test
+        run: dotnet test Tests/MathCore.DSP.Tests/MathCore.DSP.Tests.csproj --no-build -c Debug
