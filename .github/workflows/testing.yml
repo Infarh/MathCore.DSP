@@ -17,8 +17,8 @@ jobs:
           
       - name: Building
         run: |
-          dotnet build MathCore.DSP/MathCore.DS.csproj --nologo -c Debug
-          dotnet build Tests/MathCore.DSP.Tests/MathCore.DSP.Tests.csproj --nologo -c Debug
+          dotnet build MathCore.DSP --nologo -c Debug
+          dotnet build Tests/MathCore.DSP.Tests --nologo -c Debug
           
       - name: Run Tests
-        run: dotnet test Tests/MathCore.DSP.Tests/MathCore.DSP.Tests.csproj --no-build -c Debug
+        run: dotnet test Tests/MathCore.DSP.Tests --no-build -c Debug
