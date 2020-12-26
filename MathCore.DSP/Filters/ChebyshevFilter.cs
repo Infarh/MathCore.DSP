@@ -1,7 +1,10 @@
-﻿using MathCore.Annotations;
+﻿using System.Runtime.Serialization;
+
+using MathCore.Annotations;
 
 namespace MathCore.DSP.Filters
 {
+    [KnownType(typeof(ChebyshevLowPass))]
     public abstract class ChebyshevFilter : AnalogBasedFilter
     {
         /// <inheritdoc />

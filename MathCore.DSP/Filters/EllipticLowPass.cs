@@ -50,10 +50,10 @@ namespace MathCore.DSP.Filters
             var k_W = fp / fs;
             var k_eps = eps_p / eps_s;
 
-            var K_w = FullEllipticIntegral(k_W);
-            var T_w = FullEllipticIntegralComplimentary(k_W);
-            var K_eps = FullEllipticIntegral(k_eps);
-            var T_eps = FullEllipticIntegralComplimentary(k_eps);
+            var K_w = K(k_W);
+            var T_w = T(k_W);
+            var K_eps = K(k_eps);
+            var T_eps = T(k_eps);
 
             // Оценка снизу порядка фильтра
             var double_N = T_eps * K_w / (K_eps * T_w);
@@ -89,8 +89,11 @@ namespace MathCore.DSP.Filters
                 zeros[2 * i + 1] = zeros[2 * i].ComplexConjugate;
             }
 
-            var z_zeros = zeros.ToArray(z => ToZ(z * Wp, dt));
-            var z_poles = poles.ToArray(z => ToZ(z * Wp, dt));
+            //var z_zeros = zeros.ToArray(z => ToZ(z * Wp, dt));
+            //var z_poles = poles.ToArray(z => ToZ(z * Wp, dt));
+
+            var z_zeros = ToZArray(zeros, dt, Wp);
+            var z_poles = ToZArray(poles, dt, Wp);
 
             if (r > 0)
             {

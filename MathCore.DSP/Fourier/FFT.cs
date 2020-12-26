@@ -255,9 +255,7 @@ namespace MathCore.DSP.Fourier
         public static double[] Recursive_FFT([NotNull] double[] a)
         {
             var n = a.Length;
-            if(!n.IsPowerOf2())
-                throw new ArgumentException("Длина массива должна быть степенью 2", nameof(a));
-            return Recursive_FFTInternal(a, n);
+            return n.IsPowerOf2() ? Recursive_FFTInternal(a, n) : throw new ArgumentException("Длина массива должна быть степенью 2", nameof(a));
         }
         private static double[] Recursive_FFTInternal(double[] a, int n)
         {
@@ -296,9 +294,9 @@ namespace MathCore.DSP.Fourier
         public static Task<double[]> Recursive_FFTAsync([NotNull] double[] a, int MinAsyncLength = 256)
         {
             var n = a.Length;
-            if(!n.IsPowerOf2())
-                throw new ArgumentException("Длина массива должна быть степенью 2", nameof(a));
-            return Recursive_FFTInternalAsync(a, n, MinAsyncLength);
+            return n.IsPowerOf2()
+                ? Recursive_FFTInternalAsync(a, n, MinAsyncLength)
+                : throw new ArgumentException("Длина массива должна быть степенью 2", nameof(a));
         }
 
         [ItemNotNull]

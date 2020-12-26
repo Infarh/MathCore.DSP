@@ -1,6 +1,6 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MathCore.Annotations;
@@ -13,22 +13,22 @@ namespace NAudio.Wave
     {
         private class WaveInDataLoader
         {
-            private WaveIn _Input;
+            private readonly WaveIn _Input;
             [CanBeNull] private readonly IProgress<double> _Progress;
-            private readonly TaskCompletionSource<DigitalSignal> _TaskSource = new TaskCompletionSource<DigitalSignal>();
-            List<short> samples;
-            short[] buffer;
-            private int SamplesCount;
+            private readonly TaskCompletionSource<DigitalSignal?> _TaskSource = new();
+            readonly List<short> _Samples;
+            readonly short[] _Buffer;
+            private readonly int _SamplesCount;
 
 
             public WaveInDataLoader(WaveIn Input, int SamplesCount, [CanBeNull] IProgress<double> Progress, CancellationToken Cancel)
             {
                 _Input = Input;
                 _Progress = Progress;
-                this.SamplesCount = SamplesCount;
-                samples = new List<short>(SamplesCount);
+                _SamplesCount = SamplesCount;
+                _Samples = new List<short>(SamplesCount);
                 var samples_rate = _Input.WaveFormat.SampleRate;
-                buffer = new short[_Input.BufferMilliseconds * samples_rate / 1000];
+                _Buffer = new short[_Input.BufferMilliseconds * samples_rate / 1000];
                 _Input.DataAvailable += DataAvailable;
                 _Input.RecordingStopped += OnRecordingStop;
             }
@@ -38,8 +38,8 @@ namespace NAudio.Wave
             private void DataAvailable(object? Sender, WaveInEventArgs e)
             {
                 var recorded = e.BytesRecorded / 2;
-                var current_count = samples.Count;
-                var capacity = samples.Capacity;
+                var current_count = _Samples.Count;
+                var capacity = _Samples.Capacity;
                 var necessary_count = capacity - current_count;
                 _Progress?.Report((double)current_count / capacity);
                 if (necessary_count == 0)
@@ -47,16 +47,16 @@ namespace NAudio.Wave
                     _Input.StopRecording();
                     return;
                 }
-                if (necessary_count >= recorded && recorded == buffer.Length)
+                if (necessary_count >= recorded && recorded == _Buffer.Length)
                 {
-                    Buffer.BlockCopy(e.Buffer, 0, buffer, 0, e.BytesRecorded);
-                    samples.AddRange(buffer);
+                    Buffer.BlockCopy(e.Buffer, 0, _Buffer, 0, e.BytesRecorded);
+                    _Samples.AddRange(_Buffer);
                     return;
                 }
 
-                Buffer.BlockCopy(e.Buffer, 0, buffer, 0, Math.Min(necessary_count * 2, e.Buffer.Length));
-                for (var i = 0; i < necessary_count && i < buffer.Length; i++)
-                    samples.Add(buffer[i]);
+                Buffer.BlockCopy(e.Buffer, 0, _Buffer, 0, Math.Min(necessary_count * 2, e.Buffer.Length));
+                for (var i = 0; i < necessary_count && i < _Buffer.Length; i++)
+                    _Samples.Add(_Buffer[i]);
                 _Input.StopRecording();
             }
 
@@ -64,10 +64,10 @@ namespace NAudio.Wave
             {
                 var last_buffer_length = -1;
                 var samples_rate = _Input.WaveFormat.SampleRate;
-                if (_Input.BufferMilliseconds > SamplesCount * 1000 / samples_rate)
+                if (_Input.BufferMilliseconds > _SamplesCount * 1000 / samples_rate)
                 {
                     last_buffer_length = _Input.BufferMilliseconds;
-                    _Input.BufferMilliseconds = SamplesCount * 1000 / samples_rate;
+                    _Input.BufferMilliseconds = _SamplesCount * 1000 / samples_rate;
                 }
 
 
@@ -77,11 +77,10 @@ namespace NAudio.Wave
             
         }
 
-        [ItemNotNull]
         public static async Task<DigitalSignal> GetSignalMono(
             [NotNull] this WaveIn input, 
             int SamplesCount, 
-            [CanBeNull] IProgress<double> Progress = null, 
+            IProgress<double>? Progress = null, 
             CancellationToken Cancel = default)
         {
             var last_buffer_length = -1;
@@ -105,7 +104,7 @@ namespace NAudio.Wave
                 Progress?.Report((double)current_count / capacity);
                 if (necessary_count == 0)
                 {
-                    ((WaveIn)s)?.StopRecording();
+                    ((WaveIn?)s)?.StopRecording();
                     return;
                 }
                 if (necessary_count >= recorded && recorded == buffer.Length)
@@ -118,13 +117,13 @@ namespace NAudio.Wave
                 Buffer.BlockCopy(e.Buffer, 0, buffer, 0, Math.Min(necessary_count * 2, e.Buffer.Length));
                 for (var i = 0; i < necessary_count && i < buffer.Length; i++)
                     samples.Add(buffer[i]);
-                ((WaveIn)s)?.StopRecording();
+                ((WaveIn?)s)?.StopRecording();
             };
             input.RecordingStopped += (s, e) => tcs.TrySetResult(samples);
 
             if (Cancel.CanBeCanceled)
             {
-                Cancel.Register(() => input.StopRecording());
+                Cancel.Register(input.StopRecording);
                 Cancel.Register(() => tcs.TrySetCanceled());
             }
 

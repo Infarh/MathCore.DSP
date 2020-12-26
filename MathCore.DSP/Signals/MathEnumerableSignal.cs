@@ -27,7 +27,5 @@ namespace MathCore.DSP.Signals
             var w0 = 2 * Math.PI * f0;
             return new EnumerableSignal(dt, GetSamples(t => A * Math.Sin(w0 * t + phi0), dt, SamplesCount));
         }
-
-        
     }
 }

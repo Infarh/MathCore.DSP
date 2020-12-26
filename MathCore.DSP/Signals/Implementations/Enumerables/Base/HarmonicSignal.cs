@@ -1,4 +1,5 @@
-﻿namespace MathCore.DSP.Signals.Implementations.Enumerables.Base
+﻿// ReSharper disable InconsistentNaming
+namespace MathCore.DSP.Signals.Implementations.Enumerables.Base
 {
     public abstract class HarmonicSignal : EnumerableSignalImplementation
     {

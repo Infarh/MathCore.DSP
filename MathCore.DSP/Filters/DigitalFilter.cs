@@ -26,7 +26,17 @@ namespace MathCore.DSP.Filters
         /// <param name="p">Полюс p-плоскости</param>
         /// <param name="dt">Период дискретизации</param>
         /// <returns>Полюс в z-плоскости</returns>
-        public static Complex ToZ(Complex p, double dt) => (2 / dt + p) / (2 / dt - p);
+        public static Complex ToZ(Complex p, double dt)
+        {
+            var w = 2 / dt;
+            return (w + p) / (w - p);
+        }
+
+        public static IEnumerable<Complex> ToZ(IEnumerable<Complex> p, double dt) => p.Select(z => ToZ(z, dt));
+
+        public static IEnumerable<Complex> ToZ(IEnumerable<Complex> p, double W0, double dt) => p.Select(z => ToZ(z * W0, dt));
+
+        public static Complex[] ToZArray(IEnumerable<Complex> p, double dt, double W0 = 1) => ToZ(p, W0, dt).ToArray();
 
         /// <summary>Преобразование полюса из z-плоскости в p-плоскость</summary>
         /// <param name="z">Полюс z-плоскости</param>

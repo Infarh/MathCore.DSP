@@ -120,9 +120,7 @@ namespace MathCore.DSP.Fourier
                 var Q = 0.0;
                 for (var n = 0; n < N; n++)
                 {
-                    var v = Values[n];
-                    var re = v.Re;
-                    var im = v.Im;
+                    var (re, im) = Values[n];
                     var i = n * m % N;
                     var ww = w[i];
                     P += re * ww.Cos - im * ww.Sin;
@@ -153,9 +151,7 @@ namespace MathCore.DSP.Fourier
                 for (var n = 0; n < N; n++)
                 {
                     // ReSharper disable once UseDeconstruction
-                    var v = Values[n];
-                    var re = v.Re;
-                    var im = v.Im;
+                    var (re, im) = Values[n];
                     var i = n * m % N;
                     var ww = w[i];
                     P += re * ww.Cos - im * ww.Sin;

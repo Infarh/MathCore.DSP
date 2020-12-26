@@ -1,7 +1,10 @@
-﻿#nullable enable
+﻿using System.Runtime.Serialization;
+
+#nullable enable
 namespace MathCore.DSP.Filters
 {
     /// <summary>Эллиптический фильтр</summary>
+    [KnownType(typeof(EllipticLowPass))]
     public abstract class EllipticFilter : AnalogBasedFilter
     {
         /// <summary>Инициализация нового эллиптического фильтра</summary>

@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 
 using MathCore.Annotations;
 
 namespace MathCore.DSP.Filters
 {
     /// <summary>Цифровой фильтр на основе аналогового прототипа</summary>
+    //[KnownType(typeof(BesselFilter))]       // Наихудшее аппроксимация прямоугольной АЧХ (близка по форме к гаусовой кривой), но наилучшая форма переходной хар-ки
+    [KnownType(typeof(ButterworthFilter))]  // Промежуточные качества по прямоугольности АЧХ и переходной хар-ке
+    [KnownType(typeof(ChebyshevFilter))]    // АЧХ наиболее приближена к прямоугольной - наибольшие пульсации в переходной хор-ке
+    [KnownType(typeof(EllipticFilter))]     // Максимальная крутизна АЧХ
     public abstract class AnalogBasedFilter : IIR
     {
         //https://ru.dsplib.org/content/filter_low2low/filter_low2low.html
