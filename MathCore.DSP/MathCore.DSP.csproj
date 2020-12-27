@@ -16,7 +16,7 @@
     <PackageProjectUrl>https://github.com/Infarh/MathCore.DSP</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Infarh/MathCore.DSP</RepositoryUrl>
     <PackageTags>DSP, Signal processing</PackageTags>
-    <LangVersion>8</LangVersion>
+    <LangVersion>9</LangVersion>
     <Copyright>shmachilin@gmail.com</Copyright>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>MathCoreDSPSign.snk</AssemblyOriginatorKeyFile>
