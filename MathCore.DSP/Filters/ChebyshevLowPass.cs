@@ -42,24 +42,26 @@ namespace MathCore.DSP.Filters
                 poles[i] = new Complex(-sh * sin, ch * cos);
                 poles[i + 1] = poles[i].ComplexConjugate;
             }
-            
+
             return poles;
         }
 
-        private static (Complex[] Zeros, Complex[] Poles) GetAnalogPolesII(int N, double EpsP)
+        private static (Complex[] Zeros, Complex[] Poles) GetAnalogPolesII(int N, double EpsS)
         {
             var r = N % 2;                              // Нечётность порядка фильтра
             var L = (N - r) / 2;                        // Число пар нулей
             var dth = Math.PI / N;                      // Угловой шаг между полюсами
-            var beta = arsh(EpsP) / N;
+            var beta = arsh(EpsS) / N;
             var shb = Math.Sinh(beta);
             var chb = Math.Cosh(beta);
-           
+
             var poles = new Complex[N];                 // Массив полюсов фильтра
             if (r != 0) poles[0] = -1 / shb;            // Если порядок фильтра нечётный, то первым добавляем центральный полюс
             for (var i = r; i < poles.Length; i += 2)   // Расчёт полюсов
             {
-                var th = dth * (i + 1 - r - 0.5);
+                var n = (i - r) / 2 + 1;
+                var th = dth * (n - 0.5);
+
                 var sin = Math.Sin(th);
                 var cos = Math.Cos(th);
                 var norm = 1 / (sin * sin * shb * shb + cos * cos * chb * chb);
@@ -75,10 +77,10 @@ namespace MathCore.DSP.Filters
                 zeros[2 * n - 1] = zeros[2 * n - 2].ComplexConjugate;
             }
 
-            return (poles, zeros);
+            return (zeros, poles);
         }
 
-        private static (int N, double EpsP, double Wp, double kW) GetProperties(double fp, double fs, double dt, double Gp, double Gs)
+        private static (int N, double EpsP, double EpsS, double Wp) GetProperties(double fp, double fs, double dt, double Gp, double Gs)
         {
             if (!(fp < fs)) throw new InvalidOperationException("Частота пропускания должна быть меньше частоты подавления");
             if (!(fp < 1 / (2 * dt))) throw new InvalidOperationException();
@@ -99,48 +101,68 @@ namespace MathCore.DSP.Filters
 
             var N = (int)Math.Ceiling(arch(k_eps) / arch(k_W)); // Порядок фильтра
 
-            return (N, eps_p, Wp, k_W);
+            return (N, eps_p, eps_s, Wp);
         }
 
         private static (double[] A, double[] B) InitializeI(double fp, double fs, double dt, double Gp, double Gs)
         {
-            var properties = GetProperties(fp, fs, dt, Gp, Gs);
-            var poles = GetAnalogPolesI(properties.N, properties.EpsP);
-            var z_poles = ToZArray(poles, dt, properties.Wp);
+            var (n, eps_p, _, wp) = GetProperties(fp, fs, dt, Gp, Gs);
+            var poles = GetAnalogPolesI(n, eps_p);
+            var z_poles = ToZArray(poles, dt, wp);
 
             var A = GetCoefficientsInverted(z_poles).ToRe();
 
-            var g_norm = (properties.N.IsOdd() ? 1 : Gp)
-                / (2.Power(properties.N) / z_poles.Aggregate(Complex.Real, (Z, z) => Z * (1 - z), z => z.Re));
+            var g_norm = (n.IsOdd() ? 1 : Gp)
+                / (2.Power(n) / z_poles.Multiply(z => 1 - z).Re);
 
             var B = Enumerable
-               .Range(0, properties.N + 1)
-               .ToArray(i => g_norm * SpecialFunctions.BinomialCoefficient(properties.N, i));
+               .Range(0, n + 1)
+               .ToArray(i => g_norm * SpecialFunctions.BinomialCoefficient(n, i));
 
             return (A, B);
         }
 
         private static (double[] A, double[] B) InitializeII(double fp, double fs, double dt, double Gp, double Gs)
         {
-            var properties = GetProperties(fp, fs, dt, Gp, Gs);
-            var polynom = GetAnalogPolesII(properties.N, properties.EpsP);
-            var z_poles = ToZArray(polynom.Poles, dt, properties.Wp);
-            var z_zeros = ToZArray(polynom.Zeros, dt, properties.Wp);
+            var (N, _, eps_s, wp) = GetProperties(fp, fs, dt, Gp, Gs);
+            var (zeros, poles) = GetAnalogPolesII(N, eps_s);
 
-            //var B = GetCoefficientsInverted(z_zeros).ToArray(b => b * G_norm).ToRe();
-            //var A = GetCoefficientsInverted(z_poles).ToRe();
+            var z_zeros = N.IsEven()
+               ? ToZArray(zeros, dt, wp)
+               : ToZ(zeros, dt, wp).Prepend(-1).ToArray();
+            var z_poles = ToZArray(poles, dt, wp);
 
-            return (Array.Empty<double>(), Array.Empty<double>());
+            var B = GetCoefficientsInverted(z_zeros).ToRe();
+            var A = GetCoefficientsInverted(z_poles).ToRe();
+
+            var g_norm = 1 / (z_zeros.Multiply(z => 1 - z).Re / z_poles.Multiply(z => 1 - z).Re);
+
+            for (var i = 0; i < B!.Length; i++)
+                B[i] *= g_norm;
+
+            return (A, B);
         }
 
         private static (double[] A, double[] B) InitializeIICorrected(double fp, double fs, double dt, double Gp, double Gs)
         {
-            var properties = GetProperties(fp, fs, dt, Gp, Gs);
-            var polynom = GetAnalogPolesII(properties.N, properties.EpsP);
-            var translated_poles = ToZArray(polynom.Poles, dt, properties.Wp / properties.kW);
-            var translated_zeros = ToZArray(polynom.Zeros, dt, properties.Wp / properties.kW);
+            var (N, _, eps_s, wp) = GetProperties(fp, fs, dt, Gp, Gs);
+            var (zeros, poles) = GetAnalogPolesII(N, eps_s);
 
-            return (Array.Empty<double>(), Array.Empty<double>());
+            var kw = fp / fs;
+            var z_zeros = N.IsEven()
+                ? ToZArray(zeros, dt, wp / kw)
+                : ToZ(zeros, dt, wp / kw).Prepend(-1).ToArray();
+            var z_poles = ToZArray(poles, dt, wp / kw);
+
+            var B = GetCoefficientsInverted(z_zeros).ToRe();
+            var A = GetCoefficientsInverted(z_poles).ToRe();
+
+            var g_norm = 1 / (z_zeros.Multiply(z => 1 - z).Re / z_poles.Multiply(z => 1 - z).Re);
+
+            for (var i = 0; i < B!.Length; i++)
+                B[i] *= g_norm;
+
+            return (A, B);
         }
 
         public ChebyshevType FilterType { get; }
