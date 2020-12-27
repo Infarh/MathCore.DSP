@@ -31,10 +31,11 @@ namespace MathCore.DSP.Filters
             var sh = Math.Sinh(beta);
             var ch = Math.Cosh(beta);
             var poles = new Complex[N];                 // Массив полюсов фильтра
-            if (r != 0) poles[0] = -sh;    // Если порядок фильтра нечётный, то первым добавляем центральный полюс
+            if (r != 0) poles[0] = -sh;                 // Если порядок фильтра нечётный, то первым добавляем центральный полюс
             for (var i = r; i < poles.Length; i += 2)   // Расчёт полюсов
             {
-                var th = dth * (i + 1 - r - 0.5);
+                var n = (i - r) / 2 + 1;
+                var th = dth * (n - 0.5);
 
                 var sin = Math.Sin(th);
                 var cos = Math.Cos(th);
@@ -105,9 +106,18 @@ namespace MathCore.DSP.Filters
         {
             var properties = GetProperties(fp, fs, dt, Gp, Gs);
             var poles = GetAnalogPolesI(properties.N, properties.EpsP);
-            var translated_poles = ToZArray(poles, dt, properties.Wp);
+            var z_poles = ToZArray(poles, dt, properties.Wp);
 
-            return (Array.Empty<double>(), Array.Empty<double>());
+            var A = GetCoefficientsInverted(z_poles).ToRe();
+
+            var g_norm = (properties.N.IsOdd() ? 1 : Gp)
+                / (2.Power(properties.N) / z_poles.Aggregate(Complex.Real, (Z, z) => Z * (1 - z), z => z.Re));
+
+            var B = Enumerable
+               .Range(0, properties.N + 1)
+               .ToArray(i => g_norm * SpecialFunctions.BinomialCoefficient(properties.N, i));
+
+            return (A, B);
         }
 
         private static (double[] A, double[] B) InitializeII(double fp, double fs, double dt, double Gp, double Gs)

@@ -25,14 +25,16 @@ namespace MathCore.DSP.Tests.Filters
             const double fp = 1.0 * fd / pi2;   // Граничная частота конца интервала пропускания
             const double fs = 1.6 * fd / pi2;   // Граничная частота начала интервала подавления
 
+            const double Rp = 1.5;  // Неравномерность в полосе пропускания (дБ)
+            const double Rs = 35; // Неравномерность в полосе пропускания (дБ)
+
+            #region Аналитический расчёт
+
             Assert.IsTrue(fp < fs);
             Assert.IsTrue(fp < fd / 2);
 
             //const double wp = Consts.pi2 * fp * dt; // 0.628318530717959 рад/с
             //const double ws = Consts.pi2 * fs * dt; // 1.884955592153876 рад/с
-
-            const double Rp = 1.5;  // Неравномерность в полосе пропускания (дБ)
-            const double Rs = 35; // Неравномерность в полосе пропускания (дБ)
 
             var eps_p = (10d.Pow(Rp / 10) - 1).Sqrt();
             var eps_s = (10d.Pow(Rs / 10) - 1).Sqrt();
@@ -140,7 +142,14 @@ namespace MathCore.DSP.Tests.Filters
             Assert.That.Value(H0).IsEqual(r == 1 ? 1 : Gp, 1.59e-14);
             Assert.That.Value(Hp).IsEqual(Gp, 9.78e-15);
             Assert.That.Value(Hs).LessOrEqualsThan(Gs);
-            Assert.That.Value(Hd).IsEqual(0, 5.67e-20);
+            Assert.That.Value(Hd).IsEqual(0, 5.67e-20); 
+
+            #endregion
+
+            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.I);
+
+            Assert.That.Collection(filter.A).IsEqualTo(A);
+            Assert.That.Collection(filter.B).IsEqualTo(B);
         }
     }
 }
