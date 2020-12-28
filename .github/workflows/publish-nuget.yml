@@ -20,13 +20,15 @@ jobs:
           dotnet-version: 5.0.101
         
       - name: Building
-        run: dotnet build          
+        run: |
+          dotnet build MathCore.DSP --nologo -c Release
+          dotnet build Tests/MathCore.DSP.Tests --nologo -c Release
           
-      - name: Testing
-        run: dotnet test
+      - name: Run Tests
+        run: dotnet test Tests/MathCore.DSP.Tests --no-build -c Release
         
       - name: Packing
-        run: dotnet pack -c Release
+        run: dotnet pack MathCore.DSP -c Release
         
       - name: Publishing
         run: dotnet nuget push MathCore.DSP/bin/Release/*.nupkg -k ${{ secrets.NuGetApiKey }} -n --skip-duplicate -s https://api.nuget.org/v3/index.json
