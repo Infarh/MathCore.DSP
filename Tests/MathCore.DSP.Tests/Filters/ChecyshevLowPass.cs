@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using MathCore.DSP.Filters;
@@ -90,13 +91,16 @@ namespace MathCore.DSP.Tests.Filters
                 poles[i + 1] = poles[i].ComplexConjugate;
             }
 
-            Assert.That.Collection(poles).IsEqualTo(
+            var comparer = new LambdaEqualityComparer<Complex>((x1, x2) => (x1 - x2).Abs < 1e-14);
+
+            Assert.That.Collection(poles).IsEqualTo(new Complex[]
+            {
                 -0.24765029577598821,
                 (-0.076528150056762612, +0.979787021976867),
                 (-0.076528150056762612, -0.979787021976867),
                 (-0.20035329794475673, +0.605541681317744),
                 (-0.20035329794475673, -0.605541681317744)
-                );
+            }, comparer);
 
             var z_poles = DigitalFilter.ToZArray(poles, dt, Wp);
 
@@ -678,7 +682,7 @@ namespace MathCore.DSP.Tests.Filters
             Assert.That.Value(transmission_0_abs).IsEqual(1, eps);
             Assert.That.Value(transmission_fp_abs).GreaterOrEqualsThan(Gp);
             Assert.That.Value(transmission_fs_abs).LessOrEqualsThan(Gs);
-            Assert.That.Value(transmission_fd05_abs).LessOrEqualsThan(Gs);
+            Assert.That.Value(transmission_fd05_abs).LessOrEqualsThan(Gs, eps);
         }
 
         [TestMethod]
