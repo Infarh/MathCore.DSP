@@ -4,9 +4,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <LangVersion>9</LangVersion>
-    <Version>0.0.7.2</Version>
+    <Version>0.0.8</Version>
     <PackageReleaseNotes>
-      Мелкие исправления (обновления версий пакетов)
+      Фильтры Чебышева
     </PackageReleaseNotes>
   </PropertyGroup>
 
@@ -14,12 +14,14 @@
     <Authors>Shmachilin P.A.</Authors>
     <Description>Библиотека алгоритмов цифровой обработки сигналов</Description>
     <PackageProjectUrl>https://github.com/Infarh/MathCore.DSP</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/Infarh/MathCore.DSP</RepositoryUrl>
+    <RepositoryUrl>https://github.com/Infarh/MathCore.DSP.git</RepositoryUrl>
     <PackageTags>DSP, Signal processing</PackageTags>
     <Copyright>shmachilin@gmail.com</Copyright>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>MathCoreDSPSign.snk</AssemblyOriginatorKeyFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
