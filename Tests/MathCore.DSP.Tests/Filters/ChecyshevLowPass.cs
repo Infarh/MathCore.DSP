@@ -2,10 +2,12 @@
 using System.Linq;
 
 using MathCore.DSP.Filters;
+using MathCore.DSP.Tests.Service;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 // ReSharper disable InconsistentNaming
 // ReSharper disable RedundantArgumentDefaultValue
+// ReSharper disable ArgumentsStyleNamedExpression
 
 namespace MathCore.DSP.Tests.Filters
 {
@@ -26,16 +28,13 @@ namespace MathCore.DSP.Tests.Filters
             const double fp = 1.0 * fd / pi2;   // Граничная частота конца интервала пропускания
             const double fs = 1.6 * fd / pi2;   // Граничная частота начала интервала подавления
 
-            const double Rp = 1.5;  // Неравномерность в полосе пропускания (дБ)
-            const double Rs = 35; // Неравномерность в полосе пропускания (дБ)
+            const double Rp = 1.5;              // Неравномерность в полосе пропускания (дБ)
+            const double Rs = 35;               // Затухание в полосе подавления (дБ)
 
             #region Аналитический расчёт
 
             Assert.IsTrue(fp < fs);
             Assert.IsTrue(fp < fd / 2);
-
-            //const double wp = Consts.pi2 * fp * dt; // 0.628318530717959 рад/с
-            //const double ws = Consts.pi2 * fs * dt; // 1.884955592153876 рад/с
 
             var eps_p = (10d.Pow(Rp / 10) - 1).Sqrt();
             var eps_s = (10d.Pow(Rs / 10) - 1).Sqrt();
@@ -164,16 +163,13 @@ namespace MathCore.DSP.Tests.Filters
             const double fp = 1.0 * fd / pi2;   // Граничная частота конца интервала пропускания
             const double fs = 1.6 * fd / pi2;   // Граничная частота начала интервала подавления
 
-            const double Rp = 1.5;  // Неравномерность в полосе пропускания (дБ)
-            const double Rs = 35; // Неравномерность в полосе пропускания (дБ)
+            const double Rp = 1.5;              // Неравномерность в полосе пропускания (дБ)
+            const double Rs = 35;               // Затухание в полосе подавления (дБ)
 
             #region Аналитический расчёт
 
             Assert.IsTrue(fp < fs);
             Assert.IsTrue(fp < fd / 2);
-
-            //const double wp = Consts.pi2 * fp * dt; // 0.628318530717959 рад/с
-            //const double ws = Consts.pi2 * fs * dt; // 1.884955592153876 рад/с
 
             var eps_p = (10d.Pow(Rp / 10) - 1).Sqrt();
             var eps_s = (10d.Pow(Rs / 10) - 1).Sqrt();
@@ -335,16 +331,13 @@ namespace MathCore.DSP.Tests.Filters
             const double fp = 1.0 * fd / pi2;   // Граничная частота конца интервала пропускания
             const double fs = 1.6 * fd / pi2;   // Граничная частота начала интервала подавления
 
-            const double Rp = 1.5;  // Неравномерность в полосе пропускания (дБ)
-            const double Rs = 35; // Неравномерность в полосе пропускания (дБ)
+            const double Rp = 1.5;              // Неравномерность в полосе пропускания (дБ)
+            const double Rs = 35;               // Затухание в полосе подавления (дБ)
 
             #region Аналитический расчёт
 
             Assert.IsTrue(fp < fs);
             Assert.IsTrue(fp < fd / 2);
-
-            //const double wp = Consts.pi2 * fp * dt; // 0.628318530717959 рад/с
-            //const double ws = Consts.pi2 * fs * dt; // 1.884955592153876 рад/с
 
             var eps_p = (10d.Pow(Rp / 10) - 1).Sqrt();
             var eps_s = (10d.Pow(Rs / 10) - 1).Sqrt();
@@ -409,7 +402,7 @@ namespace MathCore.DSP.Tests.Filters
                 zeros[2 * n - 1] = zeros[2 * n - 2].ComplexConjugate;
             }
 
-            var kw = fp / fs;
+            const double kw = fp / fs;
             for (var i = 0; i < poles.Length; i++) poles[i] /= kw;
             for (var i = 0; i < zeros.Length; i++) zeros[i] /= kw;
 
@@ -501,22 +494,25 @@ namespace MathCore.DSP.Tests.Filters
             Assert.That.Value(filter.Order).IsEqual(N);
         }
 
+        /// <summary>Тестирование коэффициента передачи фильтра Чебышева первого рода чётного порядка</summary>
         [TestMethod]
-        public void TypeI_TransmissionCoefficient()
+        public void TypeI_EvenOrder_TransmissionCoefficient()
         {
             const double pi2 = 2 * Math.PI;
 
-            const double fd = 5000;      // Гц // Частота дискретизации
-            const double dt = 1 / fd;    // с  // Период дискретизации
-            const double fp = fd / pi2;  // Гц // Граничная частота полосы пропускания
-            const double fs = 1.5 * fp;  // Гц // Граничная частота полосы запирания
-            const double Rp = 1;  // Неравномерность в полосе пропускания (дБ)
-            const double Rs = 45; // Неравномерность в полосе пропускания (дБ)
+            const double fd = 5000;             // Гц // Частота дискретизации
+            const double dt = 1 / fd;           // с  // Период дискретизации
+            const double fp = 1.0 * fd / pi2;   // Гц // Граничная частота полосы пропускания
+            const double fs = 1.8 * fd / pi2;   // Гц // Граничная частота полосы запирания
+            const double Rp = 1.5;              // дБ // Неравномерность в полосе пропускания
+            const double Rs = 30;               // дБ // Затухание в полосе подавления
 
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            var filter = new DSP.Filters.ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.I);
+            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.I);
+
+            Assert.That.Value(filter.Order).IsEven();
 
             var transmission_0 = filter.GetTransmissionCoefficient(0, dt);
             var transmission_fp = filter.GetTransmissionCoefficient(fp, dt);
@@ -533,6 +529,379 @@ namespace MathCore.DSP.Tests.Filters
             Assert.That.Value(transmission_fp_abs).IsEqual(Gp, eps);
             Assert.That.Value(transmission_fs_abs).LessOrEqualsThan(Gs);
             Assert.That.Value(transmission_fd05_abs).IsEqual(0, eps);
+        }
+
+        /// <summary>Тестирование коэффициента передачи фильтра Чебышева первого рода нечётного порядка</summary>
+        [TestMethod]
+        public void TypeI_OddOrder_TransmissionCoefficient()
+        {
+            const double pi2 = 2 * Math.PI;
+
+            const double fd = 5000;             // Гц // Частота дискретизации
+            const double dt = 1 / fd;           // с  // Период дискретизации
+            const double fp = 1.0 * fd / pi2;   // Гц // Граничная частота полосы пропускания
+            const double fs = 1.6 * fd / pi2;   // Гц // Граничная частота полосы запирания
+            const double Rp = 1.5;              // дБ // Неравномерность в полосе пропускания
+            const double Rs = 35;               // дБ // Затухание в полосе подавления
+
+            var Gp = (-Rp).From_dB();
+            var Gs = (-Rs).From_dB();
+
+            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.I);
+
+            Assert.That.Value(filter.Order).IsOdd();
+
+            var transmission_0 = filter.GetTransmissionCoefficient(0, dt);
+            var transmission_fp = filter.GetTransmissionCoefficient(fp, dt);
+            var transmission_fs = filter.GetTransmissionCoefficient(fs, dt);
+            var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2, dt);
+
+            var transmission_0_abs = transmission_0.Abs;
+            var transmission_fp_abs = transmission_fp.Abs;
+            var transmission_fs_abs = transmission_fs.Abs;
+            var transmission_fd05_abs = transmission_fd05.Abs;
+
+            const double eps = 3.42e-14;
+            Assert.That.Value(transmission_0_abs).IsEqual(1, eps);
+            Assert.That.Value(transmission_fp_abs).IsEqual(Gp, eps);
+            Assert.That.Value(transmission_fs_abs).LessOrEqualsThan(Gs);
+            Assert.That.Value(transmission_fd05_abs).IsEqual(0, eps);
+        }
+
+        [TestMethod]
+        public void TypeII_EvenOrder_TransmissionCoefficient()
+        {
+            const double pi2 = 2 * Math.PI;
+
+            const double fd = 5000;             // Гц // Частота дискретизации
+            const double dt = 1 / fd;           // с  // Период дискретизации
+            const double fp = 1.0 * fd / pi2;   // Гц // Граничная частота полосы пропускания
+            const double fs = 1.8 * fd / pi2;   // Гц // Граничная частота полосы запирания
+            const double Rp = 1.5;              // дБ // Неравномерность в полосе пропускания
+            const double Rs = 30;               // дБ // Затухание в полосе подавления
+
+            var Gp = (-Rp).From_dB();
+            var Gs = (-Rs).From_dB();
+
+            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.II);
+
+            Assert.That.Value(filter.Order).IsEven();
+
+            var transmission_0 = filter.GetTransmissionCoefficient(0, dt);
+            var transmission_fp = filter.GetTransmissionCoefficient(fp, dt);
+            var transmission_fs = filter.GetTransmissionCoefficient(fs, dt);
+            var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2, dt);
+
+            var transmission_0_abs = transmission_0.Abs;
+            var transmission_fp_abs = transmission_fp.Abs;
+            var transmission_fs_abs = transmission_fs.Abs;
+            var transmission_fd05_abs = transmission_fd05.Abs;
+
+            const double eps = 1.79e-15;
+            Assert.That.Value(transmission_0_abs).IsEqual(1, eps);
+            Assert.That.Value(transmission_fp_abs).LessOrEqualsThan(Gs, eps); // На граничной частоте интервала передачи фильтр имеет коэффициент передачи, равный заданному уровню затухания
+            Assert.That.Value(transmission_fs_abs).LessOrEqualsThan(Gs);
+            Assert.That.Value(transmission_fd05_abs).LessOrEqualsThan(Gs, eps);
+            // У чётного фильтра на бесконечной частоте (на fd/2)
+            // коэффициент передачи равен Gs с точностью до 1e-16
+        }
+
+        [TestMethod]
+        public void TypeII_OddOrder_TransmissionCoefficient()
+        {
+            const double pi2 = 2 * Math.PI;
+
+            const double fd = 5000;             // Гц // Частота дискретизации
+            const double dt = 1 / fd;           // с  // Период дискретизации
+            const double fp = 1.0 * fd / pi2;   // Гц // Граничная частота полосы пропускания
+            const double fs = 1.6 * fd / pi2;   // Гц // Граничная частота полосы запирания
+            const double Rp = 1.5;              // дБ // Неравномерность в полосе пропускания
+            const double Rs = 35;               // дБ // Затухание в полосе подавления
+
+            var Gp = (-Rp).From_dB();
+            var Gs = (-Rs).From_dB();
+
+            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.II);
+
+            Assert.That.Value(filter.Order).IsOdd();
+
+            var transmission_0 = filter.GetTransmissionCoefficient(0, dt);
+            var transmission_fp = filter.GetTransmissionCoefficient(fp, dt);
+            var transmission_fs = filter.GetTransmissionCoefficient(fs, dt);
+            var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2, dt);
+
+            var transmission_0_abs = transmission_0.Abs;
+            var transmission_fp_abs = transmission_fp.Abs;
+            var transmission_fs_abs = transmission_fs.Abs;
+            var transmission_fd05_abs = transmission_fd05.Abs;
+
+            const double eps = 1.79e-15;
+            Assert.That.Value(transmission_0_abs).IsEqual(1, eps);
+            Assert.That.Value(transmission_fp_abs).LessOrEqualsThan(Gs, eps); // На граничной частоте интервала передачи фильтр имеет коэффициент передачи, равный заданному уровню затухания
+            Assert.That.Value(transmission_fs_abs).LessOrEqualsThan(Gs);
+            Assert.That.Value(transmission_fd05_abs).IsEqual(0, eps);
+            // У чётного фильтра на бесконечной частоте (на fd/2)
+            // коэффициент передачи равен 0 с точностью до 1e-16
+        }
+
+        [TestMethod]
+        public void TypeIICorrected_EvenOrder_TransmissionCoefficient()
+        {
+            const double pi2 = 2 * Math.PI;
+
+            const double fd = 5000;             // Гц // Частота дискретизации
+            const double dt = 1 / fd;           // с  // Период дискретизации
+            const double fp = 1.0 * fd / pi2;   // Гц // Граничная частота полосы пропускания
+            const double fs = 1.8 * fd / pi2;   // Гц // Граничная частота полосы запирания
+            const double Rp = 1.5;              // дБ // Неравномерность в полосе пропускания
+            const double Rs = 30;               // дБ // Затухание в полосе подавления
+
+            var Gp = (-Rp).From_dB();
+            var Gs = (-Rs).From_dB();
+
+            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.IICorrected);
+
+            Assert.That.Value(filter.Order).IsEven();
+
+            var transmission_0 = filter.GetTransmissionCoefficient(0, dt);
+            var transmission_fp = filter.GetTransmissionCoefficient(fp, dt);
+            var transmission_fs = filter.GetTransmissionCoefficient(fs, dt);
+            var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2, dt);
+
+            var transmission_0_abs = transmission_0.Abs;
+            var transmission_fp_abs = transmission_fp.Abs;
+            var transmission_fs_abs = transmission_fs.Abs;
+            var transmission_fd05_abs = transmission_fd05.Abs;
+
+            const double eps = 3.42e-14;
+            Assert.That.Value(transmission_0_abs).IsEqual(1, eps);
+            Assert.That.Value(transmission_fp_abs).GreaterOrEqualsThan(Gp);
+            Assert.That.Value(transmission_fs_abs).LessOrEqualsThan(Gs);
+            Assert.That.Value(transmission_fd05_abs).LessOrEqualsThan(Gs);
+        }
+
+        [TestMethod]
+        public void TypeIICorrected_OddOrder_TransmissionCoefficient()
+        {
+            const double pi2 = 2 * Math.PI;
+
+            const double fd = 5000;             // Гц // Частота дискретизации
+            const double dt = 1 / fd;           // с  // Период дискретизации
+            const double fp = 1.0 * fd / pi2;   // Гц // Граничная частота полосы пропускания
+            const double fs = 1.6 * fd / pi2;   // Гц // Граничная частота полосы запирания
+            const double Rp = 1.5;              // дБ // Неравномерность в полосе пропускания
+            const double Rs = 35;               // дБ // Затухание в полосе подавления
+
+            var Gp = (-Rp).From_dB();
+            var Gs = (-Rs).From_dB();
+
+            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.IICorrected);
+
+            Assert.That.Value(filter.Order).IsOdd();
+
+            var transmission_0 = filter.GetTransmissionCoefficient(0, dt);
+            var transmission_fp = filter.GetTransmissionCoefficient(fp, dt);
+            var transmission_fs = filter.GetTransmissionCoefficient(fs, dt);
+            var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2, dt);
+
+            var transmission_0_abs = transmission_0.Abs;
+            var transmission_fp_abs = transmission_fp.Abs;
+            var transmission_fs_abs = transmission_fs.Abs;
+            var transmission_fd05_abs = transmission_fd05.Abs;
+
+            const double eps = 3.42e-14;
+            Assert.That.Value(transmission_0_abs).IsEqual(1, eps);
+            Assert.That.Value(transmission_fp_abs).GreaterOrEqualsThan(Gp);
+            Assert.That.Value(transmission_fs_abs).LessOrEqualsThan(Gs);
+            Assert.That.Value(transmission_fd05_abs).IsEqual(0, eps);
+        }
+
+        /// <summary>Тестирование импульсной характеристики фильтра Чебышева первого рода чётного порядка</summary>
+        [TestMethod]
+        public void TypeI_EvenOrder_ImpulseResponse()
+        {
+            const double pi2 = 2 * Math.PI;
+
+            const double fd = 5000;             // Гц // Частота дискретизации
+            const double dt = 1 / fd;           // с  // Период дискретизации
+            const double fp = 1.0 * fd / pi2;   // Гц // Граничная частота полосы пропускания
+            const double fs = 1.8 * fd / pi2;   // Гц // Граничная частота полосы запирания
+            const double Rp = 1.5;              // дБ // Неравномерность в полосе пропускания
+            const double Rs = 30;               // дБ // Затухание в полосе подавления
+
+            var Gp = (-Rp).From_dB();
+            var Gs = (-Rs).From_dB();
+
+            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.I);
+
+            Assert.That.Value(filter.Order).IsEven();
+
+            double[] expected_impulse_response =
+            {
+                +0.00884055732125126,   //  0
+                +0.05614365197974830,   //  1
+                +0.16099203897373400,   //  2
+                +0.27575709786712000,   //  3
+                +0.30792640296908800,   //  4
+                +0.21418298648174700,   //  5
+                +0.04842642349831240,   //  6
+                -0.08470720459467050,   //  7
+                -0.11573677212917000,   //  8
+                -0.05772015042422970,   //  9
+                +0.01790936028253510,   // 10
+                +0.04635399561641480,   // 11
+                +0.01696035720144810,   // 12
+                -0.03089992850593000,   // 13
+                -0.05045951649249290,   // 14
+                -0.02740883863154980    // 15
+            };
+
+            var impulse_response = filter.GetImpulseResponse(expected_impulse_response.Length, 1e-10).ToArray();
+
+            const double eps = 9.4e-7;
+            Assert.That.Collection(impulse_response)
+               .IsEqualTo(expected_impulse_response, eps);
+        }
+
+        /// <summary>Тестирование импульсной характеристики фильтра Чебышева первого рода нечётного порядка</summary>
+        [TestMethod]
+        public void TypeI_OddOrder_ImpulseResponse()
+        {
+            const double pi2 = 2 * Math.PI;
+
+            const double fd = 5000;             // Гц // Частота дискретизации
+            const double dt = 1 / fd;           // с  // Период дискретизации
+            const double fp = 1.0 * fd / pi2;   // Гц // Граничная частота полосы пропускания
+            const double fs = 1.6 * fd / pi2;   // Гц // Граничная частота полосы запирания
+            const double Rp = 1.5;              // дБ // Неравномерность в полосе пропускания
+            const double Rs = 35;               // дБ // Затухание в полосе подавления
+
+            var Gp = (-Rp).From_dB();
+            var Gs = (-Rs).From_dB();
+
+            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.I);
+
+            Assert.That.Value(filter.Order).IsOdd();
+
+            double[] expected_impulse_response =
+            {
+                +0.00226822329232988,   //  0
+                +0.01839598031217860,   //  1
+                +0.06923715452579570,   //  2
+                +0.16078383912296200,   //  3
+                +0.25625891861547400,   //  4
+                +0.28937995857462800,   //  5
+                +0.21928291005052700,   //  6
+                +0.07371124356918550,   //  7
+                -0.06457862559364690,   //  8
+                -0.11880487485266500,   //  9
+                -0.07442276580731260,   // 10
+                +0.01561090045052300,   // 11
+                +0.07749926275065900,   // 12
+                +0.07349323870675280,   // 13
+                +0.02314957138213890,   // 14
+                -0.02296390124555760,   // 15
+            };
+            // impulse_response.Select(s => s.ToString("+0.00000000000000000',';-0.00000000000000000','", System.Globalization.CultureInfo.InvariantCulture)).Select((s,i) => $"{s}   // {i,2}").ToSeparatedStr("\r\n")
+            var impulse_response = filter.GetImpulseResponse(expected_impulse_response.Length, 1e-10).ToArray();
+
+            const double eps = 9.4e-7;
+            Assert.That.Collection(impulse_response)
+               .IsEqualTo(expected_impulse_response, eps);
+        }
+
+        /// <summary>Тестирование импульсной характеристики фильтра Чебышева второго рода чётного порядка</summary>
+        [TestMethod]
+        public void TypeII_EvenOrder_ImpulseResponse()
+        {
+            const double pi2 = 2 * Math.PI;
+
+            const double fd = 5000;             // Гц // Частота дискретизации
+            const double dt = 1 / fd;           // с  // Период дискретизации
+            const double fp = 1.0 * fd / pi2;   // Гц // Граничная частота полосы пропускания
+            const double fs = 1.8 * fd / pi2;   // Гц // Граничная частота полосы запирания
+            const double Rp = 1.5;              // дБ // Неравномерность в полосе пропускания
+            const double Rs = 30;               // дБ // Затухание в полосе подавления
+
+            var Gp = (-Rp).From_dB();
+            var Gs = (-Rs).From_dB();
+
+            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.II);
+
+            Assert.That.Value(filter.Order).IsEven();
+
+            double[] expected_impulse_response =
+            {
+                +0.05012504332253210,   //  0
+                +0.09392699112998970,   //  1
+                +0.16880264674281600,   //  2
+                +0.20428669020597100,   //  3
+                +0.22480768572184000,   //  4
+                +0.20594716920198400,   //  5
+                +0.14351733262540600,   //  6
+                +0.05938964294902360,   //  7
+                -0.01582220884364540,   //  8
+                -0.06007473056575070,   //  9
+                -0.06779542575678730,   // 10
+                -0.04802429119514430,   // 11
+                -0.01693649613045550,   // 12
+                +0.01029315475076850,   // 13
+                +0.02479638209856960,   // 14
+                +0.02529890931233970,   // 15
+            };
+
+            var impulse_response = filter.GetImpulseResponse(expected_impulse_response.Length, 1e-10).ToArray();
+
+            const double eps = 9.4e-7;
+            Assert.That.Collection(impulse_response)
+               .IsEqualTo(expected_impulse_response, eps);
+        }
+
+        /// <summary>Тестирование импульсной характеристики фильтра Чебышева второго рода нечётного порядка</summary>
+        [TestMethod]
+        public void TypeII_OddOrder_ImpulseResponse()
+        {
+            const double pi2 = 2 * Math.PI;
+
+            const double fd = 5000;             // Гц // Частота дискретизации
+            const double dt = 1 / fd;           // с  // Период дискретизации
+            const double fp = 1.0 * fd / pi2;   // Гц // Граничная частота полосы пропускания
+            const double fs = 1.6 * fd / pi2;   // Гц // Граничная частота полосы запирания
+            const double Rp = 1.5;              // дБ // Неравномерность в полосе пропускания
+            const double Rs = 35;               // дБ // Затухание в полосе подавления
+
+            var Gp = (-Rp).From_dB();
+            var Gs = (-Rs).From_dB();
+
+            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.II);
+
+            Assert.That.Value(filter.Order).IsOdd();
+
+            double[] expected_impulse_response =
+            {
+                +0.03341146639120000,   //  0
+                +0.07900569722913120,   //  1
+                +0.13452296315034400,   //  2
+                +0.20068638620376200,   //  3
+                +0.22873545544693900,   //  4
+                +0.21975234841160600,   //  5
+                +0.17110029908928400,   //  6
+                +0.09079561772546840,   //  7
+                +0.00350716717435198,   //  8
+                -0.06109287376964880,   //  9
+                -0.08446355604367730,   // 10
+                -0.06746188706588570,   // 11
+                -0.02716807079979880,   // 12
+                +0.01368462023930950,   // 13
+                +0.03775672984570410,   // 14
+                +0.03925364904843500,   // 15
+            };
+            // impulse_response.Select(s => s.ToString("+0.00000000000000000',';-0.00000000000000000','", System.Globalization.CultureInfo.InvariantCulture)).Select((s,i) => $"{s}   // {i,2}").ToSeparatedStr("\r\n")
+            var impulse_response = filter.GetImpulseResponse(expected_impulse_response.Length, 1e-10).ToArray();
+
+            const double eps = 9.4e-7;
+            Assert.That.Collection(impulse_response)
+               .IsEqualTo(expected_impulse_response, eps);
         }
     }
 }

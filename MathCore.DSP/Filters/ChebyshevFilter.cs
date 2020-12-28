@@ -4,6 +4,7 @@ using MathCore.Annotations;
 
 namespace MathCore.DSP.Filters
 {
+    /// <summary>Фильтр Чебышева</summary>
     [KnownType(typeof(ChebyshevLowPass))]
     public abstract class ChebyshevFilter : AnalogBasedFilter
     {

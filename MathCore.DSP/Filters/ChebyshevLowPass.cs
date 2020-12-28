@@ -7,11 +7,13 @@ using static MathCore.Polynom.Array;
 
 namespace MathCore.DSP.Filters
 {
+    /// <summary>Фильтр Чебышева нижних частот</summary>
     public class ChebyshevLowPass : ChebyshevFilter
     {
         private static double arsh(double x) => Math.Log(x + Math.Sqrt(x * x + 1));
         private static double arch(double x) => Math.Log(x + Math.Sqrt(x * x - 1));
 
+        /// <summary>Типы фильтров Чебышева</summary>
         [SuppressMessage("ReSharper", "InconsistentNaming")]
         public enum ChebyshevType : byte
         {
@@ -106,18 +108,18 @@ namespace MathCore.DSP.Filters
 
         private static (double[] A, double[] B) InitializeI(double fp, double fs, double dt, double Gp, double Gs)
         {
-            var (n, eps_p, _, wp) = GetProperties(fp, fs, dt, Gp, Gs);
-            var poles = GetAnalogPolesI(n, eps_p);
+            var (N, eps_p, _, wp) = GetProperties(fp, fs, dt, Gp, Gs);
+            var poles = GetAnalogPolesI(N, eps_p);
             var z_poles = ToZArray(poles, dt, wp);
 
             var A = GetCoefficientsInverted(z_poles).ToRe();
 
-            var g_norm = (n.IsOdd() ? 1 : Gp)
-                / (2.Power(n) / z_poles.Multiply(z => 1 - z).Re);
+            var g_norm = (N.IsOdd() ? 1 : Gp)
+                / (2.Power(N) / z_poles.Multiply(z => 1 - z).Re);
 
             var B = Enumerable
-               .Range(0, n + 1)
-               .ToArray(i => g_norm * SpecialFunctions.BinomialCoefficient(n, i));
+               .Range(0, N + 1)
+               .ToArray(i => g_norm * SpecialFunctions.BinomialCoefficient(N, i));
 
             return (A, B);
         }
