@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <LnagVersion>9.0</LnagVersion>
+    <LangVersion>9</LangVersion>
     <Version>0.0.7.2</Version>
     <PackageReleaseNotes>
       Мелкие исправления (обновления версий пакетов)
@@ -16,7 +16,6 @@
     <PackageProjectUrl>https://github.com/Infarh/MathCore.DSP</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Infarh/MathCore.DSP</RepositoryUrl>
     <PackageTags>DSP, Signal processing</PackageTags>
-    <LangVersion>9</LangVersion>
     <Copyright>shmachilin@gmail.com</Copyright>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>MathCoreDSPSign.snk</AssemblyOriginatorKeyFile>
