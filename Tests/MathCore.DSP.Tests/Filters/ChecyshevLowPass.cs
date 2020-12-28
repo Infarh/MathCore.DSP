@@ -903,5 +903,99 @@ namespace MathCore.DSP.Tests.Filters
             Assert.That.Collection(impulse_response)
                .IsEqualTo(expected_impulse_response, eps);
         }
+
+        /// <summary>Тестирование импульсной характеристики фильтра Чебышева второго рода чётного порядка</summary>
+        [TestMethod]
+        public void TypeIICorrected_EvenOrder_ImpulseResponse()
+        {
+            const double pi2 = 2 * Math.PI;
+
+            const double fd = 5000;             // Гц // Частота дискретизации
+            const double dt = 1 / fd;           // с  // Период дискретизации
+            const double fp = 1.0 * fd / pi2;   // Гц // Граничная частота полосы пропускания
+            const double fs = 1.8 * fd / pi2;   // Гц // Граничная частота полосы запирания
+            const double Rp = 1.5;              // дБ // Неравномерность в полосе пропускания
+            const double Rs = 30;               // дБ // Затухание в полосе подавления
+
+            var Gp = (-Rp).From_dB();
+            var Gs = (-Rs).From_dB();
+
+            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.IICorrected);
+
+            Assert.That.Value(filter.Order).IsEven();
+
+            double[] expected_impulse_response =
+            {
+                +0.09748158833651720,   //  0
+                +0.24801587857989800,   //  1
+                +0.36603707048083000,   //  2
+                +0.31591693100205300,   //  3
+                +0.13960087531424400,   //  4
+                -0.06424082484097170,   //  5
+                -0.12598772097936600,   //  6
+                -0.04986798951161600,   //  7
+                +0.03782993452902130,   //  8
+                +0.05321816100665740,   //  9
+                +0.01375504036863090,   // 10
+                -0.02100526869452690,   // 11
+                -0.02161750176356920,   // 12
+                -0.00237250156111623,   // 13
+                +0.01065544118382300,   // 14
+                +0.00836193578789439,   // 15
+            };
+
+            var impulse_response = filter.GetImpulseResponse(expected_impulse_response.Length, 1e-10).ToArray();
+
+            const double eps = 9.4e-7;
+            Assert.That.Collection(impulse_response)
+               .IsEqualTo(expected_impulse_response, eps);
+        }
+
+        /// <summary>Тестирование импульсной характеристики фильтра Чебышева второго рода нечётного порядка</summary>
+        [TestMethod]
+        public void TypeIICorrected_OddOrder_ImpulseResponse()
+        {
+            const double pi2 = 2 * Math.PI;
+
+            const double fd = 5000;             // Гц // Частота дискретизации
+            const double dt = 1 / fd;           // с  // Период дискретизации
+            const double fp = 1.0 * fd / pi2;   // Гц // Граничная частота полосы пропускания
+            const double fs = 1.6 * fd / pi2;   // Гц // Граничная частота полосы запирания
+            const double Rp = 1.5;              // дБ // Неравномерность в полосе пропускания
+            const double Rs = 35;               // дБ // Затухание в полосе подавления
+
+            var Gp = (-Rp).From_dB();
+            var Gs = (-Rs).From_dB();
+
+            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.IICorrected);
+
+            Assert.That.Value(filter.Order).IsOdd();
+
+            double[] expected_impulse_response =
+            {
+                +0.06209522819412170,   //  0
+                +0.17825169051418800,   //  1
+                +0.30124398324431900,   //  2
+                +0.34265887271796400,   //  3
+                +0.23479927381146400,   //  4
+                +0.05378155735164640,   //  5
+                -0.09849782313435830,   //  6
+                -0.12399972373459100,   //  7
+                -0.03871630611893290,   //  8
+                +0.05106425231274820,   //  9
+                +0.06618294738144070,   // 10
+                +0.01813356298180970,   // 11
+                -0.02955019258530920,   // 12
+                -0.03487370097223260,   // 13
+                -0.00752873612681361,   // 14
+                +0.01714269771629890,   // 15
+            };
+            // impulse_response.Select(s => s.ToString("+0.00000000000000000',';-0.00000000000000000','", System.Globalization.CultureInfo.InvariantCulture)).Select((s,i) => $"{s}   // {i,2}").ToSeparatedStr("\r\n")
+            var impulse_response = filter.GetImpulseResponse(expected_impulse_response.Length, 1e-10).ToArray();
+
+            const double eps = 9.4e-7;
+            Assert.That.Collection(impulse_response)
+               .IsEqualTo(expected_impulse_response, eps);
+        }
     }
 }
