@@ -219,7 +219,7 @@ namespace MathCore.DSP.Tests.Filters
         }
 
         [TestMethod]
-        public void SignallProcessing()
+        public void SignalProcessing()
         {
             const double fp = 0.1;    // Гц // Граничная частота полосы пропускания
             const double fs = 0.3;    // Гц // Граничная частота полосы запирания

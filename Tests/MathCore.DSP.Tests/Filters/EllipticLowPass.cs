@@ -343,7 +343,7 @@ namespace MathCore.DSP.Tests.Filters
         }
 
         [TestMethod]
-        public void SignallProcessing()
+        public void SignalProcessing()
         {
             const double pi2 = 2 * Math.PI;
 

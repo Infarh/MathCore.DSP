@@ -2,6 +2,7 @@
 using System.Linq;
 
 using MathCore.DSP.Filters;
+using MathCore.DSP.Signals;
 using MathCore.DSP.Tests.Service;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -996,6 +997,288 @@ namespace MathCore.DSP.Tests.Filters
             const double eps = 9.4e-7;
             Assert.That.Collection(impulse_response)
                .IsEqualTo(expected_impulse_response, eps);
+        }
+
+        [TestMethod]
+        public void TypeI_EvenOrder_SignalProcessing()
+        {
+            const double pi2 = 2 * Math.PI;
+
+            const double fd = 5000;             // Гц // Частота дискретизации
+            const double dt = 1 / fd;           // с  // Период дискретизации
+            const double fp = 1.0 * fd / pi2;   // Гц // Граничная частота полосы пропускания
+            const double fs = 1.8 * fd / pi2;   // Гц // Граничная частота полосы запирания
+            const double Rp = 1.5;              // дБ // Неравномерность в полосе пропускания
+            const double Rs = 30;               // дБ // Затухание в полосе подавления
+
+            var Gp = (-Rp).From_dB();
+            var Gs = (-Rs).From_dB();
+
+            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.I);
+
+            Assert.That.Value(filter.Order).IsEven();
+
+            const int samples_count = 1024;
+            // Сигнал s0(t) = 1
+            var s_0 = new SamplesDigitalSignal(dt, Enumerable.Repeat(1d, samples_count));
+
+            // Гармонические сигналы разной частоты и амплитудой = √2
+            const double a0 = Consts.sqrt_2;
+            // Сигнал с частотой равной частоте пропускания (граничной частоте фильтра)
+            var s_fp = MathSamplesSignal.Cos(a0, fp, 0, dt, samples_count);
+            // Сигнал с частотой равной частоте заграждения
+            var s_fs = MathSamplesSignal.Cos(a0, fs, 0, dt, samples_count);
+            // Сигнал с частотой равной половине частоты дискретизации
+            var s_fd05 = MathSamplesSignal.Cos(a0, fd / 2, 0, dt, samples_count);
+
+            var y_0 = filter.ProcessIndividual(s_0);
+            var y_fp = filter.ProcessIndividual(s_fp);
+            var y_fs = filter.ProcessIndividual(s_fs);
+            var y_fd05 = filter.ProcessIndividual(s_fd05);
+
+            // Постоянный сигнал не должен измениться своей мощности
+            Assert.That.Value(y_0.Power).IsEqual(s_0.Power * Gp * Gp, 1.45e-3);
+            // На граничной частоте сигнал должен быть ослаблен на коэффициент Gp (на Gp^2 по мощности)
+            Assert.That.Value(y_fp.Power).IsEqual(s_fp.Power * Gp * Gp, 8.24e-3);
+            // На частоте заграждения сигнал должен быть ослаблен на коэффициент Gs (на Gs^2 по мощности)
+            Assert.That.Value(y_fs.Power).LessOrEqualsThan(s_fs.Power * Gs * Gs);
+            // На частоте в половину частоты дискретизации сигнал должен быть подавлен
+            Assert.That.Value(y_fd05.Power).IsEqual(0, 1.55e-4);
+        }
+
+        [TestMethod]
+        public void TypeI_OddOrder_SignalProcessing()
+        {
+            const double pi2 = 2 * Math.PI;
+
+            const double fd = 5000;             // Гц // Частота дискретизации
+            const double dt = 1 / fd;           // с  // Период дискретизации
+            const double fp = 1.0 * fd / pi2;   // Гц // Граничная частота полосы пропускания
+            const double fs = 1.5 * fd / pi2;   // Гц // Граничная частота полосы запирания
+            const double Rp = 1.5;              // дБ // Неравномерность в полосе пропускания
+            const double Rs = 35;               // дБ // Затухание в полосе подавления
+
+            var Gp = (-Rp).From_dB();
+            var Gs = (-Rs).From_dB();
+
+            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.I);
+
+            Assert.That.Value(filter.Order).IsOdd();
+
+            const int samples_count = 1024;
+            // Сигнал s0(t) = 1
+            var s_0 = new SamplesDigitalSignal(dt, Enumerable.Repeat(1d, samples_count));
+
+            // Гармонические сигналы разной частоты и амплитудой = √2
+            const double a0 = Consts.sqrt_2;
+            // Сигнал с частотой равной частоте пропускания (граничной частоте фильтра)
+            var s_fp = MathSamplesSignal.Cos(a0, fp, 0, dt, samples_count);
+            // Сигнал с частотой равной частоте заграждения
+            var s_fs = MathSamplesSignal.Cos(a0, fs, 0, dt, samples_count);
+            // Сигнал с частотой равной половине частоты дискретизации
+            var s_fd05 = MathSamplesSignal.Cos(a0, fd / 2, 0, dt, samples_count);
+
+            var y_0 = filter.ProcessIndividual(s_0);
+            var y_fp = filter.ProcessIndividual(s_fp);
+            var y_fs = filter.ProcessIndividual(s_fs);
+            var y_fd05 = filter.ProcessIndividual(s_fd05);
+
+            // Постоянный сигнал не должен измениться своей мощности
+            Assert.That.Value(y_0.Power).IsEqual(1, 5.65e-3);
+            // На граничной частоте сигнал должен быть ослаблен на коэффициент Gp (на Gp^2 по мощности)
+            Assert.That.Value(y_fp.Power).IsEqual(s_fp.Power * Gp * Gp, 1.34e-2);
+            // На частоте заграждения сигнал должен быть ослаблен на коэффициент Gs (на Gs^2 по мощности)
+            Assert.That.Value(y_fs.Power).LessOrEqualsThan(s_fs.Power * Gs * Gs, 5.61e-5);
+            // На частоте в половину частоты дискретизации сигнал должен быть подавлен
+            Assert.That.Value(y_fd05.Power).IsEqual(0, 1.55e-4);
+        }
+
+        [TestMethod]
+        public void TypeII_EvenOrder_SignalProcessing()
+        {
+            const double pi2 = 2 * Math.PI;
+
+            const double fd = 5000;             // Гц // Частота дискретизации
+            const double dt = 1 / fd;           // с  // Период дискретизации
+            const double fp = 1.0 * fd / pi2;   // Гц // Граничная частота полосы пропускания
+            const double fs = 1.8 * fd / pi2;   // Гц // Граничная частота полосы запирания
+            const double Rp = 1.5;              // дБ // Неравномерность в полосе пропускания
+            const double Rs = 30;               // дБ // Затухание в полосе подавления
+
+            var Gp = (-Rp).From_dB();
+            var Gs = (-Rs).From_dB();
+
+            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.II);
+
+            Assert.That.Value(filter.Order).IsEven();
+
+            const int samples_count = 1024;
+            // Сигнал s0(t) = 1
+            var s_0 = new SamplesDigitalSignal(dt, Enumerable.Repeat(1d, samples_count));
+
+            // Гармонические сигналы разной частоты и амплитудой = √2
+            const double a0 = Consts.sqrt_2;
+            // Сигнал с частотой равной частоте пропускания (граничной частоте фильтра)
+            var s_fp = MathSamplesSignal.Cos(a0, fp, 0, dt, samples_count);
+            // Сигнал с частотой равной частоте заграждения
+            var s_fs = MathSamplesSignal.Cos(a0, fs, 0, dt, samples_count);
+            // Сигнал с частотой равной половине частоты дискретизации
+            var s_fd05 = MathSamplesSignal.Cos(a0, fd / 2, 0, dt, samples_count);
+
+            var y_0 = filter.ProcessIndividual(s_0);
+            var y_fp = filter.ProcessIndividual(s_fp);
+            var y_fs = filter.ProcessIndividual(s_fs);
+            var y_fd05 = filter.ProcessIndividual(s_fd05);
+
+            // Постоянный сигнал не должен измениться своей мощности
+            Assert.That.Value(y_0.Power).IsEqual(1, 3.35e-3);
+            // На граничной частоте сигнал должен быть ослаблен на коэффициент Gs (на Gs^2 по мощности)
+            Assert.That.Value(y_fp.Power).IsEqual(s_fp.Power * Gs * Gs, 8.24e-3);
+            // На частоте заграждения сигнал должен быть ослаблен на коэффициент Gs (на Gs^2 по мощности)
+            Assert.That.Value(y_fs.Power).LessOrEqualsThan(s_fs.Power * Gs * Gs);
+            // На частоте в половину частоты дискретизации сигнал должен быть подавлен
+            Assert.That.Value(y_fd05.Power).IsEqual(y_fd05.Power * Gs * Gs, 2.11e-3);
+        }
+
+        [TestMethod]
+        public void TypeII_OddOrder_SignalProcessing()
+        {
+            const double pi2 = 2 * Math.PI;
+
+            const double fd = 5000;             // Гц // Частота дискретизации
+            const double dt = 1 / fd;           // с  // Период дискретизации
+            const double fp = 1.0 * fd / pi2;   // Гц // Граничная частота полосы пропускания
+            const double fs = 1.5 * fd / pi2;   // Гц // Граничная частота полосы запирания
+            const double Rp = 1.5;              // дБ // Неравномерность в полосе пропускания
+            const double Rs = 35;               // дБ // Затухание в полосе подавления
+
+            var Gp = (-Rp).From_dB();
+            var Gs = (-Rs).From_dB();
+
+            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.II);
+
+            Assert.That.Value(filter.Order).IsOdd();
+
+            const int samples_count = 1024;
+            // Сигнал s0(t) = 1
+            var s_0 = new SamplesDigitalSignal(dt, Enumerable.Repeat(1d, samples_count));
+
+            // Гармонические сигналы разной частоты и амплитудой = √2
+            const double a0 = Consts.sqrt_2;
+            // Сигнал с частотой равной частоте пропускания (граничной частоте фильтра)
+            var s_fp = MathSamplesSignal.Cos(a0, fp, 0, dt, samples_count);
+            // Сигнал с частотой равной частоте заграждения
+            var s_fs = MathSamplesSignal.Cos(a0, fs, 0, dt, samples_count);
+            // Сигнал с частотой равной половине частоты дискретизации
+            var s_fd05 = MathSamplesSignal.Cos(a0, fd / 2, 0, dt, samples_count);
+
+            var y_0 = filter.ProcessIndividual(s_0);
+            var y_fp = filter.ProcessIndividual(s_fp);
+            var y_fs = filter.ProcessIndividual(s_fs);
+            var y_fd05 = filter.ProcessIndividual(s_fd05);
+
+            // Постоянный сигнал не должен измениться своей мощности
+            Assert.That.Value(y_0.Power).IsEqual(1, 3.59e-3);
+            // На граничной частоте сигнал должен быть ослаблен на коэффициент Gs (на Gs^2 по мощности)
+            Assert.That.Value(y_fp.Power).IsEqual(s_fp.Power * Gs * Gs, 3.56e-4);
+            // На частоте заграждения сигнал должен быть ослаблен на коэффициент Gs (на Gs^2 по мощности)
+            Assert.That.Value(y_fs.Power).LessOrEqualsThan(s_fs.Power * Gs * Gs, 1.77e-4);
+            // На частоте в половину частоты дискретизации сигнал должен быть подавлен
+            Assert.That.Value(y_fd05.Power).IsEqual(0, 1.16e-4);
+        }
+
+        [TestMethod]
+        public void TypeIICorrected_EvenOrder_SignalProcessing()
+        {
+            const double pi2 = 2 * Math.PI;
+
+            const double fd = 5000;             // Гц // Частота дискретизации
+            const double dt = 1 / fd;           // с  // Период дискретизации
+            const double fp = 1.0 * fd / pi2;   // Гц // Граничная частота полосы пропускания
+            const double fs = 1.8 * fd / pi2;   // Гц // Граничная частота полосы запирания
+            const double Rp = 1.5;              // дБ // Неравномерность в полосе пропускания
+            const double Rs = 30;               // дБ // Затухание в полосе подавления
+
+            var Gp = (-Rp).From_dB();
+            var Gs = (-Rs).From_dB();
+
+            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.IICorrected);
+
+            Assert.That.Value(filter.Order).IsEven();
+
+            const int samples_count = 1024;
+            // Сигнал s0(t) = 1
+            var s_0 = new SamplesDigitalSignal(dt, Enumerable.Repeat(1d, samples_count));
+
+            // Гармонические сигналы разной частоты и амплитудой = √2
+            const double a0 = Consts.sqrt_2;
+            // Сигнал с частотой равной частоте пропускания (граничной частоте фильтра)
+            var s_fp = MathSamplesSignal.Cos(a0, fp, 0, dt, samples_count);
+            // Сигнал с частотой равной частоте заграждения
+            var s_fs = MathSamplesSignal.Cos(a0, fs, 0, dt, samples_count);
+            // Сигнал с частотой равной половине частоты дискретизации
+            var s_fd05 = MathSamplesSignal.Cos(a0, fd / 2, 0, dt, samples_count);
+
+            var y_0 = filter.ProcessIndividual(s_0);
+            var y_fp = filter.ProcessIndividual(s_fp);
+            var y_fs = filter.ProcessIndividual(s_fs);
+            var y_fd05 = filter.ProcessIndividual(s_fd05);
+
+            // Постоянный сигнал не должен измениться своей мощности
+            Assert.That.Value(y_0.Power).IsEqual(1, 1.87e-3);
+            // На граничной частоте сигнал должен быть ослаблен на коэффициент Gp (на Gp^2 по мощности)
+            Assert.That.Value(y_fp.Power).GreaterOrEqualsThan(s_fp.Power * Gp * Gp, 6.57e-2);
+            // На частоте заграждения сигнал должен быть ослаблен на коэффициент Gs (на Gs^2 по мощности)
+            Assert.That.Value(y_fs.Power).LessOrEqualsThan(s_fs.Power * Gs * Gs, 7.28e-5);
+            // На частоте в половину частоты дискретизации сигнал должен быть подавлен
+            Assert.That.Value(y_fd05.Power).IsEqual(y_fd05.Power * Gs * Gs, 2.20e-3);
+        }
+
+        [TestMethod]
+        public void TypeIICorrected_OddOrder_SignalProcessing()
+        {
+            const double pi2 = 2 * Math.PI;
+
+            const double fd = 5000;             // Гц // Частота дискретизации
+            const double dt = 1 / fd;           // с  // Период дискретизации
+            const double fp = 1.0 * fd / pi2;   // Гц // Граничная частота полосы пропускания
+            const double fs = 1.5 * fd / pi2;   // Гц // Граничная частота полосы запирания
+            const double Rp = 1.5;              // дБ // Неравномерность в полосе пропускания
+            const double Rs = 35;               // дБ // Затухание в полосе подавления
+
+            var Gp = (-Rp).From_dB();
+            var Gs = (-Rs).From_dB();
+
+            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.IICorrected);
+
+            Assert.That.Value(filter.Order).IsOdd();
+
+            const int samples_count = 1024;
+            // Сигнал s0(t) = 1
+            var s_0 = new SamplesDigitalSignal(dt, Enumerable.Repeat(1d, samples_count));
+
+            // Гармонические сигналы разной частоты и амплитудой = √2
+            const double a0 = Consts.sqrt_2;
+            // Сигнал с частотой равной частоте пропускания (граничной частоте фильтра)
+            var s_fp = MathSamplesSignal.Cos(a0, fp, 0, dt, samples_count);
+            // Сигнал с частотой равной частоте заграждения
+            var s_fs = MathSamplesSignal.Cos(a0, fs, 0, dt, samples_count);
+            // Сигнал с частотой равной половине частоты дискретизации
+            var s_fd05 = MathSamplesSignal.Cos(a0, fd / 2, 0, dt, samples_count);
+
+            var y_0 = filter.ProcessIndividual(s_0);
+            var y_fp = filter.ProcessIndividual(s_fp);
+            var y_fs = filter.ProcessIndividual(s_fs);
+            var y_fd05 = filter.ProcessIndividual(s_fd05);
+
+            // Постоянный сигнал не должен измениться своей мощности
+            Assert.That.Value(y_0.Power).IsEqual(1, 2.40e-3);
+            // На граничной частоте сигнал должен быть ослаблен на коэффициент Gp (на Gp^2 по мощности)
+            Assert.That.Value(y_fp.Power).GreaterOrEqualsThan(s_fp.Power * Gp * Gp, 1.68e-1);
+            // На частоте заграждения сигнал должен быть ослаблен на коэффициент Gs (на Gs^2 по мощности)
+            Assert.That.Value(y_fs.Power).LessOrEqualsThan(s_fs.Power * Gs * Gs, 1.67e-4);
+            // На частоте в половину частоты дискретизации сигнал должен быть подавлен
+            Assert.That.Value(y_fd05.Power).IsEqual(0, 1.74e-4);
         }
     }
 }
