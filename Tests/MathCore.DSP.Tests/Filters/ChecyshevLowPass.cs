@@ -5,6 +5,7 @@ using MathCore.DSP.Filters;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 // ReSharper disable InconsistentNaming
+// ReSharper disable RedundantArgumentDefaultValue
 
 namespace MathCore.DSP.Tests.Filters
 {
@@ -496,6 +497,40 @@ namespace MathCore.DSP.Tests.Filters
 
             Assert.That.Collection(filter.A).IsEqualTo(A, 4.442e-16);
             Assert.That.Collection(filter.B).IsEqualTo(B, 1.389e-17);
+        }
+
+        [TestMethod]
+        public void TypeI_TransmissionCoefficient()
+        {
+            const double pi2 = 2 * Math.PI;
+
+            const double fd = 5000;      // Гц // Частота дискретизации
+            const double dt = 1 / fd;    // с  // Период дискретизации
+            const double fp = fd / pi2;  // Гц // Граничная частота полосы пропускания
+            const double fs = 1.5 * fp;  // Гц // Граничная частота полосы запирания
+            const double Rp = 1;  // Неравномерность в полосе пропускания (дБ)
+            const double Rs = 45; // Неравномерность в полосе пропускания (дБ)
+
+            var Gp = (-Rp).From_dB();
+            var Gs = (-Rs).From_dB();
+
+            var filter = new DSP.Filters.ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.I);
+
+            var transmission_0 = filter.GetTransmissionCoefficient(0, dt);
+            var transmission_fp = filter.GetTransmissionCoefficient(fp, dt);
+            var transmission_fs = filter.GetTransmissionCoefficient(fs, dt);
+            var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2, dt);
+
+            var transmission_0_abs = transmission_0.Abs;
+            var transmission_fp_abs = transmission_fp.Abs;
+            var transmission_fs_abs = transmission_fs.Abs;
+            var transmission_fd05_abs = transmission_fd05.Abs;
+
+            const double eps = 3.42e-14;
+            Assert.That.Value(transmission_0_abs).IsEqual(Gp, eps);
+            Assert.That.Value(transmission_fp_abs).IsEqual(Gp, eps);
+            Assert.That.Value(transmission_fs_abs).LessOrEqualsThan(Gs);
+            Assert.That.Value(transmission_fd05_abs).IsEqual(0, eps);
         }
     }
 }
