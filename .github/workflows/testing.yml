@@ -10,13 +10,15 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       
-      - name: Use .NET 3.1.200
+      - name: Use .NET 5.0.101
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 3.1.200
+          dotnet-version: 5.0.101
           
       - name: Building
-        run: dotnet build -c Debug
+        run: |
+          dotnet build MathCore.DSP --nologo -c Debug
+          dotnet build Tests/MathCore.DSP.Tests --nologo -c Debug
           
       - name: Run Tests
-        run: dotnet test
+        run: dotnet test Tests/MathCore.DSP.Tests --no-build -c Debug

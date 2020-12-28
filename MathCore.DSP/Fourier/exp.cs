@@ -6,7 +6,7 @@ using MathCore.Annotations;
 namespace MathCore.DSP.Fourier
 {
     /// <summary>Комплексное экспоненциальное значение</summary>
-    internal struct Exp
+    internal readonly struct Exp
     {
         /// <summary>Синусная составляющая</summary>
         public readonly double Sin;

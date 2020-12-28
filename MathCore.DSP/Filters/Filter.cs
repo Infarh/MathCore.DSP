@@ -41,6 +41,7 @@ namespace MathCore.DSP.Filters
         {
             if (filter is null) throw new ArgumentNullException(nameof(filter));
             if (signal is null) throw new ArgumentNullException(nameof(signal));
+            
             return filter.Process(signal);
         }
 
