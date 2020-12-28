@@ -2,7 +2,7 @@
 
 namespace MathCore.DSP.Signals.Interpolators
 {
-    /// <summary>Билинейный интерполятор</summary>
+    /// <summary>Билинейный интерполятор</summary> 
     [Serializable]
     public class Bilinear : Interpolator
     {

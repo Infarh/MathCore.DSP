@@ -167,7 +167,7 @@ namespace MathCore.DSP.Tests.Filters
         }
 
         [TestMethod]
-        public void TransmissionCoefficientAtZerroFrequencyTestTest()
+        public void TransmissionCoefficientAtZeroFrequencyTestTest()
         {
             const double fd = 1000;
             const double dt = 1 / fd;

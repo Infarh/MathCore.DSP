@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using MathCore.Annotations;
 using MathCore.DSP.Signals;
 
@@ -15,33 +16,54 @@ namespace MathCore.DSP.Filters
         /// <returns>Значение на оси частот аналогового прототипа</returns>
         public static double ToAnalogFrequency(double DigitalFrequency, double dt) => Math.Tan(Math.PI * DigitalFrequency * dt) / (Math.PI * dt);
 
+        /// <summary>Преобразование частоты аналогового  прототипа в частоту цифрового фильтра</summary>
+        /// <param name="AnalogFrequency">Значение на оси частот аналогового фильтра</param>
+        /// <param name="dt">Период дискретизации</param>
+        /// <returns>Значение на оси частот цифрового фильтра</returns>
+        public static double ToDigitalFrequency(double AnalogFrequency, double dt) => Math.Atan(Math.PI * AnalogFrequency * dt) / (Math.PI * dt);
+
         /// <summary>Преобразование полюса из p-плоскости в z-плоскость</summary>
         /// <param name="p">Полюс p-плоскости</param>
         /// <param name="dt">Период дискретизации</param>
         /// <returns>Полюс в z-плоскости</returns>
-        public static Complex ToZ(Complex p, double dt) => (2 / dt + p) / (2 / dt - p);
+        public static Complex ToZ(Complex p, double dt)
+        {
+            var w = 2 / dt;
+            return (w + p) / (w - p);
+        }
 
-        /// <summary>Расчёт нормирующего множителя (приводящего системную-передаточную функцию к виду с максимумом в 1</summary>
+        public static IEnumerable<Complex> ToZ(IEnumerable<Complex> p, double dt) => p.Select(z => ToZ(z, dt));
+
+        public static IEnumerable<Complex> ToZ(IEnumerable<Complex> p, double W0, double dt) => p.Select(z => ToZ(z * W0, dt));
+
+        public static Complex[] ToZArray(IEnumerable<Complex> p, double dt, double W0 = 1) => ToZ(p, W0, dt).ToArray();
+
+        /// <summary>Преобразование полюса из z-плоскости в p-плоскость</summary>
+        /// <param name="z">Полюс z-плоскости</param>
+        /// <param name="dt">Период дискретизации</param>
+        /// <returns>Полюс в p-плоскости</returns>
+        public static Complex ToP(Complex z, double dt) => 2 / dt * (z - 1) / (z + 1);
+
+        /// <summary>Расчёт нормирующего множителя (приводящего системную-передаточную функцию к виду с максимумом в 1)</summary>
         /// <param name="poles">Набор полюсов</param>
         /// <param name="dt">Период дискретизации</param>
         /// <returns>Нормирующий множитель</returns>
-        public static double GetNomalizeCoefficient([NotNull] IEnumerable<Complex> poles, double dt)
+        public static double GetNormalizeCoefficient([NotNull] IEnumerable<Complex> poles, double dt)
         {
             if (poles is null) throw new ArgumentNullException(nameof(poles));
 
-            var result = new Complex(1);
             var k = 2 / dt;
-            result = poles.Aggregate(result, (current, p0) => current * (k - p0));
-            var (re, im) = result;
-            if (Math.Abs(im / re) > 1e-15) throw new InvalidOperationException("Комплексный результат");
-            return 1 / re;
+            var (re, im) = poles.Aggregate(Complex.Real, (current, p0) => current * (k - p0));
+            return (im / re).Abs() <= 1e-15
+                ? 1 / re
+                : throw new InvalidOperationException("Комплексный результат");
         }
 
         /// <summary>Вектор состояния</summary>
         protected readonly double[] State;
 
         /// <summary>Порядок фильтра</summary>
-        public virtual int Order => State.Length;
+        public virtual int Order => State.Length - 1;
 
         /// <summary>Инициализация нового цифрового фильтра</summary>
         /// <param name="Order">Порядок фильтра</param>
@@ -67,7 +89,7 @@ namespace MathCore.DSP.Filters
         {
             if (Signal is null) throw new ArgumentNullException(nameof(Signal));
             if (state is null) throw new ArgumentNullException(nameof(state));
-            if (state.Length != Order) throw new InvalidOperationException($"Длина вектора состояний {state.Length} не равна порядку фильтра {Order}");
+            if (state.Length != Order + 1) throw new InvalidOperationException($"Длина вектора состояний {state.Length} не равна порядку фильтра {Order} + 1");
 
             return new SamplesDigitalSignal(Signal.dt, Signal.Select(s => Process(s, state)));
         }
@@ -75,7 +97,7 @@ namespace MathCore.DSP.Filters
         /// <summary>Обработать цифровой сигнал независимо от состояния фильтра (вектор состояния создаётся на каждый вызов этого метода)</summary>
         /// <param name="Signal">Обрабатываемый цифровой сигнал</param>
         /// <returns>Обработанный цифровой сигнал</returns>
-        [NotNull] public DigitalSignal ProcessIndividual([NotNull] DigitalSignal Signal) => Process(Signal, new double[Order]);
+        [NotNull] public DigitalSignal ProcessIndividual([NotNull] DigitalSignal Signal) => Process(Signal, new double[Order + 1]);
 
         /// <summary>Сбросить состояние фильтра</summary>
         public override void Reset() => Array.Clear(State, 0, State.Length);

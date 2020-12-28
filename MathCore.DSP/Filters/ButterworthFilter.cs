@@ -1,8 +1,11 @@
-﻿using MathCore.Annotations;
+﻿using System.Runtime.Serialization;
+
+using MathCore.Annotations;
 
 namespace MathCore.DSP.Filters
 {
     /// <summary>Фильтр Баттерворта</summary>
+    [KnownType(typeof(ButterworthLowPass))]
     public abstract class ButterworthFilter : AnalogBasedFilter
     {
         /// <summary>Инициализация фильтра Баттерворта</summary>

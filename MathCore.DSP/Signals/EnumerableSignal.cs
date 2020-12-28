@@ -23,7 +23,7 @@ namespace MathCore.DSP.Signals
                 List<double> list => list[n],
                 IList<double> list => list[n],
                 _ => _Samples.ElementAt(n)
-        };
+            };
             set
             {
                 switch (_Samples)
