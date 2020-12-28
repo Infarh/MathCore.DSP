@@ -63,7 +63,7 @@ namespace MathCore.DSP.Filters
         protected readonly double[] State;
 
         /// <summary>Порядок фильтра</summary>
-        public virtual int Order => State.Length;
+        public virtual int Order => State.Length - 1;
 
         /// <summary>Инициализация нового цифрового фильтра</summary>
         /// <param name="Order">Порядок фильтра</param>
@@ -89,7 +89,7 @@ namespace MathCore.DSP.Filters
         {
             if (Signal is null) throw new ArgumentNullException(nameof(Signal));
             if (state is null) throw new ArgumentNullException(nameof(state));
-            if (state.Length != Order) throw new InvalidOperationException($"Длина вектора состояний {state.Length} не равна порядку фильтра {Order}");
+            if (state.Length != Order + 1) throw new InvalidOperationException($"Длина вектора состояний {state.Length} не равна порядку фильтра {Order} + 1");
 
             return new SamplesDigitalSignal(Signal.dt, Signal.Select(s => Process(s, state)));
         }
@@ -97,7 +97,7 @@ namespace MathCore.DSP.Filters
         /// <summary>Обработать цифровой сигнал независимо от состояния фильтра (вектор состояния создаётся на каждый вызов этого метода)</summary>
         /// <param name="Signal">Обрабатываемый цифровой сигнал</param>
         /// <returns>Обработанный цифровой сигнал</returns>
-        [NotNull] public DigitalSignal ProcessIndividual([NotNull] DigitalSignal Signal) => Process(Signal, new double[Order]);
+        [NotNull] public DigitalSignal ProcessIndividual([NotNull] DigitalSignal Signal) => Process(Signal, new double[Order + 1]);
 
         /// <summary>Сбросить состояние фильтра</summary>
         public override void Reset() => Array.Clear(State, 0, State.Length);

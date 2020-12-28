@@ -497,6 +497,8 @@ namespace MathCore.DSP.Tests.Filters
 
             Assert.That.Collection(filter.A).IsEqualTo(A, 4.442e-16);
             Assert.That.Collection(filter.B).IsEqualTo(B, 1.389e-17);
+
+            Assert.That.Value(filter.Order).IsEqual(N);
         }
 
         [TestMethod]

@@ -19,16 +19,16 @@ namespace MathCore.DSP.Filters
             if (Accuracity <= 0) throw new ArgumentOutOfRangeException(nameof(Accuracity), "Точность должна быть больше 0");
             if (MaxSamples == 0) yield break;
 
-            var filter_order = filter.Order;
-            var state = new double[filter_order];
+            var state_length = filter.Order + 1;
+            var state = new double[state_length];
             yield return filter.Process(1, state);
-            var energy = state.Sum(s => s * s) / filter_order;
+            var energy = state.Sum(s => s * s) / state_length;
             var energy_max = energy;
             do
             {
                 if (--MaxSamples == 0) yield break;
                 yield return filter.Process(0, state);
-                energy = state.Sum(s => s * s) / filter_order;
+                energy = state.Sum(s => s * s) / state_length;
                 if (energy > energy_max)
                     energy_max = energy;
             } while (energy / energy_max >= Accuracity);
