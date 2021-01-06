@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-using static MathCore.DSP.Filters.DigitalFilter;
 using static MathCore.Polynom.Array;
 using static MathCore.SpecialFunctions.EllipticJacobi;
 

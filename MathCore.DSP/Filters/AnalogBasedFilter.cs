@@ -50,6 +50,64 @@ namespace MathCore.DSP.Filters
             }
         }
 
+        public readonly ref struct Specisication
+        {
+            public double dt { get; }
+
+            public double fp { get; }
+            public double fs { get; }
+
+            public double wp { get; }
+            public double ws { get; }
+
+            public double Fp { get; }
+            public double Fs { get; }
+
+            public double Wp { get; }
+            public double Ws { get; }
+
+            public double Gp { get; }
+            public double Gs { get; }
+
+            public double Rp { get; }
+            public double Rs { get; }
+
+            public double EpsP { get; }
+            public double EpsS { get; }
+
+            public double kEps => EpsS / EpsP;
+            public double kW => Fs / Fp;
+
+            public Specisication(double dt, double fp, double fs, double Gp, double Gs)
+            {
+                if (!(fp < fs)) throw new InvalidOperationException("Частота пропускания должна быть меньше частоты подавления");
+                if (!(fp < 1 / (2 * dt))) throw new InvalidOperationException();
+
+                this.dt = dt;
+                this.fp = fp;
+                this.fs = fs;
+                this.Gp = Gp;
+                this.Gs = Gs;
+
+                Rp = -Gp.In_dB();
+                Rs = -Gs.In_dB();
+
+                EpsP = (10d.Pow(Rp / 10) - 1).Sqrt();
+                EpsS = (10d.Pow(Rs / 10) - 1).Sqrt();
+
+                Fp = ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
+                Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового пропита
+
+                wp = Consts.pi2 * fp;
+                ws = Consts.pi2 * fp;
+
+                Wp = Consts.pi2 * Fp;
+                Ws = Consts.pi2 * Fp;
+            }
+        }
+
+        public static Specisication GetSpecisication(double dt, double fp, double fs, double Gp, double Gs) => new(dt, fp, fs, Gp, Gs);
+
         /// <summary>Инициализация параметров цифрового фильтра на базе аналогового прототипа</summary>
         /// <param name="B">Коэффициенты полинома числителя</param>
         /// <param name="A">Коэффициенты полинома знаменателя</param>

@@ -16,32 +16,14 @@ namespace MathCore.DSP.Filters
         /// <param name="Gp">Затухание в полосе пропускания</param>
         /// <param name="Gs">Затухание в полосе заграждения</param>
         /// <returns>Кортеж с коэффициентами полинома числителя и знаменателя передаточной функции</returns>
-        private static (double[] A, double[] B) Initialize(double dt, double fp, double fs, double Gp, double Gs)
+        private static (double[] A, double[] B) Initialize(Specisication opt)
         {
-            if (!(fp < fs)) throw new InvalidOperationException("Частота пропускания должна быть меньше частоты подавления");
-            if (!(fp < 1 / (2 * dt))) throw new InvalidOperationException();
-
-            var Rp = -Gp.In_dB();
-            var Rs = -Gs.In_dB();
-
-            var eps_p = (10d.Pow(Rp / 10) - 1).Sqrt();
-            var eps_s = (10d.Pow(Rs / 10) - 1).Sqrt();
-
-
-            var Fp = ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
-            var Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового пропита
-
-            var Wp = Consts.pi2 * Fp;
-
-            var k_eps = eps_s / eps_p;
-            var k_W = Fs / Fp;
-
             // Порядок фильтра
-            var N = (int)Math.Ceiling(Math.Log(k_eps) / Math.Log(k_W));
+            var N = (int)Math.Ceiling(Math.Log(opt.kEps) / Math.Log(opt.kW));
             var r = N % 2; // Нечётность порядка фильтра
 
             // Радиус окружности размещения полюсов фильтра
-            var alpha = eps_p.Pow(-1d / N);
+            var alpha = opt.EpsP.Pow(-1d / N);
 
             // Угловой шаг между полюсами
             var dth = Math.PI / N;
@@ -61,13 +43,15 @@ namespace MathCore.DSP.Filters
             }
 
             // Масштабируем полюса на требуемую частоту пропускания
+            var Wp = opt.Wp;
             var translated_poles = poles.ToArray(p => p * Wp);
             // Переходим из p-плоскости в z-плоскость
+            var dt = opt.dt;
             var z_poles = translated_poles.ToArray(p => ToZ(p, dt));
             // Вычисляем нормирующий множитель
             var kz = GetNormalizeCoefficient(translated_poles, dt);
             var WpN = Wp.Pow(N);
-            var k = WpN * kz / eps_p;
+            var k = WpN * kz / opt.EpsP;
             var B = new double[N + 1];
             for (var i = 0; i < B.Length; i++)
                 B[i] = k * SpecialFunctions.BinomialCoefficient(N, i);
@@ -83,7 +67,7 @@ namespace MathCore.DSP.Filters
         /// <param name="Gp">Затухание в полосе пропускания (0.891250938 = -1 дБ)</param>
         /// <param name="Gs">Затухание в полосе заграждения (0.031622777 = -30 дБ)</param>
         public ButterworthLowPass(double dt, double fp, double fs, double Gp = 0.891250938, double Gs = 0.031622777)
-            : this(Initialize(dt, fp, fs, Gp, Gs)) { }
+            : this(Initialize(GetSpecisication(dt, fp, fs, Gp, Gs))) { }
 
         private ButterworthLowPass((double[] A, double[] B) config) : base(config.B, config.A) { }
     }
