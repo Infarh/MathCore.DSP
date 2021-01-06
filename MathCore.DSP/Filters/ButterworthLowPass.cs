@@ -10,37 +10,12 @@ namespace MathCore.DSP.Filters
         // https://ru.dsplib.org/content/filter_butter_ap/filter_butter_ap.html
 
         /// <summary>Инициализация коэффициентов передаточной функции фильтра Баттерворта</summary>
-        /// <param name="dt">Период дискретизации</param>
-        /// <param name="fp">Частота пропускания</param>
-        /// <param name="fs">Частота заграждения</param>
-        /// <param name="Gp">Затухание в полосе пропускания</param>
-        /// <param name="Gs">Затухание в полосе заграждения</param>
         /// <returns>Кортеж с коэффициентами полинома числителя и знаменателя передаточной функции</returns>
         private static (double[] A, double[] B) Initialize(Specisication opt)
         {
             // Порядок фильтра
             var N = (int)Math.Ceiling(Math.Log(opt.kEps) / Math.Log(opt.kW));
-            var r = N % 2; // Нечётность порядка фильтра
-
-            // Радиус окружности размещения полюсов фильтра
-            var alpha = opt.EpsP.Pow(-1d / N);
-
-            // Угловой шаг между полюсами
-            var dth = Math.PI / N;
-
-            // Массив полюсов фильтра
-            var poles = new Complex[N];
-            // Если порядок фильтра нечётный, то первым добавляем центральный полюс
-            if (r != 0) poles[0] = -alpha;
-            // Расчёт полюсов
-            for (var i = r; i < poles.Length; i += 2)
-            {
-                var w = dth * (i + 1 - r - 0.5);
-                var sin = -alpha * Math.Sin(w);
-                var cos = alpha * Math.Cos(w);
-                poles[i] = new Complex(sin, cos);
-                poles[i + 1] = new Complex(sin, -cos);
-            }
+            var poles = GetNormPoles(N, opt.EpsP);
 
             // Масштабируем полюса на требуемую частоту пропускания
             var Wp = opt.Wp;
