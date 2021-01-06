@@ -76,6 +76,7 @@ namespace MathCore.DSP.Filters
             public double EpsS { get; }
 
             public double kEps => EpsS / EpsP;
+            public double kw => fs / fp;
             public double kW => Fs / Fp;
 
             public Specisication(double dt, double fp, double fs, double Gp, double Gs)
