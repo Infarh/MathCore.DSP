@@ -10,13 +10,13 @@ namespace MathCore.DSP.Filters
         // https://ru.dsplib.org/content/filter_butter_ap/filter_butter_ap.html
 
         /// <summary>Инициализация коэффициентов передаточной функции фильтра Баттерворта</summary>
+        /// <param name="dt">Период дискретизации</param>
         /// <param name="fp">Частота пропускания</param>
         /// <param name="fs">Частота заграждения</param>
-        /// <param name="dt">Период дискретизации</param>
         /// <param name="Gp">Затухание в полосе пропускания</param>
         /// <param name="Gs">Затухание в полосе заграждения</param>
         /// <returns>Кортеж с коэффициентами полинома числителя и знаменателя передаточной функции</returns>
-        private static (double[] A, double[] B) Initialize(double fp, double fs, double dt, double Gp, double Gs)
+        private static (double[] A, double[] B) Initialize(double dt, double fp, double fs, double Gp, double Gs)
         {
             if (!(fp < fs)) throw new InvalidOperationException("Частота пропускания должна быть меньше частоты подавления");
             if (!(fp < 1 / (2 * dt))) throw new InvalidOperationException();
@@ -77,13 +77,13 @@ namespace MathCore.DSP.Filters
         }
 
         /// <summary>Инициализация нового фильтра Баттерворта нижних частот</summary>
+        /// <param name="dt">Период дискретизации</param>
         /// <param name="fp">Частота пропускания</param>
         /// <param name="fs">Частота заграждения</param>
-        /// <param name="dt">Период дискретизации</param>
         /// <param name="Gp">Затухание в полосе пропускания (0.891250938 = -1 дБ)</param>
         /// <param name="Gs">Затухание в полосе заграждения (0.031622777 = -30 дБ)</param>
-        public ButterworthLowPass(double fp, double fs, double dt, double Gp = 0.891250938, double Gs = 0.031622777)
-            : this(Initialize(fp, fs, dt, Gp, Gs)) { }
+        public ButterworthLowPass(double dt, double fp, double fs, double Gp = 0.891250938, double Gs = 0.031622777)
+            : this(Initialize(dt, fp, fs, Gp, Gs)) { }
 
         private ButterworthLowPass((double[] A, double[] B) config) : base(config.B, config.A) { }
     }

@@ -21,13 +21,13 @@ namespace MathCore.DSP.Filters
         private static double T(double k) => FullEllipticIntegralComplimentary(k);
 
         /// <summary>Инициализация коэффициентов передаточной функции Эллиптического фильтра</summary>
+        /// <param name="dt">Период дискретизации</param>
         /// <param name="fp">Частота пропускания</param>
         /// <param name="fs">Частота заграждения</param>
-        /// <param name="dt">Период дискретизации</param>
         /// <param name="Gp">Затухание в полосе пропускания</param>
         /// <param name="Gs">Затухание в полосе заграждения</param>
         /// <returns>Кортеж с коэффициентами полинома числителя и знаменателя передаточной функции</returns>
-        private static (double[] A, double[] B) Initialize(double fp, double fs, double dt, double Gp, double Gs)
+        private static (double[] A, double[] B) Initialize(double dt, double fp, double fs, double Gp, double Gs)
         {
             if (!(fp < fs)) throw new InvalidOperationException("Частота пропускания должна быть меньше частоты подавления");
             if (!(fp < 1 / (2 * dt))) throw new InvalidOperationException();
@@ -119,13 +119,13 @@ namespace MathCore.DSP.Filters
         public double Gs { get; }
 
         /// <summary>Инициализация нового Эллиптического фильтра нижних частот</summary>
+        /// <param name="dt">Период дискретизации</param>
         /// <param name="fp">Частота пропускания</param>
         /// <param name="fs">Частота заграждения</param>
-        /// <param name="dt">Период дискретизации</param>
         /// <param name="Gp">Затухание в полосе пропускания (0.891250938 = -1 дБ)</param>
         /// <param name="Gs">Затухание в полосе заграждения (0.005623413 = -45 дБ)</param>
-        public EllipticLowPass(double fp, double fs, double dt, double Gp = 0.891250938, double Gs = 0.005623413)
-            : this(Initialize(fp, fs, dt, Gp, Gs))
+        public EllipticLowPass(double dt, double fp, double fs, double Gp = 0.891250938, double Gs = 0.005623413)
+            : this(Initialize(dt, fp, fs, Gp, Gs))
         {
             this.fp = fp;
             this.fs = fs;

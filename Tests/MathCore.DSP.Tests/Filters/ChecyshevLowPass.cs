@@ -151,7 +151,7 @@ namespace MathCore.DSP.Tests.Filters
 
             #endregion
 
-            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.I);
+            var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevLowPass.ChebyshevType.I);
 
             Assert.That.Collection(filter.A).IsEqualTo(A);
             Assert.That.Collection(filter.B).IsEqualTo(B);
@@ -319,7 +319,7 @@ namespace MathCore.DSP.Tests.Filters
 
             #endregion
 
-            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.II);
+            var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevLowPass.ChebyshevType.II);
 
             Assert.That.Collection(filter.A).IsEqualTo(A);
             Assert.That.Collection(filter.B).IsEqualTo(B);
@@ -491,7 +491,7 @@ namespace MathCore.DSP.Tests.Filters
 
             #endregion
 
-            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.IICorrected);
+            var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevLowPass.ChebyshevType.IICorrected);
 
             Assert.That.Collection(filter.A).IsEqualTo(A, 4.442e-16);
             Assert.That.Collection(filter.B).IsEqualTo(B, 1.389e-17);
@@ -515,7 +515,7 @@ namespace MathCore.DSP.Tests.Filters
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.I);
+            var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevLowPass.ChebyshevType.I);
 
             Assert.That.Value(filter.Order).IsEven();
 
@@ -552,7 +552,7 @@ namespace MathCore.DSP.Tests.Filters
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.I);
+            var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevLowPass.ChebyshevType.I);
 
             Assert.That.Value(filter.Order).IsOdd();
 
@@ -588,7 +588,7 @@ namespace MathCore.DSP.Tests.Filters
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.II);
+            var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevLowPass.ChebyshevType.II);
 
             Assert.That.Value(filter.Order).IsEven();
 
@@ -626,7 +626,7 @@ namespace MathCore.DSP.Tests.Filters
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.II);
+            var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevLowPass.ChebyshevType.II);
 
             Assert.That.Value(filter.Order).IsOdd();
 
@@ -664,7 +664,7 @@ namespace MathCore.DSP.Tests.Filters
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.IICorrected);
+            var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevLowPass.ChebyshevType.IICorrected);
 
             Assert.That.Value(filter.Order).IsEven();
 
@@ -700,7 +700,7 @@ namespace MathCore.DSP.Tests.Filters
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.IICorrected);
+            var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevLowPass.ChebyshevType.IICorrected);
 
             Assert.That.Value(filter.Order).IsOdd();
 
@@ -737,7 +737,7 @@ namespace MathCore.DSP.Tests.Filters
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.I);
+            var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevLowPass.ChebyshevType.I);
 
             Assert.That.Value(filter.Order).IsEven();
 
@@ -784,7 +784,7 @@ namespace MathCore.DSP.Tests.Filters
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.I);
+            var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevLowPass.ChebyshevType.I);
 
             Assert.That.Value(filter.Order).IsOdd();
 
@@ -831,7 +831,7 @@ namespace MathCore.DSP.Tests.Filters
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.II);
+            var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevLowPass.ChebyshevType.II);
 
             Assert.That.Value(filter.Order).IsEven();
 
@@ -878,7 +878,7 @@ namespace MathCore.DSP.Tests.Filters
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.II);
+            var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevLowPass.ChebyshevType.II);
 
             Assert.That.Value(filter.Order).IsOdd();
 
@@ -925,7 +925,7 @@ namespace MathCore.DSP.Tests.Filters
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.IICorrected);
+            var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevLowPass.ChebyshevType.IICorrected);
 
             Assert.That.Value(filter.Order).IsEven();
 
@@ -972,7 +972,7 @@ namespace MathCore.DSP.Tests.Filters
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.IICorrected);
+            var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevLowPass.ChebyshevType.IICorrected);
 
             Assert.That.Value(filter.Order).IsOdd();
 
@@ -1018,7 +1018,7 @@ namespace MathCore.DSP.Tests.Filters
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.I);
+            var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevLowPass.ChebyshevType.I);
 
             Assert.That.Value(filter.Order).IsEven();
 
@@ -1065,7 +1065,7 @@ namespace MathCore.DSP.Tests.Filters
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.I);
+            var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevLowPass.ChebyshevType.I);
 
             Assert.That.Value(filter.Order).IsOdd();
 
@@ -1112,7 +1112,7 @@ namespace MathCore.DSP.Tests.Filters
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.II);
+            var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevLowPass.ChebyshevType.II);
 
             Assert.That.Value(filter.Order).IsEven();
 
@@ -1159,7 +1159,7 @@ namespace MathCore.DSP.Tests.Filters
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.II);
+            var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevLowPass.ChebyshevType.II);
 
             Assert.That.Value(filter.Order).IsOdd();
 
@@ -1206,7 +1206,7 @@ namespace MathCore.DSP.Tests.Filters
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.IICorrected);
+            var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevLowPass.ChebyshevType.IICorrected);
 
             Assert.That.Value(filter.Order).IsEven();
 
@@ -1253,7 +1253,7 @@ namespace MathCore.DSP.Tests.Filters
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            var filter = new ChebyshevLowPass(fp, fs, dt, Gp, Gs, ChebyshevLowPass.ChebyshevType.IICorrected);
+            var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevLowPass.ChebyshevType.IICorrected);
 
             Assert.That.Value(filter.Order).IsOdd();
 

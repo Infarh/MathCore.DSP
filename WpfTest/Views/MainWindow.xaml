@@ -40,7 +40,11 @@
                     <fa:ImageAwesome Height="14" Icon="Solid_Download"/>
                 </Button>
             </ToolBar>
-            <ToolBar Band="1">
+            <ToolBar Band="1"
+                     xmlns:c="clr-namespace:WpfTest.Infrastructure.Converters">
+                <ToolBar.Resources>
+                    <c:Transparent x:Key="TransparentConverter"/>
+                </ToolBar.Resources>
                 <Button Command="{Binding RecordSignalCommand}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Запись"/>
@@ -51,6 +55,8 @@
                 <Label Content="Длина"/>
                 <TextBox Width="60" TextAlignment="Right" Text="{Binding SignalTimeLength}"/>
                 <TextBlock Text="с" VerticalAlignment="Center"/>
+                <TextBox Width="120" Text="{Binding TestValue, UpdateSourceTrigger=PropertyChanged, Delay=100}"/>
+                <TextBlock Text="{Binding TestValue}" VerticalAlignment="Center"/>
             </ToolBar>
         </ToolBarTray>
         <StatusBar DockPanel.Dock="Bottom">

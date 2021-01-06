@@ -82,7 +82,7 @@ namespace MathCore.DSP.Filters
             return (zeros, poles);
         }
 
-        private static (int N, double EpsP, double EpsS, double Wp) GetProperties(double fp, double fs, double dt, double Gp, double Gs)
+        private static (int N, double EpsP, double EpsS, double Wp) GetProperties(double dt, double fp, double fs, double Gp, double Gs)
         {
             if (!(fp < fs)) throw new InvalidOperationException("Частота пропускания должна быть меньше частоты подавления");
             if (!(fp < 1 / (2 * dt))) throw new InvalidOperationException();
@@ -106,9 +106,9 @@ namespace MathCore.DSP.Filters
             return (N, eps_p, eps_s, Wp);
         }
 
-        private static (double[] A, double[] B) InitializeI(double fp, double fs, double dt, double Gp, double Gs)
+        private static (double[] A, double[] B) InitializeI(double dt, double fp, double fs, double Gp, double Gs)
         {
-            var (N, eps_p, _, wp) = GetProperties(fp, fs, dt, Gp, Gs);
+            var (N, eps_p, _, wp) = GetProperties(dt, fp, fs, Gp, Gs);
             var poles = GetAnalogPolesI(N, eps_p);
             var z_poles = ToZArray(poles, dt, wp);
 
@@ -124,9 +124,9 @@ namespace MathCore.DSP.Filters
             return (A, B);
         }
 
-        private static (double[] A, double[] B) InitializeII(double fp, double fs, double dt, double Gp, double Gs)
+        private static (double[] A, double[] B) InitializeII(double dt, double fp, double fs, double Gp, double Gs)
         {
-            var (N, _, eps_s, wp) = GetProperties(fp, fs, dt, Gp, Gs);
+            var (N, _, eps_s, wp) = GetProperties(dt, fp, fs, Gp, Gs);
             var (zeros, poles) = GetAnalogPolesII(N, eps_s);
 
             var z_zeros = N.IsEven()
@@ -145,9 +145,9 @@ namespace MathCore.DSP.Filters
             return (A, B);
         }
 
-        private static (double[] A, double[] B) InitializeIICorrected(double fp, double fs, double dt, double Gp, double Gs)
+        private static (double[] A, double[] B) InitializeIICorrected(double dt, double fp, double fs, double Gp, double Gs)
         {
-            var (N, _, eps_s, wp) = GetProperties(fp, fs, dt, Gp, Gs);
+            var (N, _, eps_s, wp) = GetProperties(dt, fp, fs, Gp, Gs);
             var (zeros, poles) = GetAnalogPolesII(N, eps_s);
 
             var kw = fp / fs;
@@ -170,18 +170,18 @@ namespace MathCore.DSP.Filters
         public ChebyshevType FilterType { get; }
 
         /// <summary>Инициализация нового фильтра Чебышева нижних частот</summary>
+        /// <param name="dt">Период дискретизации</param>
         /// <param name="fp">Частота пропускания</param>
         /// <param name="fs">Частота заграждения</param>
-        /// <param name="dt">Период дискретизации</param>
         /// <param name="Gp">Затухание в полосе пропускания (0.891250938 = -1 дБ)</param>
         /// <param name="Gs">Затухание в полосе заграждения (0.005623413 = -45 дБ)</param>
         /// <param name="Type">Тип (род) фильтра чебышева</param>
-        public ChebyshevLowPass(double fp, double fs, double dt, double Gp = 0.891250938, double Gs = 0.005623413, ChebyshevType Type = ChebyshevType.I)
+        public ChebyshevLowPass(double dt, double fp, double fs, double Gp = 0.891250938, double Gs = 0.005623413, ChebyshevType Type = ChebyshevType.I)
             : this(Type switch
             {
-                ChebyshevType.I => InitializeI(fp, fs, dt, Gp, Gs),
-                ChebyshevType.II => InitializeII(fp, fs, dt, Gp, Gs),
-                ChebyshevType.IICorrected => InitializeIICorrected(fp, fs, dt, Gp, Gs),
+                ChebyshevType.I => InitializeI(dt, fp, fs, Gp, Gs),
+                ChebyshevType.II => InitializeII(dt, fp, fs, Gp, Gs),
+                ChebyshevType.IICorrected => InitializeIICorrected(dt, fp, fs, Gp, Gs),
                 _ => throw new InvalidEnumArgumentException(nameof(Type), (int)Type, typeof(ChebyshevType))
             }) => FilterType = Type;
 
