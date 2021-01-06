@@ -50,7 +50,7 @@ namespace MathCore.DSP.Filters
             }
         }
 
-        public readonly ref struct Specisication
+        public readonly ref struct Specification
         {
             public double dt { get; }
 
@@ -79,7 +79,7 @@ namespace MathCore.DSP.Filters
             public double kw => fs / fp;
             public double kW => Fs / Fp;
 
-            public Specisication(double dt, double fp, double fs, double Gp, double Gs)
+            public Specification(double dt, double fp, double fs, double Gp, double Gs)
             {
                 if (!(fp < fs)) throw new InvalidOperationException("Частота пропускания должна быть меньше частоты подавления");
                 if (!(fp < 1 / (2 * dt))) throw new InvalidOperationException();
@@ -107,7 +107,7 @@ namespace MathCore.DSP.Filters
             }
         }
 
-        public static Specisication GetSpecisication(double dt, double fp, double fs, double Gp, double Gs) => new(dt, fp, fs, Gp, Gs);
+        public static Specification GetSpecification(double dt, double fp, double fs, double Gp, double Gs) => new(dt, fp, fs, Gp, Gs);
 
         /// <summary>Инициализация параметров цифрового фильтра на базе аналогового прототипа</summary>
         /// <param name="B">Коэффициенты полинома числителя</param>

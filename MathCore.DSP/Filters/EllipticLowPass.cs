@@ -21,7 +21,7 @@ namespace MathCore.DSP.Filters
 
         /// <summary>Инициализация коэффициентов передаточной функции Эллиптического фильтра</summary>
         /// <returns>Кортеж с коэффициентами полинома числителя и знаменателя передаточной функции</returns>
-        private static (double[] A, double[] B) Initialize(Specisication opt)
+        private static (double[] A, double[] B) Initialize(Specification opt)
         {
             var k_W = 1 / opt.kw;
             var k_eps = 1 / opt.kEps;
@@ -63,7 +63,7 @@ namespace MathCore.DSP.Filters
         /// <param name="Gp">Затухание в полосе пропускания (0.891250938 = -1 дБ)</param>
         /// <param name="Gs">Затухание в полосе заграждения (0.005623413 = -45 дБ)</param>
         public EllipticLowPass(double dt, double fp, double fs, double Gp = 0.891250938, double Gs = 0.005623413)
-            : this(Initialize(GetSpecisication(dt, fp, fs, Gp, Gs)))
+            : this(Initialize(GetSpecification(dt, fp, fs, Gp, Gs)))
         {
             this.fp = fp;
             this.fs = fs;

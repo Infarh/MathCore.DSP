@@ -494,7 +494,7 @@ namespace MathCore.DSP.Tests.Filters
             var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevLowPass.ChebyshevType.IICorrected);
 
             Assert.That.Collection(filter.A).IsEqualTo(A, 4.442e-16);
-            Assert.That.Collection(filter.B).IsEqualTo(B, 1.389e-17);
+            Assert.That.Collection(filter.B).IsEqualTo(B, 6.94e-17);
 
             Assert.That.Value(filter.Order).IsEqual(N);
         }

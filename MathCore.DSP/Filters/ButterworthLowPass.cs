@@ -11,7 +11,7 @@ namespace MathCore.DSP.Filters
 
         /// <summary>Инициализация коэффициентов передаточной функции фильтра Баттерворта</summary>
         /// <returns>Кортеж с коэффициентами полинома числителя и знаменателя передаточной функции</returns>
-        private static (double[] A, double[] B) Initialize(Specisication opt)
+        private static (double[] A, double[] B) Initialize(Specification opt)
         {
             // Порядок фильтра
             var N = (int)Math.Ceiling(Math.Log(opt.kEps) / Math.Log(opt.kW));
@@ -42,7 +42,7 @@ namespace MathCore.DSP.Filters
         /// <param name="Gp">Затухание в полосе пропускания (0.891250938 = -1 дБ)</param>
         /// <param name="Gs">Затухание в полосе заграждения (0.031622777 = -30 дБ)</param>
         public ButterworthLowPass(double dt, double fp, double fs, double Gp = 0.891250938, double Gs = 0.031622777)
-            : this(Initialize(GetSpecisication(dt, fp, fs, Gp, Gs))) { }
+            : this(Initialize(GetSpecification(dt, fp, fs, Gp, Gs))) { }
 
         private ButterworthLowPass((double[] A, double[] B) config) : base(config.B, config.A) { }
     }
