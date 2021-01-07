@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using static MathCore.Polynom.Array;
@@ -12,7 +11,7 @@ namespace MathCore.DSP.Filters
     {
         private static (double[] A, double[] B) InitializeI(Specification opt)
         {
-            var N = (int)Math.Ceiling(arch(opt.kEps) / arch(opt.kW)); // Порядок фильтра
+            var N = (int)Math.Ceiling(arcch(opt.kEps) / arcch(opt.kW)); // Порядок фильтра
 
             var poles = GetNormedPolesI(N, opt.EpsP);
             var z_poles = ToZArray(poles, opt.dt, opt.Wp);
@@ -31,7 +30,7 @@ namespace MathCore.DSP.Filters
 
         private static (double[] A, double[] B) InitializeII(Specification opt)
         {
-            var N = (int)Math.Ceiling(arch(opt.kEps) / arch(opt.kW)); // Порядок фильтра
+            var N = (int)Math.Ceiling(arcch(opt.kEps) / arcch(opt.kW)); // Порядок фильтра
             var (zeros, poles) = GetNormedPolesII(N, opt.EpsS);
 
             var z_zeros = N.IsEven()
@@ -52,7 +51,7 @@ namespace MathCore.DSP.Filters
 
         private static (double[] A, double[] B) InitializeIICorrected(Specification opt)
         {
-            var N = (int)Math.Ceiling(arch(opt.kEps) / arch(opt.kW)); // Порядок фильтра
+            var N = (int)Math.Ceiling(arcch(opt.kEps) / arcch(opt.kW)); // Порядок фильтра
             var (zeros, poles) = GetNormedPolesII(N, opt.EpsS);
 
             var kw = opt.kw;

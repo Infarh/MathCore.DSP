@@ -10,8 +10,8 @@ namespace MathCore.DSP.Filters
     [KnownType(typeof(ChebyshevLowPass))]
     public abstract class ChebyshevFilter : AnalogBasedFilter
     {
-        protected static double arsh(double x) => Math.Log(x + Math.Sqrt(x * x + 1));
-        protected static double arch(double x) => Math.Log(x + Math.Sqrt(x * x - 1));
+        protected static double arcsh(double x) => Math.Log(x + Math.Sqrt(x * x + 1));
+        protected static double arcch(double x) => Math.Log(x + Math.Sqrt(x * x - 1));
 
         /// <summary>Типы фильтров Чебышева</summary>
         [SuppressMessage("ReSharper", "InconsistentNaming")]
@@ -29,7 +29,7 @@ namespace MathCore.DSP.Filters
         {
             var r = N % 2;                              // Нечётность порядка фильтра
             var dth = Math.PI / N;                      // Угловой шаг между полюсами
-            var beta = arsh(1 / EpsP) / N;
+            var beta = arcsh(1 / EpsP) / N;
             var sh = Math.Sinh(beta);
             var ch = Math.Cosh(beta);
             var poles = new Complex[N];                 // Массив полюсов фильтра
@@ -53,7 +53,7 @@ namespace MathCore.DSP.Filters
             var r = N % 2;                              // Нечётность порядка фильтра
             var L = (N - r) / 2;                        // Число пар нулей
             var dth = Math.PI / N;                      // Угловой шаг между полюсами
-            var beta = arsh(EpsS) / N;
+            var beta = arcsh(EpsS) / N;
             var shb = Math.Sinh(beta);
             var chb = Math.Cosh(beta);
 

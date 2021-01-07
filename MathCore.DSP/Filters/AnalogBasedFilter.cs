@@ -34,19 +34,51 @@ namespace MathCore.DSP.Filters
             /// <param name="wpl">Нижняя частота среза ППФ</param>
             /// <param name="wph">Верхняя частота среза ППФ</param>
             /// <returns>Нули/полюса ППФ</returns>
-            public static IEnumerable<Complex> ToBandPass(IEnumerable<Complex> Z, double wpl, double wph)
+            public static (Complex[] Poles, Complex[] Zeros) ToBandPass(
+                Complex[] Poles,
+                Complex[] Zeros,
+                double fpl, double fph)
             {
-                var dw = wph - wph;
-                var wc2 = (wpl * wph);
+                if (Poles is null) throw new ArgumentNullException(nameof(Poles));
+                if (Zeros is null) throw new ArgumentNullException(nameof(Zeros));
+                if (Poles.Length == 0) throw new ArgumentException("Размер вектора полюсов должен быть больше 0", nameof(Poles));
+                if (Zeros.Length > Poles.Length) throw new ArgumentException("Число нулей не должна быть больше числа полюсов", nameof(Zeros));
 
-                foreach (var z in Z)
+                var wpl = Consts.pi2 * fpl;
+                var wph = Consts.pi2 * fph;
+
+                var dw = (wph - wph) / 2;
+                var wc2 = wpl * wph;
+
+                // На каждый исходный полюс формируется пара новых полюсов
+                // Число нулей равно удвоенному числу исходных нулей
+                //      + ноль в 0 кратности, равной разности числа полюсов и нулей
+                var poles = new Complex[Poles.Length * 2];
+                var zeros = new Complex[Zeros.Length * 2 + (Poles.Length - Zeros.Length)];
+
+                static void Set(in Complex p, in Complex D, out Complex p1, out Complex p2)
                 {
-                    var dwz = 0.5 * dw * z;
-                    var D = (dwz * dwz - wc2).Sqrt();
-
-                    yield return -dwz + D;
-                    yield return -dwz - D;
+                    p1 = p + D;
+                    p2 = p - D;
                 }
+
+                for (var i = 0; i < Poles.Length; i++)
+                {
+                    var pdw = dw * Poles[i];
+                    Set(pdw, Complex.Sqrt(pdw.Power - wc2), 
+                        out poles[2 * i], 
+                        out poles[2 * i + 1]);
+                }
+
+                for (var i = 0; i < Zeros.Length; i++)
+                {
+                    var pdw = dw * Zeros[i];
+                    Set(pdw, Complex.Sqrt(pdw.Power - wc2), 
+                        out zeros[2 * i],
+                        out zeros[2 * i + 1]);
+                }
+
+                return (poles, zeros);
             }
         }
 
