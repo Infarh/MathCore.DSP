@@ -7,6 +7,7 @@ namespace MathCore.DSP.Filters
 {
     /// <summary>Эллиптический фильтр</summary>
     [KnownType(typeof(EllipticLowPass))]
+    [KnownType(typeof(EllipticBandPass))]
     public abstract class EllipticFilter : AnalogBasedFilter
     {
         protected static (Complex[] Zeros, Complex[] Poles) GetNormedZeros(int N, double EpsP, double EpsS)
