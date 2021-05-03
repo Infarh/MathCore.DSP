@@ -118,11 +118,11 @@ namespace MathCore.DSP.Tests.Filters
 
             var WpN = Wp.Pow(N)
                .AssertThanValue()
-               .IsEqual(0.034302685030761962)
+               .IsEqual(0.034302685030761955)
                .ActualValue;
 
             var k = WpN * kz / eps_p;
-            Assert.That.Value(k).IsEqual(0.030466713814017589);
+            Assert.That.Value(k).IsEqual(0.030466713814017582);
 
             var b = Enumerable.Range(0, N + 1).ToArray(i => k * SpecialFunctions.BinomialCoefficient(N, i));
 
@@ -148,7 +148,7 @@ namespace MathCore.DSP.Tests.Filters
                 -0.20332535619647568
             );
 
-            var filter = new DSP.Filters.ButterworthLowPass(fp, fs, dt, Gp, Gs);
+            var filter = new DSP.Filters.ButterworthLowPass(dt, fp, fs, Gp, Gs);
 
             Assert.That.Collection(filter.A).IsEqualTo(a, 1e-15);
             Assert.That.Collection(filter.B).IsEqualTo(b, 1e-16);
@@ -166,14 +166,14 @@ namespace MathCore.DSP.Tests.Filters
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            var filter = new DSP.Filters.ButterworthLowPass(fp, fs, dt, Gp, Gs);
+            var filter = new DSP.Filters.ButterworthLowPass(dt, fp, fs, Gp, Gs);
 
             var transmission_0 = filter.GetTransmissionCoefficient(0, dt);
             var transmission_fp = filter.GetTransmissionCoefficient(fp, dt);
             var transmission_fs = filter.GetTransmissionCoefficient(fs, dt);
             var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2, dt);
 
-            Assert.That.Value(transmission_0.Abs).IsEqual(1, 2.23e-16);
+            Assert.That.Value(transmission_0.Abs).IsEqual(1, 4.45e-16);
             Assert.That.Value(transmission_fp.Abs).IsEqual(Gp, 6.67e-016);
             Assert.That.Value(transmission_fs.Abs).LessOrEqualsThan(Gs);
             Assert.That.Value(transmission_fd05.Abs).IsEqual(0, 4.27e-34);
@@ -191,11 +191,11 @@ namespace MathCore.DSP.Tests.Filters
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            var filter = new DSP.Filters.ButterworthLowPass(fp, fs, dt, Gp, Gs);
+            var filter = new DSP.Filters.ButterworthLowPass(dt, fp, fs, Gp, Gs);
 
             double[] expected_impulse_response =
             {
-                +0.030466713814017603,
+                +0.030466713814017596,
                 +0.13656962408945683,
                 +0.2655529821380315,
                 +0.30340505314308713,
@@ -215,7 +215,7 @@ namespace MathCore.DSP.Tests.Filters
             var impulse_response = filter.GetImpulseResponse(expected_impulse_response.Length, 1e-10).ToArray();
 
             Assert.That.Collection(impulse_response)
-               .IsEqualTo(expected_impulse_response);
+               .IsEqualTo(expected_impulse_response, 1e-16);
         }
 
         [TestMethod]
@@ -230,7 +230,7 @@ namespace MathCore.DSP.Tests.Filters
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            var filter = new DSP.Filters.ButterworthLowPass(fp, fs, dt, Gp, Gs);
+            var filter = new DSP.Filters.ButterworthLowPass(dt, fp, fs, Gp, Gs);
 
             const int samples_count = 1024;
             // Сигнал s0(t) = 1

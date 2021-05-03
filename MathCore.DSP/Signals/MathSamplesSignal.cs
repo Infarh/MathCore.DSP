@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Text;
+
 using MathCore.Annotations;
 
 namespace MathCore.DSP.Signals

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Linq.Expressions;
 
 namespace MathCore.DSP
 {
@@ -7,12 +7,9 @@ namespace MathCore.DSP
     {
         static void Main()
         {
-            var X = Enumerable.Range(1, 10).ToArray();
+            static void Print(Expression<Func<double, double>> f) => Console.WriteLine(f);
 
-            Array.Copy(X, 0, X, 1, X.Length - 1);
-
-
-            Console.ReadLine();
+            Print(x => Math.Sin(x) / x);
         }
     }
 }

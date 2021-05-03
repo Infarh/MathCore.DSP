@@ -1,0 +1,36 @@
+name: Publish GitHub.com/packages
+
+on:
+  push:
+    branches: 
+      - master
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    name: Update package
+    
+    steps:
+      
+      - name: Checkout repository
+        uses: actions/checkout@v1
+        
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.x
+        
+      - name: Building
+        run: |
+          dotnet build MathCore.DSP/MathCore.DSP.csproj --nologo
+          dotnet build Tests/MathCore.DSP.Tests/MathCore.DSP.Tests.csproj --nologo
+        
+      - name: Testing
+        run: dotnet test Tests/MathCore.DSP.Tests/MathCore.DSP.Tests.csproj --nologo --no-restore
+        
+      - name: Packing
+        run: dotnet pack MathCore.DSP/MathCore.DSP.csproj -c Release -v m          
+      
+      - name: Push package
+        run: dotnet nuget push "**/*.nupkg" --skip-duplicate -s https://nuget.pkg.github.com/Infarh/index.json -k ${{secrets.GITHUB_TOKEN}}
