@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Windows.Input;
 
 using MathCore.Annotations;
 using MathCore.DSP.Signals;
-using MathCore.DSP.Signals.Implementations.Enumerables.Base;
 using MathCore.WPF;
 using MathCore.WPF.Commands;
 using MathCore.WPF.ViewModels;
-
-using OxyPlot;
 
 using WpfTest.Models;
 using WpfTest.Services.Interfaces;
@@ -90,6 +86,16 @@ namespace WpfTest.ViewModels
 
         /// <summary>Записанный цифровой сигнал</summary>
         public DigitalSignal RecordedSignal { get => _RecordedSignal; private set => Set(ref _RecordedSignal, value); }
+
+        #endregion
+
+        #region TestValue : double - Тестовое значение
+
+        /// <summary>Тестовое значение</summary>
+        private double _TestValue;
+
+        /// <summary>Тестовое значение</summary>
+        public double TestValue { get => _TestValue; set => Set(ref _TestValue, value); }
 
         #endregion
 

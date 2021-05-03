@@ -10,6 +10,8 @@ namespace MathCore.DSP.Filters
     /// <summary>Цифровой фильтр</summary>
     public abstract class DigitalFilter : Filter
     {
+
+
         /// <summary>Преобразование частоты цифрового фильтра в частоту аналогового прототипа</summary>
         /// <param name="DigitalFrequency">Значение на оси частот цифрового фильтра</param>
         /// <param name="dt">Период дискретизации</param>
@@ -30,6 +32,24 @@ namespace MathCore.DSP.Filters
         {
             var w = 2 / dt;
             return (w + p) / (w - p);
+        }
+
+        public static (Complex[] zPoles, Complex[] zZeros) ToZ(Complex[] pPoles, Complex[] pZeros, double dt)
+        {
+            if (pPoles is null) throw new ArgumentNullException(nameof(pPoles));
+            if (pZeros is null) throw new ArgumentNullException(nameof(pZeros));
+            if (pZeros.Length > pPoles.Length) throw new ArgumentException("Число нулей не должно превышать числа полюсов", nameof(pZeros));
+
+            var poles_count = pPoles.Length;
+
+            var zZeros = new Complex[poles_count];
+            var zPoles = new Complex[poles_count];
+
+            for (var i = 0; i < pPoles.Length; i++) zPoles[i] = ToZ(pPoles[i], dt);
+            for (var i = 0; i < pZeros.Length; i++) zZeros[i] = ToZ(pZeros[i], dt);
+            for (var i = pZeros.Length; i < zZeros.Length; i++) zZeros[i] = -1;
+
+            return (zPoles, zZeros);
         }
 
         public static IEnumerable<Complex> ToZ(IEnumerable<Complex> p, double dt) => p.Select(z => ToZ(z, dt));

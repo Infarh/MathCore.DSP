@@ -260,7 +260,7 @@ namespace MathCore.DSP.Tests.Filters
 
             #endregion
 
-            var filter = new DSP.Filters.EllipticLowPass(fp, fs, dt, Gp, Gs);
+            var filter = new DSP.Filters.EllipticLowPass(dt, fp, fs, Gp, Gs);
 
             Assert.That.Collection(filter.A).IsEqualTo(A, 1e-15);
             Assert.That.Collection(filter.B).IsEqualTo(B, 1e-16);
@@ -281,7 +281,7 @@ namespace MathCore.DSP.Tests.Filters
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            var filter = new DSP.Filters.EllipticLowPass(fp, fs, dt, Gp, Gs);
+            var filter = new DSP.Filters.EllipticLowPass(dt, fp, fs, Gp, Gs);
 
             var transmission_0 = filter.GetTransmissionCoefficient(0, dt);
             var transmission_fp = filter.GetTransmissionCoefficient(fp, dt);
@@ -314,7 +314,7 @@ namespace MathCore.DSP.Tests.Filters
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            var filter = new DSP.Filters.EllipticLowPass(fp, fs, dt, Gp, Gs);
+            var filter = new DSP.Filters.EllipticLowPass(dt, fp, fs, Gp, Gs);
 
             double[] expected_impulse_response =
             {
@@ -356,7 +356,7 @@ namespace MathCore.DSP.Tests.Filters
             var Gp = (-Rp).From_dB();
             var Gs = (-Rs).From_dB();
 
-            var filter = new DSP.Filters.EllipticLowPass(fp, fs, dt, Gp, Gs);
+            var filter = new DSP.Filters.EllipticLowPass(dt, fp, fs, Gp, Gs);
 
             const int samples_count = 1024;
             // Сигнал s0(t) = 1
