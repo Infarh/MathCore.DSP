@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using MathCore.Annotations;
 
+using static MathCore.Complex;
+using static MathCore.Consts;
+
 namespace MathCore.DSP.Fourier
 {
     /// <summary>Класс преобразования Фурье</summary>
@@ -13,24 +16,24 @@ namespace MathCore.DSP.Fourier
         /// <summary>Коэффициент прямого преобразования Фурье</summary>
         /// <param name="N">Число спектральных составляющих</param>
         /// <returns>Комплексное значение коэффициента Фурье</returns>
-        public static Complex W(int N) => Complex.Exp(1d / N, -Consts.pi2 / N);
+        public static Complex W(int N) => Exp(1d / N, -pi2 / N);
 
         /// <summary>Коэффициент обратного преобразования Фурье</summary>
         /// <param name="N">Число спектральных составляющих</param>
         /// <returns>Комплексное значение обратного коэффициента Фурье</returns>
-        public static Complex Winv(int N) => Complex.Exp(Consts.pi2 / N);
+        public static Complex Winv(int N) => Exp(pi2 / N);
 
         /// <summary>Коэффициент прямого преобразования Фурье для спектральной составляющей</summary>
         /// <param name="k">Номер спектральной составляющей</param>
         /// <param name="N">Число спектральных составляющих</param>
         /// <returns>Комплексное значение коэффициента Фурье</returns>
-        public static Complex W(int k, int N) => Complex.Exp(1d / N, -Consts.pi2 * k / N);
+        public static Complex W(int k, int N) => Exp(1d / N, -pi2 * k / N);
 
         /// <summary>Коэффициент обратного преобразования Фурье для спектральной составляющей</summary>
         /// <param name="k">Номер спектральной составляющей</param>
         /// <param name="N">Число спектральных составляющих</param>
         /// <returns>Комплексное значение обратного коэффициента Фурье</returns>
-        public static Complex Winv(int k, int N) => Complex.Exp(1d / N, -Consts.pi2 * k / N);
+        public static Complex Winv(int k, int N) => Exp(1d / N, -pi2 * k / N);
 
         /* -------------------------------------------------------------------------------------------- */
 

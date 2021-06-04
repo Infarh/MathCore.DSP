@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using MathCore.Annotations;
+
+using static System.Array;
+
+using static MathCore.Polynom.Array;
 
 namespace MathCore.DSP.Filters
 {
@@ -8,22 +11,20 @@ namespace MathCore.DSP.Filters
     public class IIR : DigitalFilter
     {
         /// <summary>Массив коэффициентов полинома числителя</summary>
-        [NotNull] private readonly double[] _B;
+        private readonly double[] _B;
         /// <summary>Массив коэффициентов полинома знаменателя</summary>
-        [NotNull] private readonly double[] _A;
+        private readonly double[] _A;
 
         /// <summary>Массив коэффициентов полинома числителя</summary>
-        [NotNull]
-        public ReadOnlyCollection<double> B => Array.AsReadOnly(_B);
+        public ReadOnlyCollection<double> B => AsReadOnly(_B);
 
         /// <summary>Массив коэффициентов полинома знаменателя</summary>
-        [NotNull]
-        public ReadOnlyCollection<double> A => Array.AsReadOnly(_A);
+        public ReadOnlyCollection<double> A => AsReadOnly(_A);
 
         /// <summary>Инициализация нового цифрового фильтра с бесконечной импульсной характеристикой</summary>
         /// <param name="B">Массив коэффициентов полинома числителя</param>
         /// <param name="A">Массив коэффициентов полинома знаменателя</param>
-        public IIR([NotNull] double[] B, [NotNull] double[] A)
+        public IIR(double[] B, double[] A)
             : base(
                 Math.Max(
                     (A ?? throw new ArgumentNullException(nameof(B))).Length,
@@ -45,33 +46,23 @@ namespace MathCore.DSP.Filters
         /// <summary>Последовательное соединение фильтра с другим <see cref="IIR"/></summary>
         /// <param name="filter">Соединяемый фильтр</param>
         /// <returns>Фильтр, представляющий собой результат последовательного соединения двух фильтров</returns>
-        [NotNull]
-        public IIR ConnectionSerialTo([NotNull] IIR filter)
-        {
-            if (filter is null) throw new ArgumentNullException(nameof(filter));
-
-            var b = Polynom.Array.Multiply(_B, filter._B);
-            var a = Polynom.Array.Multiply(_A, filter._A);
-            return new IIR(b, a);
-        }
+        public IIR ConnectionSerialTo(IIR filter) =>
+            filter is null
+                ? throw new ArgumentNullException(nameof(filter))
+                : new IIR(
+                    B: Multiply(_B, filter._B),
+                    A: Multiply(_A, filter._A));
 
         /// <summary>Параллельное соединение фильтра с другим <see cref="IIR"/></summary>
         /// <param name="filter">Соединяемый фильтр</param>
         /// <returns>Фильтр, представляющий собой результат параллельного соединения двух фильтров</returns>
-        [NotNull]
-        public IIR ConnectionParallelTo([NotNull] IIR filter)
-        {
-            if (filter is null) throw new ArgumentNullException(nameof(filter));
-
-            var b1 = _B;
-            var b2 = filter._B;
-
-            var a1 = _A;
-            var a2 = filter._A;
-
-            var b = Polynom.Array.Sum(Polynom.Array.Multiply(b1, a2), Polynom.Array.Multiply(b2, a1));
-            var a = Polynom.Array.Multiply(a1, a2);
-            return new IIR(Polynom.Array.Multiply(b, 0.5), a);
-        }
+        public IIR ConnectionParallelTo(IIR filter) =>
+            filter is null
+                ? throw new ArgumentNullException(nameof(filter))
+                : new IIR(
+                    B: Multiply(
+                        Sum(Multiply(_B, filter._A), Multiply(filter._B, _A)),
+                        0.5),
+                    A: Multiply(_A, filter._A));
     }
 }

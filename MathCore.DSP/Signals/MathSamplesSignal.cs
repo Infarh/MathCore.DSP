@@ -1,12 +1,9 @@
 ﻿using System;
 
-using MathCore.Annotations;
-
 namespace MathCore.DSP.Signals
 {
     public static class MathSamplesSignal
     {
-        [NotNull]
         public static SamplesDigitalSignal Sin(double A, double f0, double phi0, double dt, int SamplesCount)
         {
             var samples = new double[SamplesCount];
@@ -16,7 +13,6 @@ namespace MathCore.DSP.Signals
             return new SamplesDigitalSignal(dt, samples);
         }
 
-        [NotNull]
         public static SamplesDigitalSignal Cos(double A, double f0, double phi0, double dt, int SamplesCount)
         {
             var samples = new double[SamplesCount];

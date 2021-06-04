@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Linq;
 
+using static System.Math;
+
+using static MathCore.Polynom.Array;
+using static MathCore.SpecialFunctions;
+
 namespace MathCore.DSP.Filters
 {
     /// <summary>Низкочастотный фильтр Баттерворта</summary>
@@ -14,7 +19,7 @@ namespace MathCore.DSP.Filters
         private static (double[] A, double[] B) Initialize(Specification opt)
         {
             // Порядок фильтра
-            var N = (int)Math.Ceiling(Math.Log(opt.kEps) / Math.Log(opt.kW));
+            var N = (int)Ceiling(Log(opt.kEps) / Log(opt.kW));
             var poles = GetNormPoles(N, opt.EpsP);
 
             // Масштабируем полюса на требуемую частоту пропускания
@@ -29,10 +34,10 @@ namespace MathCore.DSP.Filters
             var k = WpN * kz / opt.EpsP;
             var B = new double[N + 1];
             for (var i = 0; i < B.Length; i++)
-                B[i] = k * SpecialFunctions.BinomialCoefficient(N, i);
-            var A = Polynom.Array.GetCoefficientsInverted(z_poles).ToRe();
+                B[i] = k * BinomialCoefficient(N, i);
+            var A = GetCoefficientsInverted(z_poles).ToRe();
 
-            return (A, B);
+            return (A!, B!);
         }
 
         /// <summary>Инициализация нового фильтра Баттерворта нижних частот</summary>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-using MathCore.Annotations;
+using static System.Math;
 
 namespace MathCore.DSP.Filters
 {
@@ -17,7 +17,7 @@ namespace MathCore.DSP.Filters
             var alpha = EpsP.Pow(-1d / N);
 
             // Угловой шаг между полюсами
-            var dth = Math.PI / N;
+            var dth = PI / N;
 
             // Массив полюсов фильтра
             var poles = new Complex[N];
@@ -27,8 +27,8 @@ namespace MathCore.DSP.Filters
             for (var i = r; i < poles.Length; i += 2)
             {
                 var w = dth * (i + 1 - r - 0.5);
-                var sin = -alpha * Math.Sin(w);
-                var cos = alpha * Math.Cos(w);
+                var sin = -alpha * Sin(w);
+                var cos = alpha * Cos(w);
                 poles[i] = new Complex(sin, cos);
                 poles[i + 1] = new Complex(sin, -cos);
             }
@@ -39,6 +39,6 @@ namespace MathCore.DSP.Filters
         /// <summary>Инициализация фильтра Баттерворта</summary>
         /// <param name="B">Коэффициенты полинома числителя</param>
         /// <param name="A">Коэффициенты полинома знаменателя</param>
-        protected ButterworthFilter([NotNull] double[] B, [NotNull] double[] A) : base(B, A) { }
+        protected ButterworthFilter(double[] B, double[] A) : base(B, A) { }
     }
 }

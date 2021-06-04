@@ -5,6 +5,10 @@ using System.Linq;
 using MathCore.Annotations;
 using MathCore.DSP.Signals;
 
+using static System.Math;
+
+using static MathCore.Complex;
+
 namespace MathCore.DSP.Filters
 {
     /// <summary>Цифровой фильтр</summary>
@@ -16,13 +20,13 @@ namespace MathCore.DSP.Filters
         /// <param name="DigitalFrequency">Значение на оси частот цифрового фильтра</param>
         /// <param name="dt">Период дискретизации</param>
         /// <returns>Значение на оси частот аналогового прототипа</returns>
-        public static double ToAnalogFrequency(double DigitalFrequency, double dt) => Math.Tan(Math.PI * DigitalFrequency * dt) / (Math.PI * dt);
+        public static double ToAnalogFrequency(double DigitalFrequency, double dt) => Tan(PI * DigitalFrequency * dt) / (PI * dt);
 
         /// <summary>Преобразование частоты аналогового  прототипа в частоту цифрового фильтра</summary>
         /// <param name="AnalogFrequency">Значение на оси частот аналогового фильтра</param>
         /// <param name="dt">Период дискретизации</param>
         /// <returns>Значение на оси частот цифрового фильтра</returns>
-        public static double ToDigitalFrequency(double AnalogFrequency, double dt) => Math.Atan(Math.PI * AnalogFrequency * dt) / (Math.PI * dt);
+        public static double ToDigitalFrequency(double AnalogFrequency, double dt) => Atan(PI * AnalogFrequency * dt) / (PI * dt);
 
         /// <summary>Преобразование полюса из p-плоскости в z-плоскость</summary>
         /// <param name="p">Полюс p-плоскости</param>
@@ -42,14 +46,14 @@ namespace MathCore.DSP.Filters
 
             var poles_count = pPoles.Length;
 
-            var zZeros = new Complex[poles_count];
-            var zPoles = new Complex[poles_count];
+            var z_zeros = new Complex[poles_count];
+            var z_poles = new Complex[poles_count];
 
-            for (var i = 0; i < pPoles.Length; i++) zPoles[i] = ToZ(pPoles[i], dt);
-            for (var i = 0; i < pZeros.Length; i++) zZeros[i] = ToZ(pZeros[i], dt);
-            for (var i = pZeros.Length; i < zZeros.Length; i++) zZeros[i] = -1;
+            for (var i = 0; i < pPoles.Length; i++) z_poles[i] = ToZ(pPoles[i], dt);
+            for (var i = 0; i < pZeros.Length; i++) z_zeros[i] = ToZ(pZeros[i], dt);
+            for (var i = pZeros.Length; i < z_zeros.Length; i++) z_zeros[i] = -1;
 
-            return (zPoles, zZeros);
+            return (z_poles, z_zeros);
         }
 
         public static IEnumerable<Complex> ToZ(IEnumerable<Complex> p, double dt) => p.Select(z => ToZ(z, dt));
@@ -73,7 +77,7 @@ namespace MathCore.DSP.Filters
             if (poles is null) throw new ArgumentNullException(nameof(poles));
 
             var k = 2 / dt;
-            var (re, im) = poles.Aggregate(Complex.Real, (current, p0) => current * (k - p0));
+            var (re, im) = poles.Aggregate(Real, (current, p0) => current * (k - p0));
             return (im / re).Abs() <= 1e-15
                 ? 1 / re
                 : throw new InvalidOperationException("Комплексный результат");

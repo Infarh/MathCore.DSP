@@ -2,7 +2,10 @@
 using System.ComponentModel;
 using System.Linq;
 
+using static System.Math;
+
 using static MathCore.Polynom.Array;
+using static MathCore.SpecialFunctions;
 
 namespace MathCore.DSP.Filters
 {
@@ -11,7 +14,7 @@ namespace MathCore.DSP.Filters
     {
         private static (double[] A, double[] B) InitializeI(Specification opt)
         {
-            var N = (int)Math.Ceiling(arcch(opt.kEps) / arcch(opt.kW)); // Порядок фильтра
+            var N = (int)Ceiling(arcch(opt.kEps) / arcch(opt.kW)); // Порядок фильтра
 
             var poles = GetNormedPolesI(N, opt.EpsP);
             var z_poles = ToZArray(poles, opt.dt, opt.Wp);
@@ -23,14 +26,14 @@ namespace MathCore.DSP.Filters
 
             var B = Enumerable
                .Range(0, N + 1)
-               .ToArray(i => g_norm * SpecialFunctions.BinomialCoefficient(N, i));
+               .ToArray(i => g_norm * BinomialCoefficient(N, i));
 
-            return (A, B);
+            return (A!, B!);
         }
 
         private static (double[] A, double[] B) InitializeII(Specification opt)
         {
-            var N = (int)Math.Ceiling(arcch(opt.kEps) / arcch(opt.kW)); // Порядок фильтра
+            var N = (int)Ceiling(arcch(opt.kEps) / arcch(opt.kW)); // Порядок фильтра
             var (zeros, poles) = GetNormedPolesII(N, opt.EpsS);
 
             var z_zeros = N.IsEven()
@@ -46,12 +49,12 @@ namespace MathCore.DSP.Filters
             for (var i = 0; i < B!.Length; i++)
                 B[i] *= g_norm;
 
-            return (A, B);
+            return (A!, B!);
         }
 
         private static (double[] A, double[] B) InitializeIICorrected(Specification opt)
         {
-            var N = (int)Math.Ceiling(arcch(opt.kEps) / arcch(opt.kW)); // Порядок фильтра
+            var N = (int)Ceiling(arcch(opt.kEps) / arcch(opt.kW)); // Порядок фильтра
             var (zeros, poles) = GetNormedPolesII(N, opt.EpsS);
 
             var kw = opt.kw;
@@ -68,7 +71,7 @@ namespace MathCore.DSP.Filters
             for (var i = 0; i < B!.Length; i++)
                 B[i] *= g_norm;
 
-            return (A, B);
+            return (A!, B!);
         }
 
         public ChebyshevType FilterType { get; }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq.Expressions;
 
+using static System.Math;
+
 namespace MathCore.DSP
 {
     class Program
@@ -9,7 +11,7 @@ namespace MathCore.DSP
         {
             static void Print(Expression<Func<double, double>> f) => Console.WriteLine(f);
 
-            Print(x => Math.Sin(x) / x);
+            Print(x => Sin(x) / x);
         }
     }
 }

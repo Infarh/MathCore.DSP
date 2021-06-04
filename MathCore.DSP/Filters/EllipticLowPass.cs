@@ -2,6 +2,9 @@
 using System.Linq;
 using System.Runtime.CompilerServices;
 
+using static System.Array;
+using static System.Math;
+
 using static MathCore.Polynom.Array;
 using static MathCore.SpecialFunctions.EllipticJacobi;
 
@@ -26,7 +29,7 @@ namespace MathCore.DSP.Filters
             var k_W = 1 / opt.kw;
             var k_eps = 1 / opt.kEps;
 
-            var N = (int)Math.Ceiling(T(k_eps) * K(k_W) / (K(k_eps) * T(k_W))); // Порядок фильтра
+            var N = (int)Ceiling(T(k_eps) * K(k_W) / (K(k_eps) * T(k_W))); // Порядок фильтра
 
             var (zeros, poles) = GetNormedZeros(N, opt.EpsP, opt.EpsS);
 
@@ -36,8 +39,8 @@ namespace MathCore.DSP.Filters
             var is_odd = N.IsOdd();
             if (is_odd)
             {
-                Array.Resize(ref z_zeros, z_zeros.Length + 1);
-                Array.Copy(z_zeros, 0, z_zeros, 1, z_zeros.Length - 1);
+                Resize(ref z_zeros, z_zeros.Length + 1);
+                Copy(z_zeros, 0, z_zeros, 1, z_zeros.Length - 1);
                 z_zeros[0] = -1;
             }
 
@@ -47,7 +50,7 @@ namespace MathCore.DSP.Filters
             var B = GetCoefficientsInverted(z_zeros).ToArray(b => b * G_norm).ToRe();
             var A = GetCoefficientsInverted(z_poles).ToRe();
 
-            return (A, B);
+            return (A!, B!);
         }
 
         public double fp { get; }

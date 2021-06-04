@@ -7,6 +7,8 @@ using MathCore.DSP.Tests.Service;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+using static System.Linq.Enumerable;
+
 namespace MathCore.DSP.Tests.Filters
 {
     [TestClass]
@@ -124,7 +126,7 @@ namespace MathCore.DSP.Tests.Filters
             var k = WpN * kz / eps_p;
             Assert.That.Value(k).IsEqual(0.030466713814017582);
 
-            var b = Enumerable.Range(0, N + 1).ToArray(i => k * SpecialFunctions.BinomialCoefficient(N, i));
+            var b = Range(0, N + 1).ToArray(i => k * SpecialFunctions.BinomialCoefficient(N, i));
 
             Assert.That.Collection(b).IsEqualTo(new[]
             {
@@ -234,7 +236,7 @@ namespace MathCore.DSP.Tests.Filters
 
             const int samples_count = 1024;
             // Сигнал s0(t) = 1
-            var s_0 = new SamplesDigitalSignal(dt, Enumerable.Repeat(1d, samples_count));
+            var s_0 = new SamplesDigitalSignal(dt, Repeat(1d, samples_count));
 
             // Гармонические сигналы разной частоты и амплитудой = √2
             const double a0 = Consts.sqrt_2;

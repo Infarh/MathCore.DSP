@@ -1,8 +1,7 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
-using MathCore.Annotations;
+using static System.Math;
 
 namespace MathCore.DSP.Filters
 {
@@ -10,8 +9,8 @@ namespace MathCore.DSP.Filters
     [KnownType(typeof(ChebyshevLowPass))]
     public abstract class ChebyshevFilter : AnalogBasedFilter
     {
-        protected static double arcsh(double x) => Math.Log(x + Math.Sqrt(x * x + 1));
-        protected static double arcch(double x) => Math.Log(x + Math.Sqrt(x * x - 1));
+        protected static double arcsh(double x) => Log(x + Sqrt(x * x + 1));
+        protected static double arcch(double x) => Log(x + Sqrt(x * x - 1));
 
         /// <summary>Типы фильтров Чебышева</summary>
         [SuppressMessage("ReSharper", "InconsistentNaming")]
@@ -28,10 +27,10 @@ namespace MathCore.DSP.Filters
         protected static Complex[] GetNormedPolesI(int N, double EpsP)
         {
             var r = N % 2;                              // Нечётность порядка фильтра
-            var dth = Math.PI / N;                      // Угловой шаг между полюсами
+            var dth = PI / N;                      // Угловой шаг между полюсами
             var beta = arcsh(1 / EpsP) / N;
-            var sh = Math.Sinh(beta);
-            var ch = Math.Cosh(beta);
+            var sh = Sinh(beta);
+            var ch = Cosh(beta);
             var poles = new Complex[N];                 // Массив полюсов фильтра
             if (r != 0) poles[0] = -sh;                 // Если порядок фильтра нечётный, то первым добавляем центральный полюс
             for (var i = r; i < poles.Length; i += 2)   // Расчёт полюсов
@@ -39,8 +38,8 @@ namespace MathCore.DSP.Filters
                 var n = (i - r) / 2 + 1;
                 var th = dth * (n - 0.5);
 
-                var sin = Math.Sin(th);
-                var cos = Math.Cos(th);
+                var sin = Sin(th);
+                var cos = Cos(th);
                 poles[i] = new Complex(-sh * sin, ch * cos);
                 poles[i + 1] = poles[i].ComplexConjugate;
             }
@@ -52,10 +51,10 @@ namespace MathCore.DSP.Filters
         {
             var r = N % 2;                              // Нечётность порядка фильтра
             var L = (N - r) / 2;                        // Число пар нулей
-            var dth = Math.PI / N;                      // Угловой шаг между полюсами
+            var dth = PI / N;                      // Угловой шаг между полюсами
             var beta = arcsh(EpsS) / N;
-            var shb = Math.Sinh(beta);
-            var chb = Math.Cosh(beta);
+            var shb = Sinh(beta);
+            var chb = Cosh(beta);
 
             var poles = new Complex[N];                 // Массив полюсов фильтра
             if (r != 0) poles[0] = -1 / shb;            // Если порядок фильтра нечётный, то первым добавляем центральный полюс
@@ -64,8 +63,8 @@ namespace MathCore.DSP.Filters
                 var n = (i - r) / 2 + 1;
                 var th = dth * (n - 0.5);
 
-                var sin = Math.Sin(th);
-                var cos = Math.Cos(th);
+                var sin = Sin(th);
+                var cos = Cos(th);
                 var norm = 1 / (sin * sin * shb * shb + cos * cos * chb * chb);
                 poles[i] = new Complex(-shb * sin * norm, chb * cos * norm);
                 poles[i + 1] = poles[i].ComplexConjugate;
@@ -75,7 +74,7 @@ namespace MathCore.DSP.Filters
             for (var n = 1; n <= L; n++)
             {
                 var th = dth * (n - 0.5);
-                zeros[2 * n - 2] = new Complex(0, 1 / Math.Cos(th));
+                zeros[2 * n - 2] = new Complex(0, 1 / Cos(th));
                 zeros[2 * n - 1] = zeros[2 * n - 2].ComplexConjugate;
             }
 
@@ -83,6 +82,6 @@ namespace MathCore.DSP.Filters
         }
 
         /// <inheritdoc />
-        protected ChebyshevFilter([NotNull] double[] B, [NotNull] double[] A) : base(B, A) { }
+        protected ChebyshevFilter(double[] B, double[] A) : base(B, A) { }
     }
 }

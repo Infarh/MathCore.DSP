@@ -7,6 +7,8 @@ using MathCore.DSP.Tests.Service;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+using static System.Math;
+
 using static MathCore.Polynom.Array;
 using static MathCore.SpecialFunctions.EllipticJacobi;
 
@@ -22,7 +24,7 @@ namespace MathCore.DSP.Tests.Filters
         {
             //https://ru.dsplib.org/content/filter_ellip_ap/filter_ellip_ap.html
 
-            const double pi2 = 2 * Math.PI;
+            const double pi2 = 2 * PI;
 
             const double fd = 5000;         // Частота дискретизации
             const double dt = 1 / fd;       // Период дискретизации
@@ -50,9 +52,9 @@ namespace MathCore.DSP.Tests.Filters
             //var Ws = Consts.pi2 * Fs;
 
             // Допуск на АЧХ в интервале пропускания
-            var eps_p = (Math.Pow(10, Rp / 10) - 1).Sqrt().AssertThanValue().IsEqual(0.50884713990958752).ActualValue;
+            var eps_p = (Pow(10, Rp / 10) - 1).Sqrt().AssertThanValue().IsEqual(0.50884713990958752).ActualValue;
             // Допуск на АЧХ в интервале подавления
-            var eps_s = (Math.Pow(10, Rs / 10) - 1).Sqrt().AssertThanValue().IsEqual(177.82512927503748).ActualValue;
+            var eps_s = (Pow(10, Rs / 10) - 1).Sqrt().AssertThanValue().IsEqual(177.82512927503748).ActualValue;
 
             //var k_eps = eps_s / eps_p;
             //var k_W = Fs / Fp;
@@ -84,7 +86,7 @@ namespace MathCore.DSP.Tests.Filters
             var double_N = T_eps * K_w / (K_eps * T_w);
             Assert.That.Value(double_N).IsEqual(4.381849263936846);
 
-            var N = (int)Math.Ceiling(double_N); // Порядок фильтра
+            var N = (int)Ceiling(double_N); // Порядок фильтра
             Assert.That.Value(N).IsEqual(5);
 
             var L = N / 2;  // Число комплексно сопряжённых полюсов
@@ -269,7 +271,7 @@ namespace MathCore.DSP.Tests.Filters
         [TestMethod]
         public void TransmissionCoefficient()
         {
-            const double pi2 = 2 * Math.PI;
+            const double pi2 = 2 * PI;
 
             const double fd = 5000;      // Гц // Частота дискретизации
             const double dt = 1 / fd;    // с  // Период дискретизации
@@ -303,7 +305,7 @@ namespace MathCore.DSP.Tests.Filters
         [TestMethod]
         public void ImpulseResponse()
         {
-            const double pi2 = 2 * Math.PI;
+            const double pi2 = 2 * PI;
 
             const double fd = 5000;      // Гц // Частота дискретизации
             const double dt = 1 / fd;    // с  // Период дискретизации
@@ -345,7 +347,7 @@ namespace MathCore.DSP.Tests.Filters
         [TestMethod]
         public void SignalProcessing()
         {
-            const double pi2 = 2 * Math.PI;
+            const double pi2 = 2 * PI;
 
             const double fd = 5000;      // Гц // Частота дискретизации
             const double dt = 1 / fd;    // с  // Период дискретизации

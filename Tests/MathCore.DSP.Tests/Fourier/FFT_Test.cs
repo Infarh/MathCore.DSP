@@ -3,6 +3,8 @@ using System.Linq;
 using MathCore.DSP.Fourier;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+using static System.Math;
+
 namespace MathCore.DSP.Tests.Fourier
 {
     [TestClass]
@@ -47,9 +49,9 @@ namespace MathCore.DSP.Tests.Fourier
         }
 
         private static double TestFunction(double x) => 1
-            + 2 * Math.Cos(2 * Math.PI * x * 1)
-            + 8 * Math.Cos(2 * Math.PI * x * 4)
-            + 12 * Math.Cos(2 * Math.PI * x * 6);
+            + 2 * Cos(2 * PI * x * 1)
+            + 8 * Cos(2 * PI * x * 4)
+            + 12 * Cos(2 * PI * x * 6);
 
         [TestMethod]
         public void TransformTest()

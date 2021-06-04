@@ -16,7 +16,7 @@ namespace MathCore.DSP.Signals
     public class SamplesDigitalSignal : DigitalSignal, IEquatable<SamplesDigitalSignal>, IIndexableRef<double>
     {
         /// <summary>Массив отсчётов</summary>
-        [NotNull] private readonly double[] _Samples;
+        private readonly double[] _Samples;
 
         /// <inheritdoc />
         /// <summary>Число элементов массива</summary>
@@ -44,12 +44,12 @@ namespace MathCore.DSP.Signals
             }
         }
 
-        public SamplesDigitalSignal(double dt, [NotNull] double[] Samples) : base(dt) => _Samples = Samples ?? throw new ArgumentNullException(nameof(Samples));
+        public SamplesDigitalSignal(double dt, double[] Samples) : base(dt) => _Samples = Samples ?? throw new ArgumentNullException(nameof(Samples));
 
-        public SamplesDigitalSignal(double dt, int SamplesCount, [NotNull] Func<double, double> f) : this(dt, f.Sampling(0, dt, SamplesCount)) { }
+        public SamplesDigitalSignal(double dt, int SamplesCount, Func<double, double> f) : this(dt, f.Sampling(0, dt, SamplesCount)) { }
 
-        public SamplesDigitalSignal(double dt, [NotNull] IEnumerable<double> Samples) : this(dt, (Samples ?? throw new ArgumentNullException(nameof(Samples))).ToArray()) { }
-        public SamplesDigitalSignal(double dt, [NotNull] IEnumerable<int> Samples) : this(dt, (Samples ?? throw new ArgumentNullException(nameof(Samples))).Select(v => (double)v).ToArray()) { }
+        public SamplesDigitalSignal(double dt, IEnumerable<double> Samples) : this(dt, (Samples ?? throw new ArgumentNullException(nameof(Samples))).ToArray()) { }
+        public SamplesDigitalSignal(double dt, IEnumerable<int> Samples) : this(dt, (Samples ?? throw new ArgumentNullException(nameof(Samples))).Select(v => (double)v).ToArray()) { }
 
         /// <inheritdoc />
         protected override IEnumerable<double> GetIntegralSamples(double s0)
@@ -65,7 +65,6 @@ namespace MathCore.DSP.Signals
         /// <summary>Вычисление интеграла</summary>
         /// <param name="s0">Константа интегрирования</param>
         /// <returns>Цифровой сигнал, как результат интегрирования</returns>
-        [NotNull]
         public SamplesDigitalSignal GetIntegralSampled(double s0 = 0)
         {
             var samples = new double[_Samples.Length];
@@ -130,6 +129,6 @@ namespace MathCore.DSP.Signals
 
         /// <summary>Массив неявного преобразования типа <see cref="SamplesDigitalSignal"/> к массиву <see cref="double"/></summary>
         /// <param name="s">Сигнал</param>
-        [NotNull] public static implicit operator double[]([NotNull] SamplesDigitalSignal s) => s._Samples;
+        public static implicit operator double[](SamplesDigitalSignal s) => s._Samples;
     }
 }
