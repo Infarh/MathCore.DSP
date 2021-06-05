@@ -27,22 +27,21 @@ namespace MathCore.DSP.Filters
 
         protected static IEnumerable<Complex> GetNormedPolesI(int N, double EpsP)
         {
-            var r = N % 2;                              // Нечётность порядка фильтра
-            var dth = PI / N;                      // Угловой шаг между полюсами
+            var r = N % 2;                   // Нечётность порядка фильтра
+            var dth = PI / N;                // Угловой шаг между полюсами
             var beta = arcsh(1 / EpsP) / N;
             var sh = Sinh(beta);
             var ch = Cosh(beta);
-            var poles = new Complex[N];                 // Массив полюсов фильтра
-            if (r != 0) poles[0] = -sh;                 // Если порядок фильтра нечётный, то первым добавляем центральный полюс
-            for (var i = r; i < poles.Length; i += 2)   // Расчёт полюсов
+            if (r != 0) yield return -sh;    // Если порядок фильтра нечётный, то первым добавляем центральный полюс
+            for (var i = r; i < N; i += 2)   // Расчёт полюсов
             {
                 var n = (i - r) / 2 + 1;
                 var th = dth * (n - 0.5);
 
                 var sin = Sin(th);
                 var cos = Cos(th);
-                yield return new Complex(-sh * sin, ch * cos);
-                yield return poles[i].ComplexConjugate;
+                yield return new Complex(-sh * sin, +ch * cos);
+                yield return new Complex(-sh * sin, -ch * cos);
             }
         }
 

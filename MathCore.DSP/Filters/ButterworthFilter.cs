@@ -30,9 +30,9 @@ namespace MathCore.DSP.Filters
             // Массив полюсов фильтра
             var poles = new Complex[N];
             // Если порядок фильтра нечётный, то первым добавляем центральный полюс
-            if (r != 0) poles[0] = -alpha;
+            if (r != 0) yield return -alpha;
             // Расчёт полюсов
-            for (var i = r; i < poles.Length; i += 2)
+            for (var i = r; i < N; i += 2)
             {
                 var w = dth * (i + 1 - r - 0.5);
                 var sin = -alpha * Sin(w);
