@@ -8,6 +8,9 @@ using MathCore.DSP.Tests.Service;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using static System.Linq.Enumerable;
+using static System.Math;
+
+using static MathCore.SpecialFunctions;
 
 namespace MathCore.DSP.Tests.Filters
 {
@@ -62,7 +65,7 @@ namespace MathCore.DSP.Tests.Filters
             Assert.That.Value(k_eps).GreaterThan(0);
             Assert.That.Value(k_W).GreaterThan(0);
 
-            var double_n = Math.Log(k_eps) / Math.Log(k_W);
+            var double_n = Log(k_eps) / Log(k_W);
             // Порядок фильтра
             var N = (int)double_n;
             if (double_n - N > 0) N += 1;
@@ -79,14 +82,14 @@ namespace MathCore.DSP.Tests.Filters
             var alpha = eps_p.Pow(-1d / N);
             Assert.That.Value(alpha).IsEqual(1.2525763881810263);
 
-            var th0 = Math.PI / N;
+            var th0 = PI / N;
 
             var poles = new Complex[N];
             if (r != 0) poles[0] = -alpha;
             for (var i = r; i < poles.Length; i += 2)
             {
                 var w = th0 * (i + 1 - r - 0.5);
-                poles[i] = (-alpha * Math.Sin(w), alpha * Math.Cos(w));
+                poles[i] = (-alpha * Sin(w), alpha * Cos(w));
                 poles[i + 1] = poles[i].ComplexConjugate;
             }
 
@@ -126,7 +129,7 @@ namespace MathCore.DSP.Tests.Filters
             var k = WpN * kz / eps_p;
             Assert.That.Value(k).IsEqual(0.030466713814017582);
 
-            var b = Range(0, N + 1).ToArray(i => k * SpecialFunctions.BinomialCoefficient(N, i));
+            var b = Range(0, N + 1).ToArray(i => k * BinomialCoefficient(N, i));
 
             Assert.That.Collection(b).IsEqualTo(new[]
             {

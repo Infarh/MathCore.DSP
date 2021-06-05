@@ -24,6 +24,9 @@ namespace MathCore.DSP.Filters
         /// <summary>Инициализация нового цифрового фильтра с бесконечной импульсной характеристикой</summary>
         /// <param name="B">Массив коэффициентов полинома числителя</param>
         /// <param name="A">Массив коэффициентов полинома знаменателя</param>
+        /// <exception cref="ArgumentException">Если число коэффициентов полинома числителя == 0</exception>
+        /// <exception cref="ArgumentException">Если число коэффициентов полинома знаменателя меньше 2</exception>
+        /// <exception cref="ArgumentException">Число коэффициентов полинома числителя должно быть меньше числа коэффициентов знаменателя</exception>
         public IIR(double[] B, double[] A)
             : base(
                 Math.Max(

@@ -16,12 +16,19 @@ namespace MathCore.DSP.Filters
         /// <summary>Обработать последовательность отсчётов сигнала</summary>
         /// <param name="Samples">Перечисление отсчётов сигнала, подлежащая фильтрации</param>
         /// <returns>Последовательность обработанных значений</returns>
-        public virtual IEnumerable<double> Process(IEnumerable<double> Samples) => Samples.Select(Process);
+        public virtual IEnumerable<double> Process(IEnumerable<double> Samples)
+        {
+            foreach (var sample in Samples)
+                yield return Process(sample);
+        }
 
         /// <summary>Обработать цифровой сигнал</summary>
         /// <param name="Signal">Обрабатываемый сигнал</param>
         /// <returns>Обработанный цифровой сигнал</returns>
-        public DigitalSignal Process(DigitalSignal Signal) => new SamplesDigitalSignal((Signal ?? throw new ArgumentNullException(nameof(Signal))).dt, Process((IEnumerable<double>)Signal));
+        public DigitalSignal Process(DigitalSignal Signal) => 
+            Signal is null 
+                ? throw new ArgumentNullException(nameof(Signal))
+                : new SamplesDigitalSignal(Signal.dt, Process((IEnumerable<double>)Signal));
 
         /// <summary>Сбросить состояние фильтра</summary>
         public abstract void Reset();
@@ -35,11 +42,12 @@ namespace MathCore.DSP.Filters
         /// <param name="filter">Фильтр</param>
         /// <param name="signal">Фильтруемый сигнал</param>
         /// <returns>Сигнал на выходе фильтра</returns>
-        public static DigitalSignal operator *(Filter filter, DigitalSignal signal)
-        {
-            if (filter is null) throw new ArgumentNullException(nameof(filter));
-            return filter.Process(signal ?? throw new ArgumentNullException(nameof(signal)));
-        }
+        public static DigitalSignal operator *(Filter filter, DigitalSignal signal) => 
+            filter is null 
+                ? throw new ArgumentNullException(nameof(filter)) 
+                : signal is null 
+                    ? throw new ArgumentNullException(nameof(signal))
+                    : filter.Process(signal);
 
         /// <summary>Оператор структурного умножения фильтра и цифрового сигнала</summary>
         /// <param name="filter">Фильтр</param>

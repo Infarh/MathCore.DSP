@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 using static System.Math;
@@ -9,8 +10,15 @@ namespace MathCore.DSP.Filters
     [KnownType(typeof(ButterworthLowPass))]
     public abstract class ButterworthFilter : AnalogBasedFilter
     {
-        protected static Complex[] GetNormPoles(int N, double EpsP)
+        /// <summary>Получить список полюсов нормированного фильтра</summary>
+        /// <param name="N">Число полюсов</param>
+        /// <param name="EpsP">Затухание фильтра</param>
+        /// <returns>Массив полюсов нормированного фильтра</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Если число полюсов меньше 1</exception>
+        protected static IEnumerable<Complex> GetNormPoles(int N, double EpsP)
         {
+            if (N <= 0) throw new ArgumentOutOfRangeException(nameof(N), N, "Число полюсов должно быть больше 0");
+
             var r = N % 2; // Нечётность порядка фильтра
 
             // Радиус окружности размещения полюсов фильтра
@@ -29,11 +37,9 @@ namespace MathCore.DSP.Filters
                 var w = dth * (i + 1 - r - 0.5);
                 var sin = -alpha * Sin(w);
                 var cos = alpha * Cos(w);
-                poles[i] = new Complex(sin, cos);
-                poles[i + 1] = new Complex(sin, -cos);
+                yield return new Complex(sin, cos);
+                yield return new Complex(sin, -cos);
             }
-
-            return poles;
         }
 
         /// <summary>Инициализация фильтра Баттерворта</summary>

@@ -12,16 +12,16 @@ namespace MathCore.DSP.Filters
     /// <summary>Фильтр Чебышева нижних частот</summary>
     public class ChebyshevLowPass : ChebyshevFilter
     {
-        private static (double[] A, double[] B) InitializeI(Specification opt)
+        private static (double[] A, double[] B) InitializeI(Specification Spec)
         {
-            var N = (int)Ceiling(arcch(opt.kEps) / arcch(opt.kW)); // Порядок фильтра
+            var N = (int)Ceiling(arcch(Spec.kEps) / arcch(Spec.kW)); // Порядок фильтра
 
-            var poles = GetNormedPolesI(N, opt.EpsP);
-            var z_poles = ToZArray(poles, opt.dt, opt.Wp);
+            var poles = GetNormedPolesI(N, Spec.EpsP);
+            var z_poles = ToZArray(poles, Spec.dt, Spec.Wp);
 
             var A = GetCoefficientsInverted(z_poles).ToRe();
 
-            var g_norm = (N.IsOdd() ? 1 : opt.Gp)
+            var g_norm = (N.IsOdd() ? 1 : Spec.Gp)
                 / (2.Power(N) / z_poles.Multiply(z => 1 - z).Re);
 
             var B = Enumerable
@@ -31,15 +31,15 @@ namespace MathCore.DSP.Filters
             return (A!, B!);
         }
 
-        private static (double[] A, double[] B) InitializeII(Specification opt)
+        private static (double[] A, double[] B) InitializeII(Specification Spec)
         {
-            var N = (int)Ceiling(arcch(opt.kEps) / arcch(opt.kW)); // Порядок фильтра
-            var (zeros, poles) = GetNormedPolesII(N, opt.EpsS);
+            var N = (int)Ceiling(arcch(Spec.kEps) / arcch(Spec.kW)); // Порядок фильтра
+            var (zeros, poles) = GetNormedPolesII(N, Spec.EpsS);
 
             var z_zeros = N.IsEven()
-               ? ToZArray(zeros, opt.dt, opt.Wp)
-               : ToZ(zeros, opt.dt, opt.Wp).Prepend(-1).ToArray();
-            var z_poles = ToZArray(poles, opt.dt, opt.Wp);
+               ? ToZArray(zeros, Spec.dt, Spec.Wp)
+               : ToZ(zeros, Spec.dt, Spec.Wp).Prepend(-1).ToArray();
+            var z_poles = ToZArray(poles, Spec.dt, Spec.Wp);
 
             var B = GetCoefficientsInverted(z_zeros).ToRe();
             var A = GetCoefficientsInverted(z_poles).ToRe();
@@ -52,16 +52,16 @@ namespace MathCore.DSP.Filters
             return (A!, B!);
         }
 
-        private static (double[] A, double[] B) InitializeIICorrected(Specification opt)
+        private static (double[] A, double[] B) InitializeIICorrected(Specification Spec)
         {
-            var N = (int)Ceiling(arcch(opt.kEps) / arcch(opt.kW)); // Порядок фильтра
-            var (zeros, poles) = GetNormedPolesII(N, opt.EpsS);
+            var N = (int)Ceiling(arcch(Spec.kEps) / arcch(Spec.kW)); // Порядок фильтра
+            var (zeros, poles) = GetNormedPolesII(N, Spec.EpsS);
 
-            var kw = opt.kw;
+            var kw = Spec.kw;
             var z_zeros = N.IsEven()
-                ? ToZArray(zeros, opt.dt, opt.Wp * kw)
-                : ToZ(zeros, opt.dt, opt.Wp * kw).Prepend(-1).ToArray();
-            var z_poles = ToZArray(poles, opt.dt, opt.Wp * kw);
+                ? ToZArray(zeros, Spec.dt, Spec.Wp * kw)
+                : ToZ(zeros, Spec.dt, Spec.Wp * kw).Prepend(-1).ToArray();
+            var z_poles = ToZArray(poles, Spec.dt, Spec.Wp * kw);
 
             var B = GetCoefficientsInverted(z_zeros).ToRe();
             var A = GetCoefficientsInverted(z_poles).ToRe();
@@ -74,6 +74,7 @@ namespace MathCore.DSP.Filters
             return (A!, B!);
         }
 
+        /// <summary>Тип фильтра</summary>
         public ChebyshevType FilterType { get; }
 
         /// <summary>Инициализация нового фильтра Чебышева нижних частот</summary>
@@ -86,12 +87,12 @@ namespace MathCore.DSP.Filters
         public ChebyshevLowPass(double dt, double fp, double fs, double Gp = 0.891250938, double Gs = 0.005623413, ChebyshevType Type = ChebyshevType.I)
             : this(GetSpecification(dt, fp, fs, Gp, Gs), Type) => FilterType = Type;
 
-        private ChebyshevLowPass(Specification opt, ChebyshevType Type)
+        public ChebyshevLowPass(Specification Spec, ChebyshevType Type = ChebyshevType.I)
             : this(Type switch
             {
-                ChebyshevType.I => InitializeI(opt),
-                ChebyshevType.II => InitializeII(opt),
-                ChebyshevType.IICorrected => InitializeIICorrected(opt),
+                ChebyshevType.I => InitializeI(Spec),
+                ChebyshevType.II => InitializeII(Spec),
+                ChebyshevType.IICorrected => InitializeIICorrected(Spec),
                 _ => throw new InvalidEnumArgumentException(nameof(Type), (int)Type, typeof(ChebyshevType))
             }) { }
 

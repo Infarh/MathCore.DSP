@@ -8,14 +8,13 @@ using MathCore.DSP.Signals;
 using static System.Math;
 
 using static MathCore.Complex;
+// ReSharper disable InconsistentNaming
 
 namespace MathCore.DSP.Filters
 {
     /// <summary>Цифровой фильтр</summary>
     public abstract class DigitalFilter : Filter
     {
-
-
         /// <summary>Преобразование частоты цифрового фильтра в частоту аналогового прототипа</summary>
         /// <param name="DigitalFrequency">Значение на оси частот цифрового фильтра</param>
         /// <param name="dt">Период дискретизации</param>
@@ -38,6 +37,12 @@ namespace MathCore.DSP.Filters
             return (w + p) / (w - p);
         }
 
+        /// <summary>Преобразование нулей/полюсов из p-плоскости в z-плоскость</summary>
+        /// <param name="pPoles">Массив полюсов в p-плоскости</param>
+        /// <param name="pZeros">Массив нулей в p-плоскости</param>
+        /// <param name="dt">Период дискретизации</param>
+        /// <returns>Массивы полюсов и нулей в z-плоскости</returns>
+        /// <exception cref="ArgumentException">Если число нулей больше числа полюсов</exception>
         public static (Complex[] zPoles, Complex[] zZeros) ToZ(Complex[] pPoles, Complex[] pZeros, double dt)
         {
             if (pPoles is null) throw new ArgumentNullException(nameof(pPoles));
@@ -56,10 +61,24 @@ namespace MathCore.DSP.Filters
             return (z_poles, z_zeros);
         }
 
+        /// <summary>Преобразование нулей/полюсов из p-плоскости в z-плоскость</summary>
+        /// <param name="p">Перечисление нулей/полюсов p-плоскости</param>
+        /// <param name="dt">Период дискретизации</param>
+        /// <returns>Нули/полюса z-плоскости</returns>
         public static IEnumerable<Complex> ToZ(IEnumerable<Complex> p, double dt) => p.Select(z => ToZ(z, dt));
 
+        /// <summary>Преобразование нулей/полюсов из p-плоскости в z-плоскость с масштабированием</summary>
+        /// <param name="p">Перечисление нулей/полюсов p-плоскости</param>
+        /// <param name="W0">Коэффициент масштабирования</param>
+        /// <param name="dt">Период дискретизации</param>
+        /// <returns>Нули/полюса z-плоскости с масштабированием</returns>
         public static IEnumerable<Complex> ToZ(IEnumerable<Complex> p, double W0, double dt) => p.Select(z => ToZ(z * W0, dt));
 
+        /// <summary>Преобразоване нулей/полюсов в массив в z-плоскости</summary>
+        /// <param name="p">Нули/полюса p-плоскости</param>
+        /// <param name="dt">Частота дискретизации</param>
+        /// <param name="W0">Коэффициент масштабирования</param>
+        /// <returns>Массив нулей/полюсов z-плоскости</returns>
         public static Complex[] ToZArray(IEnumerable<Complex> p, double dt, double W0 = 1) => ToZ(p, W0, dt).ToArray();
 
         /// <summary>Преобразование полюса из z-плоскости в p-плоскость</summary>
@@ -80,7 +99,7 @@ namespace MathCore.DSP.Filters
             var (re, im) = poles.Aggregate(Real, (current, p0) => current * (k - p0));
             return (im / re).Abs() <= 1e-15
                 ? 1 / re
-                : throw new InvalidOperationException("Комплексный результат");
+                : throw new InvalidOperationException($"Вычисления привели к комплексному результату {new Complex(re, im)}");
         }
 
         /// <summary>Вектор состояния</summary>
@@ -91,7 +110,8 @@ namespace MathCore.DSP.Filters
 
         /// <summary>Инициализация нового цифрового фильтра</summary>
         /// <param name="Order">Порядок фильтра</param>
-        protected DigitalFilter(int Order) => State = new double[Order];
+        /// <exception cref="ArgumentOutOfRangeException">Если порядок фильтра 0, или меньше</exception>
+        protected DigitalFilter(int Order) => State = new double[Order > 0 ? Order : throw new ArgumentOutOfRangeException(nameof(Order), Order, "Порядок фильтра должен быть больше 0")];
 
         /// <summary>Обработать очередной отсчёт цифрового сигнала</summary>
         /// <param name="Sample">Обрабатываемый отсчёт цифрового сигнала</param>

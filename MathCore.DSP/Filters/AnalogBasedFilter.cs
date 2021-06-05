@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 
+using static MathCore.Consts;
+
 namespace MathCore.DSP.Filters
 {
     /// <summary>Цифровой фильтр на основе аналогового прототипа</summary>
@@ -28,10 +30,13 @@ namespace MathCore.DSP.Filters
             public static IEnumerable<Complex> ToHigh(IEnumerable<Complex> Z, double wp) => Z.Select(z => wp * z);
 
             /// <summary>Преобразование нулей/полюсов фильтра ФНЧ-ППФ</summary>
-            /// <param name="Z">Нули/полюса прототипа (нормированного ФНЧ)</param>
-            /// <param name="wpl">Нижняя частота среза ППФ</param>
-            /// <param name="wph">Верхняя частота среза ППФ</param>
+            /// <param name="Poles">Полюса прототипа (нормированного ФНЧ)</param>
+            /// <param name="Zeros">Нули прототипа (нормированного ФНЧ)</param>
+            /// <param name="fpl">Нижняя частота среза ППФ</param>
+            /// <param name="fph">Верхняя частота среза ППФ</param>
             /// <returns>Нули/полюса ППФ</returns>
+            /// <exception cref="ArgumentException">Если число полюсов == 0</exception>
+            /// <exception cref="ArgumentException">Если число нулей больше числа полюсов</exception>
             public static (Complex[] Poles, Complex[] Zeros) ToBandPass(
                 Complex[] Poles,
                 Complex[] Zeros,
@@ -42,8 +47,8 @@ namespace MathCore.DSP.Filters
                 if (Poles.Length == 0) throw new ArgumentException("Размер вектора полюсов должен быть больше 0", nameof(Poles));
                 if (Zeros.Length > Poles.Length) throw new ArgumentException("Число нулей не должна быть больше числа полюсов", nameof(Zeros));
 
-                var wpl = Consts.pi2 * fpl;
-                var wph = Consts.pi2 * fph;
+                var wpl = pi2 * fpl;
+                var wph = pi2 * fph;
 
                 var dw = (wph - wph) / 2;
                 var wc2 = wpl * wph;
@@ -80,39 +85,66 @@ namespace MathCore.DSP.Filters
             }
         }
 
+        /// <summary>Спецификация фильтра</summary>
         public readonly ref struct Specification
         {
+            /// <summary>Период дискретизации</summary>
             public double dt { get; }
 
+            /// <summary>Граничная частота полосы пропускания</summary>
             public double fp { get; }
+            /// <summary>Граничная частота полосы заграждения</summary>
             public double fs { get; }
 
+            /// <summary>Граничная циклическая частота полосы пропускания</summary>
             public double wp { get; }
+            /// <summary>Граничная циклическая частота полосы заграждения</summary>
             public double ws { get; }
 
+            /// <summary>Граничная частота полосы пропускания цифрового фильтра</summary>
             public double Fp { get; }
+            /// <summary>Граничная частота полосы заграждения цифрового фильтра</summary>
             public double Fs { get; }
 
+            /// <summary>Граничная циклическая частота полосы пропускания цифрового фильтра</summary>
             public double Wp { get; }
+            /// <summary>Граничная циклическая частота полосы заграждения цифрового фильтра</summary>
             public double Ws { get; }
 
+            /// <summary>Коэффициент передачи в полосе пропускания</summary>
             public double Gp { get; }
+            /// <summary>Коэффициент передачи в полосе подавления</summary>
             public double Gs { get; }
 
+            /// <summary>Коэффициент подавления в полосе пропускания (дБ)</summary>
             public double Rp { get; }
+            /// <summary>Коэффициент подавления в полосе заграждения (дБ)</summary>
             public double Rs { get; }
 
+            /// <summary>Неоднородность АЧХ в полосе пропускания</summary>
             public double EpsP { get; }
+            /// <summary>Неоднородность АЧХ в полосе заграждения</summary>
             public double EpsS { get; }
 
+            /// <summary>Отношение неоднородностей коэффициентов передачи заграждения и пропускания</summary>
             public double kEps => EpsS / EpsP;
+            /// <summary>Отношение частотных полос заграждения и пропускания</summary>
             public double kw => fs / fp;
+            /// <summary>Отношение частотных полос заграждения и пропускания цифрового фильтра</summary>
             public double kW => Fs / Fp;
 
+            /// <summary>Инициализация новой спецификации фильтра</summary>
+            /// <param name="dt">Период дискретизации</param>
+            /// <param name="fp">Граничная частота полосы пропускания</param>
+            /// <param name="fs">Граничная частота полосы заграждения</param>
+            /// <param name="Gp">Коэффициент передачи в полосе пропускания</param>
+            /// <param name="Gs">Коэффициент передачи в полосе заграждения</param>
+            /// <exception cref="InvalidOperationException">Если частота пропускания больше, либо равна частоте подавления</exception>
+            /// <exception cref="InvalidOperationException">Если частота пропускания больше, либо равна половине частоты дискретизации</exception>
             public Specification(double dt, double fp, double fs, double Gp, double Gs)
             {
                 if (!(fp < fs)) throw new InvalidOperationException("Частота пропускания должна быть меньше частоты подавления");
-                if (!(fp < 1 / (2 * dt))) throw new InvalidOperationException();
+                if (!(fp < 1 / (2 * dt))) throw new InvalidOperationException("Частота пропускания должен быть меньше половины полосы дискретизации");
 
                 this.dt = dt;
                 this.fp = fp;
@@ -126,17 +158,30 @@ namespace MathCore.DSP.Filters
                 EpsP = (10d.Pow(Rp / 10) - 1).Sqrt();
                 EpsS = (10d.Pow(Rs / 10) - 1).Sqrt();
 
+                //var tEpsP = (1 / Gp.Pow2() - 1).Sqrt();
+                //var tEpsS = (1 / Gs.Pow2() - 1).Sqrt();
+
+                //var tEpsP = (1 - Gp*Gp).Sqrt() / (Gp*Gp);
+                //var tEpsS = (1 - Gs*Gs).Sqrt() / (Gs*Gs);
+
                 Fp = ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
                 Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового пропита
 
-                wp = Consts.pi2 * fp;
-                ws = Consts.pi2 * fp;
+                wp = pi2 * fp;
+                ws = pi2 * fp;
 
-                Wp = Consts.pi2 * Fp;
-                Ws = Consts.pi2 * Fp;
+                Wp = pi2 * Fp;
+                Ws = pi2 * Fp;
             }
         }
 
+        /// <summary>Создать спецификацию фильтра</summary>
+        /// <param name="dt">Период дискретизации</param>
+        /// <param name="fp">Граничная частота полосы пропускания</param>
+        /// <param name="fs">Граничная частота полосы заграждения</param>
+        /// <param name="Gp">Коэффициент передачи в полосе пропускания</param>
+        /// <param name="Gs">Коэффициент передачи в полосе заграждения</param>
+        /// <returns>Спецификация фильтра</returns>
         public static Specification GetSpecification(double dt, double fp, double fs, double Gp, double Gs) => new(dt, fp, fs, Gp, Gs);
 
         /// <summary>Инициализация параметров цифрового фильтра на базе аналогового прототипа</summary>

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
 using static System.Math;
@@ -24,7 +25,7 @@ namespace MathCore.DSP.Filters
             IICorrected
         }
 
-        protected static Complex[] GetNormedPolesI(int N, double EpsP)
+        protected static IEnumerable<Complex> GetNormedPolesI(int N, double EpsP)
         {
             var r = N % 2;                              // Нечётность порядка фильтра
             var dth = PI / N;                      // Угловой шаг между полюсами
@@ -40,11 +41,9 @@ namespace MathCore.DSP.Filters
 
                 var sin = Sin(th);
                 var cos = Cos(th);
-                poles[i] = new Complex(-sh * sin, ch * cos);
-                poles[i + 1] = poles[i].ComplexConjugate;
+                yield return new Complex(-sh * sin, ch * cos);
+                yield return poles[i].ComplexConjugate;
             }
-
-            return poles;
         }
 
         protected static (Complex[] Zeros, Complex[] Poles) GetNormedPolesII(int N, double EpsS)

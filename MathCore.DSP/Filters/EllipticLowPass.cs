@@ -66,7 +66,7 @@ namespace MathCore.DSP.Filters
         /// <param name="Gp">Затухание в полосе пропускания (0.891250938 = -1 дБ)</param>
         /// <param name="Gs">Затухание в полосе заграждения (0.005623413 = -45 дБ)</param>
         public EllipticLowPass(double dt, double fp, double fs, double Gp = 0.891250938, double Gs = 0.005623413)
-            : this(Initialize(GetSpecification(dt, fp, fs, Gp, Gs)))
+            : this(GetSpecification(dt, fp, fs, Gp, Gs))
         {
             this.fp = fp;
             this.fs = fs;
@@ -74,6 +74,8 @@ namespace MathCore.DSP.Filters
             this.Gp = Gp;
             this.Gs = Gs;
         }
+
+        public EllipticLowPass(Specification Spec) : this(Initialize(Spec)) { }
 
         /// <summary>Инициализация нового Эллиптического фильтра</summary>
         /// <param name="config">Кортеж, содержащий массив коэффициентов полинома числителя и знаменателя</param>

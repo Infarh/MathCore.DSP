@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 
+using static System.Array;
+
 namespace MathCore.DSP.Filters
 {
     /// <summary>Фильтр с конечной импульсной характеристикой</summary>
@@ -10,7 +12,7 @@ namespace MathCore.DSP.Filters
         private readonly double[] _ImpulseResponse;
 
         /// <summary>Импульсная характеристика</summary>
-        public ReadOnlyCollection<double> ImpulseResponse => Array.AsReadOnly(_ImpulseResponse);
+        public ReadOnlyCollection<double> ImpulseResponse => AsReadOnly(_ImpulseResponse);
 
         /// <summary>Инициализация нового цифрового фильтра с конечной импульсной характеристикой</summary>
         /// <param name="ImpulseResponse">Отсчёты импульсной характеристики фильтра</param>
