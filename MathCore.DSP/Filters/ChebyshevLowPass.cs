@@ -85,7 +85,7 @@ namespace MathCore.DSP.Filters
         /// <param name="Gs">Затухание в полосе заграждения (0.005623413 = -45 дБ)</param>
         /// <param name="Type">Тип (род) фильтра чебышева</param>
         public ChebyshevLowPass(double dt, double fp, double fs, double Gp = 0.891250938, double Gs = 0.005623413, ChebyshevType Type = ChebyshevType.I)
-            : this(GetSpecification(dt, fp, fs, Gp, Gs), Type) => FilterType = Type;
+            : this(GetSpecification(dt, fp, fs, Gp, Gs), Type) { }
 
         public ChebyshevLowPass(Specification Spec, ChebyshevType Type = ChebyshevType.I)
             : this(Type switch
@@ -94,8 +94,8 @@ namespace MathCore.DSP.Filters
                 ChebyshevType.II => InitializeII(Spec),
                 ChebyshevType.IICorrected => InitializeIICorrected(Spec),
                 _ => throw new InvalidEnumArgumentException(nameof(Type), (int)Type, typeof(ChebyshevType))
-            }) { }
+            }, Spec) => FilterType = Type;
 
-        private ChebyshevLowPass((double[] A, double[] B) config) : base(config.B, config.A) { }
+        private ChebyshevLowPass((double[] A, double[] B) config, Specification Spec) : base(config.B, config.A, Spec) { }
     }
 }

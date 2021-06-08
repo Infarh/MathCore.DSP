@@ -80,6 +80,6 @@ namespace MathCore.DSP.Filters
         }
 
         /// <inheritdoc />
-        protected ChebyshevFilter(double[] B, double[] A) : base(B, A) { }
+        protected ChebyshevFilter(double[] B, double[] A, Specification Spec) : base(B, A, Spec) { }
     }
 }

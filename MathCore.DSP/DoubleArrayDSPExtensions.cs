@@ -89,18 +89,18 @@ namespace MathCore.DSP
         /// <param name="B">Массив коэффициентов прямых связей</param>
         /// <param name="f">Частота, на которой требуется рассчитать коэффициент передачи фильтра</param>
         /// <returns>Значение комплексного коэффициента передачи рекуррентного фильтра на заданной частоте</returns>
-        public static Complex GetTransmissionCoefficient(double[] A, double[] B, double f)
+        public static Complex GetTransmissionCoefficient(IReadOnlyList<double> A, IReadOnlyList<double> B, double f)
         {
             //var p = new Complex(0, 2 * Math.PI * f);
             var p = Complex.Exp(-2 * Math.PI * f);
 
-            static Complex Sum(double[] V, Complex p)
+            static Complex Sum(IReadOnlyList<double> V, Complex p)
             {
                 var sum_re = V[^1];
                 var sum_im = 0d;
                 var (exp_re, exp_im) = p;
 
-                for (var i = V.Length - 2; i >= 0; i--)
+                for (var i = V.Count - 2; i >= 0; i--)
                 {
                     var s_re = sum_re * exp_re - sum_im * exp_im + V[i];
                     var s_im = sum_re * exp_im + sum_im * exp_re;

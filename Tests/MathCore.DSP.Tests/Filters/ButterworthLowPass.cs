@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Dynamic;
 using System.Linq;
 
 using MathCore.DSP.Filters;
@@ -160,11 +161,97 @@ namespace MathCore.DSP.Tests.Filters
         }
 
         [TestMethod]
+        public void Creation_fp500_ps1500_fd_5000()
+        {
+            const double fp = 500;    // Гц // Граничная частота полосы пропускания
+            const double fs = 1500;    // Гц // Граничная частота полосы запирания
+            const double fd = 5000;      // Гц // Частота дискретизации
+            const double dt = 1 / fd; // 2с // Период дискретизации
+            const double Rp = 1;  // Неравномерность в полосе пропускания (дБ)
+            const double Rs = 30; // Неравномерность в полосе пропускания (дБ)
+            var Gp = (-Rp).From_dB();
+            var Gs = (-Rs).From_dB();
+
+            var eps_p = (10d.Pow(Rp / 10) - 1).Sqrt();
+            var eps_s = (10d.Pow(Rs / 10) - 1).Sqrt();
+
+            var Fp = DigitalFilter.ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
+            var Fs = DigitalFilter.ToAnalogFrequency(fs, dt);  // Частота подавления аналогового прототипа
+
+            var k_eps = eps_s / eps_p;
+            var k_W = Fs / Fp;
+
+            var double_n = Log(k_eps) / Log(k_W);
+
+            var N = (int)double_n;
+            if (double_n - N > 0) N += 1;
+
+            var L = N / 2;
+            var r = N % 2;
+
+            var alpha = eps_p.Pow(-1d / N);
+
+            var th0 = PI / N;
+
+            var poles = new Complex[N];
+            if (r != 0) poles[0] = -alpha;
+            for (var i = r; i < poles.Length; i += 2)
+            {
+                var w = th0 * (i + 1 - r - 0.5);
+                poles[i] = (-alpha * Sin(w), alpha * Cos(w));
+                poles[i + 1] = poles[i].ComplexConjugate;
+            }
+
+            var translated_poles = poles.ToArray(p => p * Consts.pi2 * Fp);
+            var z_poles = translated_poles.ToArray(p => DigitalFilter.ToZ(p, dt));
+            var kz = DigitalFilter.GetNormalizeCoefficient(translated_poles, dt);
+            var WpN = (Consts.pi2 * Fp).Pow(N);
+            var k = WpN * kz / eps_p;
+            var b = Range(0, N + 1).ToArray(i => k * BinomialCoefficient(N, i));
+            var a_complex = Polynom.Array.GetCoefficientsInverted(z_poles);
+            var a = a_complex.ToRe() ?? throw new AssertFailedException("Отсутствует ссылка на массив вещественных значений");
+
+            var filter = new DSP.Filters.ButterworthLowPass(dt, fp, fs, Gp, Gs);
+
+            Assert.That.Value(filter.Order).IsEqual(N);
+
+            var tr_k = filter.GetTransmissionCoefficient(fs, dt).Abs.In_dB();
+
+            Assert.That.Collection(filter.A).IsEqualTo(a, 3e-12);
+            Assert.That.Collection(filter.B).IsEqualTo(b, 1e-16);
+        }
+
+        [TestMethod]
         public void TransmissionCoefficient()
         {
             const double fp = 0.1;    // Гц // Граничная частота полосы пропускания
             const double fs = 0.3;    // Гц // Граничная частота полосы запирания
             const double fd = 1;      // Гц // Частота дискретизации
+            const double dt = 1 / fd; // 2с // Период дискретизации
+            const double Rp = 1;  // Неравномерность в полосе пропускания (дБ)
+            const double Rs = 30; // Неравномерность в полосе пропускания (дБ)
+            var Gp = (-Rp).From_dB();
+            var Gs = (-Rs).From_dB();
+
+            var filter = new DSP.Filters.ButterworthLowPass(dt, fp, fs, Gp, Gs);
+
+            var transmission_0 = filter.GetTransmissionCoefficient(0, dt);
+            var transmission_fp = filter.GetTransmissionCoefficient(fp, dt);
+            var transmission_fs = filter.GetTransmissionCoefficient(fs, dt);
+            var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2, dt);
+
+            Assert.That.Value(transmission_0.Abs).IsEqual(1, 4.45e-16);
+            Assert.That.Value(transmission_fp.Abs).IsEqual(Gp, 6.67e-016);
+            Assert.That.Value(transmission_fs.Abs).LessOrEqualsThan(Gs);
+            Assert.That.Value(transmission_fd05.Abs).IsEqual(0, 4.27e-34);
+        }
+
+        [TestMethod]
+        public void TransmissionCoefficient_fp500_ps600_fd_5000()
+        {
+            const double fp = 500;    // Гц // Граничная частота полосы пропускания
+            const double fs = 1500;    // Гц // Граничная частота полосы запирания
+            const double fd = 5000;      // Гц // Частота дискретизации
             const double dt = 1 / fd; // 2с // Период дискретизации
             const double Rp = 1;  // Неравномерность в полосе пропускания (дБ)
             const double Rs = 30; // Неравномерность в полосе пропускания (дБ)

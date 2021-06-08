@@ -164,6 +164,86 @@ namespace MathCore.DSP.Tests.Filters
         }
 
         [TestMethod]
+        public void TypeI_Creation_fp500_fs1500_fd5000_Rp1_Rs30()
+        {
+            const double fd = 5000;             // Частота дискретизации
+            const double dt = 1 / fd;           // Период дискретизации
+
+            const double fp = 500;   // Граничная частота конца интервала пропускания
+            const double fs = 1500;   // Граничная частота начала интервала подавления
+
+            const double Rp = 1;              // Неравномерность в полосе пропускания (дБ)
+            const double Rs = 30;               // Затухание в полосе подавления (дБ)
+
+            #region Аналитический расчёт
+
+            var eps_p = (10d.Pow(Rp / 10) - 1).Sqrt();
+            var eps_s = (10d.Pow(Rs / 10) - 1).Sqrt();
+
+            var Gp = (-Rp).From_dB();
+            var Gs = (-Rs).From_dB();
+
+            var Fp = ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
+            var Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового прототипа
+
+            var Wp = Consts.pi2 * Fp;
+            var Ws = Consts.pi2 * Fs;
+
+            var k_eps = eps_s / eps_p;
+            var k_W = Ws / Wp;
+
+            var N = (int)Ceiling(arcch(k_eps) / arcch(k_W)); // Порядок фильтра
+
+            var r = N % 2;                              // Нечётность порядка фильтра
+            var dth = PI / N;                      // Угловой шаг между полюсами
+            var beta = arcsh(1 / eps_p) / N;
+
+            var sh = Sinh(beta);
+            var ch = Cosh(beta);
+            var poles = new Complex[N];                 // Массив полюсов фильтра
+            if (r != 0) poles[0] = -sh;                 // Если порядок фильтра нечётный, то первым добавляем центральный полюс
+            for (var i = r; i < poles.Length; i += 2)   // Расчёт полюсов
+            {
+                var n = (i - r) / 2 + 1;
+                var th = dth * (n - 0.5);
+
+                var sin = Sin(th);
+                var cos = Cos(th);
+                poles[i] = new Complex(-sh * sin, ch * cos);
+                poles[i + 1] = poles[i].ComplexConjugate;
+            }
+
+            var comparer = new LambdaEqualityComparer<Complex>((x1, x2) => (x1 - x2).Abs < 1e-14);
+
+            var z_poles = ToZArray(poles, dt, Wp);
+
+            var (A, a_im) = GetCoefficientsInverted(z_poles);
+
+            var G_norm = (r > 0 ? 1 : Gp)
+                / (2.Power(N) / z_poles.Aggregate(Complex.Real, (Z, z) => Z * (1 - z), z => z.Re));
+
+            var B = Range(0, N + 1).ToArray(i => G_norm * SpecialFunctions.BinomialCoefficient(N, i));
+
+            // Проверяем коэффициенты передачи рассчитанного фильтра
+            var H0 = GetTransmissionCoefficient(A, B, 0).Abs;          // == (r == 1 ? 1 : Gp)
+            var Hp = GetTransmissionCoefficient(A, B, fp / fd).Abs;    // == Gp
+            var Hs = GetTransmissionCoefficient(A, B, fs / fd).Abs;    // <= Gs
+            var Hd = GetTransmissionCoefficient(A, B, 0.5).Abs;        // == 0
+
+            Assert.That.Value(H0).IsEqual(r == 1 ? 1 : Gp, 1.59e-14);
+            Assert.That.Value(Hp).IsEqual(Gp, 9.78e-15);
+            Assert.That.Value(Hs).LessOrEqualsThan(Gs);
+            Assert.That.Value(Hd).IsEqual(0, 5.67e-20);
+
+            #endregion
+
+            var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+
+            Assert.That.Collection(filter.A).IsEqualTo(A);
+            Assert.That.Collection(filter.B).IsEqualTo(B);
+        }
+
+        [TestMethod]
         public void TypeII_Creation()
         {
             const double pi2 = 2 * PI;

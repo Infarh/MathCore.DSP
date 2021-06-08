@@ -4,6 +4,8 @@ using System.Linq;
 using System.Runtime.Serialization;
 
 using static MathCore.Consts;
+// ReSharper disable InconsistentNaming
+// ReSharper disable ParameterHidesMember
 
 namespace MathCore.DSP.Filters
 {
@@ -68,15 +70,15 @@ namespace MathCore.DSP.Filters
                 for (var i = 0; i < Poles.Length; i++)
                 {
                     var pdw = dw * Poles[i];
-                    Set(pdw, Complex.Sqrt(pdw.Power - wc2), 
-                        out poles[2 * i], 
+                    Set(pdw, Complex.Sqrt(pdw.Power - wc2),
+                        out poles[2 * i],
                         out poles[2 * i + 1]);
                 }
 
                 for (var i = 0; i < Zeros.Length; i++)
                 {
                     var pdw = dw * Zeros[i];
-                    Set(pdw, Complex.Sqrt(pdw.Power - wc2), 
+                    Set(pdw, Complex.Sqrt(pdw.Power - wc2),
                         out zeros[2 * i],
                         out zeros[2 * i + 1]);
                 }
@@ -90,6 +92,9 @@ namespace MathCore.DSP.Filters
         {
             /// <summary>Период дискретизации</summary>
             public double dt { get; }
+
+            /// <summary>Частота дискретизации</summary>
+            public double fd => 1 / dt;
 
             /// <summary>Граничная частота полосы пропускания</summary>
             public double fp { get; }
@@ -173,6 +178,9 @@ namespace MathCore.DSP.Filters
                 Wp = pi2 * Fp;
                 Ws = pi2 * Fp;
             }
+
+            public void Deconstruct(out double dt, out double fp, out double fs, out double Gp, out double Gs) =>
+                (dt, fp, fs, Gp, Gs) = (this.dt, this.fp, this.fs, this.Gp, this.Gs);
         }
 
         /// <summary>Создать спецификацию фильтра</summary>
@@ -184,9 +192,31 @@ namespace MathCore.DSP.Filters
         /// <returns>Спецификация фильтра</returns>
         public static Specification GetSpecification(double dt, double fp, double fs, double Gp, double Gs) => new(dt, fp, fs, Gp, Gs);
 
+        /// <summary>Период дискретизации</summary>
+        public double dt { get; }
+
+        /// <summary>Частота дискретизации</summary>
+        public double fd => 1 / dt;
+
+        /// <summary>Граничная частота полосы пропускания</summary>
+        public double fp { get; }
+
+        /// <summary>Граничная частота полосы подавления</summary>
+        public double fs { get; }
+
+        /// <summary>Затухание в полосе пропускания</summary>
+        public double Gp { get; }
+
+        /// <summary>Затухание в полосе подавления</summary>
+        public double Gs { get; }
+
+        /// <summary>Спецификация фильтра</summary>
+        public Specification Spec => new(dt, fp, fs, Gp, Gs);
+
         /// <summary>Инициализация параметров цифрового фильтра на базе аналогового прототипа</summary>
         /// <param name="B">Коэффициенты полинома числителя</param>
         /// <param name="A">Коэффициенты полинома знаменателя</param>
-        protected AnalogBasedFilter(double[] B, double[] A) : base(B, A) { }
+        /// <param name="Spec">Спецификация фильтра</param>
+        protected AnalogBasedFilter(double[] B, double[] A, Specification Spec) : base(B, A) => (dt, fp, fs, Gp, Gs) = Spec;
     }
 }

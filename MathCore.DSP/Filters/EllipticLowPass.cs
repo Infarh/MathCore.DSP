@@ -53,12 +53,6 @@ namespace MathCore.DSP.Filters
             return (A!, B!);
         }
 
-        public double fp { get; }
-        public double fs { get; }
-        public double dt { get; }
-        public double Gp { get; }
-        public double Gs { get; }
-
         /// <summary>Инициализация нового Эллиптического фильтра нижних частот</summary>
         /// <param name="dt">Период дискретизации</param>
         /// <param name="fp">Частота пропускания</param>
@@ -66,19 +60,12 @@ namespace MathCore.DSP.Filters
         /// <param name="Gp">Затухание в полосе пропускания (0.891250938 = -1 дБ)</param>
         /// <param name="Gs">Затухание в полосе заграждения (0.005623413 = -45 дБ)</param>
         public EllipticLowPass(double dt, double fp, double fs, double Gp = 0.891250938, double Gs = 0.005623413)
-            : this(GetSpecification(dt, fp, fs, Gp, Gs))
-        {
-            this.fp = fp;
-            this.fs = fs;
-            this.dt = dt;
-            this.Gp = Gp;
-            this.Gs = Gs;
-        }
+            : this(GetSpecification(dt, fp, fs, Gp, Gs)) { }
 
-        public EllipticLowPass(Specification Spec) : this(Initialize(Spec)) { }
+        public EllipticLowPass(Specification Spec) : this(Initialize(Spec), Spec) { }
 
         /// <summary>Инициализация нового Эллиптического фильтра</summary>
         /// <param name="config">Кортеж, содержащий массив коэффициентов полинома числителя и знаменателя</param>
-        private EllipticLowPass((double[] A, double[] B) config) : base(config.B, config.A) { }
+        private EllipticLowPass((double[] A, double[] B) config, Specification Spec) : base(config.B, config.A, Spec) { }
     }
 }

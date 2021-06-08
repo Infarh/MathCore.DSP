@@ -51,8 +51,8 @@ namespace MathCore.DSP.Filters
 
         /// <summary>Инициализация нового фильтра Баттерворта нижних частот</summary>
         /// <param name="Spec">Спецификация фильтра</param>
-        public ButterworthLowPass(Specification Spec) : this(GetPolynoms(Spec)) { }
+        public ButterworthLowPass(Specification Spec) : this(GetPolynoms(Spec), Spec) { }
 
-        private ButterworthLowPass((double[] A, double[] B) config) : base(config.B, config.A) { }
+        private ButterworthLowPass((double[] A, double[] B) config, Specification Spec) : base(config.B, config.A, Spec) { }
     }
 }

@@ -27,8 +27,6 @@ namespace MathCore.DSP.Filters
             // Угловой шаг между полюсами
             var dth = PI / N;
 
-            // Массив полюсов фильтра
-            var poles = new Complex[N];
             // Если порядок фильтра нечётный, то первым добавляем центральный полюс
             if (r != 0) yield return -alpha;
             // Расчёт полюсов
@@ -45,6 +43,7 @@ namespace MathCore.DSP.Filters
         /// <summary>Инициализация фильтра Баттерворта</summary>
         /// <param name="B">Коэффициенты полинома числителя</param>
         /// <param name="A">Коэффициенты полинома знаменателя</param>
-        protected ButterworthFilter(double[] B, double[] A) : base(B, A) { }
+        /// <param name="Spec">Спецификация фильтра</param>
+        protected ButterworthFilter(double[] B, double[] A, Specification Spec) : base(B, A, Spec) { }
     }
 }

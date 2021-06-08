@@ -269,6 +269,147 @@ namespace MathCore.DSP.Tests.Filters
         }
 
         [TestMethod]
+        public void Creation_fp500_fs1500_fd5000_Rp1_Rs30()
+        {
+            //https://ru.dsplib.org/content/filter_ellip_ap/filter_ellip_ap.html
+
+            const double fd = 5000;         // Частота дискретизации
+            const double dt = 1 / fd;       // Период дискретизации
+
+            const double fp = 500;     // Граничная частота конца интервала пропускания
+            const double fs = 1500;     // Граничная частота начала интервала подавления
+
+            const double Rp = 1;    // Неоднородность АЧХ в интервале пропускания не более 1 дБ
+            const double Rs = 30;   // Уровень подавления более 45 дБ
+
+            var Gp = (-Rp).From_dB();   // Значения АЧХ в интервале пропускания
+            var Gs = (-Rs).From_dB();   // Значения АЧХ в интервале подавления
+
+            #region Аналитический расчёт фильтра
+
+            // Рассчитываем частоты цифрового фильтра
+            var Fp = DigitalFilter.ToAnalogFrequency(fp, dt);
+            var Fs = DigitalFilter.ToAnalogFrequency(fs, dt);
+
+            // Круговые частоты
+            var Wp = Consts.pi2 * Fp;
+            //var Ws = Consts.pi2 * Fs;
+
+            // Допуск на АЧХ в интервале пропускания
+            var eps_p = (Pow(10, Rp / 10) - 1).Sqrt();
+            // Допуск на АЧХ в интервале подавления
+            var eps_s = (Pow(10, Rs / 10) - 1).Sqrt();
+
+            var k_W = fp / fs;
+            var k_eps = eps_p / eps_s;
+
+            var K_w = FullEllipticIntegral(k_W);
+
+            var T_w = FullEllipticIntegralComplimentary(k_W);
+
+            var K_eps = FullEllipticIntegral(k_eps);
+
+            var T_eps = FullEllipticIntegralComplimentary(k_eps);
+
+            // Оценка снизу порядка фильтра
+            var double_N = T_eps * K_w / (K_eps * T_w);
+
+            var N = (int)Ceiling(double_N); // Порядок фильтра
+
+            var L = N / 2;  // Число комплексно сопряжённых полюсов
+            var r = N % 2;  // Число (0 или 1) действительных полюсов - (чётность фильтра)
+
+            // Эллиптический модуль
+            var u = Enumerable.Range(1, L).ToArray(i => (2 * i - 1d) / N);
+
+            var m = (1 - k_eps * k_eps).Sqrt();
+
+            var kp = m.Power(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Power(4));
+
+            k_W = (1 - kp * kp).Sqrt();
+
+            var v0_complex = sn_inverse((0, 1 / eps_p), k_eps) / N;
+
+            var zeros = new Complex[N - r]; // Массив нулей (на r меньше числа полюсов)
+            var poles = new Complex[N];     // Массив полюсов
+
+            // Если фильтр нечётный, то первым полюсом будет действительный полюс
+            if (r != 0) poles[0] = Complex.i * sn_uk(v0_complex, k_W);
+            for (var i = 0; i < L; i++)
+            {
+                // Меняем местами действительную и мнимую часть вместо домножения на комплексную единицу
+                var (p_im, p_re) = cd_uk(u[i] - v0_complex, k_W);
+
+                poles[r + 2 * i] = (-p_re, p_im);
+                poles[r + 2 * i + 1] = poles[r + 2 * i].ComplexConjugate;
+
+                var p0_im = 1 / (k_W * cd_uk(u[i], k_W));
+                zeros[2 * i] = (0, p0_im);
+                zeros[2 * i + 1] = zeros[2 * i].ComplexConjugate;
+            }
+
+            // Рассчитываем коэффициенты полиномов числителя и знаменателя передаточной функции
+            // аналогового прототипа H(p) = Q(p) / P(p)
+            var analog_numerator_coefficients = GetCoefficientsInverted(zeros);     // Q(p)
+            var analog_denominator_coefficients = GetCoefficientsInverted(poles);   // P(p)
+
+            var (analog_b, _) = analog_numerator_coefficients;
+            var (analog_a, _) = analog_denominator_coefficients;
+
+            var norm_k = analog_b[^1] / analog_a[^1];
+
+            var translated_zeros = zeros.ToArray(p => p * Wp);
+            var translated_poles = poles.ToArray(p => p * Wp);
+
+            var z_zeros = translated_zeros.ToArray(z => DigitalFilter.ToZ(z, dt));
+            var z_poles = translated_poles.ToArray(z => DigitalFilter.ToZ(z, dt));
+
+            if (r > 0)
+            {
+                Array.Resize(ref z_zeros, z_zeros.Length + 1);
+                Array.Copy(z_zeros, 0, z_zeros, 1, z_zeros.Length - 1);
+                z_zeros[0] = -1;
+            }
+
+            var G_norm = (r > 0 ? 1 : 1 / (1 + eps_p * eps_p).Sqrt())
+                / (z_zeros.Aggregate(Complex.Real, (Z, z) => Z * (1 - z))
+                    / z_poles.Aggregate(Complex.Real, (Z, z) => Z * (1 - z))).Abs;
+
+            var (B, _) = GetCoefficientsInverted(z_zeros).ToArray(b => b * G_norm);
+            var (A, _) = GetCoefficientsInverted(z_poles);
+
+            // Проверяем коэффициенты передачи рассчитанного фильтра
+            var H0 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0).Abs;
+            var Hp = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fp / fd).Abs;
+            var Hps = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0.5 * (fp + fs) / fd).Abs;
+            var Hs = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fs / fd).Abs;
+            var Hd = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0.5).Abs;
+
+            //var H = Enumerable.Range(0, 101).Select(i => fd / 2 / 100 * i)
+            //   .Select(f => ($"{f,5} {DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, f / fd).Abs.In_dB().Round(2)}"))
+            //   .ToArray();
+
+            //var H0db = H0.In_dB();
+            //var Hpdb = Hp.In_dB();
+            //var Hpsdb = Hps.In_dB();
+            //var Hsdb = Hs.In_dB();
+            //var Hddb = Hd.In_dB();
+
+            const double eps = 1e-14;
+            Assert.That.Value(H0).IsEqual(1, eps);                 // Коэффициент на нулевой частоте должен быть равен 1
+            Assert.That.Value(Hp).GreaterOrEqualsThan(Gp, eps);    // Коэффициент передачи на граничной частоте конца интервала пропускания должен быть не меньше заданного значения Gp
+            Assert.That.Value(Hs).LessOrEqualsThan(Gs);            // Коэффициент передачи на граничной частоте начала интервала подавления должен быть не больше заданного значения Gs
+            Assert.That.Value(Hd).IsEqual(0, eps);                 // Коэффициент передачи на частоте, равной половине частоты дискретизации (соответствующей бесконечно большой частоте) должен быть равен нулю
+
+            #endregion
+
+            var filter = new DSP.Filters.EllipticLowPass(dt, fp, fs, Gp, Gs);
+
+            Assert.That.Collection(filter.A).IsEqualTo(A, 1e-15);
+            Assert.That.Collection(filter.B).IsEqualTo(B, 1e-16);
+        }
+
+        [TestMethod]
         public void TransmissionCoefficient()
         {
             const double pi2 = 2 * PI;
