@@ -91,7 +91,7 @@ namespace MathCore.DSP.Filters
         /// <param name="poles">Набор полюсов</param>
         /// <param name="dt">Период дискретизации</param>
         /// <returns>Нормирующий множитель</returns>
-        public static double GetNormalizeCoefficient([NotNull] IEnumerable<Complex> poles, double dt)
+        public static double GetNormalizeCoefficient(IEnumerable<Complex> poles, double dt)
         {
             if (poles is null) throw new ArgumentNullException(nameof(poles));
 

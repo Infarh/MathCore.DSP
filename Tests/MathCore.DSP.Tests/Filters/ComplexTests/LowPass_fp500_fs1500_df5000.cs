@@ -66,7 +66,6 @@ namespace MathCore.DSP.Tests.Filters.ComplexTests
             var specification = Information.GetSpecification();
             var filter = new DSP.Filters.EllipticLowPass(specification);
 
-
             var H = Enumerable.Range(1, 101).Select(i => filter.fd / 100 * i)
                .Select(f => $"{f,5} {GetTransmigrationCoefficient(filter, f, 1000).In_dB_byPower().Round(2)}")
                .ToArray();
