@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using MathCore.Annotations;
 using MathCore.DSP.Signals;
 
 using static System.Math;
@@ -117,7 +116,7 @@ namespace MathCore.DSP.Filters
         /// <param name="Sample">Обрабатываемый отсчёт цифрового сигнала</param>
         /// <param name="state">Вектор состояния фильтра</param>
         /// <returns>Значение сигнала на выходе фильтра после обработки отсчёта</returns>
-        public abstract double Process(double Sample, [NotNull] double[] state);
+        public abstract double Process(double Sample, double[] state);
 
         /// <summary>Обработать отсчёт цифрового сигнала</summary>
         /// <param name="Sample">Обрабатываемый отсчёт цифрового сигнала</param>
@@ -128,8 +127,8 @@ namespace MathCore.DSP.Filters
         /// <param name="Signal">Цифровой сигнал</param>
         /// <param name="state">Вектор состояния фильтра</param>
         /// <returns>Обработанный цифровой сигнал</returns>
-        [NotNull]
-        public DigitalSignal Process([NotNull] DigitalSignal Signal, [NotNull] double[] state)
+
+        public DigitalSignal Process(DigitalSignal Signal, double[] state)
         {
             if (Signal is null) throw new ArgumentNullException(nameof(Signal));
             if (state is null) throw new ArgumentNullException(nameof(state));
@@ -141,7 +140,7 @@ namespace MathCore.DSP.Filters
         /// <summary>Обработать цифровой сигнал независимо от состояния фильтра (вектор состояния создаётся на каждый вызов этого метода)</summary>
         /// <param name="Signal">Обрабатываемый цифровой сигнал</param>
         /// <returns>Обработанный цифровой сигнал</returns>
-        [NotNull] public DigitalSignal ProcessIndividual([NotNull] DigitalSignal Signal) => Process(Signal, new double[Order + 1]);
+        public DigitalSignal ProcessIndividual(DigitalSignal Signal) => Process(Signal, new double[Order + 1]);
 
         /// <summary>Сбросить состояние фильтра</summary>
         public override void Reset() => Array.Clear(State, 0, State.Length);
@@ -150,6 +149,6 @@ namespace MathCore.DSP.Filters
         /// <param name="f">Частота расчёта коэффициента передачи</param>
         /// <param name="dt">Период дискретизации</param>
         /// <returns>Комплексный коэффициент передачи фильтра</returns>
-        public Complex GetTransmissionCoefficient(double f, double dt) => GetTransmissionCoefficient(f * dt);
+        public virtual Complex GetTransmissionCoefficient(double f, double dt) => GetTransmissionCoefficient(f * dt);
     }
 }

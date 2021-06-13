@@ -426,10 +426,10 @@ namespace MathCore.DSP.Tests.Filters
 
             var filter = new DSP.Filters.EllipticLowPass(dt, fp, fs, Gp, Gs);
 
-            var transmission_0 = filter.GetTransmissionCoefficient(0, dt);
-            var transmission_fp = filter.GetTransmissionCoefficient(fp, dt);
-            var transmission_fs = filter.GetTransmissionCoefficient(fs, dt);
-            var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2, dt);
+            var transmission_0 = filter.GetTransmissionCoefficient(0);
+            var transmission_fp = filter.GetTransmissionCoefficient(fp);
+            var transmission_fs = filter.GetTransmissionCoefficient(fs);
+            var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
 
             var transmission_0_abs = transmission_0.Abs;
             var transmission_fp_abs = transmission_fp.Abs;

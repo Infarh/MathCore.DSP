@@ -3,6 +3,7 @@ using System.Linq;
 
 using MathCore.DSP.Filters;
 using MathCore.DSP.Signals;
+using MathCore.Vectors;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -41,8 +42,10 @@ namespace MathCore.DSP.Tests.Filters.ComplexTests
             }
         }
 
+        protected static void CheckTransmissionGreaterThan(AnalogBasedFilter Filter, double Gdb, Interval Freq, double Accuracy = 0, int M = 100, int N = 10000) =>
+            CheckTransmissionGreaterThan(Filter, Gdb, Freq.Min, Freq.Max, Accuracy, M, N);
 
-        private static void CheckTransmissionGreaterThan(AnalogBasedFilter Filter, double Gdb, double f1, double f2, double Accuracy = 0, int M = 100, int N = 10000)
+        protected static void CheckTransmissionGreaterThan(AnalogBasedFilter Filter, double Gdb, double f1, double f2, double Accuracy = 0, int M = 100, int N = 10000)
         {
             var df = (f2 - f1) / (M + 1);
             for (var i = 0; i < M; i++)
@@ -56,7 +59,7 @@ namespace MathCore.DSP.Tests.Filters.ComplexTests
             }
         }
 
-        private static void CheckTransmissionLessThen(AnalogBasedFilter Filter, double Gdb, double f1, double f2, double Accuracy = 0, int M = 100, int N = 10000)
+        protected static void CheckTransmissionLessThen(AnalogBasedFilter Filter, double Gdb, double f1, double f2, double Accuracy = 0, int M = 100, int N = 10000)
         {
             var df = (f2 - f1) / (M + 1);
             for (var i = 0; i < M; i++)
@@ -102,10 +105,12 @@ namespace MathCore.DSP.Tests.Filters.ComplexTests
         protected static double GetTransmigrationCoefficient(AnalogBasedFilter Filter, double f0, int N)
         {
             var x = f0 is 0d
-                ? MathEnumerableSignal.Const(1, Filter.dt, N)
-                : MathEnumerableSignal.Sin(1, f0, 0, Filter.dt, N);
+                ? MathEnumerableSignal.Const(Filter.dt, N)
+                : MathEnumerableSignal.Sin(Filter.dt, f0, N);
 
-            return Filter.ProcessIndividual(x).Power / x.Power;
+            var y = Filter.ProcessIndividual(x);
+            //var vv = y.Samples.Select(v => new Vector2D(v.Time, v.Value));
+            return y.Power / x.Power;
         }
 
         /// <summary>Проверка фильтра в полосе пропускания</summary>

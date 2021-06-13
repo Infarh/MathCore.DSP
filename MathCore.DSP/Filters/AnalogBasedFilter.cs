@@ -218,5 +218,25 @@ namespace MathCore.DSP.Filters
         /// <param name="A">Коэффициенты полинома знаменателя</param>
         /// <param name="Spec">Спецификация фильтра</param>
         protected AnalogBasedFilter(double[] B, double[] A, Specification Spec) : base(B, A) => (dt, fp, fs, Gp, Gs) = Spec;
+
+        public override Complex GetTransmissionCoefficient(double f) => base.GetTransmissionCoefficient(f / fd);
+
+        public override Complex GetTransmissionCoefficient(double f, double dt) => base.GetTransmissionCoefficient(f / fd);
+
+        public static IEnumerable<Complex> TransformToBandPassPoles(IEnumerable<Complex> NormedPoles, double fmin, double fmax)
+        {
+            var w_min = Consts.pi2 * fmin;
+            var w_max = Consts.pi2 * fmax;
+            var dw = (w_max - w_min) / 2;
+            var w2 = w_min * w_max;
+
+            foreach (var p in NormedPoles)
+            {
+                var pdw = p * dw;
+                var sqrt = Complex.Sqrt(pdw.Pow2() - w2);
+                yield return pdw + sqrt;
+                yield return pdw - sqrt;
+            }
+        }
     }
 }

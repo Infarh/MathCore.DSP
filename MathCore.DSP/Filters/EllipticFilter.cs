@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
 using static System.Linq.Enumerable;
@@ -55,5 +56,13 @@ namespace MathCore.DSP.Filters
         /// <param name="A">Коэффициенты полинома знаменателя</param>
         /// <param name="Spec">Спецификация фильтра</param>
         protected EllipticFilter(double[] B, double[] A, Specification Spec) : base(B, A, Spec) { }
+
+        /// <summary>Полный эллиптический интеграл</summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected static double K(double k) => FullEllipticIntegral(k);
+
+        /// <summary>Полный комплиментарный эллиптический интеграл</summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected static double T(double k) => FullEllipticIntegralComplimentary(k);
     }
 }

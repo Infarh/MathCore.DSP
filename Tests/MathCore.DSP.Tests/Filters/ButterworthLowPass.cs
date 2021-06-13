@@ -260,10 +260,10 @@ namespace MathCore.DSP.Tests.Filters
 
             var filter = new DSP.Filters.ButterworthLowPass(dt, fp, fs, Gp, Gs);
 
-            var transmission_0 = filter.GetTransmissionCoefficient(0, dt);
-            var transmission_fp = filter.GetTransmissionCoefficient(fp, dt);
-            var transmission_fs = filter.GetTransmissionCoefficient(fs, dt);
-            var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2, dt);
+            var transmission_0 = filter.GetTransmissionCoefficient(0);
+            var transmission_fp = filter.GetTransmissionCoefficient(fp);
+            var transmission_fs = filter.GetTransmissionCoefficient(fs);
+            var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
 
             Assert.That.Value(transmission_0.Abs).IsEqual(1, 4.45e-16);
             Assert.That.Value(transmission_fp.Abs).IsEqual(Gp, 6.67e-016);

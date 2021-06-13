@@ -14,14 +14,6 @@ namespace MathCore.DSP.Filters
 {
     public class EllipticLowPass : EllipticFilter
     {
-        /// <summary>Полный эллиптический интеграл</summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static double K(double k) => FullEllipticIntegral(k);
-
-        /// <summary>Полный комплиментарный эллиптический интеграл</summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static double T(double k) => FullEllipticIntegralComplimentary(k);
-
         /// <summary>Инициализация коэффициентов передаточной функции Эллиптического фильтра</summary>
         /// <returns>Кортеж с коэффициентами полинома числителя и знаменателя передаточной функции</returns>
         private static (double[] A, double[] B) Initialize(Specification opt)
@@ -65,7 +57,8 @@ namespace MathCore.DSP.Filters
         public EllipticLowPass(Specification Spec) : this(Initialize(Spec), Spec) { }
 
         /// <summary>Инициализация нового Эллиптического фильтра</summary>
-        /// <param name="config">Кортеж, содержащий массив коэффициентов полинома числителя и знаменателя</param>
-        private EllipticLowPass((double[] A, double[] B) config, Specification Spec) : base(config.B, config.A, Spec) { }
+        /// <param name="Polynoms">Кортеж, содержащий массив коэффициентов полинома числителя и знаменателя</param>
+        /// <param name="Spec">Спецификация фильтра</param>
+        private EllipticLowPass((double[] A, double[] B) Polynoms, Specification Spec) : base(Polynoms.B, Polynoms.A, Spec) { }
     }
 }

@@ -26,7 +26,7 @@ namespace MathCore.DSP.Filters
             var N = (int)Ceiling(Log(Spec.kEps) / Log(Spec.kW));
             var poles = GetNormPoles(N, Spec.EpsP);
 
-            var ppf_zeros = Enumerable.Repeat(new Complex(), N);
+            //var ppf_zeros = Enumerable.Repeat(new Complex(), N);
             var ppf_poles = TransformToBandPassPoles(poles, Fmin, Fmax).ToArray();
 
             var ppf_zeros_z = Enumerable.Repeat(Complex.ReValue(1), N).AppendLast(Enumerable.Repeat(Complex.ReValue(-1), N)).ToArray();
