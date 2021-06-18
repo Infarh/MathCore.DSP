@@ -7,6 +7,7 @@ using MathCore.DSP.Signals;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 // ReSharper disable UnusedVariable
 // ReSharper disable InconsistentNaming
+// ReSharper disable MemberCanBePrivate.Local
 
 namespace MathCore.DSP.Tests.Filters.ComplexTests
 {
@@ -46,9 +47,9 @@ namespace MathCore.DSP.Tests.Filters.ComplexTests
         public void Butterworth()
         {
             var filter = new ButterworthBandPass(
-                Information.dt, 
-                Information.fp, Information.fs, 
-                Information.fmin, Information.fmax, 
+                Information.dt,
+                Information.fp, Information.fs,
+                Information.fmin, Information.fmax,
                 (-Information.Rp).From_dB(), (-Information.Rs).From_dB());
 
             var spec = filter.Spec;
@@ -65,6 +66,11 @@ namespace MathCore.DSP.Tests.Filters.ComplexTests
             var h____1 = GetTransmigrationCoefficient(filter, 1, 1000).In_dB_byPower();
             var h_down = GetTransmigrationCoefficient(filter, 10, 1000).In_dB_byPower();
             var h__low = GetTransmigrationCoefficient(filter, 100, 1000).In_dB_byPower();
-        }   
-    }       
+        }
+
+        public void Elliptic()
+        {
+        
+        }
+    }
 }

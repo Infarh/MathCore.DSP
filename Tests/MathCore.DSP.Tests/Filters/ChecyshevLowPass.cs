@@ -74,17 +74,17 @@ namespace MathCore.DSP.Tests.Filters
             Assert.That.Value(k_eps).IsEqual(87.5385969314623);
             Assert.That.Value(k_W).IsEqual(1.8847407364824178);
 
-            var N = (int)Ceiling(arcch(k_eps) / arcch(k_W)); // Порядок фильтра
-            Assert.That.Value(N).IsEqual(5);
+            var order = (int)Ceiling(arcch(k_eps) / arcch(k_W)); // Порядок фильтра
+            Assert.That.Value(order).IsEqual(5);
 
-            var r = N % 2;                              // Нечётность порядка фильтра
-            var dth = PI / N;                      // Угловой шаг между полюсами
-            var beta = arcsh(1 / eps_p) / N;
+            var r = order % 2;                              // Нечётность порядка фильтра
+            var dth = PI / order;                      // Угловой шаг между полюсами
+            var beta = arcsh(1 / eps_p) / order;
             Assert.That.Value(beta).IsEqual(0.24518628509618212);
 
             var sh = Sinh(beta);
             var ch = Cosh(beta);
-            var poles = new Complex[N];                 // Массив полюсов фильтра
+            var poles = new Complex[order];                 // Массив полюсов фильтра
             if (r != 0) poles[0] = -sh;                 // Если порядок фильтра нечётный, то первым добавляем центральный полюс
             for (var i = r; i < poles.Length; i += 2)   // Расчёт полюсов
             {
@@ -130,11 +130,11 @@ namespace MathCore.DSP.Tests.Filters
                 -0.4503476466802788);
 
             var G_norm = (r > 0 ? 1 : Gp)
-                / (2.Power(N) / z_poles.Aggregate(Complex.Real, (Z, z) => Z * (1 - z), z => z.Re));
+                / (2.Power(order) / z_poles.Aggregate(Complex.Real, (Z, z) => Z * (1 - z), z => z.Re));
 
             Assert.That.Value(G_norm).IsEqual(0.0022682232923298762);
 
-            var B = Range(0, N + 1).ToArray(i => G_norm * SpecialFunctions.BinomialCoefficient(N, i));
+            var B = Range(0, order + 1).ToArray(i => G_norm * SpecialFunctions.BinomialCoefficient(order, i));
 
             Assert.That.Collection(B).ValuesAreEqual(
                 0.0022682232923298762,
