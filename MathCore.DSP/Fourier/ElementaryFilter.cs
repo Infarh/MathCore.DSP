@@ -1,4 +1,5 @@
-﻿using System;
+﻿using static System.Math;
+
 // ReSharper disable UnusedType.Global
 // ReSharper disable NotAccessedField.Local
 // ReSharper disable InconsistentNaming
@@ -24,7 +25,7 @@ namespace MathCore.DSP.Fourier
         private int _SamplesIndex;
 
         /// <summary>Значение фильтра</summary>
-        public Complex Value => new Complex(_ReValue / _N, _ImValue / _N);
+        public Complex Value => new(_ReValue / _N, _ImValue / _N);
 
         /// <summary>Инициализация нового элементарного фильтра преобразования Фурье</summary>
         /// <param name="N">Размер выборки</param>
@@ -49,8 +50,8 @@ namespace MathCore.DSP.Fourier
         public Complex Process(double value)
         {
             var arg = _dPhi * _SamplesIndex++;
-            _ReValue += Math.Cos(arg) * value;
-            _ImValue += Math.Sin(arg) * value;
+            _ReValue += Cos(arg) * value;
+            _ImValue += Sin(arg) * value;
             return Value;
         }
     }

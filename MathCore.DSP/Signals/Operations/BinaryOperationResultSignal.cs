@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MathCore.Annotations;
 
 namespace MathCore.DSP.Signals.Operations
 {
@@ -9,13 +8,13 @@ namespace MathCore.DSP.Signals.Operations
     public abstract class BinaryOperationResultSignal : OperationResultSignal
     {
         /// <summary>Функция бинарной операции над отсчётами двух сигналов</summary>
-        [NotNull] private readonly Func<double, double, double> _Function;
+        private readonly Func<double, double, double> _Function;
 
         /// <summary>Первый операнд-сигнал бинарной операции</summary>
-        [NotNull] public DigitalSignal Signal1 { get; }
+        public DigitalSignal Signal1 { get; }
 
         /// <summary>Второй операнд-сигнал бинарной операции</summary>
-        [NotNull] public DigitalSignal Signal2 { get; }
+        public DigitalSignal Signal2 { get; }
 
         /// <summary>Число отсчётов (вычисляется как число отсчётов первого сигнала)</summary>
         public override int SamplesCount => Signal1.SamplesCount;
@@ -30,7 +29,7 @@ namespace MathCore.DSP.Signals.Operations
         /// <param name="Signal1">Первый сигнал-операнд операции</param>
         /// <param name="Signal2">Второй сигнал-операнд операции</param>
         /// <param name="Function">Функция, вычисляемая от каждой пары отсчётов сигналов</param>
-        protected BinaryOperationResultSignal([NotNull] DigitalSignal Signal1, [NotNull] DigitalSignal Signal2, [NotNull] Func<double, double, double> Function) : base(Signal1.dt)
+        protected BinaryOperationResultSignal(DigitalSignal Signal1, DigitalSignal Signal2, Func<double, double, double> Function) : base(Signal1.dt)
         {
             this.Signal1 = Signal1 ?? throw new ArgumentNullException(nameof(Signal1));
             this.Signal2 = Signal2 ?? throw new ArgumentNullException(nameof(Signal2));

@@ -1,5 +1,4 @@
-﻿using MathCore.Annotations;
-using Spectrum = System.Func<int, MathCore.Complex>;
+﻿using Spectrum = System.Func<int, MathCore.Complex>;
 
 namespace MathCore.DSP.Fourier
 {
@@ -10,8 +9,7 @@ namespace MathCore.DSP.Fourier
         /// <param name="s">Массив вещественных значений отсчётов</param>
         /// <param name="IsInverse">Выполнить обратное преобразование</param>
         /// <returns>Спектр</returns>
-        [NotNull]
-        public static Spectrum GetFourierTransformation([NotNull] this double[] s, bool IsInverse = false)
+        public static Spectrum GetFourierTransformation(this double[] s, bool IsInverse = false)
         {
             var N = s.Length;
             var w = Exp.GetCoefficients(N, IsInverse);
@@ -36,8 +34,7 @@ namespace MathCore.DSP.Fourier
         /// <param name="s">Массив комплексных значений отсчётов</param>
         /// <param name="IsInverse">Выполнить обратное преобразование</param>
         /// <returns>Спектр</returns>
-        [NotNull]
-        public static Spectrum GetFourierTransformation([NotNull] this Complex[] s, bool IsInverse = false)
+        public static Spectrum GetFourierTransformation(this Complex[] s, bool IsInverse = false)
         {
             var N = s.Length;
             var w = Exp.GetCoefficients(N, IsInverse);

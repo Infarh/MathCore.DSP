@@ -1,6 +1,5 @@
-﻿
-using System;
-using MathCore.Annotations;
+﻿using static System.Math;
+
 // ReSharper disable InconsistentNaming
 
 namespace MathCore.DSP.Fourier
@@ -23,7 +22,6 @@ namespace MathCore.DSP.Fourier
         /// <param name="N"></param>
         /// <param name="IsInverse"></param>
         /// <returns></returns>
-        [NotNull]
         public static Exp[] GetCoefficients(int N, bool IsInverse = false)
         {
             var w = new Exp[N];
@@ -32,7 +30,7 @@ namespace MathCore.DSP.Fourier
             var arg = 0.0;
             for(var i = 0; i < N; i++)
             {
-                w[i] = new Exp(Math.Sin(arg), Math.Cos(arg));
+                w[i] = new Exp(Sin(arg), Cos(arg));
                 arg += darg;
             }
             return w;

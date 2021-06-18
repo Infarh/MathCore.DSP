@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using MathCore.DSP.Filters;
 using MathCore.DSP.Signals;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using static System.Math;
 
 namespace MathCore.DSP.Tests.Filters
 {
@@ -30,7 +31,7 @@ namespace MathCore.DSP.Tests.Filters
             var b0 = b[0];
             var b1 = b[1];
 
-            var w0 = Math.Tan(Math.PI * f0 * dt);
+            var w0 = Tan(PI * f0 * dt);
             Assert.AreEqual(1 / (w0 + 1), b0 / a0);
             Assert.AreEqual(-1 / (w0 + 1), b1 / a0);
             //Assert.AreEqual(1, a0 / a0);
@@ -87,7 +88,7 @@ namespace MathCore.DSP.Tests.Filters
             const double eps = 3.02e-4;
 
             const double A0 = Consts.sqrt_2;
-            var x0 = new SamplesDigitalSignal(dt, 1024, t => A0 * Math.Cos(2 * Math.PI * f0 * t));
+            var x0 = new SamplesDigitalSignal(dt, 1024, t => A0 * Cos(2 * PI * f0 * t));
 
             var x0_power = x0.Power;
             Assert.AreEqual(1, x0_power, eps);

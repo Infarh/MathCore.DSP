@@ -2,28 +2,26 @@
 using System.Collections.Generic;
 using System.Numerics;
 
-using MathCore.Annotations;
-
 namespace MathCore.DSP
 {
     /// <summary>Методы-расширения для вещественных массивов</summary>
     public static class DoubleArrayDSPExtensions
     {
-        internal static Vector<double> ToVector(this double[] array) => new Vector<double>(array);
+        internal static Vector<double> ToVector(this double[] array) => new(array);
         
         /// <summary>Вычислить значение коэффициента передачи фильтра, заданного импульсной характеристикой</summary>
         /// <param name="ImpulseResponse">Массив отсчётов импульсной характеристики</param>
         /// <param name="f">Частота вычисления коэффициента передачи</param>
         /// <param name="dt">Период дискретизации импульсной характеристики</param>
         /// <returns>Комплексное значение коэффициента передачи фильтра с указанной импульсной характеристикой</returns>
-        public static Complex GetTransmissionCoefficient([NotNull] this double[] ImpulseResponse, double f, double dt)
+        public static Complex GetTransmissionCoefficient(this double[] ImpulseResponse, double f, double dt)
             => ImpulseResponse.GetTransmissionCoefficient(f * dt);
 
         /// <summary>Вычислить значение коэффициента передачи фильтра, заданного импульсной характеристикой</summary>
         /// <param name="ImpulseResponse">Массив отсчётов импульсной характеристики</param>
         /// <param name="f">Нормированная частота вычисления коэффициента передачи</param>
         /// <returns>Комплексное значение коэффициента передачи фильтра с указанной импульсной характеристикой</returns>
-        public static Complex GetTransmissionCoefficient([NotNull] this double[] ImpulseResponse, double f)
+        public static Complex GetTransmissionCoefficient(this double[] ImpulseResponse, double f)
         {
             var e = Complex.Exp(-2 * Math.PI * f);
             Complex result = ImpulseResponse[^1];
@@ -37,7 +35,7 @@ namespace MathCore.DSP
         /// <param name="ImpulseResponse">Массив значений импульсной характеристики</param>
         /// <param name="Sample">Значение входного отсчёта фильтра</param>
         /// <returns>Значение выходного отсчёта фильтра</returns>
-        public static double FilterSample([NotNull] this double[] State, [NotNull] double[] ImpulseResponse, double Sample)
+        public static double FilterSample(this double[] State, double[] ImpulseResponse, double Sample)
         {
             var result = 0d;
 
@@ -57,7 +55,7 @@ namespace MathCore.DSP
         /// <param name="ImpulseResponse">Массив значений импульсной характеристики</param>
         /// <param name="Sample">Значение входного отсчёта фильтра</param>
         /// <returns>Значение выходного отсчёта фильтра</returns>
-        public static double FilterSampleVector([NotNull] this double[] State, [NotNull] double[] ImpulseResponse, double Sample)
+        public static double FilterSampleVector(this double[] State, double[] ImpulseResponse, double Sample)
         {
             Array.Copy(State, 0, State, 1, State.Length - 1);
             State[0] = Sample;
@@ -65,11 +63,10 @@ namespace MathCore.DSP
             return Vector.Dot(State.ToVector() * ImpulseResponse.ToVector(), Vector<double>.One);
         }
 
-        [NotNull]
         public static IEnumerable<double> FilterFIR(
-            [NotNull] this IEnumerable<double> samples,
-            [NotNull] double[] ImpulseResponse,
-            [NotNull] double[] State)
+            this IEnumerable<double> samples,
+            double[] ImpulseResponse,
+            double[] State)
         {
             if (samples is null) throw new ArgumentNullException(nameof(samples));
             if (ImpulseResponse is null) throw new ArgumentNullException(nameof(ImpulseResponse));
@@ -80,12 +77,11 @@ namespace MathCore.DSP
                 yield return State.FilterSample(ImpulseResponse, sample);
         }
 
-        [NotNull]
-        public static IEnumerable<double> FilterFIR([NotNull] this IEnumerable<double> samples, [NotNull] double[] ImpulseResponse)
+        public static IEnumerable<double> FilterFIR(this IEnumerable<double> samples, double[] ImpulseResponse)
             => samples.FilterFIR(ImpulseResponse, new double[ImpulseResponse.Length]);
 
 
-        public static Complex GetTransmissionCoefficient([NotNull] double[] A, [NotNull] double[] B, double f, double dt)
+        public static Complex GetTransmissionCoefficient(double[] A, double[] B, double f, double dt)
             => GetTransmissionCoefficient(A, B, f * dt);
 
         /// <summary>Расчёт коэффициента передачи рекуррентного фильтра, заданного массивами своих коэффициентов для указанной частоты</summary>
@@ -93,18 +89,18 @@ namespace MathCore.DSP
         /// <param name="B">Массив коэффициентов прямых связей</param>
         /// <param name="f">Частота, на которой требуется рассчитать коэффициент передачи фильтра</param>
         /// <returns>Значение комплексного коэффициента передачи рекуррентного фильтра на заданной частоте</returns>
-        public static Complex GetTransmissionCoefficient([NotNull] double[] A, [NotNull] double[] B, double f)
+        public static Complex GetTransmissionCoefficient(IReadOnlyList<double> A, IReadOnlyList<double> B, double f)
         {
             //var p = new Complex(0, 2 * Math.PI * f);
             var p = Complex.Exp(-2 * Math.PI * f);
 
-            static Complex Sum(double[] V, Complex p)
+            static Complex Sum(IReadOnlyList<double> V, Complex p)
             {
                 var sum_re = V[^1];
                 var sum_im = 0d;
                 var (exp_re, exp_im) = p;
 
-                for (var i = V.Length - 2; i >= 0; i--)
+                for (var i = V.Count - 2; i >= 0; i--)
                 {
                     var s_re = sum_re * exp_re - sum_im * exp_im + V[i];
                     var s_im = sum_re * exp_im + sum_im * exp_re;
@@ -126,9 +122,9 @@ namespace MathCore.DSP
         /// <param name="Sample">Фильтруемый отсчёт</param>
         /// <returns>Обработанное значение</returns>
         public static double FilterSample(
-            [NotNull] this double[] State,
-            [NotNull] double[] A, 
-            [NotNull] double[] B,
+            this double[] State,
+            double[] A, 
+            double[] B,
             double Sample)
         {
             var a0 = 1 / A[0];
@@ -166,12 +162,11 @@ namespace MathCore.DSP
             return r;
         }
 
-        [NotNull]
         public static IEnumerable<double> FilterIIR(
-            [NotNull] this IEnumerable<double> samples,
-            [NotNull] double[] A,
-            [NotNull] double[] B, 
-            [NotNull] double[] State)
+            this IEnumerable<double> samples,
+            double[] A,
+            double[] B, 
+            double[] State)
         {
             if (samples is null) throw new ArgumentNullException(nameof(samples));
             if (A is null) throw new ArgumentNullException(nameof(A));
@@ -183,11 +178,10 @@ namespace MathCore.DSP
                 yield return FilterSample(State, A, B, sample);
         }
 
-        [NotNull]
         public static IEnumerable<double> FilterIIR(
-            [NotNull] this IEnumerable<double> samples, 
-            [NotNull] double[] A, 
-            [NotNull] double[] B)
+            this IEnumerable<double> samples, 
+            double[] A, 
+            double[] B)
             => samples.FilterIIR(A, B, new double[A.Length]);
     }
 }

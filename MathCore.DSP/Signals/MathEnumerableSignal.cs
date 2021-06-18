@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using MathCore.Annotations;
 
 namespace MathCore.DSP.Signals
 {
@@ -14,18 +13,18 @@ namespace MathCore.DSP.Signals
                 yield return f(x += dt);
         }
 
-        [NotNull]
-        public static EnumerableSignal Sin(double A, double f0, double phi0, double dt, int SamplesCount = -1)
+        public static EnumerableSignal Sin(double dt, double f0, int SamplesCount, double A = 1, double phi0 = 0)
         {
             var w0 = 2 * Math.PI * f0;
             return new EnumerableSignal(dt, GetSamples(t => A * Math.Sin(w0 * t + phi0), dt, SamplesCount));
         }
 
-        [NotNull]
-        public static EnumerableSignal Cos(double A, double f0, double phi0, double dt, int SamplesCount)
+        public static EnumerableSignal Cos(double dt, double f0, int SamplesCount, double A = 1, double phi0 = 0)
         {
             var w0 = 2 * Math.PI * f0;
             return new EnumerableSignal(dt, GetSamples(t => A * Math.Sin(w0 * t + phi0), dt, SamplesCount));
         }
+
+        public static EnumerableSignal Const(double dt, int SamplesCount, double A = 1) => new(dt, GetSamples(_ => A, dt, SamplesCount));
     }
 }

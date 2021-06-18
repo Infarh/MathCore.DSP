@@ -1,5 +1,8 @@
-﻿using System;
-using MathCore.Annotations;
+﻿using static System.Math;
+
+using static MathCore.Consts;
+
+using Signal = System.Func<double, double>;
 using IntSpectrum = System.Func<int, MathCore.Complex>;
 using DoubleSpectrum = System.Func<double, MathCore.Complex>;
 
@@ -14,18 +17,17 @@ namespace MathCore.DSP.Fourier
         /// <param name="IsInverse">Обратное преобразование</param>
         /// <param name="dt">Шаг численного расчёта</param>
         /// <returns>Спектр</returns>
-        [NotNull]
         public static DoubleSpectrum GetFourierTransformation(
-            [NotNull] this Func<double, double> s,
+            this Signal s,
             double t1,
             double t2,
             bool IsInverse = false,
             double dt = 1e-4)
         {
             var delta_t = t2 - t1;
-            var N = (int)Math.Abs(delta_t / dt);
+            var N = (int)Abs(delta_t / dt);
             dt = delta_t / N;
-            var w = Consts.pi2;
+            var w = pi2;
             if(IsInverse) w *= -1;
 
             return f =>
@@ -35,8 +37,8 @@ namespace MathCore.DSP.Fourier
                 var t = t1;
                 var val = s(t);
                 var arg = pif * t;
-                var p = val * Math.Cos(arg);
-                var q = val * Math.Sin(arg);
+                var p = val * Cos(arg);
+                var q = val * Sin(arg);
             
                 var re_s = .0;
                 var im_s = .0;
@@ -44,8 +46,8 @@ namespace MathCore.DSP.Fourier
                 {
                     val = s(t);
                     arg = pif * t;
-                    re_s += p + (p = val * Math.Cos(arg));
-                    im_s += q + (q = val * Math.Sin(arg));
+                    re_s += p + (p = val * Cos(arg));
+                    im_s += q + (q = val * Sin(arg));
                     t += dt;
                 }
                 return new Complex(re_s * .5 * dt, im_s * .5 * dt);
@@ -59,18 +61,17 @@ namespace MathCore.DSP.Fourier
         /// <param name="IsInverse">Обратное преобразование</param>
         /// <param name="dt">Шаг численного расчёта</param>
         /// <returns>Спектр</returns>
-        [NotNull]
         public static DoubleSpectrum GetFourierTransformation(
-            [NotNull] this Func<double, Complex> s,
+            this DoubleSpectrum s,
             double t1, 
             double t2,
             bool IsInverse = false,
             double dt = 1e-4)
         {
             var delta_t = t2 - t1;
-            var N = (int)Math.Abs(delta_t / dt);
+            var N = (int)Abs(delta_t / dt);
             dt = delta_t / N;
-            var w = Consts.pi2;
+            var w = pi2;
             if(IsInverse) w *= -1;
 
             return f =>
@@ -98,16 +99,15 @@ namespace MathCore.DSP.Fourier
         /// <param name="IsInverse">Обратное преобразование</param>
         /// <param name="dt">Шаг численного расчёта</param>
         /// <returns>Спектр по целочисленным значениям частот</returns>
-        [NotNull]
         public static IntSpectrum GetFourierSpectrum(
-            [NotNull] this Func<double, double> s,
+            this Signal s,
             double t1,
             double t2,
             bool IsInverse = false,
             double dt = 1e-4)
         {
             var delta_t = t2 - t1;
-            var N = (int)Math.Abs(delta_t / dt);
+            var N = (int)Abs(delta_t / dt);
             var ss = new double[N];
             dt = delta_t / N;
             for(var n = 0; n < N; n++)
@@ -122,16 +122,15 @@ namespace MathCore.DSP.Fourier
         /// <param name="IsInverse">Обратное преобразование</param>
         /// <param name="dt">Шаг численного расчёта</param>
         /// <returns>Спектр по целочисленным значениям частот</returns>
-        [NotNull]
         public static IntSpectrum GetFourierSpectrum(
-            [NotNull] this Func<double, Complex> s,
+            this DoubleSpectrum s,
             double t1, 
             double t2,
             bool IsInverse = false,
             double dt = 1e-4)
         {
             var delta_t = t2 - t1;
-            var N = (int)Math.Abs(delta_t / dt);
+            var N = (int)Abs(delta_t / dt);
 
             var ss = new Complex[N];
             dt = delta_t / N;

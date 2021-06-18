@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using MathCore.Annotations;
+
+using static System.Math;
+
 #pragma warning disable 1591
 
 namespace MathCore.DSP.Fourier
@@ -29,8 +32,7 @@ namespace MathCore.DSP.Fourier
         /// Алгоритмическая сложность O(N*logN) для любых N
         /// </remarks>
         [Copyright("29.05.2009 by Bochkanov Sergey", url = "alglib.sources.ru")]
-        [NotNull]
-        public static Complex[] FFT([NotNull] Complex[] x)
+        public static Complex[] FFT(Complex[] x)
         {
             var N = x.Length;
             if (N == 1) return new[] { x[0] };
@@ -69,8 +71,7 @@ namespace MathCore.DSP.Fourier
         /// </summary>
         /// <param name="y">Массив значений спектра</param>
         [Copyright("29.05.2009 by Bochkanov Sergey", url = "alglib.sources.ru")]
-        [NotNull]
-        public static Complex[] FFT_Complex_Inverse([NotNull] Complex[] y)
+        public static Complex[] FFT_Complex_Inverse(Complex[] y)
         {
             var N = y.Length;
 
@@ -115,8 +116,7 @@ namespace MathCore.DSP.Fourier
         /// <param name="x">Массив входных значений</param>
         /// <value>Массив комплексных значений спектра</value>
         [SuppressMessage("ReSharper", "TooWideLocalVariableScope")]
-        [NotNull]
-        public static Complex[] FFT([NotNull] double[] x)
+        public static Complex[] FFT(double[] x)
         {
             var N = x.Length;
             switch (N)
@@ -144,8 +144,8 @@ namespace MathCore.DSP.Fourier
                 double nsin, cos;
                 for (var i = 0; i <= n05; i++)
                 {
-                    nsin = -Math.Sin(pi_n * i);
-                    cos = Math.Cos(pi_n * i);
+                    nsin = -Sin(pi_n * i);
+                    cos = Cos(pi_n * i);
 
                     i_dx = 2 * (i % n05);
                     h_n_re = z[i_dx];
@@ -204,8 +204,7 @@ namespace MathCore.DSP.Fourier
           -- ALGLIB --
              Copyright 01.06.2009 by Bochkanov Sergey
         *************************************************************************/
-        [NotNull]
-        public static double[] FFT_Real_Inverse([NotNull] Complex[] f, int n)
+        public static double[] FFT_Real_Inverse(Complex[] f, int n)
         {
             //
             // Special case: N=1, FFT is just identity transform.
@@ -223,7 +222,7 @@ namespace MathCore.DSP.Fourier
             var h = new double[n];
             var result = new double[n];
             h[0] = f[0].Re;
-            var n05 = (int)Math.Floor(n / 2d);
+            var n05 = (int)Floor(n / 2d);
             for (var i = 1; i < n05; i++)
             {
                 h[i] = f[i].Re - f[i].Im;
@@ -394,7 +393,7 @@ namespace MathCore.DSP.Fourier
               -- ALGLIB --
                  Copyright 01.05.2009 by Bochkanov Sergey
             *************************************************************************/
-            public static void FTBaseGenerateComplexFFTPlan(int n, [NotNull] FT_Plan plan)
+            public static void FTBaseGenerateComplexFFTPlan(int n, FT_Plan plan)
             {
 
                 var plan_array_size = 1;
@@ -408,9 +407,9 @@ namespace MathCore.DSP.Fourier
                 FT_BaseGeneratePlanRec(n, c_FT_BaseCfftTask, plan, ref plan_size, ref pre_computed_size, ref plan_array_size,
                                       ref tmp_mem_size, ref stack_mem_size, stack_ptr);
 
-                plan.StackBuffer = new double[Math.Max(stack_mem_size, 1)];
-                plan.TempBuffer = new double[Math.Max(tmp_mem_size, 1)];
-                plan.PreComputed = new double[Math.Max(pre_computed_size, 1)];
+                plan.StackBuffer = new double[Max(stack_mem_size, 1)];
+                plan.TempBuffer = new double[Max(tmp_mem_size, 1)];
+                plan.PreComputed = new double[Max(pre_computed_size, 1)];
                 stack_ptr = 0;
 
                 FT_BasePrecomputedPlanRec(plan, 0, stack_ptr);
@@ -503,7 +502,7 @@ namespace MathCore.DSP.Fourier
                  Copyright 01.05.2009 by Bochkanov Sergey
             *************************************************************************/
 
-            private static void FT_BaseExecutePlanRec(ref double[] A, int Aoffset, [NotNull] FT_Plan plan, int EntryOffset, int StackPtr)
+            private static void FT_BaseExecutePlanRec(ref double[] A, int Aoffset, FT_Plan plan, int EntryOffset, int StackPtr)
             {
                 if (plan.plan[EntryOffset + 3] == FFT_EmptyPlan)
                     return;
@@ -1299,7 +1298,7 @@ namespace MathCore.DSP.Fourier
                         // Note that child plans are COMPLEX
                         // (whether plan itself is complex or not).
                         //
-                        TempMemorySize = Math.Max(TempMemorySize, 2 * n1 * n2);
+                        TempMemorySize = Max(TempMemorySize, 2 * n1 * n2);
                         plan.plan[entryoffset + 0] = esize;
                         plan.plan[entryoffset + 1] = n1;
                         plan.plan[entryoffset + 2] = n2;
@@ -1346,7 +1345,7 @@ namespace MathCore.DSP.Fourier
                     //
                     var k = 2 * n2 - 1;
                     var m = FT_BaseFindSmooth(k);
-                    TempMemorySize = Math.Max(TempMemorySize, 2 * m);
+                    TempMemorySize = Max(TempMemorySize, 2 * m);
                     plan.plan[entryoffset + 0] = esize;
                     plan.plan[entryoffset + 1] = n2;
                     plan.plan[entryoffset + 2] = -1;
@@ -1355,7 +1354,7 @@ namespace MathCore.DSP.Fourier
                     plan.plan[entryoffset + 5] = PlanSize;
 
                     StackPtr += 2 * 2 * m;
-                    StackMemorySize = Math.Max(StackMemorySize, StackPtr);
+                    StackMemorySize = Max(StackMemorySize, StackPtr);
 
                     FT_BaseGeneratePlanRec(m, c_FT_BaseCfftTask, plan, ref PlanSize, ref PreComputedSize,
                                           ref PlanArraySize, ref TempMemorySize, ref StackMemorySize, StackPtr);
@@ -1376,7 +1375,7 @@ namespace MathCore.DSP.Fourier
                     // Cooley-Tukey plan
                     //
                     //
-                    TempMemorySize = Math.Max(TempMemorySize, 2 * n1 * n2);
+                    TempMemorySize = Max(TempMemorySize, 2 * n1 * n2);
                     plan.plan[entryoffset + 0] = esize;
                     plan.plan[entryoffset + 1] = n1;
                     plan.plan[entryoffset + 2] = n2;
@@ -1436,7 +1435,7 @@ namespace MathCore.DSP.Fourier
               -- ALGLIB --
                  Copyright 01.05.2009 by Bochkanov Sergey
             *************************************************************************/
-            private static void FT_BasePrecomputedPlanRec([NotNull] FT_Plan plan, int entryoffset, int stackptr)
+            private static void FT_BasePrecomputedPlanRec(FT_Plan plan, int entryoffset, int stackptr)
             {
 
                 if (plan.plan[entryoffset + 3] == FFT_CooleyTukeyPlan ||
@@ -1460,8 +1459,8 @@ namespace MathCore.DSP.Fourier
                     if (n == 3)
                     {
                         offs = plan.plan[entryoffset + 7];
-                        plan.PreComputed[offs + 0] = Math.Cos(pi23) - 1;
-                        plan.PreComputed[offs + 1] = Math.Sin(pi23);
+                        plan.PreComputed[offs + 0] = Cos(pi23) - 1;
+                        plan.PreComputed[offs + 1] = Sin(pi23);
                         return;
                     }
 
@@ -1470,11 +1469,11 @@ namespace MathCore.DSP.Fourier
                         offs = plan.plan[entryoffset + 7];
                         const double pi25 = Consts.pi2 / 5;
                         const double pi45 = pi25 * 2;
-                        plan.PreComputed[offs + 0] = (Math.Cos(pi25) + Math.Cos(pi45)) / 2 - 1;
-                        plan.PreComputed[offs + 1] = (Math.Cos(pi25) - Math.Cos(pi45)) / 2;
-                        plan.PreComputed[offs + 2] = -Math.Sin(pi25);
-                        plan.PreComputed[offs + 3] = -(Math.Sin(pi25) + Math.Sin(pi45));
-                        plan.PreComputed[offs + 4] = Math.Sin(pi25) - Math.Sin(pi45);
+                        plan.PreComputed[offs + 0] = (Cos(pi25) + Cos(pi45)) / 2 - 1;
+                        plan.PreComputed[offs + 1] = (Cos(pi25) - Cos(pi45)) / 2;
+                        plan.PreComputed[offs + 2] = -Sin(pi25);
+                        plan.PreComputed[offs + 3] = -(Sin(pi25) + Sin(pi45));
+                        plan.PreComputed[offs + 4] = Sin(pi25) - Sin(pi45);
                         return;
                     }
                 }
@@ -1491,11 +1490,11 @@ namespace MathCore.DSP.Fourier
                 for (i = 0; i < 2 * m; i++)
                     plan.PreComputed[offs + i] = 0;
 
-                var pin = Math.PI / n;
+                var pin = PI / n;
                 for (i = 0; i < n; i++)
                 {
-                    var bx = Math.Cos(pin * i * i);
-                    var by = Math.Sin(pin * i * i);
+                    var bx = Cos(pin * i * i);
+                    var by = Sin(pin * i * i);
                     plan.PreComputed[offs + 2 * i + 0] = bx;
                     plan.PreComputed[offs + 2 * i + 1] = by;
                     plan.PreComputed[offs + 2 * m + 2 * i + 0] = bx;
@@ -1521,10 +1520,10 @@ namespace MathCore.DSP.Fourier
             {
                 var n = n1 * n2;
                 var pin = -Consts.pi2 / n;
-                var twbasexm1 = Math.Sin(.5 * pin);
+                var twbasexm1 = Sin(.5 * pin);
                 twbasexm1 *= -2 * twbasexm1;
                 //twbasexm1 = -(2 * math.sqr(Math.Sin(0.5 * v)));
-                var twbasey = Math.Sin(pin);
+                var twbasey = Sin(pin);
                 double twrowxm1 = 0;
                 double twrowy = 0;
                 for (var i = 0; i <= n2 - 1; i++)
@@ -1552,10 +1551,10 @@ namespace MathCore.DSP.Fourier
                         if (j % FT_BaseUpdateTW == 0)
                         {
                             pin = -(Consts.pi2 * i * (j + 1) / n);
-                            twxm1 = Math.Sin(.5 * pin);
+                            twxm1 = Sin(.5 * pin);
                             twxm1 *= -2 * twxm1;
                             //twxm1 = -(2 * math.sqr(Math.Sin(0.5 * v)));
-                            twy = Math.Sin(pin);
+                            twy = Sin(pin);
                         }
                         else
                         {
@@ -1573,10 +1572,10 @@ namespace MathCore.DSP.Fourier
                     if (j % FT_BaseUpdateTW == 0)
                     {
                         pin = -(Consts.pi2 * (i + 1) / n);
-                        twrowxm1 = Math.Sin(.5 * pin);
+                        twrowxm1 = Sin(.5 * pin);
                         twrowxm1 *= -2 * twrowxm1;
                         //twrowxm1 = -(2 * math.sqr(Math.Sin(0.5 * v)));
-                        twrowy = Math.Sin(pin);
+                        twrowy = Sin(pin);
                     }
                     else
                     {
@@ -1637,7 +1636,7 @@ namespace MathCore.DSP.Fourier
                                            int bstart, int bstride, int m, int n)
             {
                 if (m == 0 || n == 0) return;
-                if (Math.Max(m, n) <= 8)
+                if (Max(m, n) <= 8)
                 {
                     var m2 = 2 * bstride;
                     for (var i = 0; i <= m - 1; i++)
@@ -1697,7 +1696,7 @@ namespace MathCore.DSP.Fourier
             {
                 if (m == 0 || n == 0) return;
 
-                if (Math.Max(m, n) <= 8)
+                if (Max(m, n) <= 8)
                 {
                     for (var i = 0; i <= m - 1; i++)
                     {
@@ -1753,7 +1752,7 @@ namespace MathCore.DSP.Fourier
             {
                 if (seed >= n)
                 {
-                    best = Math.Min(best, seed);
+                    best = Min(best, seed);
                     return;
                 }
                 if (leastfactor <= 2)
@@ -1771,7 +1770,7 @@ namespace MathCore.DSP.Fourier
               -- ALGLIB --
                  Copyright 01.05.2009 by Bochkanov Sergey
             *************************************************************************/
-            private static void FFT_AarrayResize([NotNull] ref int[] a, ref int asize, int newasize)
+            private static void FFT_AarrayResize(ref int[] a, ref int asize, int newasize)
             {
                 var tmp = new int[asize];
                 for (var i = 0; i <= asize - 1; i++)
@@ -1799,7 +1798,7 @@ namespace MathCore.DSP.Fourier
                     for (j = 0; j <= n - 1; j++)
                     {
                         var ij = i * j;
-                        v += a[offs + j] * (Math.Cos(pin * ij) + Math.Sin(pin * ij));
+                        v += a[offs + j] * (Cos(pin * ij) + Sin(pin * ij));
                     }
                     buf[i] = v;
                 }

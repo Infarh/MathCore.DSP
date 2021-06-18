@@ -5,6 +5,14 @@ using MathCore.DSP.Filters;
 using MathCore.DSP.Signals;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using static System.Linq.Enumerable;
+using static System.Math;
+
+using static MathCore.DSP.DoubleArrayDSPExtensions;
+using static MathCore.DSP.Filters.DigitalFilter;
+using static MathCore.Polynom.Array;
+
 // ReSharper disable InconsistentNaming
 // ReSharper disable RedundantArgumentDefaultValue
 // ReSharper disable ArgumentsStyleNamedExpression
@@ -14,13 +22,13 @@ namespace MathCore.DSP.Tests.Filters
     [TestClass]
     public class ChecyshevLowPass : UnitTest
     {
-        private static double arcsh(double x) => Math.Log(x + Math.Sqrt(x * x + 1));
-        private static double arcch(double x) => Math.Log(x + Math.Sqrt(x * x - 1));
+        private static double arcsh(double x) => Log(x + Sqrt(x * x + 1));
+        private static double arcch(double x) => Log(x + Sqrt(x * x - 1));
 
         [TestMethod]
         public void TypeI_Creation()
         {
-            const double pi2 = 2 * Math.PI;
+            const double pi2 = 2 * PI;
 
             const double fd = 5000;             // Частота дискретизации
             const double dt = 1 / fd;           // Период дискретизации
@@ -51,8 +59,8 @@ namespace MathCore.DSP.Tests.Filters
             Assert.That.Value(Gp.In_dB()).IsEqual(-1.5, 4.67e-15);
             Assert.That.Value(Gs.In_dB()).IsEqual(-35);
 
-            var Fp = DigitalFilter.ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
-            var Fs = DigitalFilter.ToAnalogFrequency(fs, dt);  // Частота подавления аналогового прототипа
+            var Fp = ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
+            var Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового прототипа
 
             Assert.That.Value(Fp).IsEqual(869.46741682049208);
             Assert.That.Value(Fs).IsEqual(1638.7206595257194);
@@ -66,25 +74,25 @@ namespace MathCore.DSP.Tests.Filters
             Assert.That.Value(k_eps).IsEqual(87.5385969314623);
             Assert.That.Value(k_W).IsEqual(1.8847407364824178);
 
-            var N = (int)Math.Ceiling(arcch(k_eps) / arcch(k_W)); // Порядок фильтра
-            Assert.That.Value(N).IsEqual(5);
+            var order = (int)Ceiling(arcch(k_eps) / arcch(k_W)); // Порядок фильтра
+            Assert.That.Value(order).IsEqual(5);
 
-            var r = N % 2;                              // Нечётность порядка фильтра
-            var dth = Math.PI / N;                      // Угловой шаг между полюсами
-            var beta = arcsh(1 / eps_p) / N;
+            var r = order % 2;                              // Нечётность порядка фильтра
+            var dth = PI / order;                      // Угловой шаг между полюсами
+            var beta = arcsh(1 / eps_p) / order;
             Assert.That.Value(beta).IsEqual(0.24518628509618212);
 
-            var sh = Math.Sinh(beta);
-            var ch = Math.Cosh(beta);
-            var poles = new Complex[N];                 // Массив полюсов фильтра
+            var sh = Sinh(beta);
+            var ch = Cosh(beta);
+            var poles = new Complex[order];                 // Массив полюсов фильтра
             if (r != 0) poles[0] = -sh;                 // Если порядок фильтра нечётный, то первым добавляем центральный полюс
             for (var i = r; i < poles.Length; i += 2)   // Расчёт полюсов
             {
                 var n = (i - r) / 2 + 1;
                 var th = dth * (n - 0.5);
 
-                var sin = Math.Sin(th);
-                var cos = Math.Cos(th);
+                var sin = Sin(th);
+                var cos = Cos(th);
                 poles[i] = new Complex(-sh * sin, ch * cos);
                 poles[i + 1] = poles[i].ComplexConjugate;
             }
@@ -100,7 +108,7 @@ namespace MathCore.DSP.Tests.Filters
                 (-0.20035329794475673, -0.605541681317744)
             }, comparer);
 
-            var z_poles = DigitalFilter.ToZArray(poles, dt, Wp);
+            var z_poles = ToZArray(poles, dt, Wp);
 
             Assert.That.Collection(z_poles).IsEqualTo(
                 0.76166135868560936,
@@ -110,7 +118,7 @@ namespace MathCore.DSP.Tests.Filters
                 (0.65550339923693535, -0.49362618841054584)
             );
 
-            var (A, a_im) = Polynom.Array.GetCoefficientsInverted(z_poles);
+            var (A, a_im) = GetCoefficientsInverted(z_poles);
 
             Assert.That.Collection(a_im).ElementsAreEqualTo(0, 2.3e-16);
             Assert.That.Collection(A).ValuesAreEqual(
@@ -122,11 +130,11 @@ namespace MathCore.DSP.Tests.Filters
                 -0.4503476466802788);
 
             var G_norm = (r > 0 ? 1 : Gp)
-                / (2.Power(N) / z_poles.Aggregate(Complex.Real, (Z, z) => Z * (1 - z), z => z.Re));
+                / (2.Power(order) / z_poles.Aggregate(Complex.Real, (Z, z) => Z * (1 - z), z => z.Re));
 
             Assert.That.Value(G_norm).IsEqual(0.0022682232923298762);
 
-            var B = Enumerable.Range(0, N + 1).ToArray(i => G_norm * SpecialFunctions.BinomialCoefficient(N, i));
+            var B = Range(0, order + 1).ToArray(i => G_norm * SpecialFunctions.BinomialCoefficient(order, i));
 
             Assert.That.Collection(B).ValuesAreEqual(
                 0.0022682232923298762,
@@ -137,10 +145,90 @@ namespace MathCore.DSP.Tests.Filters
                 0.0022682232923298762);
 
             // Проверяем коэффициенты передачи рассчитанного фильтра
-            var H0 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0).Abs;          // == (r == 1 ? 1 : Gp)
-            var Hp = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fp / fd).Abs;    // == Gp
-            var Hs = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fs / fd).Abs;    // <= Gs
-            var Hd = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0.5).Abs;        // == 0
+            var H0 = GetTransmissionCoefficient(A, B, 0).Abs;          // == (r == 1 ? 1 : Gp)
+            var Hp = GetTransmissionCoefficient(A, B, fp / fd).Abs;    // == Gp
+            var Hs = GetTransmissionCoefficient(A, B, fs / fd).Abs;    // <= Gs
+            var Hd = GetTransmissionCoefficient(A, B, 0.5).Abs;        // == 0
+
+            Assert.That.Value(H0).IsEqual(r == 1 ? 1 : Gp, 1.59e-14);
+            Assert.That.Value(Hp).IsEqual(Gp, 9.78e-15);
+            Assert.That.Value(Hs).LessOrEqualsThan(Gs);
+            Assert.That.Value(Hd).IsEqual(0, 5.67e-20);
+
+            #endregion
+
+            var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+
+            Assert.That.Collection(filter.A).IsEqualTo(A);
+            Assert.That.Collection(filter.B).IsEqualTo(B);
+        }
+
+        [TestMethod]
+        public void TypeI_Creation_fp500_fs1500_fd5000_Rp1_Rs30()
+        {
+            const double fd = 5000;             // Частота дискретизации
+            const double dt = 1 / fd;           // Период дискретизации
+
+            const double fp = 500;   // Граничная частота конца интервала пропускания
+            const double fs = 1500;   // Граничная частота начала интервала подавления
+
+            const double Rp = 1;              // Неравномерность в полосе пропускания (дБ)
+            const double Rs = 30;               // Затухание в полосе подавления (дБ)
+
+            #region Аналитический расчёт
+
+            var eps_p = (10d.Pow(Rp / 10) - 1).Sqrt();
+            var eps_s = (10d.Pow(Rs / 10) - 1).Sqrt();
+
+            var Gp = (-Rp).From_dB();
+            var Gs = (-Rs).From_dB();
+
+            var Fp = ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
+            var Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового прототипа
+
+            var Wp = Consts.pi2 * Fp;
+            var Ws = Consts.pi2 * Fs;
+
+            var k_eps = eps_s / eps_p;
+            var k_W = Ws / Wp;
+
+            var N = (int)Ceiling(arcch(k_eps) / arcch(k_W)); // Порядок фильтра
+
+            var r = N % 2;                              // Нечётность порядка фильтра
+            var dth = PI / N;                      // Угловой шаг между полюсами
+            var beta = arcsh(1 / eps_p) / N;
+
+            var sh = Sinh(beta);
+            var ch = Cosh(beta);
+            var poles = new Complex[N];                 // Массив полюсов фильтра
+            if (r != 0) poles[0] = -sh;                 // Если порядок фильтра нечётный, то первым добавляем центральный полюс
+            for (var i = r; i < poles.Length; i += 2)   // Расчёт полюсов
+            {
+                var n = (i - r) / 2 + 1;
+                var th = dth * (n - 0.5);
+
+                var sin = Sin(th);
+                var cos = Cos(th);
+                poles[i] = new Complex(-sh * sin, ch * cos);
+                poles[i + 1] = poles[i].ComplexConjugate;
+            }
+
+            var comparer = new LambdaEqualityComparer<Complex>((x1, x2) => (x1 - x2).Abs < 1e-14);
+
+            var z_poles = ToZArray(poles, dt, Wp);
+
+            var (A, a_im) = GetCoefficientsInverted(z_poles);
+
+            var G_norm = (r > 0 ? 1 : Gp)
+                / (2.Power(N) / z_poles.Aggregate(Complex.Real, (Z, z) => Z * (1 - z), z => z.Re));
+
+            var B = Range(0, N + 1).ToArray(i => G_norm * SpecialFunctions.BinomialCoefficient(N, i));
+
+            // Проверяем коэффициенты передачи рассчитанного фильтра
+            var H0 = GetTransmissionCoefficient(A, B, 0).Abs;          // == (r == 1 ? 1 : Gp)
+            var Hp = GetTransmissionCoefficient(A, B, fp / fd).Abs;    // == Gp
+            var Hs = GetTransmissionCoefficient(A, B, fs / fd).Abs;    // <= Gs
+            var Hd = GetTransmissionCoefficient(A, B, 0.5).Abs;        // == 0
 
             Assert.That.Value(H0).IsEqual(r == 1 ? 1 : Gp, 1.59e-14);
             Assert.That.Value(Hp).IsEqual(Gp, 9.78e-15);
@@ -158,7 +246,7 @@ namespace MathCore.DSP.Tests.Filters
         [TestMethod]
         public void TypeII_Creation()
         {
-            const double pi2 = 2 * Math.PI;
+            const double pi2 = 2 * PI;
 
             const double fd = 5000;             // Частота дискретизации
             const double dt = 1 / fd;           // Период дискретизации
@@ -189,8 +277,8 @@ namespace MathCore.DSP.Tests.Filters
             Assert.That.Value(Gp.In_dB()).IsEqual(-1.5, 4.67e-15);
             Assert.That.Value(Gs.In_dB()).IsEqual(-35);
 
-            var Fp = DigitalFilter.ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
-            var Fs = DigitalFilter.ToAnalogFrequency(fs, dt);  // Частота подавления аналогового прототипа
+            var Fp = ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
+            var Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового прототипа
 
             Assert.That.Value(Fp).IsEqual(869.46741682049208);
             Assert.That.Value(Fs).IsEqual(1638.7206595257194);
@@ -204,17 +292,17 @@ namespace MathCore.DSP.Tests.Filters
             Assert.That.Value(k_eps).IsEqual(87.5385969314623);
             Assert.That.Value(k_W).IsEqual(1.8847407364824178);
 
-            var N = (int)Math.Ceiling(arcch(k_eps) / arcch(k_W)); // Порядок фильтра
+            var N = (int)Ceiling(arcch(k_eps) / arcch(k_W)); // Порядок фильтра
             Assert.That.Value(N).IsEqual(5);
 
             var r = N % 2;                              // Нечётность порядка фильтра
             var L = (N - r) / 2;
-            var dth = Math.PI / N;                      // Угловой шаг между полюсами
+            var dth = PI / N;                      // Угловой шаг между полюсами
             var beta = arcsh(eps_s) / N;
             Assert.That.Value(beta).IsEqual(0.94451840539627485);
 
-            var sh = Math.Sinh(beta);
-            var ch = Math.Cosh(beta);
+            var sh = Sinh(beta);
+            var ch = Cosh(beta);
             var poles = new Complex[N];                    // Массив полюсов фильтра
             if (r != 0) poles[0] = -1 / sh;              // Если порядок фильтра нечётный, то первым добавляем центральный полюс
             for (var i = r; i < poles.Length; i += 2)   // Расчёт полюсов
@@ -222,8 +310,8 @@ namespace MathCore.DSP.Tests.Filters
                 var n = (i - r) / 2 + 1;
                 var th = dth * (n - 0.5);
 
-                var sin = Math.Sin(th);
-                var cos = Math.Cos(th);
+                var sin = Sin(th);
+                var cos = Cos(th);
                 var norm = (sh.Pow2() * sin.Pow2() + ch.Pow2() * cos.Pow2()).GetInverse();
                 poles[i] = new Complex(-sh * sin, ch * cos) * norm;
                 poles[i + 1] = poles[i].ComplexConjugate;
@@ -233,7 +321,7 @@ namespace MathCore.DSP.Tests.Filters
             for (var n = 1; n <= L; n++)
             {
                 var th = dth * (n - 0.5);
-                zeros[2 * n - 2] = new Complex(0, 1 / Math.Cos(th));
+                zeros[2 * n - 2] = new Complex(0, 1 / Cos(th));
                 zeros[2 * n - 1] = zeros[2 * n - 2].ComplexConjugate;
             }
 
@@ -253,9 +341,9 @@ namespace MathCore.DSP.Tests.Filters
                 );
 
             var z_zeros = r == 0
-                ? DigitalFilter.ToZArray(zeros, dt, Wp)
-                : DigitalFilter.ToZ(zeros, dt, Wp).Prepend(-1).ToArray();
-            var z_poles = DigitalFilter.ToZArray(poles, dt, Wp);
+                ? ToZArray(zeros, dt, Wp)
+                : ToZ(zeros, dt, Wp).Prepend(-1).ToArray();
+            var z_poles = ToZArray(poles, dt, Wp);
 
             Assert.That.Collection(z_zeros).IsEqualTo(
                 -1,
@@ -273,8 +361,8 @@ namespace MathCore.DSP.Tests.Filters
                 (0.44222883055670215, -0.33954724414602883)
             );
 
-            var (B, b_im) = Polynom.Array.GetCoefficientsInverted(z_zeros);
-            var (A, a_im) = Polynom.Array.GetCoefficientsInverted(z_poles);
+            var (B, b_im) = GetCoefficientsInverted(z_zeros);
+            var (A, a_im) = GetCoefficientsInverted(z_poles);
 
             Assert.That.Collection(b_im).ElementsAreEqualTo(0, 2.23e-16);
             Assert.That.Collection(a_im).ElementsAreEqualTo(0, 1.12e-16);
@@ -305,10 +393,10 @@ namespace MathCore.DSP.Tests.Filters
                 -0.075860624472381427);
 
             // Проверяем коэффициенты передачи рассчитанного фильтра
-            var H0 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0).Abs;          // == (r == 1 ? 1 : Gp)
-            var Hp = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fp / fd).Abs;    // <= Gs  !!!
-            var Hs = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fs / fd).Abs;    // <= Gs
-            var Hd = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0.5).Abs;        // == 0
+            var H0 = GetTransmissionCoefficient(A, B, 0).Abs;          // == (r == 1 ? 1 : Gp)
+            var Hp = GetTransmissionCoefficient(A, B, fp / fd).Abs;    // <= Gs  !!!
+            var Hs = GetTransmissionCoefficient(A, B, fs / fd).Abs;    // <= Gs
+            var Hd = GetTransmissionCoefficient(A, B, 0.5).Abs;        // == 0
 
             Assert.That.Value(H0).IsEqual(1, 1.79e-15);
             Assert.That.Value(Hp).IsEqual(Gs, 1.29e-16);
@@ -326,7 +414,7 @@ namespace MathCore.DSP.Tests.Filters
         [TestMethod]
         public void TypeIICorrected_Creation()
         {
-            const double pi2 = 2 * Math.PI;
+            const double pi2 = 2 * PI;
 
             const double fd = 5000;             // Частота дискретизации
             const double dt = 1 / fd;           // Период дискретизации
@@ -357,8 +445,8 @@ namespace MathCore.DSP.Tests.Filters
             Assert.That.Value(Gp.In_dB()).IsEqual(-1.5, 4.67e-15);
             Assert.That.Value(Gs.In_dB()).IsEqual(-35);
 
-            var Fp = DigitalFilter.ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
-            var Fs = DigitalFilter.ToAnalogFrequency(fs, dt);  // Частота подавления аналогового прототипа
+            var Fp = ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
+            var Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового прототипа
 
             Assert.That.Value(Fp).IsEqual(869.46741682049208);
             Assert.That.Value(Fs).IsEqual(1638.7206595257194);
@@ -372,17 +460,17 @@ namespace MathCore.DSP.Tests.Filters
             Assert.That.Value(k_eps).IsEqual(87.5385969314623);
             Assert.That.Value(k_W).IsEqual(1.8847407364824178);
 
-            var N = (int)Math.Ceiling(arcch(k_eps) / arcch(k_W)); // Порядок фильтра
+            var N = (int)Ceiling(arcch(k_eps) / arcch(k_W)); // Порядок фильтра
             Assert.That.Value(N).IsEqual(5);
 
             var r = N % 2;                              // Нечётность порядка фильтра
             var L = (N - r) / 2;
-            var dth = Math.PI / N;                      // Угловой шаг между полюсами
+            var dth = PI / N;                      // Угловой шаг между полюсами
             var beta = arcsh(eps_s) / N;
             Assert.That.Value(beta).IsEqual(0.94451840539627485);
 
-            var sh = Math.Sinh(beta);
-            var ch = Math.Cosh(beta);
+            var sh = Sinh(beta);
+            var ch = Cosh(beta);
             var poles = new Complex[N];                    // Массив полюсов фильтра
             if (r != 0) poles[0] = -1 / sh;              // Если порядок фильтра нечётный, то первым добавляем центральный полюс
             for (var i = r; i < poles.Length; i += 2)   // Расчёт полюсов
@@ -390,8 +478,8 @@ namespace MathCore.DSP.Tests.Filters
                 var n = (i - r) / 2 + 1;
                 var th = dth * (n - 0.5);
 
-                var sin = Math.Sin(th);
-                var cos = Math.Cos(th);
+                var sin = Sin(th);
+                var cos = Cos(th);
                 var norm = (sh.Pow2() * sin.Pow2() + ch.Pow2() * cos.Pow2()).GetInverse();
                 poles[i] = new Complex(-sh * sin, ch * cos) * norm;
                 poles[i + 1] = poles[i].ComplexConjugate;
@@ -401,7 +489,7 @@ namespace MathCore.DSP.Tests.Filters
             for (var n = 1; n <= L; n++)
             {
                 var th = dth * (n - 0.5);
-                zeros[2 * n - 2] = new Complex(0, 1 / Math.Cos(th));
+                zeros[2 * n - 2] = new Complex(0, 1 / Cos(th));
                 zeros[2 * n - 1] = zeros[2 * n - 2].ComplexConjugate;
             }
 
@@ -425,9 +513,9 @@ namespace MathCore.DSP.Tests.Filters
                 );
 
             var z_zeros = r == 0
-                ? DigitalFilter.ToZArray(zeros, dt, Wp)
-                : DigitalFilter.ToZ(zeros, dt, Wp).Prepend(-1).ToArray();
-            var z_poles = DigitalFilter.ToZArray(poles, dt, Wp);
+                ? ToZArray(zeros, dt, Wp)
+                : ToZ(zeros, dt, Wp).Prepend(-1).ToArray();
+            var z_poles = ToZArray(poles, dt, Wp);
 
             Assert.That.Collection(z_zeros).IsEqualTo(
                 -1,
@@ -445,8 +533,8 @@ namespace MathCore.DSP.Tests.Filters
                 (0.2009647788360637, -0.39567388309026885)
             );
 
-            var (B, b_im) = Polynom.Array.GetCoefficientsInverted(z_zeros);
-            var (A, a_im) = Polynom.Array.GetCoefficientsInverted(z_poles);
+            var (B, b_im) = GetCoefficientsInverted(z_zeros);
+            var (A, a_im) = GetCoefficientsInverted(z_poles);
 
             Assert.That.Collection(b_im).ElementsAreEqualTo(0, 1.12e-16);
             Assert.That.Collection(a_im).ElementsAreEqualTo(0, 5.56e-17);
@@ -477,10 +565,10 @@ namespace MathCore.DSP.Tests.Filters
                 -0.014328552997592952);
 
             // Проверяем коэффициенты передачи рассчитанного фильтра
-            var H0 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0).Abs;          // == (r == 1 ? 1 : Gp)
-            var Hp = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fp / fd).Abs;    // >= Gp  !!!
-            var Hs = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fs / fd).Abs;    // <= Gs
-            var Hd = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0.5).Abs;        // == 0
+            var H0 = GetTransmissionCoefficient(A, B, 0).Abs;          // == (r == 1 ? 1 : Gp)
+            var Hp = GetTransmissionCoefficient(A, B, fp / fd).Abs;    // >= Gp  !!!
+            var Hs = GetTransmissionCoefficient(A, B, fs / fd).Abs;    // <= Gs
+            var Hd = GetTransmissionCoefficient(A, B, 0.5).Abs;        // == 0
 
             Assert.That.Value(H0).IsEqual(1, 2.23e-16);
             Assert.That.Value(Hp).GreaterOrEqualsThan(Gp);
@@ -501,7 +589,7 @@ namespace MathCore.DSP.Tests.Filters
         [TestMethod]
         public void TypeI_EvenOrder_TransmissionCoefficient()
         {
-            const double pi2 = 2 * Math.PI;
+            const double pi2 = 2 * PI;
 
             const double fd = 5000;             // Гц // Частота дискретизации
             const double dt = 1 / fd;           // с  // Период дискретизации
@@ -517,10 +605,10 @@ namespace MathCore.DSP.Tests.Filters
 
             Assert.That.Value(filter.Order).IsEven();
 
-            var transmission_0 = filter.GetTransmissionCoefficient(0, dt);
-            var transmission_fp = filter.GetTransmissionCoefficient(fp, dt);
-            var transmission_fs = filter.GetTransmissionCoefficient(fs, dt);
-            var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2, dt);
+            var transmission_0 = filter.GetTransmissionCoefficient(0);
+            var transmission_fp = filter.GetTransmissionCoefficient(fp);
+            var transmission_fs = filter.GetTransmissionCoefficient(fs);
+            var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
 
             var transmission_0_abs = transmission_0.Abs;
             var transmission_fp_abs = transmission_fp.Abs;
@@ -538,7 +626,7 @@ namespace MathCore.DSP.Tests.Filters
         [TestMethod]
         public void TypeI_OddOrder_TransmissionCoefficient()
         {
-            const double pi2 = 2 * Math.PI;
+            const double pi2 = 2 * PI;
 
             const double fd = 5000;             // Гц // Частота дискретизации
             const double dt = 1 / fd;           // с  // Период дискретизации
@@ -554,10 +642,10 @@ namespace MathCore.DSP.Tests.Filters
 
             Assert.That.Value(filter.Order).IsOdd();
 
-            var transmission_0 = filter.GetTransmissionCoefficient(0, dt);
-            var transmission_fp = filter.GetTransmissionCoefficient(fp, dt);
-            var transmission_fs = filter.GetTransmissionCoefficient(fs, dt);
-            var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2, dt);
+            var transmission_0 = filter.GetTransmissionCoefficient(0);
+            var transmission_fp = filter.GetTransmissionCoefficient(fp);
+            var transmission_fs = filter.GetTransmissionCoefficient(fs);
+            var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
 
             var transmission_0_abs = transmission_0.Abs;
             var transmission_fp_abs = transmission_fp.Abs;
@@ -574,7 +662,7 @@ namespace MathCore.DSP.Tests.Filters
         [TestMethod]
         public void TypeII_EvenOrder_TransmissionCoefficient()
         {
-            const double pi2 = 2 * Math.PI;
+            const double pi2 = 2 * PI;
 
             const double fd = 5000;             // Гц // Частота дискретизации
             const double dt = 1 / fd;           // с  // Период дискретизации
@@ -590,10 +678,10 @@ namespace MathCore.DSP.Tests.Filters
 
             Assert.That.Value(filter.Order).IsEven();
 
-            var transmission_0 = filter.GetTransmissionCoefficient(0, dt);
-            var transmission_fp = filter.GetTransmissionCoefficient(fp, dt);
-            var transmission_fs = filter.GetTransmissionCoefficient(fs, dt);
-            var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2, dt);
+            var transmission_0 = filter.GetTransmissionCoefficient(0);
+            var transmission_fp = filter.GetTransmissionCoefficient(fp);
+            var transmission_fs = filter.GetTransmissionCoefficient(fs);
+            var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
 
             var transmission_0_abs = transmission_0.Abs;
             var transmission_fp_abs = transmission_fp.Abs;
@@ -612,7 +700,7 @@ namespace MathCore.DSP.Tests.Filters
         [TestMethod]
         public void TypeII_OddOrder_TransmissionCoefficient()
         {
-            const double pi2 = 2 * Math.PI;
+            const double pi2 = 2 * PI;
 
             const double fd = 5000;             // Гц // Частота дискретизации
             const double dt = 1 / fd;           // с  // Период дискретизации
@@ -628,10 +716,10 @@ namespace MathCore.DSP.Tests.Filters
 
             Assert.That.Value(filter.Order).IsOdd();
 
-            var transmission_0 = filter.GetTransmissionCoefficient(0, dt);
-            var transmission_fp = filter.GetTransmissionCoefficient(fp, dt);
-            var transmission_fs = filter.GetTransmissionCoefficient(fs, dt);
-            var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2, dt);
+            var transmission_0 = filter.GetTransmissionCoefficient(0);
+            var transmission_fp = filter.GetTransmissionCoefficient(fp);
+            var transmission_fs = filter.GetTransmissionCoefficient(fs);
+            var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
 
             var transmission_0_abs = transmission_0.Abs;
             var transmission_fp_abs = transmission_fp.Abs;
@@ -650,7 +738,7 @@ namespace MathCore.DSP.Tests.Filters
         [TestMethod]
         public void TypeIICorrected_EvenOrder_TransmissionCoefficient()
         {
-            const double pi2 = 2 * Math.PI;
+            const double pi2 = 2 * PI;
 
             const double fd = 5000;             // Гц // Частота дискретизации
             const double dt = 1 / fd;           // с  // Период дискретизации
@@ -666,10 +754,10 @@ namespace MathCore.DSP.Tests.Filters
 
             Assert.That.Value(filter.Order).IsEven();
 
-            var transmission_0 = filter.GetTransmissionCoefficient(0, dt);
-            var transmission_fp = filter.GetTransmissionCoefficient(fp, dt);
-            var transmission_fs = filter.GetTransmissionCoefficient(fs, dt);
-            var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2, dt);
+            var transmission_0 = filter.GetTransmissionCoefficient(0);
+            var transmission_fp = filter.GetTransmissionCoefficient(fp);
+            var transmission_fs = filter.GetTransmissionCoefficient(fs);
+            var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
 
             var transmission_0_abs = transmission_0.Abs;
             var transmission_fp_abs = transmission_fp.Abs;
@@ -686,7 +774,7 @@ namespace MathCore.DSP.Tests.Filters
         [TestMethod]
         public void TypeIICorrected_OddOrder_TransmissionCoefficient()
         {
-            const double pi2 = 2 * Math.PI;
+            const double pi2 = 2 * PI;
 
             const double fd = 5000;             // Гц // Частота дискретизации
             const double dt = 1 / fd;           // с  // Период дискретизации
@@ -702,10 +790,10 @@ namespace MathCore.DSP.Tests.Filters
 
             Assert.That.Value(filter.Order).IsOdd();
 
-            var transmission_0 = filter.GetTransmissionCoefficient(0, dt);
-            var transmission_fp = filter.GetTransmissionCoefficient(fp, dt);
-            var transmission_fs = filter.GetTransmissionCoefficient(fs, dt);
-            var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2, dt);
+            var transmission_0 = filter.GetTransmissionCoefficient(0);
+            var transmission_fp = filter.GetTransmissionCoefficient(fp);
+            var transmission_fs = filter.GetTransmissionCoefficient(fs);
+            var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
 
             var transmission_0_abs = transmission_0.Abs;
             var transmission_fp_abs = transmission_fp.Abs;
@@ -723,7 +811,7 @@ namespace MathCore.DSP.Tests.Filters
         [TestMethod]
         public void TypeI_EvenOrder_ImpulseResponse()
         {
-            const double pi2 = 2 * Math.PI;
+            const double pi2 = 2 * PI;
 
             const double fd = 5000;             // Гц // Частота дискретизации
             const double dt = 1 / fd;           // с  // Период дискретизации
@@ -770,7 +858,7 @@ namespace MathCore.DSP.Tests.Filters
         [TestMethod]
         public void TypeI_OddOrder_ImpulseResponse()
         {
-            const double pi2 = 2 * Math.PI;
+            const double pi2 = 2 * PI;
 
             const double fd = 5000;             // Гц // Частота дискретизации
             const double dt = 1 / fd;           // с  // Период дискретизации
@@ -817,7 +905,7 @@ namespace MathCore.DSP.Tests.Filters
         [TestMethod]
         public void TypeII_EvenOrder_ImpulseResponse()
         {
-            const double pi2 = 2 * Math.PI;
+            const double pi2 = 2 * PI;
 
             const double fd = 5000;             // Гц // Частота дискретизации
             const double dt = 1 / fd;           // с  // Период дискретизации
@@ -864,7 +952,7 @@ namespace MathCore.DSP.Tests.Filters
         [TestMethod]
         public void TypeII_OddOrder_ImpulseResponse()
         {
-            const double pi2 = 2 * Math.PI;
+            const double pi2 = 2 * PI;
 
             const double fd = 5000;             // Гц // Частота дискретизации
             const double dt = 1 / fd;           // с  // Период дискретизации
@@ -911,7 +999,7 @@ namespace MathCore.DSP.Tests.Filters
         [TestMethod]
         public void TypeIICorrected_EvenOrder_ImpulseResponse()
         {
-            const double pi2 = 2 * Math.PI;
+            const double pi2 = 2 * PI;
 
             const double fd = 5000;             // Гц // Частота дискретизации
             const double dt = 1 / fd;           // с  // Период дискретизации
@@ -958,7 +1046,7 @@ namespace MathCore.DSP.Tests.Filters
         [TestMethod]
         public void TypeIICorrected_OddOrder_ImpulseResponse()
         {
-            const double pi2 = 2 * Math.PI;
+            const double pi2 = 2 * PI;
 
             const double fd = 5000;             // Гц // Частота дискретизации
             const double dt = 1 / fd;           // с  // Период дискретизации
@@ -1004,7 +1092,7 @@ namespace MathCore.DSP.Tests.Filters
         [TestMethod]
         public void TypeI_EvenOrder_SignalProcessing()
         {
-            const double pi2 = 2 * Math.PI;
+            const double pi2 = 2 * PI;
 
             const double fd = 5000;             // Гц // Частота дискретизации
             const double dt = 1 / fd;           // с  // Период дискретизации
@@ -1022,7 +1110,7 @@ namespace MathCore.DSP.Tests.Filters
 
             const int samples_count = 1024;
             // Сигнал s0(t) = 1
-            var s_0 = new SamplesDigitalSignal(dt, Enumerable.Repeat(1d, samples_count));
+            var s_0 = new SamplesDigitalSignal(dt, Repeat(1d, samples_count));
 
             // Гармонические сигналы разной частоты и амплитудой = √2
             const double a0 = Consts.sqrt_2;
@@ -1051,7 +1139,7 @@ namespace MathCore.DSP.Tests.Filters
         [TestMethod]
         public void TypeI_OddOrder_SignalProcessing()
         {
-            const double pi2 = 2 * Math.PI;
+            const double pi2 = 2 * PI;
 
             const double fd = 5000;             // Гц // Частота дискретизации
             const double dt = 1 / fd;           // с  // Период дискретизации
@@ -1069,7 +1157,7 @@ namespace MathCore.DSP.Tests.Filters
 
             const int samples_count = 1024;
             // Сигнал s0(t) = 1
-            var s_0 = new SamplesDigitalSignal(dt, Enumerable.Repeat(1d, samples_count));
+            var s_0 = new SamplesDigitalSignal(dt, Repeat(1d, samples_count));
 
             // Гармонические сигналы разной частоты и амплитудой = √2
             const double a0 = Consts.sqrt_2;
@@ -1098,7 +1186,7 @@ namespace MathCore.DSP.Tests.Filters
         [TestMethod]
         public void TypeII_EvenOrder_SignalProcessing()
         {
-            const double pi2 = 2 * Math.PI;
+            const double pi2 = 2 * PI;
 
             const double fd = 5000;             // Гц // Частота дискретизации
             const double dt = 1 / fd;           // с  // Период дискретизации
@@ -1116,7 +1204,7 @@ namespace MathCore.DSP.Tests.Filters
 
             const int samples_count = 1024;
             // Сигнал s0(t) = 1
-            var s_0 = new SamplesDigitalSignal(dt, Enumerable.Repeat(1d, samples_count));
+            var s_0 = new SamplesDigitalSignal(dt, Repeat(1d, samples_count));
 
             // Гармонические сигналы разной частоты и амплитудой = √2
             const double a0 = Consts.sqrt_2;
@@ -1145,7 +1233,7 @@ namespace MathCore.DSP.Tests.Filters
         [TestMethod]
         public void TypeII_OddOrder_SignalProcessing()
         {
-            const double pi2 = 2 * Math.PI;
+            const double pi2 = 2 * PI;
 
             const double fd = 5000;             // Гц // Частота дискретизации
             const double dt = 1 / fd;           // с  // Период дискретизации
@@ -1163,7 +1251,7 @@ namespace MathCore.DSP.Tests.Filters
 
             const int samples_count = 1024;
             // Сигнал s0(t) = 1
-            var s_0 = new SamplesDigitalSignal(dt, Enumerable.Repeat(1d, samples_count));
+            var s_0 = new SamplesDigitalSignal(dt, Repeat(1d, samples_count));
 
             // Гармонические сигналы разной частоты и амплитудой = √2
             const double a0 = Consts.sqrt_2;
@@ -1192,7 +1280,7 @@ namespace MathCore.DSP.Tests.Filters
         [TestMethod]
         public void TypeIICorrected_EvenOrder_SignalProcessing()
         {
-            const double pi2 = 2 * Math.PI;
+            const double pi2 = 2 * PI;
 
             const double fd = 5000;             // Гц // Частота дискретизации
             const double dt = 1 / fd;           // с  // Период дискретизации
@@ -1210,7 +1298,7 @@ namespace MathCore.DSP.Tests.Filters
 
             const int samples_count = 1024;
             // Сигнал s0(t) = 1
-            var s_0 = new SamplesDigitalSignal(dt, Enumerable.Repeat(1d, samples_count));
+            var s_0 = new SamplesDigitalSignal(dt, Repeat(1d, samples_count));
 
             // Гармонические сигналы разной частоты и амплитудой = √2
             const double a0 = Consts.sqrt_2;
@@ -1239,7 +1327,7 @@ namespace MathCore.DSP.Tests.Filters
         [TestMethod]
         public void TypeIICorrected_OddOrder_SignalProcessing()
         {
-            const double pi2 = 2 * Math.PI;
+            const double pi2 = 2 * PI;
 
             const double fd = 5000;             // Гц // Частота дискретизации
             const double dt = 1 / fd;           // с  // Период дискретизации
@@ -1257,7 +1345,7 @@ namespace MathCore.DSP.Tests.Filters
 
             const int samples_count = 1024;
             // Сигнал s0(t) = 1
-            var s_0 = new SamplesDigitalSignal(dt, Enumerable.Repeat(1d, samples_count));
+            var s_0 = new SamplesDigitalSignal(dt, Repeat(1d, samples_count));
 
             // Гармонические сигналы разной частоты и амплитудой = √2
             const double a0 = Consts.sqrt_2;

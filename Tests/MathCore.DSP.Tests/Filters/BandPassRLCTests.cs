@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using MathCore.DSP.Filters;
 using MathCore.DSP.Fourier;
 using MathCore.DSP.Signals;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using static System.Math;
 
 namespace MathCore.DSP.Tests.Filters
 {
@@ -19,8 +20,8 @@ namespace MathCore.DSP.Tests.Filters
             const double f0 = 30;
             const double Df = 10;
 
-            var w = Math.Tan(Math.PI * f0 * dt);
-            var dw = Math.PI * Df * dt;
+            var w = Tan(PI * f0 * dt);
+            var dw = PI * Df * dt;
 
             var expected_b0 = dw;
             var expected_b1 = 0d;
@@ -91,7 +92,7 @@ namespace MathCore.DSP.Tests.Filters
             const double eps = 0.048;
 
             const double A0 = Consts.sqrt_2;
-            var x0 = new SamplesDigitalSignal(dt, 1024, t => A0 * Math.Cos(2 * Math.PI * f0 * t));
+            var x0 = new SamplesDigitalSignal(dt, 1024, t => A0 * Cos(2 * PI * f0 * t));
 
             var x0_power = x0.Power;
             Assert.AreEqual(1, x0_power, eps);
@@ -102,7 +103,7 @@ namespace MathCore.DSP.Tests.Filters
 
             var y0_power = y0.Power;
 
-            Assert.AreEqual(x0_power, y0_power, eps, $"delta:{Math.Abs(x0_power - y0_power)}");
+            Assert.AreEqual(x0_power, y0_power, eps, $"delta:{Abs(x0_power - y0_power)}");
         }
 
         [TestMethod]
@@ -114,7 +115,7 @@ namespace MathCore.DSP.Tests.Filters
             const double Df = 10;
             const double eps = 0.86e-3;
 
-            var x0 = new SamplesDigitalSignal(dt, 1024, t => 1 * Math.Cos(2 * Math.PI * 0 * t));
+            var x0 = new SamplesDigitalSignal(dt, 1024, t => 1 * Cos(2 * PI * 0 * t));
 
             var x0_power = x0.Power;
             Assert.AreEqual(1, x0_power, eps);
@@ -125,7 +126,7 @@ namespace MathCore.DSP.Tests.Filters
 
             var y0_power = y0.Power;
 
-            Assert.AreEqual(0, y0_power, eps, $"delta:{Math.Abs(0 - y0_power)}");
+            Assert.AreEqual(0, y0_power, eps, $"delta:{Abs(0 - y0_power)}");
         }
 
         [TestMethod]
@@ -137,7 +138,7 @@ namespace MathCore.DSP.Tests.Filters
             const double Df = 10;
             const double eps = 7.7e-6;
 
-            var x0 = new SamplesDigitalSignal(dt, 1024, t => 1 * Math.Cos(2 * Math.PI * fd / 2 * t));
+            var x0 = new SamplesDigitalSignal(dt, 1024, t => 1 * Cos(2 * PI * fd / 2 * t));
 
             var x0_power = x0.Power;
             Assert.AreEqual(1, x0_power, eps);
@@ -148,7 +149,7 @@ namespace MathCore.DSP.Tests.Filters
 
             var y0_power = y0.Power;
 
-            Assert.AreEqual(0, y0_power, eps, $"delta:{Math.Abs(0 - y0_power):e2}");
+            Assert.AreEqual(0, y0_power, eps, $"delta:{Abs(0 - y0_power):e2}");
         }
 
         [TestMethod]
@@ -164,7 +165,7 @@ namespace MathCore.DSP.Tests.Filters
             var c = rlc.GetTransmissionCoefficient(f0, dt);
 
             const double eps = 1.12e-15;
-            Assert.AreEqual(1, c.Abs, eps, $"delta:{Math.Abs(1 - c.Abs):e2}");
+            Assert.AreEqual(1, c.Abs, eps, $"delta:{Abs(1 - c.Abs):e2}");
         }
 
         [TestMethod]
@@ -179,7 +180,7 @@ namespace MathCore.DSP.Tests.Filters
 
             var c = rlc.GetTransmissionCoefficient(0, dt);
 
-            Assert.AreEqual(0, c.Abs, $"delta:{Math.Abs(0 - c.Abs):e2}");
+            Assert.AreEqual(0, c.Abs, $"delta:{Abs(0 - c.Abs):e2}");
         }
 
         [TestMethod]
@@ -195,7 +196,7 @@ namespace MathCore.DSP.Tests.Filters
             var c = rlc.GetTransmissionCoefficient(fd / 2, dt);
 
             const double eps = 1.93e-18;
-            Assert.AreEqual(0, c.Abs, eps, $"delta:{Math.Abs(0 - c.Abs):e2}");
+            Assert.AreEqual(0, c.Abs, eps, $"delta:{Abs(0 - c.Abs):e2}");
         }
 
         [TestMethod]
@@ -210,9 +211,9 @@ namespace MathCore.DSP.Tests.Filters
 
             const int samples_count = 1000;
             var s0 = new SamplesDigitalSignal(dt, Enumerable.Repeat(1, samples_count));
-            var s1 = new SamplesDigitalSignal(dt, samples_count, t => 1 * Math.Cos(2 * Math.PI * (f0 - Df / 2) * t));
-            var s2 = new SamplesDigitalSignal(dt, samples_count, t => 1 * Math.Cos(2 * Math.PI * f0 * t));
-            var s3 = new SamplesDigitalSignal(dt, samples_count, t => 1 * Math.Cos(2 * Math.PI * (f0 + Df / 2) * t));
+            var s1 = new SamplesDigitalSignal(dt, samples_count, t => 1 * Cos(2 * PI * (f0 - Df / 2) * t));
+            var s2 = new SamplesDigitalSignal(dt, samples_count, t => 1 * Cos(2 * PI * f0 * t));
+            var s3 = new SamplesDigitalSignal(dt, samples_count, t => 1 * Cos(2 * PI * (f0 + Df / 2) * t));
 
             var s = s0 + s1 + s2 + s3;
             s.FourierTransform().ToAbsArg(out var abs_S, out var arg_S);

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using MathCore.Annotations;
+
+using static System.Math;
+
+using static MathCore.Consts;
 
 namespace MathCore.DSP.Fourier
 {
@@ -9,11 +12,10 @@ namespace MathCore.DSP.Fourier
     {
         /// <summary>Прямое преобразование отсчётов функции в спектр</summary>
         /// <param name="Values">Массив отсчётов функции</param>
-        [NotNull]
-        public static Complex[] FastFourierTransform([NotNull] this double[] Values)
+        public static Complex[] FastFourierTransform(this double[] Values)
         {
             var N = Values.Length;
-            if(!N.IsPowerOf2()) N = 1 << ((int)Math.Log(N, 2) + 1);
+            if(!N.IsPowerOf2()) N = 1 << ((int)Log(N, 2) + 1);
 
             var real_spectrum = new double[N * 2];
             N = Values.Length;
@@ -31,15 +33,14 @@ namespace MathCore.DSP.Fourier
 
         /// <summary>Прямое преобразование отсчётов функции в спектр</summary>
         /// <param name="Values">Массив отсчётов функции</param>
-        [NotNull]
-        public static Complex[] FastFourierTransform([NotNull] this Complex[] Values)
+        public static Complex[] FastFourierTransform(this Complex[] Values)
         {
             var length = Values.Length;
             if(!length.IsPowerOf2())
             {
-                var length_log2 = Math.Log(length, 2);
-                length_log2 -= Math.Round(length_log2);
-                length += (int)Math.Pow(2, length_log2);
+                var length_log2 = Log(length, 2);
+                length_log2 -= Round(length_log2);
+                length += (int)Pow(2, length_log2);
             }
 
             var spectrum = new double[length * 2];
@@ -63,15 +64,14 @@ namespace MathCore.DSP.Fourier
 
         /// <summary>Обратное преобразование отсчётов спектра в отсчёты сигнала</summary>
         /// <param name="Spectrum">Массив отсчётов спектра</param>
-        [NotNull]
-        public static Complex[] FastFurierInverse([NotNull] this Complex[] Spectrum)
+        public static Complex[] FastFourierInverse(this Complex[] Spectrum)
         {
             var spectrum_length = Spectrum.Length;
             if(!spectrum_length.IsPowerOf2())
             {
-                var spectrum_length_log2 = Math.Log(spectrum_length, 2);
-                spectrum_length_log2 -= Math.Round(spectrum_length_log2);
-                spectrum_length += (int)Math.Pow(2, spectrum_length_log2);
+                var spectrum_length_log2 = Log(spectrum_length, 2);
+                spectrum_length_log2 -= Round(spectrum_length_log2);
+                spectrum_length += (int)Pow(2, spectrum_length_log2);
             }
 
             var values = new double[spectrum_length * 2];
@@ -92,7 +92,7 @@ namespace MathCore.DSP.Fourier
         }
 
 #pragma warning disable IDE1006 // Стили именования
-        private static void fft([NotNull] ref double[] Values, bool IsInverse)
+        private static void fft(ref double[] Values, bool IsInverse)
 #pragma warning restore IDE1006 // Стили именования
         {
             var N = Values.Length / 2;
@@ -127,14 +127,14 @@ namespace MathCore.DSP.Fourier
             }
 
             var m_max = 2;
-            var theta0 = Consts.pi2 * i_sign;
+            var theta0 = pi2 * i_sign;
             while(n > m_max)
             {
                 var i_step = m_max << 1;
                 var theta = theta0 / m_max;
-                var w_pr = Math.Sin(.5 * theta);
+                var w_pr = Sin(.5 * theta);
                 w_pr *= -2 * w_pr;
-                var w_pi = Math.Sin(theta);
+                var w_pi = Sin(theta);
                 double w_r = 1;
                 double w_i = 0;
                 for(var ii = 1; ii <= (m_max >> 1); ii++)
@@ -166,7 +166,7 @@ namespace MathCore.DSP.Fourier
         /// <summary>Целочисленное преобразование Фурье</summary>
         /// <param name="a">Массив целых чисел</param>
         /// <param name="invert">Обратное преобразование</param>
-        public static void FFT_int([NotNull] this int[] a, bool invert = false)
+        public static void FFT_int(this int[] a, bool invert = false)
         {
             var n = a.Length;
 
@@ -251,12 +251,12 @@ namespace MathCore.DSP.Fourier
             return d == 1 ? x : 0;
         }
 
-
-        public static double[] Recursive_FFT([NotNull] double[] a)
+        public static double[] Recursive_FFT(double[] a)
         {
             var n = a.Length;
             return n.IsPowerOf2() ? Recursive_FFTInternal(a, n) : throw new ArgumentException("Длина массива должна быть степенью 2", nameof(a));
         }
+
         private static double[] Recursive_FFTInternal(double[] a, int n)
         {
             switch (n)
@@ -279,7 +279,7 @@ namespace MathCore.DSP.Fourier
             odd = Recursive_FFTInternal(odd, n2);
 
             var y = new double[n];
-            var wn = Math.Exp(Consts.pi2 / n);
+            var wn = Exp(pi2 / n);
             var w = 1d;
             for(var k = 0; k < n2; k++)
             {
@@ -290,8 +290,7 @@ namespace MathCore.DSP.Fourier
             return y;
         }
 
-        [NotNull, ItemNotNull]
-        public static Task<double[]> Recursive_FFTAsync([NotNull] double[] a, int MinAsyncLength = 256)
+        public static Task<double[]> Recursive_FFTAsync(double[] a, int MinAsyncLength = 256)
         {
             var n = a.Length;
             return n.IsPowerOf2()
@@ -299,8 +298,7 @@ namespace MathCore.DSP.Fourier
                 : throw new ArgumentException("Длина массива должна быть степенью 2", nameof(a));
         }
 
-        [ItemNotNull]
-        private static async Task<double[]> Recursive_FFTInternalAsync([NotNull] double[] a, int n, int MinAsyncLength = 256)
+        private static async Task<double[]> Recursive_FFTInternalAsync(double[] a, int n, int MinAsyncLength = 256)
         {
             switch(n)
             {
@@ -334,7 +332,7 @@ namespace MathCore.DSP.Fourier
             }
 
             var y = new double[n];
-            var wn = Math.Exp(Consts.pi2 / n);
+            var wn = Exp(pi2 / n);
             var w = 1d;
             for(var k = 0; k < n2; k++)
             {

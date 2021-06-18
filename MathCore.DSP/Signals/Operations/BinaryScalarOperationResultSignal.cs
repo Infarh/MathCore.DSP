@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MathCore.Annotations;
 
 namespace MathCore.DSP.Signals.Operations
 {
@@ -14,10 +13,10 @@ namespace MathCore.DSP.Signals.Operations
         private readonly double _Value;
 
         /// <summary>Функция операции над отсчётами сигнала</summary>
-        [NotNull] private readonly SignalCombinator _Function;
+        private readonly SignalCombinator _Function;
 
         /// <summary>Сигнал, участвующий в операции</summary>
-        [NotNull] public DigitalSignal Signal { get; }
+        public DigitalSignal Signal { get; }
 
         /// <summary>Количество отсчётов</summary>
         public override int SamplesCount => Signal.SamplesCount;
@@ -32,7 +31,7 @@ namespace MathCore.DSP.Signals.Operations
         /// <param name="Signal">Исходный сигнал</param>
         /// <param name="Value">Вещественное число</param>
         /// <param name="Function">Функция, вызываемая для каждого отсчёта сигнала (первый аргумент) и вещественного числа (второй аргумент)</param>
-        protected BinaryScalarOperationResultSignal([NotNull] DigitalSignal Signal, double Value, [NotNull] SignalCombinator Function) : base(Signal.dt)
+        protected BinaryScalarOperationResultSignal(DigitalSignal Signal, double Value, SignalCombinator Function) : base(Signal.dt)
         {
             this.Signal = Signal ?? throw new ArgumentNullException(nameof(Signal));
             _Value = Value;
