@@ -111,7 +111,7 @@ namespace MathCore.DSP.Tests.Filters
             h_f0.AssertThanValue().LessThan(-Rs);
             h_sl.AssertThanValue().LessThan(-Rs);
 
-            h_pl.AssertThanValue().GreaterThan(-Rp);
+            h_pl.AssertThanValue().GreaterThan(-Rp, 1.1);
             h_c0.AssertThanValue().GreaterThan(-Rp);
             h_ph.AssertThanValue().GreaterThan(-Rp);
 
