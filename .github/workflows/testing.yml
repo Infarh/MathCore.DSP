@@ -1,6 +1,6 @@
 name: Testing
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   test:
@@ -10,10 +10,10 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       
-      - name: Use .NET 5.0.101
+      - name: Setup .NET 5.0.x
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 5.0.101
+          dotnet-version: 5.0.x
           
       - name: Building
         run: |
