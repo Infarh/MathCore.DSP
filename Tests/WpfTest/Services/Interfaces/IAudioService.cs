@@ -4,10 +4,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using MathCore.Annotations;
 using MathCore.DSP.Signals;
+using MathCore.Hosting;
+
 using WpfTest.Models;
 
 namespace WpfTest.Services.Interfaces
 {
+    [Service(Implementation = typeof(NAudioService))]
     internal interface IAudioService
     {
         [ItemNotNull]
