@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:l="clr-namespace:WpfTest"
              xmlns:vm="clr-namespace:WpfTest.ViewModels"
-             StartupUri="Views/MicrophoneRecorderWindow.xaml">
+             StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
          <ResourceDictionary>
             <vm:ViewModelLocator x:Key="Locator"/>

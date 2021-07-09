@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MathCore.DSP\MathCore.DSP.csproj" />
+    <ProjectReference Include="..\..\MathCore.DSP\MathCore.DSP.csproj" />
   </ItemGroup>
 
   <ItemGroup>

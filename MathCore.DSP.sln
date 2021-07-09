@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleTest", "Tests\Consol
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathCore.DSP.Tests", "Tests\MathCore.DSP.Tests\MathCore.DSP.Tests.csproj", "{B92826FA-3130-431E-953C-5A6E9F3489D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfTest", "WpfTest\WpfTest.csproj", "{C129E8A4-1A28-4B06-BFC4-D7840A8BD77D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfTest", "Tests\WpfTest\WpfTest.csproj", "{C129E8A4-1A28-4B06-BFC4-D7840A8BD77D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

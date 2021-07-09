@@ -60,7 +60,7 @@ namespace NAudio.Wave
                 _Input.StopRecording();
             }
 
-            public Task<DigitalSignal> GetSignal()
+            public Task<DigitalSignal?> GetSignal()
             {
                 var last_buffer_length = -1;
                 var samples_rate = _Input.WaveFormat.SampleRate;
