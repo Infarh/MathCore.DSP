@@ -1,6 +1,9 @@
-﻿namespace WpfTest.Services.Interfaces
+﻿using MathCore.Hosting;
+
+namespace WpfTest.Services.Interfaces
 {
-    internal interface ISignalProcessingService
+    [Service(Implementation = typeof(DSPService))]
+    public interface ISignalProcessingService
     {
 
     }

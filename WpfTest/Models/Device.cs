@@ -1,6 +1,6 @@
 ﻿namespace WpfTest.Models
 {
-    class Device
+    internal class Device
     {
         public int Index { get; }
         public string Name { get; }

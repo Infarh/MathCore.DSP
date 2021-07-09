@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-using MathCore.Annotations;
 using MathCore.DSP.Signals;
 
 using NAudio.Wave;
@@ -15,7 +14,6 @@ namespace WpfTest.Services
 {
     internal class NAudioService : IAudioService
     {
-        [ItemNotNull]
         public IEnumerable<Device> GetInputDevices()
         {
             var devices_count = WaveIn.DeviceCount;
@@ -26,7 +24,6 @@ namespace WpfTest.Services
             }
         }
 
-        [ItemNotNull]
         public IEnumerable<Device> GetOutputDevices()
         {
             var devices_count = WaveOut.DeviceCount;

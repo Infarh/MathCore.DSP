@@ -5,16 +5,20 @@ using System.Windows.Input;
 
 using MathCore.Annotations;
 using MathCore.DSP.Signals;
+using MathCore.Hosting;
 using MathCore.WPF;
 using MathCore.WPF.Commands;
 using MathCore.WPF.ViewModels;
+
+using Microsoft.Extensions.DependencyInjection;
 
 using WpfTest.Models;
 using WpfTest.Services.Interfaces;
 
 namespace WpfTest.ViewModels
 {
-    class MainWindowViewModel : ViewModel
+    [Service(ServiceLifetime.Scoped)]
+    internal class MicrophoneRecorderViewModel : ViewModel
     {
         private readonly IAudioService _Audio;
         private readonly ISignalProcessingService _SignalProcessing;
@@ -146,7 +150,7 @@ namespace WpfTest.ViewModels
 
         #endregion
 
-        public MainWindowViewModel(IAudioService Audio, ISignalProcessingService SignalProcessing)
+        public MicrophoneRecorderViewModel(IAudioService Audio, ISignalProcessingService SignalProcessing)
         {
             _Audio = Audio;
             _SignalProcessing = SignalProcessing;

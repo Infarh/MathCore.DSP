@@ -1,9 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using MathCore.Hosting.WPF;
+
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WpfTest.ViewModels
 {
-    class ViewModelLocator
+    class ViewModelLocator : ServiceLocatorHosted
     {
-        public MainWindowViewModel MainWindowModel => App.Host.Services.GetRequiredService<MainWindowViewModel>();
+        public MicrophoneRecorderViewModel MicrophoneRecorderModel => Services.GetRequiredService<MicrophoneRecorderViewModel>();
     }
 }
