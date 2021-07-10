@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Dynamic;
 using System.Linq;
 
 using MathCore.DSP.Filters;
@@ -12,6 +11,7 @@ using static System.Linq.Enumerable;
 using static System.Math;
 
 using static MathCore.SpecialFunctions;
+// ReSharper disable InconsistentNaming
 
 namespace MathCore.DSP.Tests.Filters
 {
