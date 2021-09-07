@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" mc:Ignorable="d"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:l="clr-namespace:WpfTest"
         xmlns:fdv="clr-namespace:WpfTest.Views.FilterDesigners"
         xmlns:fd="clr-namespace:WpfTest.ViewModels.FilterDesigners"
         DataContext="{Binding MainModel, Source={StaticResource Locator}}"
@@ -23,7 +24,9 @@
         </DataTemplate>
     </Window.Resources>
     <Grid>
-        <TabControl ItemsSource="{Binding FilterDesigners}" DisplayMemberPath="Title"/>
-        <TextBlock Text="{Binding MicrophoneRecorderModel, Source={StaticResource Locator}}"/>
+        <!--<TabControl ItemsSource="{Binding FilterDesigners}" 
+                    SelectedItem="{Binding SelectedFilterDesigner}"
+                    DisplayMemberPath="Title"/>-->
+        <TextBlock Text="{Binding Source={x:Static l:App.Current}, Path=.}"/>
     </Grid>
 </Window>
