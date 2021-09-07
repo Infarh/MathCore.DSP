@@ -10,10 +10,7 @@ namespace WpfTest.ViewModels
     [Service(ServiceLifetime.Scoped)]
     public class MainWindowViewModel : TitledViewModel
     {
-        public MainWindowViewModel()
-        {
-            Title = "Главное окно";
-        }
+        public MainWindowViewModel() => Title = "Главное окно";
 
         public FilterDesign[] FilterDesigners { get; } = 
         {
@@ -22,5 +19,15 @@ namespace WpfTest.ViewModels
             new ChebyshevIBandPassDesign(),
             new ChebyshevIIBandPassDesign()
         };
+
+        #region SelectedDesigner : FilterDesign - Выбранный фильтр
+
+        /// <summary>Выбранный фильтр</summary>
+        private FilterDesign _SelectedFilterDesigner;
+
+        /// <summary>Выбранный фильтр</summary>
+        public FilterDesign SelectedFilterDesigner { get => _SelectedFilterDesigner; set => Set(ref _SelectedFilterDesigner, value); }
+
+        #endregion
     }
 }
