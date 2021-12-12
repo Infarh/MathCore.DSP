@@ -4,9 +4,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <LangVersion>latest</LangVersion>
-    <Version>0.0.8.6</Version>
+    <Version>0.0.9</Version>
+    <ImplicitUsings>enable</ImplicitUsings>
     <PackageReleaseNotes>
-      Обновление пакетов
+      Обновление платформы
     </PackageReleaseNotes>
   </PropertyGroup>
 
@@ -15,7 +16,7 @@
     <Description>Библиотека алгоритмов цифровой обработки сигналов</Description>
     <PackageProjectUrl>https://github.com/Infarh/MathCore.DSP</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Infarh/MathCore.DSP.git</RepositoryUrl>
-    <PackageTags>DSP, Signal processing</PackageTags>
+    <PackageTags>DSP,Signal processing</PackageTags>
     <Copyright>shmachilin@gmail.com</Copyright>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>MathCoreDSPSign.snk</AssemblyOriginatorKeyFile>
@@ -36,7 +37,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MathCore" Version="0.0.58" />
+    <PackageReference Include="MathCore" Version="0.0.59" />
     <PackageReference Include="System.Memory" Version="4.5.4" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
   </ItemGroup>
