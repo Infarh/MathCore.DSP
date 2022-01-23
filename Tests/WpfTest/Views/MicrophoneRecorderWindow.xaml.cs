@@ -1,8 +1,7 @@
 ﻿// ReSharper disable once CheckNamespace
-namespace WpfTest
+namespace WpfTest;
+
+public partial class MainWindow
 {
-    public partial class MainWindow
-    {
-        public MainWindow() => InitializeComponent();
-    }
+    public MainWindow() => InitializeComponent();
 }

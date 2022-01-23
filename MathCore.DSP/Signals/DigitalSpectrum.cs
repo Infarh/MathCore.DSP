@@ -1,11 +1,10 @@
-﻿namespace MathCore.DSP.Signals
+﻿namespace MathCore.DSP.Signals;
+
+public class DigitalSpectrum
 {
-    public class DigitalSpectrum
-    {
-        private double _df;
+    private double _df;
 
-        public double fd => _df;
+    public double fd => _df;
 
-        protected DigitalSpectrum(double df) { }
-    }
+    protected DigitalSpectrum(double df) { }
 }

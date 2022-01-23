@@ -1,7 +1,6 @@
-﻿namespace WpfTest.ViewModels.FilterDesigners
+﻿namespace WpfTest.ViewModels.FilterDesigners;
+
+public class ChebyshevIIBandPassDesign : BandPassFilterDesign
 {
-    public class ChebyshevIIBandPassDesign : BandPassFilterDesign
-    {
-        public ChebyshevIIBandPassDesign() => Title = "ППФ Чебышева II-рода";
-    }
+    public ChebyshevIIBandPassDesign() => Title = "ППФ Чебышева II-рода";
 }

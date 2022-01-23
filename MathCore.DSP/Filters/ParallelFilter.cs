@@ -1,21 +1,20 @@
-﻿namespace MathCore.DSP.Filters
+﻿namespace MathCore.DSP.Filters;
+
+/// <summary>Параллельный комбинационный фильтр</summary>
+public class ParallelFilter : CombinationFilter
 {
-    /// <summary>Параллельный комбинационный фильтр</summary>
-    public class ParallelFilter : CombinationFilter
+    /// <summary>Инициализация нового параллельного комбинационного фильтра</summary>
+    /// <param name="Filter1">Первый фильтр в комбинации</param>
+    /// <param name="Filter2">Второй фильтр в комбинации</param>
+    public ParallelFilter(Filter Filter1, Filter Filter2) : base(Filter1, Filter2) { }
+
+    public override double Process(double Sample) => Filter1.Process(Sample / 2) + Filter2.Process(Sample / 2);
+
+    public override void Reset()
     {
-        /// <summary>Инициализация нового параллельного комбинационного фильтра</summary>
-        /// <param name="Filter1">Первый фильтр в комбинации</param>
-        /// <param name="Filter2">Второй фильтр в комбинации</param>
-        public ParallelFilter(Filter Filter1, Filter Filter2) : base(Filter1, Filter2) { }
-
-        public override double Process(double Sample) => Filter1.Process(Sample / 2) + Filter2.Process(Sample / 2);
-
-        public override void Reset()
-        {
-            Filter1.Reset();
-            Filter2.Reset();
-        }
-
-        public override Complex GetTransmissionCoefficient(double f) => (Filter1.GetTransmissionCoefficient(f) + Filter2.GetTransmissionCoefficient(f)) / 2;
+        Filter1.Reset();
+        Filter2.Reset();
     }
+
+    public override Complex GetTransmissionCoefficient(double f) => (Filter1.GetTransmissionCoefficient(f) + Filter2.GetTransmissionCoefficient(f)) / 2;
 }

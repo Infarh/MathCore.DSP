@@ -1,8 +1,7 @@
 ﻿using WpfTest.Services.Interfaces;
 
-namespace WpfTest.Services
+namespace WpfTest.Services;
+
+internal class DSPService : ISignalProcessingService
 {
-    internal class DSPService : ISignalProcessingService
-    {
-    }
 }

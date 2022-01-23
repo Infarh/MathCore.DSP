@@ -1,7 +1,6 @@
-﻿namespace WpfTest.Views.FilterDesigners
+﻿namespace WpfTest.Views.FilterDesigners;
+
+public partial class ButterworthBandPassFilterDesigner
 {
-    public partial class ButterworthBandPassFilterDesigner
-    {
-        public ButterworthBandPassFilterDesigner() => InitializeComponent();
-    }
+    public ButterworthBandPassFilterDesigner() => InitializeComponent();
 }

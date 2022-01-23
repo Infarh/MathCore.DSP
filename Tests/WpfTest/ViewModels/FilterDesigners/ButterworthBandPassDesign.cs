@@ -1,7 +1,6 @@
-﻿namespace WpfTest.ViewModels.FilterDesigners
+﻿namespace WpfTest.ViewModels.FilterDesigners;
+
+public class ButterworthBandPassDesign : BandPassFilterDesign
 {
-    public class ButterworthBandPassDesign : BandPassFilterDesign
-    {
-        public ButterworthBandPassDesign() => Title = "ППФ Баттерворта";
-    }
+    public ButterworthBandPassDesign() => Title = "ППФ Баттерворта";
 }

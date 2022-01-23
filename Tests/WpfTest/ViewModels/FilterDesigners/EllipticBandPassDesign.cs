@@ -1,7 +1,6 @@
-﻿namespace WpfTest.ViewModels.FilterDesigners
+﻿namespace WpfTest.ViewModels.FilterDesigners;
+
+public class EllipticBandPassDesign : BandPassFilterDesign
 {
-    public class EllipticBandPassDesign : BandPassFilterDesign
-    {
-        public EllipticBandPassDesign() => Title = "ППФ Эллиптический";
-    }
+    public EllipticBandPassDesign() => Title = "ППФ Эллиптический";
 }
