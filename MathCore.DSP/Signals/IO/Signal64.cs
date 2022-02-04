@@ -1,13 +1,11 @@
 ﻿using System.Buffers;
-using System.Drawing;
 
 namespace MathCore.DSP.Signals.IO;
 
-public class Signal8 : FileSignal
+public class Signal64 : FileSignal
 {
-    private const int __HeaderByteLength = 8 * 4;
-    private const int __SampleByteLength = 1;
-    private const int __MaxValue = (1 << __SampleByteLength * 8) - 1;
+    private const int __SampleByteLength = 8;
+    private const ulong __MaxValue = ulong.MaxValue;
 
     private double _Min = double.NaN;
     private double _Max = double.NaN;
@@ -17,7 +15,7 @@ public class Signal8 : FileSignal
     {
         get
         {
-            if (_Min is not double.NaN)
+            if (!double.IsNaN(_Min))
                 return _Min;
 
             Initialize();
@@ -30,7 +28,7 @@ public class Signal8 : FileSignal
     {
         get
         {
-            if (_Max is not double.NaN)
+            if (!double.IsNaN(_Max))
                 return _Max;
 
             Initialize();
@@ -51,7 +49,7 @@ public class Signal8 : FileSignal
     {
         get
         {
-            if (_Min is not double.NaN)
+            if (!double.IsNaN(_Min))
                 return _SamplesCount;
 
             Initialize();
@@ -63,7 +61,7 @@ public class Signal8 : FileSignal
 
     public double TimeMax => t0 + TimeLength;
 
-    public Signal8(string FileName) : base(FileName) { }
+    public Signal64(string FileName) : base(FileName) { }
 
     protected override void Initialize()
     {
@@ -89,34 +87,44 @@ public class Signal8 : FileSignal
             (_Min, _Max) = (min, max);
         }
 
-        var delta = max - min;
         min = _Min;
-        var k = delta / __MaxValue;
+        var delta = max - min;
+        var k = delta / ulong.MaxValue;
 
-        const int buffer_size = 1024;
+        const int samples_count = 512;
+        const int buffer_size = samples_count * __SampleByteLength;
         var buffer = ArrayPool<byte>.Shared.Rent(buffer_size);
         try
         {
             var stream = reader.BaseStream;
-            int readed;
+            if (Tmin > t0)
+            {
+                var bytes_offset = (long)((Tmin - t0) / dt) + __HeaderByteLength;
+                if (bytes_offset > stream.Length)
+                    yield break;
+
+                stream.Seek(bytes_offset, SeekOrigin.Begin);
+            }
+
+            int readed_bytes_count;
             var sample_index = 0;
             do
             {
-                readed = stream.Read(buffer, 0, buffer_size);
-                for (var i = 0; i < readed; i++)
+                readed_bytes_count = stream.Read(buffer, 0, buffer_size);
+                for (var i = 0; i < readed_bytes_count; i += __SampleByteLength)
                 {
                     var t = t0 + sample_index * dt;
                     if (t > Tmax)
                         yield break;
 
-                    var code = buffer[i];
+                    var code = BitConverter.ToUInt64(buffer, i);
                     var sample = code * k + min;
 
                     yield return new(t, sample);
                     sample_index++;
                 }
             }
-            while (readed == buffer_size);
+            while (readed_bytes_count == buffer_size);
         }
         finally
         {
@@ -146,7 +154,7 @@ public class Signal8 : FileSignal
         var count = 0;
         foreach (var sample in Samples)
         {
-            var code = (byte)((sample - min) * k);
+            var code = (ulong)((sample - min) * k);
             writer.Write(code);
             count++;
         }

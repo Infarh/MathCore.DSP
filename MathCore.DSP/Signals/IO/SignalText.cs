@@ -17,7 +17,7 @@ public class SignalText : FileSignal
         _t0 = double.Parse(reader.ReadLine()!, format);
     }
 
-    public override IEnumerable<double> GetSamples()
+    public override IEnumerable<SignalSample> GetSamples(double Tmin = double.NegativeInfinity, double Tmax = double.PositiveInfinity)
     {
         var format = NumbersFormat ?? NumberFormatInfo.InvariantInfo;
 
@@ -27,9 +27,23 @@ public class SignalText : FileSignal
             (_dt, _t0) = (dt, t0);
 
         var stream = reader.BaseStream;
+        var sample_index = 0;
         while (stream.Position < stream.Length)
-            if (double.TryParse(reader.ReadLine(), NumberStyles.Any, format, out var value))
-                yield return value;
+            if (reader.ReadLine() is { Length: > 0 } line && double.TryParse(line, NumberStyles.Any, format, out var value))
+            {
+                var t = t0 + sample_index * dt;
+                if (t < Tmin)
+                {
+                    sample_index++;
+                    continue;
+                }
+
+                if (t > Tmax)
+                    yield break;
+
+                yield return new(t, value);
+                sample_index++;
+            }
     }
 
     public override void SetSamples(IEnumerable<double> Samples)
