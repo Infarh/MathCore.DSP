@@ -6,8 +6,8 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:fa="http://schemas.fontawesome.com/icons/"
         xmlns:l="clr-namespace:WpfTest"
-        xmlns:oxy="http://oxyplot.org/wpf"
         xmlns:signals="clr-namespace:MathCore.DSP.Signals;assembly=MathCore.DSP"
+        xmlns:oxy="http://oxyplot.org/wpf/contrib"
         DataContext="{Binding MicrophoneRecorderModel, Source={StaticResource Locator}}"
         Title="{Binding Title}"
         Width="800" Height="450">

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29215.179
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathCore.DSP", "MathCore.DSP\MathCore.DSP.csproj", "{AFCB9EC8-33F6-4E5C-92FE-27783C25C479}"
 EndProject
@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleTest", "Tests\Consol
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathCore.DSP.Tests", "Tests\MathCore.DSP.Tests\MathCore.DSP.Tests.csproj", "{B92826FA-3130-431E-953C-5A6E9F3489D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfTest", "Tests\WpfTest\WpfTest.csproj", "{C129E8A4-1A28-4B06-BFC4-D7840A8BD77D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfTest", "Tests\WpfTest\WpfTest.csproj", "{C129E8A4-1A28-4B06-BFC4-D7840A8BD77D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks", "Tests\Benchmarks\Benchmarks.csproj", "{6E552E38-1B68-4DBD-9DAB-03FF2A0A4F06}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{C129E8A4-1A28-4B06-BFC4-D7840A8BD77D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C129E8A4-1A28-4B06-BFC4-D7840A8BD77D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C129E8A4-1A28-4B06-BFC4-D7840A8BD77D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E552E38-1B68-4DBD-9DAB-03FF2A0A4F06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E552E38-1B68-4DBD-9DAB-03FF2A0A4F06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E552E38-1B68-4DBD-9DAB-03FF2A0A4F06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E552E38-1B68-4DBD-9DAB-03FF2A0A4F06}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,6 +57,7 @@ Global
 		{9E507C80-64A5-49F2-9B58-0833908A10EB} = {C1AA67F3-31C6-4C42-884D-BBC39CBD555E}
 		{B92826FA-3130-431E-953C-5A6E9F3489D3} = {C1AA67F3-31C6-4C42-884D-BBC39CBD555E}
 		{C129E8A4-1A28-4B06-BFC4-D7840A8BD77D} = {C1AA67F3-31C6-4C42-884D-BBC39CBD555E}
+		{6E552E38-1B68-4DBD-9DAB-03FF2A0A4F06} = {C1AA67F3-31C6-4C42-884D-BBC39CBD555E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6BE66C71-515C-48D4-B800-5F3E6CF13654}

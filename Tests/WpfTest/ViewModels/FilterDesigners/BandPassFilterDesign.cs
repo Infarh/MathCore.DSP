@@ -1,7 +1,6 @@
-﻿namespace WpfTest.ViewModels.FilterDesigners
-{
-    public abstract class BandPassFilterDesign : FilterDesign
-    {
+﻿namespace WpfTest.ViewModels.FilterDesigners;
 
-    }
+public abstract class BandPassFilterDesign : FilterDesign
+{
+
 }

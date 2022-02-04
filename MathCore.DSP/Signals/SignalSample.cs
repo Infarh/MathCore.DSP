@@ -1,35 +1,51 @@
-﻿using System;
-
-// ReSharper disable UnusedType.Global
-
+﻿// ReSharper disable UnusedType.Global
 // ReSharper disable InconsistentNaming
 
-namespace MathCore.DSP.Signals
+namespace MathCore.DSP.Signals;
+
+public readonly struct SignalSample : IEquatable<SignalSample>
 {
-    public readonly struct SignalSample : IEquatable<SignalSample>
+    public double Time { get; }
+
+    public double Value { get; }
+
+    public SignalSample(double Time, double Value)
     {
-        public double Time { get; }
-        public double Value {get;}
+        this.Time = Time;
+        this.Value = Value;
+    }
 
-        public SignalSample(double Time, double Value)
+    public bool Equals(SignalSample other) => Time.Equals(other.Time) && Value.Equals(other.Value);
+
+    public override bool Equals(object obj) => obj is SignalSample other && Equals(other);
+
+    public override int GetHashCode()
+    {
+        unchecked
         {
-            this.Time = Time;
-            this.Value = Value;
+            return (Time.GetHashCode() * 397) ^ Value.GetHashCode();
         }
+    }
 
-        public bool Equals(SignalSample other) => Time.Equals(other.Time) && Value.Equals(other.Value);
+    public override string ToString() => $"{Time}:{Value}";
 
-        public override bool Equals(object obj) => obj is SignalSample other && Equals(other);
+    public static bool operator ==(SignalSample left, SignalSample right) => left.Equals(right);
+    public static bool operator !=(SignalSample left, SignalSample right) => !left.Equals(right);
 
-        public override int GetHashCode()
+    public static implicit operator double(SignalSample sample) => sample.Value;
+}
+
+public static class SignalSampleEx
+{
+    public static IEnumerable<double> AsDouble(this IEnumerable<SignalSample> samples) => samples.Select(s => s.Value);
+
+    public static IEnumerable<SignalSample> AsSamples(this IEnumerable<double> samples, double dt, double t0 = 0)
+    {
+        var index = 0;
+        foreach (var sample in samples)
         {
-            unchecked
-            {
-                return (Time.GetHashCode() * 397) ^ Value.GetHashCode();
-            }
+            yield return new(index * dt + t0, sample);
+            index++;
         }
-
-        public static bool operator ==(SignalSample left, SignalSample right) => left.Equals(right);
-        public static bool operator !=(SignalSample left, SignalSample right) => !left.Equals(right);
     }
 }

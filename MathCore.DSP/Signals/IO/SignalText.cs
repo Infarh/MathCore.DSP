@@ -1,56 +1,63 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 
-namespace MathCore.DSP.Signals.IO
+namespace MathCore.DSP.Signals.IO;
+
+public class SignalText : FileSignal
 {
-    public class SignalText : FileSignal
+    public NumberFormatInfo? NumbersFormat { get; set; } = NumberFormatInfo.InvariantInfo;
+
+    public SignalText(string FileName) : base(FileName) { }
+
+    protected override void Initialize()
     {
-        public NumberFormatInfo? NumbersFormat { get; set; } = NumberFormatInfo.InvariantInfo;
+        var format = NumbersFormat ?? NumberFormatInfo.InvariantInfo;
 
-        public SignalText(string FileName) : base(FileName) { }
+        using var reader = new StreamReader(File.OpenRead(FileName));
+        _dt = double.Parse(reader.ReadLine()!, format);
+        _t0 = double.Parse(reader.ReadLine()!, format);
+    }
 
-        protected override void Initialize()
-        {
-            var format = NumbersFormat ?? NumberFormatInfo.InvariantInfo;
+    public override IEnumerable<SignalSample> GetSamples(double Tmin = double.NegativeInfinity, double Tmax = double.PositiveInfinity)
+    {
+        var format = NumbersFormat ?? NumberFormatInfo.InvariantInfo;
 
-            using var reader = new StreamReader(File.OpenRead(FileName));
-            _dt = double.Parse(reader.ReadLine()!, format);
-            _t0 = double.Parse(reader.ReadLine()!, format);
-        }
+        using var reader = new StreamReader(File.OpenRead(FileName));
+        var (dt, t0) = (double.Parse(reader.ReadLine()!, format), double.Parse(reader.ReadLine()!, format));
+        if (_dt is double.NaN)
+            (_dt, _t0) = (dt, t0);
 
-        public override IEnumerable<double> GetSamples()
-        {
-            var format = NumbersFormat ?? NumberFormatInfo.InvariantInfo;
+        var stream = reader.BaseStream;
+        var sample_index = 0;
+        while (stream.Position < stream.Length)
+            if (reader.ReadLine() is { Length: > 0 } line && double.TryParse(line, NumberStyles.Any, format, out var value))
+            {
+                var t = t0 + sample_index * dt;
+                if (t < Tmin)
+                {
+                    sample_index++;
+                    continue;
+                }
 
-            using var reader = new StreamReader(File.OpenRead(FileName));
-            var (dt, t0) = (double.Parse(reader.ReadLine()!, format), double.Parse(reader.ReadLine()!, format));
-            if (_dt is double.NaN)
-                (_dt, _t0) = (dt, t0);
+                if (t > Tmax)
+                    yield break;
 
-            var stream = reader.BaseStream;
-            while (stream.Position < stream.Length)
-                if (double.TryParse(reader.ReadLine(), NumberStyles.Any, format, out var value))
-                    yield return value;
-        }
+                yield return new(t, value);
+                sample_index++;
+            }
+    }
 
-        public override void SetSamples(IEnumerable<double> Samples)
-        {
-            if (_dt is double.NaN or <= 0)
-                throw new InvalidOperationException("Не задан период дискретизации");
+    public override void SetSamples(IEnumerable<double> Samples)
+    {
+        if (_dt is double.NaN or <= 0)
+            throw new InvalidOperationException("Не задан период дискретизации");
 
-            var format = NumbersFormat ?? NumberFormatInfo.InvariantInfo;
+        var format = NumbersFormat ?? NumberFormatInfo.InvariantInfo;
 
-            using var writer = new StreamWriter(File.Create(FileName));
-            writer.WriteLine(_dt);
-            writer.WriteLine(_t0);
+        using var writer = new StreamWriter(File.Create(FileName));
+        writer.WriteLine(_dt);
+        writer.WriteLine(_t0);
 
-            foreach (var sample in Samples)
-                writer.WriteLine(sample.ToString(format));
-        }
+        foreach (var sample in Samples)
+            writer.WriteLine(sample.ToString(format));
     }
 }

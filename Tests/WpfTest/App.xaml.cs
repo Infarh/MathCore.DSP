@@ -1,9 +1,6 @@
-﻿using System.Linq;
+﻿namespace WpfTest;
 
-namespace WpfTest
+public partial class App
 {
-    public partial class App
-    {
 
-    }
 }
