@@ -17,7 +17,7 @@ public abstract class EllipticFilter : AnalogBasedFilter
     {
         var k_eps = EpsP / EpsS;
 
-        var (L, r) = N.DivMod(2);
+        var (L, r) = N.GetDivMod(2);
 
         // Эллиптический модуль
         var u = Range(1, L).ToArray(i => (2 * i - 1d) / N);
