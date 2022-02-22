@@ -4,10 +4,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <LangVersion>latest</LangVersion>
-    <Version>0.0.10</Version>
+    <Version>0.0.10.1</Version>
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageReleaseNotes>
-      Доработка файловых сигналов
+      Обновление пакетов
     </PackageReleaseNotes>
   </PropertyGroup>
 
