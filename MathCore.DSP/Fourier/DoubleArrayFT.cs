@@ -5,6 +5,8 @@ namespace MathCore.DSP.Fourier;
 /// <summary>Методы-расширения для вещественного и комплексного массивов</summary>
 public static class DoubleArrayFT
 {
+    
+
     /// <summary>Выполнить преобразование Фурье для вещественного массива</summary>
     /// <param name="s">Массив вещественных значений отсчётов</param>
     /// <param name="IsInverse">Выполнить обратное преобразование</param>

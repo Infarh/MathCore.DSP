@@ -64,18 +64,20 @@ public static class FFT
     public static Complex[] FastFourierInverse(this Complex[] Spectrum)
     {
         var spectrum_length = Spectrum.Length;
+        var spectrum = Spectrum;
         if(!spectrum_length.IsPowerOf2())
         {
+
             var spectrum_length_log2 = Log(spectrum_length, 2);
-            spectrum_length_log2 -= Round(spectrum_length_log2);
-            spectrum_length += (int)Pow(2, spectrum_length_log2);
+            spectrum_length = 1 << (1 + (int)Math.Floor(spectrum_length_log2));
+            spectrum = Spectrum.ResamplingOptimal(spectrum_length);
         }
 
         var values = new double[spectrum_length * 2];
-        for(var i = 0; i < spectrum_length; i++)
+        for(var i = 0; i < spectrum.Length; i++)
         {
-            values[2 * i] = Spectrum[i].Re;
-            values[2 * i + 1] = Spectrum[i].Im;
+            values[2 * i] = spectrum[i].Re;
+            values[2 * i + 1] = spectrum[i].Im;
         }
 
         fft(ref values, true);
@@ -85,12 +87,14 @@ public static class FFT
         for(var i = 0; i < complex_values_length; i++)
             complex_values[i] = new Complex(values[2 * i], values[2 * i + 1]);
 
-        return complex_values;
+        if (spectrum.Length == Spectrum.Length)
+            return complex_values;
+
+        return complex_values.ResamplingOptimal(Spectrum.Length);
     }
 
-#pragma warning disable IDE1006 // Стили именования
+    // ReSharper disable once InconsistentNaming
     private static void fft(ref double[] Values, bool IsInverse)
-#pragma warning restore IDE1006 // Стили именования
     {
         var N = Values.Length / 2;
         if(!N.IsPowerOf2())
@@ -145,8 +149,8 @@ public static class FFT
                     var temp_i = w_r * Values[j] + w_i * Values[j - 1];
                     Values[j - 1] = Values[i - 1] - temp_r;
                     Values[j] = Values[i] - temp_i;
-                    Values[i - 1] = Values[i - 1] + temp_r;
-                    Values[i] = Values[i] + temp_i;
+                    Values[i - 1] += temp_r;
+                    Values[i] += temp_i;
                 }
                 var w_temp = w_r;
                 w_r = w_r * w_pr - w_i * w_pi + w_r;
@@ -157,7 +161,7 @@ public static class FFT
 
         if(IsInverse) return;
         for(var i = 1; i <= 2 * N; i++)
-            Values[i - 1] = Values[i - 1] / N;
+            Values[i - 1] /= N;
     }
 
     /// <summary>Целочисленное преобразование Фурье</summary>
