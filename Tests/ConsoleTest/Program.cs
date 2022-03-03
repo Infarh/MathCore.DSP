@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 
+using MathCore.DSP.Infrastructure;
 using MathCore.DSP.Signals;
 using MathCore.DSP.Signals.IO;
 using MathCore.Statistic.RandomNumbers;
@@ -9,11 +10,31 @@ namespace MathCore.DSP;
 
 class Program
 {
+    private static void RandomSignalsTest()
+    {
+        const double fd = 1000;
+        const double dt = 1 / fd;
+        const int count = 1000;
+        const double df = fd / count;
+        const double f_min = 300;
+        const double f_max = 400;
+
+        var rnd = new Random();
+
+        var random_signal = Signal.Random.SpectrumBand(dt, count, f_min, f_max, rnd);
+
+        var power = random_signal.Power;
+    }
+
     static void Main()
     {
+        RandomSignalsTest();
+
         const int samples_count = 10000;
         var xx = Enumerable.Range(0, samples_count + 1);
         const double dt = 0.1;
+
+
 
         static double Signal(double t) => Math.Sin(2 * Math.PI * t);
 

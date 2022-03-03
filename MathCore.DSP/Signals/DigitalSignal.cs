@@ -25,7 +25,7 @@ public abstract class DigitalSignal : IEnumerable<double>
     public double fd => 1 / _dt;
 
     /// <summary>Начальное смещение сигнала во времени</summary>
-    public double t0 => _t0;
+    public double t0 { get => _t0; init => _t0 = value; }
 
     /// <summary>Полное время сигнала</summary>
     public virtual double TotalTime => SamplesCount * _dt;
@@ -139,6 +139,14 @@ public abstract class DigitalSignal : IEnumerable<double>
     public static MultiplyOfSignalWithScalarResultSignal operator *(double x, DigitalSignal s) => new(s, x);
     public static DivisionOfSignalWithScalarResultSignal operator /(DigitalSignal s, double x) => new(s, x);
     public static DivisionOfScalarWithSignalResultSignal operator /(double x, DigitalSignal s) => new(s, x);
+
+    public static explicit operator double[](DigitalSignal signal)
+    {
+        var count = signal.SamplesCount;
+        var samples = new double[count];
+        signal.CopyTo(samples, 0, count);
+        return samples;
+    }
 
     #endregion
 

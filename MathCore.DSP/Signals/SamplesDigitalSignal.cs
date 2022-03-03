@@ -41,12 +41,18 @@ public class SamplesDigitalSignal : DigitalSignal, IEquatable<SamplesDigitalSign
         }
     }
 
-    public SamplesDigitalSignal(double dt, double[] Samples) : base(dt) => _Samples = Samples ?? throw new ArgumentNullException(nameof(Samples));
+    public SamplesDigitalSignal(double dt, double[] Samples, double t0 = 0) : base(dt, t0) => _Samples = Samples ?? throw new ArgumentNullException(nameof(Samples));
 
-    public SamplesDigitalSignal(double dt, int SamplesCount, Func<double, double> f) : this(dt, f.Sampling(0, dt, SamplesCount)) { }
+    public SamplesDigitalSignal(double dt, int SamplesCount, Func<double, double> f, double t0 = 0) : this(dt, f.Sampling(0, dt, SamplesCount), t0) { }
 
-    public SamplesDigitalSignal(double dt, IEnumerable<double> Samples) : this(dt, (Samples ?? throw new ArgumentNullException(nameof(Samples))).ToArray()) { }
-    public SamplesDigitalSignal(double dt, IEnumerable<int> Samples) : this(dt, (Samples ?? throw new ArgumentNullException(nameof(Samples))).Select(v => (double)v).ToArray()) { }
+    private static double[] GetSamplesArray(IEnumerable<double> Samples) => Samples switch
+    {
+        double[] array => array,
+        { } => Samples.ToArray(),
+        _ => throw new ArgumentNullException(nameof(Samples))
+    };
+    public SamplesDigitalSignal(double dt, IEnumerable<double> Samples, double t0 = 0) : this(dt, GetSamplesArray(Samples), t0) { }
+    public SamplesDigitalSignal(double dt, IEnumerable<int> Samples, double t0 = 0) : this(dt, (Samples ?? throw new ArgumentNullException(nameof(Samples))).ToArray(v => (double)v), t0) { }
 
     /// <inheritdoc />
     protected override IEnumerable<double> GetIntegralSamples(double s0)
