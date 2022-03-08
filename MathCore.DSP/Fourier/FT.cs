@@ -34,16 +34,14 @@ public static class FT
 
     /* -------------------------------------------------------------------------------------------- */
 
-    [NotNull]
-    public static Complex[] FourierTransform([NotNull] this IEnumerable<double> Values, bool IsInverse = false)
+    public static Complex[] FourierTransform(this IEnumerable<double> Values, bool IsInverse = false)
         => Values.ToArray().FourierTransform(IsInverse);
 
 
     /// <summary>Прямое преобразование отсчётов функции в спектр</summary>
     /// <param name="Values">Массив отсчётов функции</param>
     /// <param name="IsInverse">Обратное преобразование</param>
-    [NotNull]
-    public static Complex[] FourierTransform([NotNull] this double[] Values, bool IsInverse = false)
+    public static Complex[] FourierTransform(this double[] Values, bool IsInverse = false)
     {
         if (Values is null) throw new ArgumentNullException(nameof(Values));
 
@@ -73,8 +71,7 @@ public static class FT
     /// <param name="Values">Массив отсчётов функции</param>
     /// <param name="IsInverse">Обратное преобразование</param>
     /// <param name="progress">Метод информирования о прогрессе операции</param>
-    [NotNull]
-    public static Complex[] FourierTransform([NotNull] this double[] Values, bool IsInverse, [CanBeNull] Action<double> progress)
+    public static Complex[] FourierTransform(this double[] Values, bool IsInverse, [CanBeNull] Action<double> progress)
     {
         if (Values is null) throw new ArgumentNullException(nameof(Values));
 
@@ -105,8 +102,7 @@ public static class FT
     /// <summary>Прямое преобразование отсчётов функции в спектр</summary>
     /// <param name="Values">Массив отсчётов функции</param>
     /// <param name="Inverse">Обратное преобразование</param>
-    [NotNull]
-    public static Complex[] FourierTransform([NotNull] this Complex[] Values, bool Inverse = false)
+    public static Complex[] FourierTransform(this Complex[] Values, bool Inverse = false)
     {
         if (Values is null) throw new ArgumentNullException(nameof(Values));
 
@@ -135,8 +131,7 @@ public static class FT
     /// <param name="Values">Массив отсчётов функции</param>
     /// <param name="Inverse">Обратное преобразование</param>
     /// <param name="progress">Метод индикации прогресса выполнения</param>
-    [NotNull]
-    public static Complex[] FourierTransform([NotNull] this Complex[] Values, bool Inverse, [CanBeNull] Action<double> progress)
+    public static Complex[] FourierTransform(this Complex[] Values, bool Inverse, [CanBeNull] Action<double> progress)
     {
         if (Values is null) throw new ArgumentNullException(nameof(Values));
 

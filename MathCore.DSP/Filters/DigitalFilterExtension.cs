@@ -11,7 +11,7 @@ public static class DigitalFilterExtension
     /// <param name="Accuracy">Точность вычисления по мощности (энергии) состояния фильтра</param>
     /// <returns>Последовательность отсчётов импульсной характеристики</returns>
     /// <exception cref="ArgumentOutOfRangeException">Если указанная точность меньше, либо равна 0</exception>
-    public static IEnumerable<double> GetImpulseResponse([NotNull] this DigitalFilter filter, int MaxSamples = -1, double Accuracy = 0.001)
+    public static IEnumerable<double> GetImpulseResponse(this DigitalFilter filter, int MaxSamples = -1, double Accuracy = 0.001)
     {
         if (filter is null) throw new ArgumentNullException(nameof(filter));
         if (Accuracy <= 0) throw new ArgumentOutOfRangeException(nameof(Accuracy), "Точность должна быть больше 0");
@@ -37,7 +37,7 @@ public static class DigitalFilterExtension
     /// <param name="filter">Объект фильтра, для которого требуется получить переходную характеристику</param>
     /// <param name="MaxSamples">Максимальное количество отсчётов (если меньше 0, то число отсчётов ограничивается по точности)</param>
     /// <returns>Последовательность отсчётов импульсной характеристики</returns>
-    public static IEnumerable<double> GetTransientResponse([NotNull] this DigitalFilter filter, int MaxSamples = -1/*, double Accuracy = 0.001*/)
+    public static IEnumerable<double> GetTransientResponse(this DigitalFilter filter, int MaxSamples = -1/*, double Accuracy = 0.001*/)
     {
         if (filter is null) throw new ArgumentNullException(nameof(filter));
         //if (Accuracy <= 0) throw new ArgumentOutOfRangeException(nameof(Accuracy), "Точность должна быть больше 0");

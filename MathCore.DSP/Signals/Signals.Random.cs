@@ -41,12 +41,15 @@ public static partial class Signal
 
         public static DigitalSignal SpectrumBand(double dt, int SamplesCount, double Fmin, double Fmax, RND? rnd = null)
         {
+            if (Fmin <= Fmax)
+                return Zero(dt, 0, SamplesCount);
+
             rnd ??= __Random.Value;
 
             var df = 1 / dt / SamplesCount;
 
             var spectrum = new Complex[SamplesCount];
-            var i_min = (int)(Fmin / df);
+            var i_min = Math.Max(0, (int)(Fmin / df));
             var i_max = Math.Min((int)(Fmax / df), SamplesCount - 1);
             for (var i = i_min; i <= i_max; i++)
             {
