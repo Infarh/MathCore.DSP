@@ -78,7 +78,7 @@ public static class WaveInExtensions
     }
 
     public static async Task<DigitalSignal> GetSignalMono(
-        [NotNull] this WaveIn input, 
+        this WaveIn input, 
         int SamplesCount, 
         IProgress<double>? Progress = null, 
         CancellationToken Cancel = default)

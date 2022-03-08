@@ -25,7 +25,11 @@ public abstract class BinaryOperationResultSignal : OperationResultSignal
     /// <param name="Signal1">Первый сигнал-операнд операции</param>
     /// <param name="Signal2">Второй сигнал-операнд операции</param>
     /// <param name="Function">Функция, вычисляемая от каждой пары отсчётов сигналов</param>
-    protected BinaryOperationResultSignal(DigitalSignal Signal1, DigitalSignal Signal2, Func<double, double, double> Function) : base(Signal1.dt)
+    protected BinaryOperationResultSignal(
+        DigitalSignal Signal1, 
+        DigitalSignal Signal2, 
+        Func<double, double, double> Function) 
+        : base(Signal1.dt, Math.Min(Signal1.t0, Signal2.t0))
     {
         this.Signal1 = Signal1 ?? throw new ArgumentNullException(nameof(Signal1));
         this.Signal2 = Signal2 ?? throw new ArgumentNullException(nameof(Signal2));

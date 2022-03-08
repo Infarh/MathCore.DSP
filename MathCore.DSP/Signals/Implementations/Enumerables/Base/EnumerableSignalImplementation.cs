@@ -6,7 +6,7 @@ namespace MathCore.DSP.Signals.Implementations.Enumerables.Base;
 
 public abstract class EnumerableSignalImplementation : EnumerableSignal
 {
-    protected EnumerableSignalImplementation(double dt, [NotNull] IEnumerable<double> Samples, double t0) : base(dt, Samples, t0) { }
+    protected EnumerableSignalImplementation(double dt, IEnumerable<double> Samples, double t0) : base(dt, Samples, t0) { }
 
     protected abstract class SignalInfo : IEnumerable<double>
     {

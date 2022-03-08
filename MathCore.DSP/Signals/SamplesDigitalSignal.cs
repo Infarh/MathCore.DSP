@@ -90,7 +90,6 @@ public class SamplesDigitalSignal : DigitalSignal, IEquatable<SamplesDigitalSign
     #region Override Object
 
     /// <inheritdoc />
-    [NotNull]
     public override string ToString() => $"signal dt:{_dt}; count:{_Samples.Length}; power:{Power.RoundAdaptive(2)}";
 
     /// <inheritdoc />
