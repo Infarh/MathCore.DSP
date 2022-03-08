@@ -12,16 +12,16 @@ class Program
 {
     private static void RandomSignalsTest()
     {
-        const double fd = 1000;
-        const double dt = 1 / fd;
-        const int count = 1000;
-        const double df = fd / count;
-        const double f_min = 300;
-        const double f_max = 400;
+        const double dt = 0.02;
+        const double df = 0.04995004;
+        const int ndf = 100;
+        const double fd = 1 / dt;
+        const double f0 = 0.1;
+        const int count = 1001;
 
-        var rnd = new Random();
+        var delta_f = new Interval(f0 - ndf * df, f0 + ndf * df);
 
-        var random_signal = Signal.Random.SpectrumBand(dt, count, f_min, f_max, rnd);
+        var random_signal = Signal.Random.SpectrumBand(dt, count, delta_f);
 
         var power = random_signal.Power;
     }

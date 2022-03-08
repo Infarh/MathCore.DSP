@@ -41,7 +41,7 @@ public static partial class Signal
 
         public static DigitalSignal SpectrumBand(double dt, int SamplesCount, double Fmin, double Fmax, RND? rnd = null)
         {
-            if (Fmin <= Fmax)
+            if (Fmin >= Fmax)
                 return Zero(dt, 0, SamplesCount);
 
             rnd ??= __Random.Value;
