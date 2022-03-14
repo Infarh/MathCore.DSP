@@ -1,10 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Security.Cryptography;
-
-using MathCore.DSP.Infrastructure;
-using MathCore.DSP.Signals;
+﻿using MathCore.DSP.Signals;
 using MathCore.DSP.Signals.IO;
-using MathCore.Statistic.RandomNumbers;
 
 namespace MathCore.DSP;
 
@@ -28,34 +23,54 @@ class Program
 
     static void Main()
     {
-        RandomSignalsTest();
+        //RandomSignalsTest();
 
-        const int samples_count = 10000;
-        var xx = Enumerable.Range(0, samples_count + 1);
+        const string file_name = $"Sinus.signal16";
+        const string path = $@"C:\123\tnd\Flight\TN2-Lightning1-operatori2iz2+zadatchiki-111.tnd.signals\{file_name} ";
+
+        const string linear_signal_file = "linear.s16";
+
         const double dt = 0.1;
+        const int samples_count = 1001;
+        const double T = (samples_count - 1) * dt;
+        const double A = T;
+        var linear_signal = new SamplesDigitalSignal(dt, samples_count, t => A * t / T, -20);
+
+        var linear_signal16 = new Signal16(linear_signal_file) { Max = A };
+        linear_signal16.SetSignal(linear_signal);
 
 
+        var signal = new Signal16(linear_signal_file);
 
-        static double Signal(double t) => Math.Sin(2 * Math.PI * t);
+        if (!signal.FileExists)
+            throw new FileNotFoundException("Не найден файл данных сигнала", path);
 
-        var rnd = new Random(5);
-        var ss = xx.Select(t => /*10 * Signal(t * dt) +*/ (rnd.NextDouble() - 0.5) * 2);
-
-        const string signal_file = "sin.signal16";
-
-        //if (!File.Exists(signal_file))
+        //var samples = signal.GetSamples(10, 15).ToArray();
+        var samples = new List<SignalSample>(signal.SamplesCount);
+        const double tmin = 10.123456789;
+        const double t1 = 30, t2 = 40;
+        foreach (var sample in signal.GetSamples(t1, t2))
         {
-            var signal16 = new Signal16(signal_file) { t0 = 5, dt = dt, Min = -10, Max = 10 };
-            signal16.SetSamples(ss);
+            samples.Add(sample);
         }
+        samples.TrimExcess();
 
-        var y = new Signal16(signal_file);
+        var ssamples = linear_signal.Samples.Where(s => s.Time is >= t1 and <= t2).ToArray();
 
-        var samples = y.GetSamples().ToArray();
+        var s0 = samples[0];
+        var s1 = samples[^1];
+        var ss0 = ssamples[0];
+        var ss1 = ssamples[^1];
 
-        var pack = SamplesPack.Create(samples.AsDouble(), 10);
+        if(s0.Time < tmin)
+            Console.WriteLine(123);
 
-        var X = rnd.NextUniform(10000000, 17, Math.PI);
+        Console.WriteLine("  Total count: {0}", signal.Count());        // 23354
+        Console.WriteLine("Samples count: {0}", samples.Count);        // 23354
+        Console.WriteLine("          dt : {0}", signal.dt);             // 0,0009765625
+        Console.WriteLine("          fd : {0}", 1 / signal.dt);         // 1024
+        Console.WriteLine("          t0 : {0}", signal.t0);             // 0
+        Console.WriteLine("          t1 : {0}", signal.t1);             // 22.806640625
     }
 }
 

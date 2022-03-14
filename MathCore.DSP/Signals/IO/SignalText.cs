@@ -6,25 +6,38 @@ public class SignalText : FileSignal
 {
     public NumberFormatInfo? NumbersFormat { get; set; } = NumberFormatInfo.InvariantInfo;
 
-    public SignalText(string FileName) : base(FileName) { }
+    public SignalText(FileInfo File) : base(File) { }
+
+    public SignalText(string FilePath) : base(FilePath) { }
 
     protected override void Initialize()
     {
         var format = NumbersFormat ?? NumberFormatInfo.InvariantInfo;
 
-        using var reader = new StreamReader(File.OpenRead(FileName));
+        using var reader = _File.OpenText();
         _dt = double.Parse(reader.ReadLine()!, format);
         _t0 = double.Parse(reader.ReadLine()!, format);
     }
 
     public override IEnumerable<SignalSample> GetSamples(double Tmin = double.NegativeInfinity, double Tmax = double.PositiveInfinity)
     {
+        if (Tmax < Tmin)
+            yield break;
+
+        using var stream = _File.OpenRead();
+        foreach (var sample in GetSamples(stream, Tmin, Tmax))
+            yield return sample;
+    }
+
+    public static IEnumerable<SignalSample> GetSamples(Stream DataStream,
+        double Tmin = double.NegativeInfinity,
+        double Tmax = double.PositiveInfinity,
+        NumberFormatInfo? NumbersFormat = null)
+    {
         var format = NumbersFormat ?? NumberFormatInfo.InvariantInfo;
 
-        using var reader = new StreamReader(File.OpenRead(FileName));
+        using var reader = new StreamReader(DataStream);
         var (dt, t0) = (double.Parse(reader.ReadLine()!, format), double.Parse(reader.ReadLine()!, format));
-        if (_dt is double.NaN)
-            (_dt, _t0) = (dt, t0);
 
         var stream = reader.BaseStream;
         var sample_index = 0;
@@ -53,7 +66,7 @@ public class SignalText : FileSignal
 
         var format = NumbersFormat ?? NumberFormatInfo.InvariantInfo;
 
-        using var writer = new StreamWriter(File.Create(FileName));
+        using var writer = _File.CreateText();
         writer.WriteLine(_dt);
         writer.WriteLine(_t0);
 

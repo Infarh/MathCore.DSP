@@ -63,11 +63,13 @@ public class Signal8 : FileSignal
 
     public double TimeMax => t0 + TimeLength;
 
-    public Signal8(string FileName) : base(FileName) { }
+    public Signal8(FileInfo File) : base(File) { }
+
+    public Signal8(string FilePath) : base(FilePath) { }
 
     protected override void Initialize()
     {
-        using var reader = new BinaryReader(File.OpenRead(FileName));
+        using var reader = _File.OpenBinary();
         _dt = reader.ReadDouble();
         _t0 = reader.ReadDouble();
         _Min = reader.ReadDouble();
@@ -80,30 +82,48 @@ public class Signal8 : FileSignal
 
     public override IEnumerable<SignalSample> GetSamples(double Tmin = double.NegativeInfinity, double Tmax = double.PositiveInfinity)
     {
-        using var reader = new BinaryReader(File.OpenRead(FileName));
-        var (dt, t0) = (reader.ReadDouble(), reader.ReadDouble());
-        var (min, max) = (reader.ReadDouble(), reader.ReadDouble());
-        if (_dt is double.NaN)
-        {
-            (_dt, _t0) = (dt, t0);
-            (_Min, _Max) = (min, max);
-        }
+        if (Tmax < Tmin)
+            yield break;
+
+        using var stream = _File.OpenRead();
+        foreach (var sample in GetSamples(stream, Tmin, Tmax))
+            yield return sample;
+    }
+
+    public static IEnumerable<SignalSample> GetSamples(Stream DataStream, double Tmin = double.NegativeInfinity, double Tmax = double.PositiveInfinity)
+    {
+        if (Tmax < Tmin) yield break;
+
+        var (dt, t0, min, max) = ReadHeader(DataStream);
+
+        if (!FindTmin(DataStream, Tmin, dt, t0, __SampleByteLength))
+            yield break;
 
         var delta = max - min;
-        min = _Min;
         var k = delta / __MaxValue;
 
-        const int buffer_size = 1024;
+        const int default_samples_count = 512;
+        var samples_count = double.IsInfinity(Tmin) || double.IsInfinity(Tmax)
+            ? default_samples_count
+            : Math.Min(default_samples_count, (int)((Tmax - Tmin) / dt));
+        var buffer_size = samples_count * __SampleByteLength;
         var buffer = ArrayPool<byte>.Shared.Rent(buffer_size);
+        //var values = buffer.AsMemory().Cast<ushort>();
         try
         {
-            var stream = reader.BaseStream;
-            int readed;
+            int readed_bytes_count;
             var sample_index = 0;
+            if (Tmin > t0)
+            {
+                t0 += (int)((Tmin - t0) / dt) * dt;
+                if (t0 < Tmin)
+                    t0 += dt;
+            }
+
             do
             {
-                readed = stream.Read(buffer, 0, buffer_size);
-                for (var i = 0; i < readed; i++)
+                readed_bytes_count = DataStream.Read(buffer, 0, buffer_size);
+                for (var i = 0; i < readed_bytes_count; i += __SampleByteLength)
                 {
                     var t = t0 + sample_index * dt;
                     if (t > Tmax)
@@ -116,7 +136,7 @@ public class Signal8 : FileSignal
                     sample_index++;
                 }
             }
-            while (readed == buffer_size);
+            while (readed_bytes_count == buffer_size);
         }
         finally
         {
@@ -133,7 +153,7 @@ public class Signal8 : FileSignal
         if (_Max is double.NaN)
             throw new InvalidOperationException("Не задан максимум интервала значений сигнала");
 
-        using var writer = new BinaryWriter(File.Create(FileName));
+        using var writer = _File.CreateBinary();
         writer.Write(_dt);
         writer.Write(_t0);
 
