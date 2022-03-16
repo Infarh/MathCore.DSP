@@ -64,33 +64,29 @@ public static class FFT
     public static Complex[] FastFourierInverse(this Complex[] Spectrum)
     {
         var spectrum_length = Spectrum.Length;
-        var spectrum = Spectrum;
-        if(!spectrum_length.IsPowerOf2())
+        if (!spectrum_length.IsPowerOf2())
         {
 
             var spectrum_length_log2 = Log(spectrum_length, 2);
             spectrum_length = 1 << (1 + (int)Math.Floor(spectrum_length_log2));
-            spectrum = Spectrum.ResamplingOptimal(spectrum_length);
         }
 
-        var values = new double[spectrum_length * 2];
-        for(var i = 0; i < spectrum.Length; i++)
+        var spectrum = new double[spectrum_length * 2];
+        var values_length = Spectrum.Length;
+        for (var i = 0; i < values_length; i++)
         {
-            values[2 * i] = spectrum[i].Re;
-            values[2 * i + 1] = spectrum[i].Im;
+            spectrum[2 * i] = Spectrum[i].Re;
+            spectrum[2 * i + 1] = Spectrum[i].Im;
         }
 
-        fft(ref values, true);
+        fft(ref spectrum, false);
 
-        var complex_values = new Complex[spectrum_length];
-        var complex_values_length = complex_values.Length;
-        for(var i = 0; i < complex_values_length; i++)
-            complex_values[i] = new Complex(values[2 * i], values[2 * i + 1]);
+        var samples = new Complex[spectrum_length];
+        values_length = samples.Length;
+        for (var i = 0; i < values_length; i++)
+            samples[i] = new Complex(spectrum[2 * i], spectrum[2 * i + 1]);
 
-        if (spectrum.Length == Spectrum.Length)
-            return complex_values;
-
-        return complex_values.ResamplingOptimal(Spectrum.Length);
+        return samples.ResamplingOptimal(Spectrum.Length);
     }
 
     // ReSharper disable once InconsistentNaming
