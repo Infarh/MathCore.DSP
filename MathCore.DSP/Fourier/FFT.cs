@@ -11,82 +11,88 @@ public static class FFT
     /// <param name="Values">Массив отсчётов функции</param>
     public static Complex[] FastFourierTransform(this double[] Values)
     {
-        var N = Values.Length;
-        if(!N.IsPowerOf2()) N = 1 << ((int)Log(N, 2) + 1);
+        return Fourier.fft.FFT(Values);
 
-        var real_spectrum = new double[N * 2];
-        N = Values.Length;
-        for(var n = 0; n < N; n++)
-            real_spectrum[2 * n] = Values[n];
+        //var N = Values.Length;
+        //if(!N.IsPowerOf2()) N = 1 << ((int)Log(N, 2) + 1);
 
-        fft(ref real_spectrum, false);
+        //var real_spectrum = new double[N * 2];
+        //N = Values.Length;
+        //for(var n = 0; n < N; n++)
+        //    real_spectrum[2 * n] = Values[n];
 
-        var spectrum = new Complex[Values.Length];
-        for(int m = 0, M = spectrum.Length; m < M; m++)
-            spectrum[m] = new Complex(real_spectrum[2 * m], real_spectrum[2 * m + 1]);
+        //fft(ref real_spectrum, false);
 
-        return spectrum;
+        //var spectrum = new Complex[Values.Length];
+        //for(int m = 0, M = spectrum.Length; m < M; m++)
+        //    spectrum[m] = new Complex(real_spectrum[2 * m], real_spectrum[2 * m + 1]);
+
+        //return spectrum;
     }
 
     /// <summary>Прямое преобразование отсчётов функции в спектр</summary>
     /// <param name="Values">Массив отсчётов функции</param>
     public static Complex[] FastFourierTransform(this Complex[] Values)
     {
-        var length = Values.Length;
-        if(!length.IsPowerOf2())
-        {
-            var length_log2 = Log(length, 2);
-            length_log2 -= Round(length_log2);
-            length += (int)Pow(2, length_log2);
-        }
+        return Fourier.fft.FFT(Values);
 
-        var spectrum = new double[length * 2];
-        var values_length = Values.Length;
-        for(var i = 0; i < values_length; i++)
-        {
-            spectrum[2 * i] = Values[i].Re;
-            spectrum[2 * i + 1] = Values[i].Im;
-        }
+        //var length = Values.Length;
+        //if(!length.IsPowerOf2())
+        //{
+        //    var length_log2 = Log(length, 2);
+        //    length_log2 -= Round(length_log2);
+        //    length += (int)Pow(2, length_log2);
+        //}
 
-        fft(ref spectrum, false);
+        //var spectrum = new double[length * 2];
+        //var values_length = Values.Length;
+        //for(var i = 0; i < values_length; i++)
+        //{
+        //    spectrum[2 * i] = Values[i].Re;
+        //    spectrum[2 * i + 1] = Values[i].Im;
+        //}
 
-        var Spectrum = new Complex[length];
-        values_length = Spectrum.Length;
-        for(var i = 0; i < values_length; i++)
-            Spectrum[i] = new Complex(spectrum[2 * i], spectrum[2 * i + 1]);
+        //fft(ref spectrum, false);
+
+        //var Spectrum = new Complex[length];
+        //values_length = Spectrum.Length;
+        //for(var i = 0; i < values_length; i++)
+        //    Spectrum[i] = new Complex(spectrum[2 * i], spectrum[2 * i + 1]);
 
 
-        return Spectrum;
+        //return Spectrum;
     }
 
     /// <summary>Обратное преобразование отсчётов спектра в отсчёты сигнала</summary>
     /// <param name="Spectrum">Массив отсчётов спектра</param>
     public static Complex[] FastFourierInverse(this Complex[] Spectrum)
     {
-        var spectrum_length = Spectrum.Length;
-        if (!spectrum_length.IsPowerOf2())
-        {
+        return Fourier.fft.FFT_Complex_Inverse(Spectrum);
 
-            var spectrum_length_log2 = Log(spectrum_length, 2);
-            spectrum_length = 1 << (1 + (int)Math.Floor(spectrum_length_log2));
-        }
+        //var spectrum_length = Spectrum.Length;
+        //if (!spectrum_length.IsPowerOf2())
+        //{
 
-        var spectrum = new double[spectrum_length * 2];
-        var values_length = Spectrum.Length;
-        for (var i = 0; i < values_length; i++)
-        {
-            spectrum[2 * i] = Spectrum[i].Re;
-            spectrum[2 * i + 1] = Spectrum[i].Im;
-        }
+        //    var spectrum_length_log2 = Log(spectrum_length, 2);
+        //    spectrum_length = 1 << (1 + (int)Math.Floor(spectrum_length_log2));
+        //}
 
-        fft(ref spectrum, false);
+        //var spectrum = new double[spectrum_length * 2];
+        //var values_length = Spectrum.Length;
+        //for (var i = 0; i < values_length; i++)
+        //{
+        //    spectrum[2 * i] = Spectrum[i].Re;
+        //    spectrum[2 * i + 1] = Spectrum[i].Im;
+        //}
 
-        var samples = new Complex[spectrum_length];
-        values_length = samples.Length;
-        for (var i = 0; i < values_length; i++)
-            samples[i] = new Complex(spectrum[2 * i], spectrum[2 * i + 1]);
+        //fft(ref spectrum, false);
 
-        return samples.ResamplingOptimal(Spectrum.Length);
+        //var samples = new Complex[spectrum_length];
+        //values_length = samples.Length;
+        //for (var i = 0; i < values_length; i++)
+        //    samples[i] = new Complex(spectrum[2 * i], spectrum[2 * i + 1]);
+
+        //return samples.ResamplingOptimal(Spectrum.Length);
     }
 
     // ReSharper disable once InconsistentNaming

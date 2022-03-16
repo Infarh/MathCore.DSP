@@ -34,7 +34,6 @@ public static class fft
     {
         var N = x.Length;
         if (N == 1) return new[] { x[0] };
-        var plan = new FT_Base.FT_Plan();
 
         var buf = new double[2 * N];
         for (var i = 0; i < N; i++)
@@ -50,6 +49,7 @@ public static class fft
         // precomputed data. It is much like a FFTW plan, but is not stored
         // between subroutine calls and is much simpler.
         //
+        var plan = new FT_Base.FT_Plan();
         FT_Base.FTBaseGenerateComplexFFTPlan(N, plan);
         FT_Base.FTBaseExecutePlan(ref buf, 0, plan);
 
@@ -75,7 +75,7 @@ public static class fft
 
         var result = new Complex[N];
         for (var i = 0; i < N; i++)
-            result[i] = new Complex(y[i].Re, -y[i].Im);
+            result[i] = y[i].ComplexConjugate;
 
         result = FFT(result);//, n);
 
@@ -393,7 +393,6 @@ public static class fft
         *************************************************************************/
         public static void FTBaseGenerateComplexFFTPlan(int n, FT_Plan plan)
         {
-
             var plan_array_size = 1;
             plan.plan = new int[plan_array_size];
 
@@ -402,8 +401,16 @@ public static class fft
             var stack_mem_size = 0;
             var stack_ptr = 0;
             var tmp_mem_size = 2 * n;
-            FT_BaseGeneratePlanRec(n, c_FT_BaseCfftTask, plan, ref plan_size, ref pre_computed_size, ref plan_array_size,
-                ref tmp_mem_size, ref stack_mem_size, stack_ptr);
+            FT_BaseGeneratePlanRec(
+                n,
+                c_FT_BaseCfftTask,
+                plan,
+                ref plan_size,
+                ref pre_computed_size,
+                ref plan_array_size,
+                ref tmp_mem_size,
+                ref stack_mem_size,
+                stack_ptr);
 
             plan.StackBuffer = new double[Max(stack_mem_size, 1)];
             plan.TempBuffer = new double[Max(tmp_mem_size, 1)];
@@ -417,55 +424,59 @@ public static class fft
         /*************************************************************************
         Generates real FFT plan
         *************************************************************************/
-        /*
-                    public static void ftbasegeneraterealfftplan(int n, ftplan plan)
-                    {
-                        var planarraysize = 1;
-                        plan.plan = new int[planarraysize];
+        //public static void ftbasegeneraterealfftplan(int n, ftplan plan)
+        //{
+        //    var plan_array_size = 1;
+        //    plan.plan = new int[plan_array_size];
 
-                        var plansize = 0;
-                        var precomputedsize = 0;
-                        var stackmemsize = 0;
-                        var stackptr = 0;
-                        var tmpmemsize = 2 * n;
-                        ftbasegenerateplanrec(n, ftbaserffttask, plan, ref plansize, ref precomputedsize, ref planarraysize,
-                                              ref tmpmemsize, ref stackmemsize, stackptr);
+        //    var plan_size = 0;
+        //    var precomputed_size = 0;
+        //    var stack_mem_size = 0;
+        //    var stack_ptr = 0;
+        //    var tmp_mem_size = 2 * n;
+        //    FTBaseGeneratePlanRec(
+        //        n,
+        //        ft_base_rfft_task,
+        //        plan,
+        //        ref plan_size,
+        //        ref precomputed_size,
+        //        ref plan_array_size,
+        //        ref tmp_mem_size,
+        //        ref stack_mem_size,
+        //        stack_ptr);
 
-                        plan.stackbuf = new double[Math.Max(stackmemsize, 1)];
-                        plan.tmpbuf = new double[Math.Max(tmpmemsize, 1)];
-                        plan.precomputed = new double[Math.Max(precomputedsize, 1)];
+        //    plan.stackbuf = new double[Max(stack_mem_size, 1)];
+        //    plan.tmpbuf = new double[Max(tmp_mem_size, 1)];
+        //    plan.precomputed = new double[Max(precomputed_size, 1)];
 
-                        stackptr = 0;
-                        ftbaseprecomputeplanrec(plan, 0, stackptr);
-                    }
-        */
+        //    stack_ptr = 0;
+        //    FTBasePrecomputePlanRec(plan, 0, stack_ptr);
+        //}
 
 
         /*************************************************************************
         Generates real FHT plan
         *************************************************************************/
-        /*
-                    public static void ftbasegeneraterealfhtplan(int n, ftplan plan)
-                    {
-                        var planarraysize = 1;
-                        plan.plan = new int[planarraysize];
+        //public static void ftbasegeneraterealfhtplan(int n, ftplan plan)
+        //{
+        //    var planarraysize = 1;
+        //    plan.plan = new int[planarraysize];
 
-                        var plansize = 0;
-                        var precomputedsize = 0;
-                        var stackmemsize = 0;
-                        var stackptr = 0;
-                        var tmpmemsize = n;
-                        ftbasegenerateplanrec(n, ftbaserfhttask, plan, ref plansize, ref precomputedsize, ref planarraysize,
-                                              ref tmpmemsize, ref stackmemsize, stackptr);
+        //    var plansize = 0;
+        //    var precomputed_size = 0;
+        //    var stack_mem_size = 0;
+        //    var stack_ptr = 0;
+        //    var tmp_mem_size = n;
+        //    FTBaseGeneratePlanRec(n, ftbaserfhttask, plan, ref plansize, ref precomputed_size, ref planarraysize,
+        //                          ref tmp_mem_size, ref stack_mem_size, stack_ptr);
 
-                        plan.stackbuf = new double[Math.Max(stackmemsize, 1)];
-                        plan.tmpbuf = new double[Math.Max(tmpmemsize, 1)];
-                        plan.precomputed = new double[Math.Max(precomputedsize, 1)];
-                        stackptr = 0;
+        //    plan.stackbuf = new double[Math.Max(stack_mem_size, 1)];
+        //    plan.tmpbuf = new double[Math.Max(tmp_mem_size, 1)];
+        //    plan.precomputed = new double[Math.Max(precomputed_size, 1)];
+        //    stack_ptr = 0;
 
-                        ftbaseprecomputeplanrec(plan, 0, stackptr);
-                    }
-        */
+        //    FTBasePrecomputePlanRec(plan, 0, stack_ptr);
+        //}
 
 
         /*************************************************************************
@@ -484,8 +495,8 @@ public static class fft
         *************************************************************************/
         public static void FTBaseExecutePlan(ref double[] a, int aoffset, FT_Plan plan)
         {
-            const int stackptr = 0;
-            FT_BaseExecutePlanRec(ref a, aoffset, plan, 0, stackptr);
+            const int stack_ptr = 0;
+            FT_BaseExecutePlanRec(ref a, aoffset, plan, 0, stack_ptr);
         }
 
 
@@ -1357,7 +1368,7 @@ public static class fft
                 FT_BaseGeneratePlanRec(m, c_FT_BaseCfftTask, plan, ref PlanSize, ref PreComputedSize,
                     ref PlanArraySize, ref TempMemorySize, ref StackMemorySize, StackPtr);
 
-                //stackptr = stackptr - 2 * 2 * m;
+                //stack_ptr = stack_ptr - 2 * 2 * m;
                 plan.plan[entryoffset + 6] = -1;
                 plan.plan[entryoffset + 7] = PreComputedSize;
                 PreComputedSize = PreComputedSize + 2 * m + 2 * n;
@@ -1433,15 +1444,15 @@ public static class fft
           -- ALGLIB --
              Copyright 01.05.2009 by Bochkanov Sergey
         *************************************************************************/
-        private static void FT_BasePrecomputedPlanRec(FT_Plan plan, int entryoffset, int stackptr)
+        private static void FT_BasePrecomputedPlanRec(FT_Plan plan, int entryoffset, int stack_ptr)
         {
 
             if (plan.plan[entryoffset + 3] == FFT_CooleyTukeyPlan ||
                 plan.plan[entryoffset + 3] == FFT_RealCooleyTukeyPlan ||
                 plan.plan[entryoffset + 3] == FHT_CooleyTukeyPlan)
             {
-                FT_BasePrecomputedPlanRec(plan, plan.plan[entryoffset + 5], stackptr);
-                FT_BasePrecomputedPlanRec(plan, plan.plan[entryoffset + 6], stackptr);
+                FT_BasePrecomputedPlanRec(plan, plan.plan[entryoffset + 5], stack_ptr);
+                FT_BasePrecomputedPlanRec(plan, plan.plan[entryoffset + 6], stack_ptr);
                 return;
             }
 
@@ -1478,7 +1489,7 @@ public static class fft
 
             if (plan.plan[entryoffset + 3] != FFT_BluesteinPlan) return;
 
-            FT_BasePrecomputedPlanRec(plan, plan.plan[entryoffset + 5], stackptr);
+            FT_BasePrecomputedPlanRec(plan, plan.plan[entryoffset + 5], stack_ptr);
 
             n = plan.plan[entryoffset + 1];
             var m = plan.plan[entryoffset + 4];
@@ -1503,7 +1514,7 @@ public static class fft
                 plan.PreComputed[offs + 2 * (m - i) + 1] = by;
             }
 
-            FT_BaseExecutePlanRec(ref plan.PreComputed, offs, plan, plan.plan[entryoffset + 5], stackptr);
+            FT_BaseExecutePlanRec(ref plan.PreComputed, offs, plan, plan.plan[entryoffset + 5], stack_ptr);
             return;
         }
 

@@ -16,7 +16,7 @@
     <Description>Библиотека алгоритмов цифровой обработки сигналов</Description>
     <PackageProjectUrl>https://github.com/Infarh/MathCore.DSP</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Infarh/MathCore.DSP.git</RepositoryUrl>
-    <PackageTags>DSP,Signal processing</PackageTags>
+    <PackageTags>DSP;Signal processing</PackageTags>
     <Copyright>shmachilin@gmail.com</Copyright>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>MathCoreDSPSign.snk</AssemblyOriginatorKeyFile>
@@ -33,7 +33,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>MathCore.DSP.xml</DocumentationFile>
+    <DocumentationFile>$(MSBuildProjectName).xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
