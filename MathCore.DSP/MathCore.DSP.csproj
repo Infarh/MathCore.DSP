@@ -7,7 +7,7 @@
     <Version>0.0.11.3</Version>
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageReleaseNotes>
-      Исправлен алгоритм генерации случайного полосового чигнала
+      Исправлен алгоритм генерации случайного полосового сигнала
     </PackageReleaseNotes>
   </PropertyGroup>
 
