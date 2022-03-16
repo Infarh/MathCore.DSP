@@ -4,10 +4,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <LangVersion>latest</LangVersion>
-    <Version>0.0.11.2</Version>
+    <Version>0.0.11.3</Version>
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageReleaseNotes>
-      Доработка цифровых сигналов
+      Исправлен алгоритм генерации случайного полосового чигнала
     </PackageReleaseNotes>
   </PropertyGroup>
 
