@@ -6,7 +6,7 @@ using MathCore.DSP.Infrastructure;
 
 namespace MathCore.DSP.Signals.IO;
 
-public abstract class FileSignal : IEnumerable<double>
+public abstract class FileSignal : IEnumerable<double>, ICollection
 {
     protected const int __HeaderByteLength = 8 * 4;
 
@@ -20,6 +20,9 @@ public abstract class FileSignal : IEnumerable<double>
 
     protected static bool FindTmin(Stream DataStream, double Tmin, double dt, double t0, int BytePerSample)
     {
+        if (dt <= 0)
+            throw new ArgumentOutOfRangeException(nameof(dt), dt, "Период дискретизации должен быть больше 0");
+
         if (Tmin <= t0) return true;
 
         if (DataStream.CanSeek)
@@ -31,8 +34,8 @@ public abstract class FileSignal : IEnumerable<double>
             if (Tmin >= samples_count * dt + t0)
                 return false;
 
-            var bytes_offset = (long)((Tmin - t0) / dt) + __HeaderByteLength;
-            if (bytes_offset > DataStream.Length)
+            var bytes_offset = __HeaderByteLength + (long)((Tmin - t0) / dt) * BytePerSample;
+            if (DataStream.Length - bytes_offset < BytePerSample)
                 return false;
 
             DataStream.Seek(bytes_offset, SeekOrigin.Begin);
@@ -41,14 +44,15 @@ public abstract class FileSignal : IEnumerable<double>
         {
             const int samples_count = 512;
             var buffer_size = samples_count * BytePerSample;
-            var bytes_offset = (int)((Tmin - t0) / BytePerSample);
+            var bytes_offset = (long)((Tmin - t0) / dt) * BytePerSample;
             var buffer = ArrayPool<byte>.Shared.Rent(buffer_size);
             try
             {
-                while (bytes_offset >= buffer_size)
+                while (bytes_offset > 0)
                 {
-                    _ = DataStream.Read(buffer, 0, Math.Min(bytes_offset, buffer_size));
-                    bytes_offset -= buffer_size;
+                    var readed = DataStream.Read(buffer, 0, (int)Math.Min(bytes_offset, buffer_size));
+                    if(readed == 0) break;
+                    bytes_offset -= readed;
                 }
             }
             finally
@@ -62,8 +66,19 @@ public abstract class FileSignal : IEnumerable<double>
 
     protected double _dt = double.NaN;
     protected double _t0;
+    protected readonly FileInfo _File;
 
-    public string FileName { get; }
+    public string FilePath => _File.FullName;
+    public string FileName => _File.Name;
+
+    public bool FileExists
+    {
+        get
+        {
+            _File.Refresh();
+            return _File.Exists;
+        }
+    }
 
     public double dt
     {
@@ -87,7 +102,9 @@ public abstract class FileSignal : IEnumerable<double>
         set => _t0 = value;
     }
 
-    protected FileSignal(string FileName) => this.FileName = FileName;
+    protected FileSignal(FileInfo File) => _File = File;
+
+    protected FileSignal(string FilePath) : this(new FileInfo(FilePath)) { }
 
     protected abstract void Initialize();
 
@@ -95,9 +112,30 @@ public abstract class FileSignal : IEnumerable<double>
 
     public abstract void SetSamples(IEnumerable<double> Samples);
 
-    public DigitalSignal GetSignal() => new SamplesDigitalSignal(dt, GetSamples().Select(s => s.Value));
+    public virtual void SetSignal(DigitalSignal Signal)
+    {
+        dt = Signal.dt;
+        t0 = Signal.t0;
+        SetSamples(Signal);
+    }
+
+    public DigitalSignal GetSignal() => new SamplesDigitalSignal(dt, this);
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     public IEnumerator<double> GetEnumerator() => GetSamples().Select(s => s.Value).GetEnumerator();
+
+    public virtual int GetSamplesCount(double Tmin = double.NegativeInfinity, double Tmax = double.PositiveInfinity) => GetSamples(Tmin, Tmax).Count();
+
+    #region ICollection
+
+    int ICollection.Count => GetSamplesCount();
+
+    bool ICollection.IsSynchronized => false;
+
+    object? ICollection.SyncRoot => null;
+
+    void ICollection.CopyTo(Array array, int index) => ((ICollection)GetSignal()).CopyTo(array, index);
+
+    #endregion
 }

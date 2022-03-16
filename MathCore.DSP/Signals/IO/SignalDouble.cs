@@ -2,6 +2,8 @@
 
 public class SignalDouble : FileSignal
 {
+    private const int __SampleByteLength = 8;
+
     private int _SamplesCount;
 
     public int SamplesCount
@@ -20,11 +22,12 @@ public class SignalDouble : FileSignal
 
     public double TimeMax => t0 + TimeLength;
 
-    public SignalDouble(string FileName) : base(FileName) { }
+    public SignalDouble(FileInfo File) : base(File) { }
+    public SignalDouble(string FilePath) : base(FilePath) { }
 
     protected override void Initialize()
     {
-        using var reader = new BinaryReader(File.OpenRead(FileName));
+        using var reader = _File.OpenBinary();
         _dt = reader.ReadDouble();
         _t0 = reader.ReadDouble();
 
@@ -37,14 +40,26 @@ public class SignalDouble : FileSignal
 
     public override IEnumerable<SignalSample> GetSamples(double Tmin = double.NegativeInfinity, double Tmax = double.PositiveInfinity)
     {
-        using var reader = new BinaryReader(File.OpenRead(FileName));
-        var (dt, t0) = (reader.ReadDouble(), reader.ReadDouble());
-        if (_dt is double.NaN)
-            (_dt, _t0) = (dt, t0);
+        if (Tmax < Tmin)
+            yield break;
 
-        var stream = reader.BaseStream;
+        using var stream = _File.OpenRead();
+        foreach (var sample in GetSamples(stream, Tmin, Tmax))
+            yield return sample;
+    }
+
+    public static IEnumerable<SignalSample> GetSamples(Stream DataStream, double Tmin = double.NegativeInfinity, double Tmax = double.PositiveInfinity)
+    {
+        using var reader = new BinaryReader(DataStream);
+        var dt = reader.ReadDouble();
+        var t0 = reader.ReadDouble();
+
+        if (!FindTmin(DataStream, Tmin, dt, t0, __SampleByteLength))
+            yield break;
+
         var sample_index = 0;
-        while (stream.Position < stream.Length)
+        var total_length = DataStream.Length;
+        while (DataStream.Position < total_length)
         {
             var t = t0 + sample_index * dt;
             if (t > Tmax)
@@ -61,7 +76,7 @@ public class SignalDouble : FileSignal
         if (_dt is double.NaN or <= 0)
             throw new InvalidOperationException("Не задан период дискретизации");
 
-        using var writer = new BinaryWriter(File.Create(FileName));
+        using var writer = _File.CreateBinary();
         writer.Write(_dt);
         writer.Write(_t0);
 

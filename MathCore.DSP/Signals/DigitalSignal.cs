@@ -10,7 +10,7 @@ namespace MathCore.DSP.Signals;
 
 /// <summary>Цифровой сигнал</summary>
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Стиль", "IDE1006:Стили именования")]
-public abstract class DigitalSignal : IEnumerable<double>
+public abstract class DigitalSignal : IEnumerable<double>, ICollection
 {
     /// <summary>Период дискретизации</summary>
     protected readonly double _dt;
@@ -118,6 +118,8 @@ public abstract class DigitalSignal : IEnumerable<double>
         }
     }
 
+    public void CopyTo(double[] Destination, int Index) => CopyTo(Destination, Index, SamplesCount);
+
     /// <inheritdoc />
     public abstract IEnumerator<double> GetEnumerator();
 
@@ -151,4 +153,34 @@ public abstract class DigitalSignal : IEnumerable<double>
     #endregion
 
     //public virtual Complex[] GetSpectrumSamples(double dt) => FT.FourierTransform()
+
+    #region ICollection
+
+    int ICollection.Count => SamplesCount;
+
+    bool ICollection.IsSynchronized => false;
+
+    object? ICollection.SyncRoot => null;
+
+    void ICollection.CopyTo(Array array, int index)
+    {
+        if (array is double[] double_array)
+        {
+            CopyTo(double_array, index);
+            return;
+        }
+
+        var destination_length = array.Length;
+        var i = 0;
+        var count = SamplesCount;
+        foreach (var sample in this)
+        {
+            array.SetValue(sample, i);
+            i++;
+            count--;
+            if (i >= destination_length || count == 0) break;
+        }
+    }
+
+    #endregion
 }

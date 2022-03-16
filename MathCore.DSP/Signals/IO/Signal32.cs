@@ -61,11 +61,13 @@ public class Signal32 : FileSignal
 
     public double TimeMax => t0 + TimeLength;
 
-    public Signal32(string FileName) : base(FileName) { }
+    public Signal32(FileInfo File) : base(File) { }
+
+    public Signal32(string FilePath) : base(FilePath) { }
 
     protected override void Initialize()
     {
-        using var stream = File.OpenRead(FileName);
+        using var stream = _File.OpenRead();
         (_dt, _t0, _Min, _Max) = ReadHeader(stream);
 
         var file_length = stream.Length;
@@ -78,7 +80,7 @@ public class Signal32 : FileSignal
         if (Tmax <= Tmin)
             return Enumerable.Empty<SignalSample>();
 
-        using var stream = File.OpenRead(FileName);
+        using var stream = _File.OpenRead();
         return GetSamples(stream);
     }
 
@@ -88,55 +90,32 @@ public class Signal32 : FileSignal
 
         using var reader = new BinaryReader(DataStream);
 
-        var (dt, t0) = (reader.ReadDouble(), reader.ReadDouble());
-        var (min, max) = (reader.ReadDouble(), reader.ReadDouble());
+        var (dt, t0, min, max) = ReadHeader(DataStream);
 
-        if (DataStream.CanSeek)
-        {
-            var file_samples_count = (DataStream.Length - __HeaderByteLength) / __SampleByteLength;
-            if (Tmin >= file_samples_count * dt + t0)
-                yield break;
-        }
-        else
-        {
-            throw new NotImplementedException();
-            // todo: если поток не поддерживает перемотку, то выполнить проверку наличия отсчётов в заданном временном интервале
-        }
+        if (!FindTmin(DataStream, Tmin, dt, t0, __SampleByteLength))
+            yield break;
 
         var delta = max - min;
         var k = delta / uint.MaxValue;
 
-        const int samples_count = 512;
-        const int buffer_size = samples_count * __SampleByteLength;
+        const int default_samples_count = 512;
+        var samples_count = double.IsInfinity(Tmin) || double.IsInfinity(Tmax)
+            ? default_samples_count
+            : Math.Min(default_samples_count, (int)((Tmax - Tmin) / dt));
+        var buffer_size = samples_count * __SampleByteLength;
         var buffer = ArrayPool<byte>.Shared.Rent(buffer_size);
+        //var values = buffer.AsMemory().Cast<ushort>();
         try
         {
-            if (Tmin > t0)
-                if (DataStream.CanSeek)
-                {
-                    var bytes_offset = (long)((Tmin - t0) / dt) + __HeaderByteLength;
-                    if (bytes_offset > DataStream.Length)
-                        yield break;
-
-                    DataStream.Seek(bytes_offset, SeekOrigin.Begin);
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                    // todo: Если поток не поддерживает перемотку, то нужно выполнить лнейное чтение до момента времени Tmin достаточно большими буферами
-                }
-
-            if (Tmin > t0)
-            {
-                var bytes_offset = (long)((Tmin - t0) / dt) + __HeaderByteLength;
-                if (bytes_offset > DataStream.Length)
-                    yield break;
-
-                DataStream.Seek(bytes_offset, SeekOrigin.Begin);
-            }
-
             int readed_bytes_count;
             var sample_index = 0;
+            if (Tmin > t0)
+            {
+                t0 += (int)((Tmin - t0) / dt) * dt;
+                if (t0 < Tmin)
+                    t0 += dt;
+            }
+
             do
             {
                 readed_bytes_count = DataStream.Read(buffer, 0, buffer_size);
@@ -170,7 +149,7 @@ public class Signal32 : FileSignal
         if (_Max is double.NaN)
             throw new InvalidOperationException("Не задан максимум интервала значений сигнала");
 
-        using var writer = new BinaryWriter(File.Create(FileName));
+        using var writer = _File.CreateBinary();
         writer.Write(_dt);
         writer.Write(_t0);
 

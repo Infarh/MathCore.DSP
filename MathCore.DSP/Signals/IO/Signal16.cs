@@ -1,8 +1,5 @@
-﻿using System.Buffers;
-using System.Data;
-using System.Runtime.InteropServices;
-
-using MathCore.DSP.Infrastructure;
+﻿using System;
+using System.Buffers;
 
 namespace MathCore.DSP.Signals.IO;
 
@@ -38,7 +35,12 @@ public class Signal16 : FileSignal
             Initialize();
             return _Max;
         }
-        set => _Max = value;
+        set
+        {
+            if (_Min is double.NaN)
+                _Min = 0;
+            _Max = value;
+        }
     }
 
     public Interval Interval { get => new(Min, Max); set => (Min, Max) = value; }
@@ -61,15 +63,19 @@ public class Signal16 : FileSignal
         }
     }
 
+    public double t1 => t0 + SamplesCount * dt;
+
     public double TimeLength => SamplesCount * dt;
 
     public double TimeMax => t0 + TimeLength;
 
-    public Signal16(string FileName) : base(FileName) { }
+    public Signal16(FileInfo File) : base(File) { }
+
+    public Signal16(string FilePath) : base(FilePath) { }
 
     protected override void Initialize()
     {
-        using var stream = File.OpenRead(FileName);
+        using var stream = _File.OpenRead();
         (_dt, _t0, _Min, _Max) = ReadHeader(stream);
 
         var file_length = stream.Length;
@@ -82,8 +88,8 @@ public class Signal16 : FileSignal
         if (Tmax < Tmin)
             yield break;
 
-        using var stream = File.OpenRead(FileName);
-        foreach (var sample in GetSamples(stream))
+        using var stream = _File.OpenRead();
+        foreach (var sample in GetSamples(stream, Tmin, Tmax))
             yield return sample;
     }
 
@@ -93,7 +99,7 @@ public class Signal16 : FileSignal
 
         var (dt, t0, min, max) = ReadHeader(DataStream);
 
-        if(!FindTmin(DataStream, Tmin, dt, t0, __SampleByteLength))
+        if (!FindTmin(DataStream, Tmin, dt, t0, __SampleByteLength))
             yield break;
 
         var delta = max - min;
@@ -101,7 +107,7 @@ public class Signal16 : FileSignal
 
         const int default_samples_count = 512;
         var samples_count = double.IsInfinity(Tmin) || double.IsInfinity(Tmax)
-            ? default_samples_count 
+            ? default_samples_count
             : Math.Min(default_samples_count, (int)((Tmax - Tmin) / dt));
         var buffer_size = samples_count * __SampleByteLength;
         var buffer = ArrayPool<byte>.Shared.Rent(buffer_size);
@@ -110,6 +116,13 @@ public class Signal16 : FileSignal
         {
             int readed_bytes_count;
             var sample_index = 0;
+            if (Tmin > t0)
+            {
+                t0 += (int)((Tmin - t0) / dt) * dt;
+                if (t0 < Tmin)
+                    t0 += dt;
+            }
+
             do
             {
                 readed_bytes_count = DataStream.Read(buffer, 0, buffer_size);
@@ -142,8 +155,10 @@ public class Signal16 : FileSignal
             throw new InvalidOperationException("Не задан минимум интервала значений сигнала");
         if (_Max is double.NaN)
             throw new InvalidOperationException("Не задан максимум интервала значений сигнала");
+        if (Math.Abs(_Min - _Max) == 0)
+            throw new InvalidOperationException("Значение минимума и максимума по амплитуде совпадают");
 
-        using var writer = new BinaryWriter(File.Create(FileName));
+        using var writer = _File.CreateBinary();
         writer.Write(_dt);
         writer.Write(_t0);
 
@@ -162,5 +177,16 @@ public class Signal16 : FileSignal
         }
 
         _SamplesCount = count;
+    }
+
+    public override int GetSamplesCount(double Tmin = double.NegativeInfinity, double Tmax = double.PositiveInfinity)
+    {
+        var t_min = Math.Max(t0, Tmin);
+        var t_max = Math.Min(t1, Tmax);
+
+        var delta_t = t_max - t_min;
+        var count = delta_t / dt;
+
+        return (int)count;
     }
 }

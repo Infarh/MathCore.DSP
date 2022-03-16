@@ -1,61 +1,26 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Security.Cryptography;
-
-using MathCore.DSP.Infrastructure;
+﻿using MathCore.DSP.Extensions;
 using MathCore.DSP.Signals;
 using MathCore.DSP.Signals.IO;
-using MathCore.Statistic.RandomNumbers;
+
+using OxyPlot;
 
 namespace MathCore.DSP;
 
 class Program
 {
-    private static void RandomSignalsTest()
-    {
-        const double dt = 0.02;
-        const double df = 0.04995004;
-        const int ndf = 100;
-        const double fd = 1 / dt;
-        const double f0 = 0.1;
-        const int count = 1001;
-
-        var delta_f = new Interval(f0 - ndf * df, f0 + ndf * df);
-
-        var random_signal = Signal.Random.SpectrumBand(dt, count, delta_f);
-
-        var power = random_signal.Power;
-    }
-
     static void Main()
     {
-        RandomSignalsTest();
+        const double fd = 1000;
+        const double dt = 1 / fd;
+        const int count = 520;
+        const double T = count * dt;
+        const double f_min = 295;
+        const double f_max = 305;
 
-        const int samples_count = 10000;
-        var xx = Enumerable.Range(0, samples_count + 1);
-        const double dt = 0.1;
-
-
-
-        static double Signal(double t) => Math.Sin(2 * Math.PI * t);
-
-        var rnd = new Random(5);
-        var ss = xx.Select(t => /*10 * Signal(t * dt) +*/ (rnd.NextDouble() - 0.5) * 2);
-
-        const string signal_file = "sin.signal16";
-
-        //if (!File.Exists(signal_file))
-        {
-            var signal16 = new Signal16(signal_file) { t0 = 5, dt = dt, Min = -10, Max = 10 };
-            signal16.SetSamples(ss);
-        }
-
-        var y = new Signal16(signal_file);
-
-        var samples = y.GetSamples().ToArray();
-
-        var pack = SamplesPack.Create(samples.AsDouble(), 10);
-
-        var X = rnd.NextUniform(10000000, 17, Math.PI);
+        Signal.Random.SpectrumBand(dt, count, f_min, f_max)
+           .Plot()
+           .ToPNG($"test[{DateTime.Now:yyyy-MM-ddTHH-mm-ss}].png")
+           .Execute();
     }
 }
 

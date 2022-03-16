@@ -11,6 +11,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!--<PackageReference Include="MathCore" Version="0.0.66" />-->
+    <PackageReference Include="OxyPlot.ImageSharp" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\MathCore.DSP\MathCore.DSP.csproj" />
   </ItemGroup>
 
