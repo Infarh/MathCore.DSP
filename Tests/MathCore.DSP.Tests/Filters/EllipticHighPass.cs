@@ -5,6 +5,7 @@ using MathCore.DSP.Filters;
 using MathCore.DSP.Tests.Service;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting.Extensions;
 
 using static System.Linq.Enumerable;
 using static System.Math;
@@ -14,7 +15,7 @@ using static MathCore.SpecialFunctions.EllipticJacobi;
 namespace MathCore.DSP.Tests.Filters;
 
 [TestClass]
-public class EllipticHighPass
+public class EllipticHighPass : UnitTest
 {
     [TestMethod]
     public void Creation()
@@ -64,12 +65,12 @@ public class EllipticHighPass
 
         var u = Range(1, L).ToArray(i => (2 * i - 1d) / N);
 
-        double m = (1 - k_eps * k_eps).Sqrt();
+        var m = (1 - k_eps * k_eps).Sqrt();
         var kp = m.Power(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Power(4));
 
         k_w = (1 - kp * kp).Sqrt();
 
-        var im_pz = Range(0, L).ToArray(i => 1 / (k_w * cd_uk(u[i], k_w)));
+        //var im_pz = Range(0, L).ToArray(i => 1 / (k_w * cd_uk(u[i], k_w)));
 
         var v0_complex = sn_inverse((0, 1 / eps_p), k_eps) / N;
 
@@ -162,8 +163,17 @@ public class EllipticHighPass
 
         /* ------------------------------------------------------------------------- */
 
-        //var filter = new DSP.Filters.EllipticHighPass(dt, fp, fs, Gp, Gs);
-        //var spec = filter.Spec;
+        var filter = new DSP.Filters.EllipticHighPass(dt, fs, fp, Gp, Gs);
+
+        var actual_B = filter.B;
+        var actual_A = filter.A;
+
+        var comparer = GetComparer();
+        actual_B.AssertThatCollection().IsEqualTo(B, comparer);
+        actual_A.AssertThatCollection().IsEqualTo(A, comparer);
+
+        //actual_B.AssertEquals(B);
+        //actual_A.AssertEquals(A);
 
         //var transmission_0 = filter.GetTransmissionCoefficient(0, dt);
         //var transmission_fp = filter.GetTransmissionCoefficient(fp, dt);

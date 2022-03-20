@@ -145,7 +145,6 @@ public abstract class AnalogBasedFilter : IIR
         /// <exception cref="InvalidOperationException">Если частота пропускания больше, либо равна половине частоты дискретизации</exception>
         public Specification(double dt, double fp, double fs, double Gp, double Gs)
         {
-            if (!(fp < fs)) throw new InvalidOperationException("Частота пропускания должна быть меньше частоты подавления");
             if (!(fp < 1 / (2 * dt))) throw new InvalidOperationException("Частота пропускания должен быть меньше половины полосы дискретизации");
 
             this.dt = dt;

@@ -6,6 +6,7 @@ using MathCore.DSP.Signals;
 using MathCore.DSP.Tests.Service;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting.Extensions;
 
 using static System.Math;
 

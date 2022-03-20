@@ -7,20 +7,30 @@ public class EllipticHighPass : EllipticFilter
 {
     public static (double[] A, double[] B) GetPolynoms(Specification opt)
     {
-        var k_w = 1 / opt.kw;
+        var k_w = opt.kw;
         var k_eps = 1 / opt.kEps;
 
-        var N = (int)Ceiling(T(k_eps) * K(k_w) / (K(k_eps) * T(k_w))); // Порядок фильтра
+        var Kw = K(k_w);
+        var Tw = T(k_w);
+        var K_eps = K(k_eps);
+        var T_eps = T(k_eps);
+
+        var double_N = T_eps * Kw / (K_eps * Tw);
+        var N = (int)Ceiling(double_N); // Порядок фильтра
 
         var (zeros, poles) = GetNormedZeros(N, opt.EpsP, opt.EpsS);
 
         // Масштабируем полюса на требуемую частоту пропускания
-        var Wp = opt.Wp;
-        var translated_zeros = TransformToHighPass(zeros, Wp);
-        var translated_poles = TransformToHighPass(poles, Wp);
+        var Fp = opt.Fp;
+        var translated_zeros = TransformToHighPass(zeros, Fp);
+        var translated_poles = TransformToHighPass(poles, Fp);
 
-        if (N.IsOdd())
-            translated_zeros = translated_zeros.Prepend(1);
+        var is_odd = N.IsOdd();
+        if (is_odd)
+            translated_zeros = translated_zeros.Prepend(0);
+
+        var zz = translated_zeros.ToArray();
+        var pp = translated_poles.ToArray();
 
         // Переходим из p-плоскости в z-плоскость
         var dt = opt.dt;
@@ -29,12 +39,11 @@ public class EllipticHighPass : EllipticFilter
         //var z_poles = translated_poles.ToArray(p => ToZ(p, dt));
         // Вычисляем нормирующий множитель
         //var kz = GetNormalizeCoefficient(translated_poles, dt);
-        var kz = poles.Multiply();
 
-        var WpN = Wp.Pow(N);
-        var k = WpN * kz / opt.EpsP;
+        var Gz0 = (z_zeros.Multiply(z => 1 + z) / z_poles.Multiply(z => 1 + z)).Abs;
+        var G_norm = (is_odd ? 1 : opt.Gp) / Gz0;
 
-        var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToArray(v => (v * k).Re);
+        var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToArray(v => (v * G_norm).Re);
         var A = Polynom.Array.GetCoefficientsInverted(z_poles).ToRe();
 
         return (A, B);
