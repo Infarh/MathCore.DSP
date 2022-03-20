@@ -44,50 +44,31 @@ public class EllipticLowPass : UnitTest
         //const double ws = 2 * Math.PI * fs / fd; // 1.5
 
         // Рассчитываем частоты цифрового фильтра
-        var Fp = DigitalFilter.ToAnalogFrequency(fp, dt).AssertThanValue().IsEqual(869.46741682049208).ActualValue;
-        var Fs = DigitalFilter.ToAnalogFrequency(fs, dt).AssertThanValue().IsEqual(1482.6818156701001).ActualValue;
+        double Fp = DigitalFilter.ToAnalogFrequency(fp, dt).AssertEquals(869.46741682049208);
+        double Fs = DigitalFilter.ToAnalogFrequency(fs, dt).AssertEquals(1482.6818156701001);
 
         // Круговые частоты
         var Wp = Consts.pi2 * Fp;
         //var Ws = Consts.pi2 * Fs;
 
         // Допуск на АЧХ в интервале пропускания
-        var eps_p = (Pow(10, Rp / 10) - 1).Sqrt().AssertThanValue().IsEqual(0.50884713990958752).ActualValue;
+        double eps_p = (Pow(10, Rp / 10) - 1).Sqrt().AssertEquals(0.50884713990958752);
         // Допуск на АЧХ в интервале подавления
-        var eps_s = (Pow(10, Rs / 10) - 1).Sqrt().AssertThanValue().IsEqual(177.82512927503748).ActualValue;
+        double eps_s = (Pow(10, Rs / 10) - 1).Sqrt().AssertEquals(177.82512927503748);
 
-        //var k_eps = eps_s / eps_p;
-        //var k_W = Fs / Fp;
-        //Assert.That.Value(k_eps).IsEqual(349.46669702542425);
-        //Assert.That.Value(k_W).IsEqual(1.705275881518411, 2.23e-16);
+        double k_w = (fp / fs).AssertEquals(0.66666666666666663);
+        double k_eps = (eps_p / eps_s).AssertEquals(0.0028615029944534269);
 
-        var k_W = fp / fs;
-        var k_eps = eps_p / eps_s;
-        Assert.That.Value(k_W).IsEqual(0.66666666666666663);
-        Assert.That.Value(k_eps).IsEqual(0.0028615029944534269);
-
-        var K_w = FullEllipticIntegral(k_W)
-           .AssertThanValue().IsEqual(1.8096674954865886)
-           .ActualValue;
-
-        var T_w = FullEllipticIntegralComplimentary(k_W)
-           .AssertThanValue().IsEqual(1.9042414169449993)
-           .ActualValue;
-
-        var K_eps = FullEllipticIntegral(k_eps)
-           .AssertThanValue().IsEqual(1.5707995423080867)
-           .ActualValue;
-
-        var T_eps = FullEllipticIntegralComplimentary(k_eps)
-           .AssertThanValue().IsEqual(7.2427154099443083)
-           .ActualValue;
+        double K_w = FullEllipticIntegral(k_w).AssertEquals(1.8096674954865886);
+        double T_w = FullEllipticIntegralComplimentary(k_w).AssertEquals(1.9042414169449993);
+        double K_eps = FullEllipticIntegral(k_eps).AssertEquals(1.5707995423080867);
+        double T_eps = FullEllipticIntegralComplimentary(k_eps).AssertEquals(7.2427154099443083);
 
         // Оценка снизу порядка фильтра
-        var double_N = T_eps * K_w / (K_eps * T_w);
-        Assert.That.Value(double_N).IsEqual(4.381849263936846);
+        double double_N = (T_eps * K_w / (K_eps * T_w)).AssertEquals(4.381849263936846);
 
-        var N = (int)Ceiling(double_N); // Порядок фильтра
-        Assert.That.Value(N).IsEqual(5);
+        // Порядок фильтра
+        int N = ((int)Ceiling(double_N)).AssertEquals(5); 
 
         var L = N / 2;  // Число комплексно сопряжённых полюсов
         var r = N % 2;  // Число (0 или 1) действительных полюсов - (чётность фильтра)
@@ -99,14 +80,14 @@ public class EllipticLowPass : UnitTest
 
         Assert.That.Collection(u).ValuesAreEqual(0.2, 0.6);
 
-        var m = (1 - k_eps * k_eps).Sqrt().AssertThanValue().IsEqual(0.99999590589192544).ActualValue;
+        double m = (1 - k_eps * k_eps).Sqrt().AssertEquals(0.99999590589192544);
 
         var kp = m.Power(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Power(4));
         Assert.That.Value(kp).IsEqual(0.64193363450270813);
 
-        k_W = (1 - kp * kp).Sqrt().AssertThanValue().IsEqual(0.7667602029931806).ActualValue;
+        k_w = (1 - kp * kp).Sqrt().AssertEquals(0.7667602029931806);
 
-        var im_pz = Enumerable.Range(0, L).ToArray(i => 1 / (k_W * cd_uk(u[i], k_W)));
+        var im_pz = Enumerable.Range(0, L).ToArray(i => 1 / (k_w * cd_uk(u[i], k_w)));
 
         Assert.That.Collection(im_pz)
            .ValuesAreEqual(
@@ -120,16 +101,16 @@ public class EllipticLowPass : UnitTest
         var poles = new Complex[N];     // Массив полюсов
 
         // Если фильтр нечётный, то первым полюсом будет действительный полюс
-        if (r != 0) poles[0] = Complex.i * sn_uk(v0_complex, k_W);
+        if (r != 0) poles[0] = Complex.i * sn_uk(v0_complex, k_w);
         for (var i = 0; i < L; i++)
         {
             // Меняем местами действительную и мнимую часть вместо домножения на комплексную единицу
-            var (p_im, p_re) = cd_uk(u[i] - v0_complex, k_W);
+            var (p_im, p_re) = cd_uk(u[i] - v0_complex, k_w);
 
             poles[r + 2 * i] = (-p_re, p_im);
             poles[r + 2 * i + 1] = poles[r + 2 * i].ComplexConjugate;
 
-            var p0_im = 1 / (k_W * cd_uk(u[i], k_W));
+            var p0_im = 1 / (k_w * cd_uk(u[i], k_w));
             zeros[2 * i] = (0, p0_im);
             zeros[2 * i + 1] = zeros[2 * i].ComplexConjugate;
         }

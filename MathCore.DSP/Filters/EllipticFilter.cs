@@ -20,31 +20,31 @@ public abstract class EllipticFilter : AnalogBasedFilter
         var (L, r) = N.GetDivMod(2);
 
         // Эллиптический модуль
-        var u = Range(1, L).ToArray(i => (2 * i - 1d) / N);
+            var u = Range(1, L).ToArray(i => (2 * i - 1d) / N);
 
-        var m = (1 - k_eps.Pow2()).Sqrt();
-        var kp = m.Power(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Pow2().Pow2());
-        var k_W = (1 - kp.Pow2()).Sqrt();
-        var v0_complex = sn_inverse((0, 1 / EpsP), k_eps) / N;
+            var m = (1 - k_eps.Pow2()).Sqrt();
+            var kp = m.Power(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Pow2().Pow2());
+            var k_w = (1 - kp.Pow2()).Sqrt();
+            var v0_complex = sn_inverse((0, 1 / EpsP), k_eps) / N;
 
-        // нулей всегда чётное число (всегда парные)
-        var zeros = new Complex[N - r]; // Массив нулей (на r меньше числа полюсов)
-        var poles = new Complex[N];     // Массив полюсов
+            // нулей всегда чётное число (всегда парные)
+            var zeros = new Complex[N - r]; // Массив нулей (на r меньше числа полюсов)
+            var poles = new Complex[N];     // Массив полюсов
 
-        // Если фильтр нечётный, то первым полюсом будет действительный полюс
-        if (r != 0) poles[0] = Complex.i * sn_uk(v0_complex, k_W);
-        for (var i = 0; i < L; i++)
-        {
-            // Меняем местами действительную и мнимую часть вместо домножения на комплексную единицу
-            var (p_im, p_re) = cd_uk(u[i] - v0_complex, k_W);
+            // Если фильтр нечётный, то первым полюсом будет действительный полюс
+            if (r != 0) poles[0] = Complex.i * sn_uk(v0_complex, k_w);
+            for (var i = 0; i < L; i++)
+            {
+                // Меняем местами действительную и мнимую часть вместо домножения на комплексную единицу
+                var (p_im, p_re) = cd_uk(u[i] - v0_complex, k_w);
 
-            poles[r + 2 * i] = (-p_re, p_im);
-            poles[r + 2 * i + 1] = poles[r + 2 * i].ComplexConjugate;
+                poles[r + 2 * i] = (-p_re, p_im);
+                poles[r + 2 * i + 1] = poles[r + 2 * i].ComplexConjugate;
 
-            var p0_im = 1 / (k_W * cd_uk(u[i], k_W));
-            zeros[2 * i] = (0, p0_im);
-            zeros[2 * i + 1] = zeros[2 * i].ComplexConjugate;
-        }
+                var p0_im = 1 / (k_w * cd_uk(u[i], k_w));
+                zeros[2 * i] = (0, p0_im);
+                zeros[2 * i + 1] = zeros[2 * i].ComplexConjugate;
+            }
 
         return (zeros, poles);
     }

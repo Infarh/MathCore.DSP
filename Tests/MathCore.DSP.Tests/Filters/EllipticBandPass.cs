@@ -108,14 +108,14 @@ public class EllipticBandPass : UnitTest
         var h_sh = filter.GetTransmissionCoefficient(fsh).Power.In_dB_byPower();
         var h_fd = filter.GetTransmissionCoefficient(fd/2).Power.In_dB_byPower();
 
-        h_f0.AssertThanValue().LessThan(-Rs);
-        h_sl.AssertThanValue().LessThan(-Rs);
+        h_f0.AssertThatValue().LessThan(-Rs);
+        h_sl.AssertThatValue().LessThan(-Rs);
 
-        h_pl.AssertThanValue().GreaterThan(-Rp, 1.1);
-        h_c0.AssertThanValue().GreaterThan(-Rp);
-        h_ph.AssertThanValue().GreaterThan(-Rp);
+        h_pl.AssertThatValue().GreaterThan(-Rp, 1.1);
+        h_c0.AssertThatValue().GreaterThan(-Rp);
+        h_ph.AssertThatValue().GreaterThan(-Rp);
 
-        h_sh.AssertThanValue().LessThan(-Rs);
-        h_fd.AssertThanValue().LessThan(-Rs);
+        h_sh.AssertThatValue().LessThan(-Rs);
+        h_fd.AssertThatValue().LessThan(-Rs);
     }
 }

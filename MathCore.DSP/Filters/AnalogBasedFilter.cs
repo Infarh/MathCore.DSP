@@ -222,8 +222,8 @@ public abstract class AnalogBasedFilter : IIR
 
     public static IEnumerable<Complex> TransformToBandPassPoles(IEnumerable<Complex> NormedPoles, double fmin, double fmax)
     {
-        var w_min = Consts.pi2 * fmin;
-        var w_max = Consts.pi2 * fmax;
+        var w_min = pi2 * fmin;
+        var w_max = pi2 * fmax;
         var dw = (w_max - w_min) / 2;
         var w2 = w_min * w_max;
 
@@ -234,5 +234,12 @@ public abstract class AnalogBasedFilter : IIR
             yield return pdw + sqrt;
             yield return pdw - sqrt;
         }
+    }
+
+    public static IEnumerable<Complex> TransformToHighPass(IEnumerable<Complex> Normed, double fp)
+    {
+        var w_pass = pi2 * fp;
+        foreach (var p in Normed) 
+            yield return w_pass / p;
     }
 }

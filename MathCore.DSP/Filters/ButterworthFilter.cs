@@ -6,6 +6,8 @@ namespace MathCore.DSP.Filters;
 
 /// <summary>Фильтр Баттерворта</summary>
 [KnownType(typeof(ButterworthLowPass))]
+[KnownType(typeof(ButterworthBandPass))]
+[KnownType(typeof(ButterworthHighPass))]
 public abstract class ButterworthFilter : AnalogBasedFilter
 {
     /// <summary>Получить список полюсов нормированного фильтра</summary>

@@ -37,7 +37,7 @@ public class EllipticLowPass : EllipticFilter
         var B = GetCoefficientsInverted(z_zeros).ToArray(b => b * G_norm).ToRe();
         var A = GetCoefficientsInverted(z_poles).ToRe();
 
-        return (A!, B!);
+        return (A, B);
     }
 
     /// <summary>Инициализация нового Эллиптического фильтра нижних частот</summary>
