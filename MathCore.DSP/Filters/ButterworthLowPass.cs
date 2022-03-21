@@ -32,7 +32,7 @@ public class ButterworthLowPass : ButterworthFilter
         var B = new double[N + 1];
         for (var i = 0; i < B.Length; i++)
             B[i] = k * BinomialCoefficient(N, i);
-        var A = GetCoefficientsInverted(z_poles).ToRe()!;
+        var A = GetCoefficientsInverted(z_poles).ToRe();
 
         return (A, B);
     }
