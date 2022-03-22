@@ -26,7 +26,7 @@ public abstract class AnalogBasedFilter : IIR
         /// <param name="Z">Нули/полюса прототипа (нормированного ФНЧ)</param>
         /// <param name="wp">Новая частота среза</param>
         /// <returns>Нули/полюса нового фильтра ФВЧ</returns>
-        public static IEnumerable<Complex> ToHigh(IEnumerable<Complex> Z, double wp) => Z.Select(z => wp * z);
+        public static IEnumerable<Complex> ToHigh(IEnumerable<Complex> Z, double wp) => Z.Select(z => z * wp);
 
         /// <summary>Преобразование нулей/полюсов фильтра ФНЧ-ППФ</summary>
         /// <param name="Poles">Полюса прототипа (нормированного ФНЧ)</param>
@@ -49,7 +49,7 @@ public abstract class AnalogBasedFilter : IIR
             var wpl = pi2 * fpl;
             var wph = pi2 * fph;
 
-            var dw = (wph - wph) / 2;
+            var dw05 = (wph - wph) / 2;
             var wc2 = wpl * wph;
 
             // На каждый исходный полюс формируется пара новых полюсов
@@ -66,7 +66,7 @@ public abstract class AnalogBasedFilter : IIR
 
             for (var i = 0; i < Poles.Length; i++)
             {
-                var pdw = dw * Poles[i];
+                var pdw = dw05 * Poles[i];
                 Set(pdw, Complex.Sqrt(pdw.Power - wc2),
                     out poles[2 * i],
                     out poles[2 * i + 1]);
@@ -74,7 +74,63 @@ public abstract class AnalogBasedFilter : IIR
 
             for (var i = 0; i < Zeros.Length; i++)
             {
-                var pdw = dw * Zeros[i];
+                var pdw = dw05 * Zeros[i];
+                Set(pdw, Complex.Sqrt(pdw.Power - wc2),
+                    out zeros[2 * i],
+                    out zeros[2 * i + 1]);
+            }
+
+            return (poles, zeros);
+        }
+
+
+        /// <summary>Преобразование нулей/полюсов фильтра ФНЧ-ПЗФ</summary>
+        /// <param name="Poles">Полюса прототипа (нормированного ФНЧ)</param>
+        /// <param name="Zeros">Нули прототипа (нормированного ФНЧ)</param>
+        /// <param name="fpl">Нижняя частота среза ПЗФ</param>
+        /// <param name="fph">Верхняя частота среза ПЗФ</param>
+        /// <returns>Нули/полюса ППФ</returns>
+        /// <exception cref="ArgumentException">Если число полюсов == 0</exception>
+        /// <exception cref="ArgumentException">Если число нулей больше числа полюсов</exception>
+        public static (Complex[] Poles, Complex[] Zeros) ToBandStop(
+            Complex[] Poles,
+            Complex[] Zeros,
+            double fpl, double fph)
+        {
+            if (Poles is null) throw new ArgumentNullException(nameof(Poles));
+            if (Zeros is null) throw new ArgumentNullException(nameof(Zeros));
+            if (Poles.Length == 0) throw new ArgumentException("Размер вектора полюсов должен быть больше 0", nameof(Poles));
+            if (Zeros.Length > Poles.Length) throw new ArgumentException("Число нулей не должна быть больше числа полюсов", nameof(Zeros));
+
+            var wpl = pi2 * fpl;
+            var wph = pi2 * fph;
+
+            var dw05 = (wph - wph) / 2;
+            var wc2 = wpl * wph;
+
+            // На каждый исходный полюс формируется пара новых полюсов
+            // Число нулей равно удвоенному числу исходных нулей
+            //      + ноль в 0 кратности, равной разности числа полюсов и нулей
+            var poles = new Complex[Poles.Length * 2];
+            var zeros = new Complex[Zeros.Length * 2 + (Poles.Length - Zeros.Length)];
+
+            static void Set(in Complex p, in Complex D, out Complex p1, out Complex p2)
+            {
+                p1 = p + D;
+                p2 = p - D;
+            }
+
+            for (var i = 0; i < Poles.Length; i++)
+            {
+                var pdw = dw05 / Poles[i];
+                Set(pdw, Complex.Sqrt(pdw.Power - wc2),
+                    out poles[2 * i],
+                    out poles[2 * i + 1]);
+            }
+
+            for (var i = 0; i < Zeros.Length; i++)
+            {
+                var pdw = dw05 / Zeros[i];
                 Set(pdw, Complex.Sqrt(pdw.Power - wc2),
                     out zeros[2 * i],
                     out zeros[2 * i + 1]);
@@ -219,26 +275,59 @@ public abstract class AnalogBasedFilter : IIR
 
     public override Complex GetTransmissionCoefficient(double f, double dt) => base.GetTransmissionCoefficient(f / fd);
 
-    public static IEnumerable<Complex> TransformToBandPassPoles(IEnumerable<Complex> NormedPoles, double fmin, double fmax)
+    /// <summary>Метод преобразования нулей и полюсов нормированного ФНЧ в нули и полюса ППФ</summary>
+    /// <param name="Normed">Нормированные нули и полюса ФНЧ</param>
+    /// <param name="fmin">Нижняя частота среза</param>
+    /// <param name="fmax">Верхняя частота среза</param>
+    /// <returns>Нули и полюса ППФ</returns>
+    public static IEnumerable<Complex> TransformToBandPass(IEnumerable<Complex> Normed, double fmin, double fmax)
     {
         var w_min = pi2 * fmin;
         var w_max = pi2 * fmax;
-        var dw = (w_max - w_min) / 2;
-        var w2 = w_min * w_max;
+        var dw05 = (w_max - w_min) / 2;
+        var wc2 = w_min * w_max;
 
-        foreach (var p in NormedPoles)
+        foreach (var p in Normed)
         {
-            var pdw = p * dw;
-            var sqrt = Complex.Sqrt(pdw.Pow2() - w2);
+            var pdw = dw05 * p;
+            var sqrt = Complex.Sqrt(pdw.Pow2() - wc2);
             yield return pdw + sqrt;
             yield return pdw - sqrt;
         }
     }
 
+    /// <summary>Метод преобразования нулей и полюсов нормированного ФНЧ в нули и полюса ПЗФ</summary>
+    /// <param name="Normed">Нормированные нули и полюса ФНЧ</param>
+    /// <param name="fmin">Нижняя частота среза</param>
+    /// <param name="fmax">Верхняя частота среза</param>
+    /// <returns>Нули и полюса ПЗФ</returns>
+    public static IEnumerable<Complex> TransformToBandStop(IEnumerable<Complex> Normed, double fmin, double fmax)
+    {
+        var w_min = pi2 * fmin;
+        var w_max = pi2 * fmax;
+        var dw05 = (w_max - w_min) / 2;
+        var wc2 = w_min * w_max;
+
+        foreach (var p in Normed)
+        {
+            var pdw = dw05 / p;
+            var sqrt = Complex.Sqrt(pdw.Pow2() - wc2);
+            yield return pdw + sqrt;
+            yield return pdw - sqrt;
+        }
+    }
+
+    public static IEnumerable<Complex> TransformToLowPass(IEnumerable<Complex> Normed, double fp)
+    {
+        var wp = pi2 * fp;
+        foreach (var p in Normed) 
+            yield return wp * p;
+    }
+
     public static IEnumerable<Complex> TransformToHighPass(IEnumerable<Complex> Normed, double fp)
     {
-        var w_pass = pi2 * fp;
+        var wp = pi2 * fp;
         foreach (var p in Normed) 
-            yield return w_pass / p;
+            yield return wp / p;
     }
 }

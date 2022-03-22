@@ -31,10 +31,10 @@ public class EllipticBandPass : EllipticFilter
         var Fpl = ToAnalogFrequency(fpl, Spec.dt);
         var Fph = ToAnalogFrequency(fph, Spec.dt);
 
-        var ppf_zeros = TransformToBandPassPoles(zeros, Fpl, Fph)
+        var ppf_zeros = TransformToBandPass(zeros, Fpl, Fph)
            .Concat(Enumerable.Repeat(new Complex(), poles.Length - zeros.Length))
            .ToArray();
-        var ppf_poles = TransformToBandPassPoles(poles, Fpl, Fph).ToArray();
+        var ppf_poles = TransformToBandPass(poles, Fpl, Fph).ToArray();
 
         var is_odd = N.IsOdd();
         var z_zeros = is_odd
