@@ -83,7 +83,6 @@ public abstract class AnalogBasedFilter : IIR
             return (poles, zeros);
         }
 
-
         /// <summary>Преобразование нулей/полюсов фильтра ФНЧ-ПЗФ</summary>
         /// <param name="Poles">Полюса прототипа (нормированного ФНЧ)</param>
         /// <param name="Zeros">Нули прототипа (нормированного ФНЧ)</param>
