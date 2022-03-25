@@ -98,8 +98,10 @@ public abstract class AnalogBasedFilter : IIR
         {
             if (Poles is null) throw new ArgumentNullException(nameof(Poles));
             if (Zeros is null) throw new ArgumentNullException(nameof(Zeros));
-            if (Poles.Length == 0) throw new ArgumentException("Размер вектора полюсов должен быть больше 0", nameof(Poles));
-            if (Zeros.Length > Poles.Length) throw new ArgumentException("Число нулей не должна быть больше числа полюсов", nameof(Zeros));
+            var count_p = Poles.Length;
+            var count_0 = Zeros.Length;
+            if (count_p == 0) throw new ArgumentException("Размер вектора полюсов должен быть больше 0", nameof(Poles));
+            if (count_0 > count_p) throw new ArgumentException("Число нулей не должна быть больше числа полюсов", nameof(Zeros));
 
             var wpl = pi2 * fpl;
             var wph = pi2 * fph;
@@ -110,8 +112,8 @@ public abstract class AnalogBasedFilter : IIR
             // На каждый исходный полюс формируется пара новых полюсов
             // Число нулей равно удвоенному числу исходных нулей
             //      + ноль в 0 кратности, равной разности числа полюсов и нулей
-            var poles = new Complex[Poles.Length * 2];
-            var zeros = new Complex[Zeros.Length * 2 + (Poles.Length - Zeros.Length)];
+            var poles = new Complex[count_p * 2];
+            var zeros = new Complex[poles.Length];
 
             static void Set(in Complex p, in Complex D, out Complex p1, out Complex p2)
             {
@@ -119,7 +121,7 @@ public abstract class AnalogBasedFilter : IIR
                 p2 = p - D;
             }
 
-            for (var i = 0; i < Poles.Length; i++)
+            for (var i = 0; i < count_p; i++)
             {
                 var pdw = dw05 / Poles[i];
                 Set(pdw, Complex.Sqrt(pdw.Power - wc2),
@@ -127,12 +129,19 @@ public abstract class AnalogBasedFilter : IIR
                     out poles[2 * i + 1]);
             }
 
-            for (var i = 0; i < Zeros.Length; i++)
+            for (var i = 0; i < count_0; i++)
             {
                 var pdw = dw05 / Zeros[i];
                 Set(pdw, Complex.Sqrt(pdw.Power - wc2),
                     out zeros[2 * i],
                     out zeros[2 * i + 1]);
+            }
+
+            var wc = wc2.Sqrt();
+            for (var i = 0; i < count_p - count_0; i++)
+            {
+                zeros[2 * (count_0 + i)] = new(0, wc);
+                zeros[2 * (count_0 + i) + 1] = new(0, -wc);
             }
 
             return (poles, zeros);
@@ -319,14 +328,14 @@ public abstract class AnalogBasedFilter : IIR
     public static IEnumerable<Complex> TransformToLowPass(IEnumerable<Complex> Normed, double fp)
     {
         var wp = pi2 * fp;
-        foreach (var p in Normed) 
+        foreach (var p in Normed)
             yield return wp * p;
     }
 
     public static IEnumerable<Complex> TransformToHighPass(IEnumerable<Complex> Normed, double fp)
     {
         var wp = pi2 * fp;
-        foreach (var p in Normed) 
+        foreach (var p in Normed)
             yield return wp / p;
     }
 }

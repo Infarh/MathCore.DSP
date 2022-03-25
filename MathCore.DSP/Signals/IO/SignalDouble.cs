@@ -1,4 +1,8 @@
-﻿namespace MathCore.DSP.Signals.IO;
+﻿using MathCore.Values;
+
+using System.Buffers;
+
+namespace MathCore.DSP.Signals.IO;
 
 public class SignalDouble : FileSignal
 {
@@ -82,5 +86,38 @@ public class SignalDouble : FileSignal
 
         foreach (var sample in Samples)
             writer.Write(sample);
+    }
+
+    public override IEnumerable<double> GetValues(double Tmin = Double.NegativeInfinity, double Tmax = Double.PositiveInfinity)
+    {
+        if (Tmax < Tmin)
+            yield break;
+
+        using var stream = _File.OpenRead();
+        foreach (var sample in GetValues(stream, Tmin, Tmax))
+            yield return sample;
+    }
+
+    public static IEnumerable<double> GetValues(Stream DataStream, double Tmin = double.NegativeInfinity, double Tmax = double.PositiveInfinity)
+    {
+        using var reader = new BinaryReader(DataStream);
+        var dt = reader.ReadDouble();
+        var t0 = reader.ReadDouble();
+
+        if (!FindTmin(DataStream, Tmin, dt, t0, __SampleByteLength))
+            yield break;
+
+        var sample_index = 0;
+        var total_length = DataStream.Length;
+        while (DataStream.Position < total_length)
+        {
+            var t = t0 + sample_index * dt;
+            if (t > Tmax)
+                yield break;
+
+            var sample = reader.ReadDouble();
+            yield return sample;
+            sample_index++;
+        }
     }
 }
