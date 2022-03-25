@@ -20,9 +20,12 @@ public class ButterworthBandPass : ButterworthFilter
         var poles = GetNormPoles(N, Spec.EpsP);
 
         //var ppf_zeros = Enumerable.Repeat(new Complex(), N);
-        var ppf_poles = TransformToBandPassPoles(poles, Fmin, Fmax).ToArray();
+        var ppf_poles = TransformToBandPass(poles, Fmin, Fmax).ToArray();
 
-        var ppf_zeros_z = Enumerable.Repeat(Complex.ReValue(1), N).AppendLast(Enumerable.Repeat(Complex.ReValue(-1), N)).ToArray();
+        var ppf_zeros_z = Enumerable
+           .Repeat(Complex.ReValue(1), N)
+           .AppendLast(Enumerable.Repeat(Complex.ReValue(-1), N))
+           .ToArray();
         var ppf_poles_z = ToZArray(ppf_poles, Spec.dt);
 
         var kz0 = Complex.Real;

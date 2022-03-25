@@ -6,6 +6,7 @@ using MathCore.DSP.Signals;
 using MathCore.DSP.Tests.Service;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting.Extensions;
 
 using static System.Linq.Enumerable;
 using static System.Math;
@@ -25,7 +26,7 @@ public class ButterworthLowPass : UnitTest
         const double dt = 1 / fd; // 2с // Период дискретизации
 
         const double fp = 0.05;    // Гц // Граничная частота полосы пропускания
-        const double fs = 0.15;    // Гц // Граничная частота полосы запирания
+        const double fs = 0.15;    // Гц // Граничная частота полосы заграждения
 
         Assert.IsTrue(fp < fs);
         Assert.IsTrue(fp < fd / 2);
@@ -118,12 +119,12 @@ public class ButterworthLowPass : UnitTest
            .ActualValue;
 
         var kz = DigitalFilter.GetNormalizeCoefficient(translated_poles, dt)
-           .AssertThanValue()
+           .AssertThatValue()
            .IsEqual(0.45194421873401691)
            .ActualValue;
 
         var WpN = Wp.Pow(N)
-           .AssertThanValue()
+           .AssertThatValue()
            .IsEqual(0.034302685030761955)
            .ActualValue;
 

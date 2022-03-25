@@ -173,4 +173,67 @@ public class Signal8 : FileSignal
 
         _SamplesCount = count;
     }
+
+    public override IEnumerable<double> GetValues(double Tmin = Double.NegativeInfinity, double Tmax = Double.PositiveInfinity)
+    {
+        if (Tmax < Tmin)
+            yield break;
+
+        using var stream = _File.OpenRead();
+        foreach (var sample in GetValues(stream, Tmin, Tmax))
+            yield return sample;
+    }
+
+    public static IEnumerable<double> GetValues(Stream DataStream, double Tmin = double.NegativeInfinity, double Tmax = double.PositiveInfinity)
+    {
+        if (Tmax < Tmin) yield break;
+
+        var (dt, t0, min, max) = ReadHeader(DataStream);
+
+        if (!FindTmin(DataStream, Tmin, dt, t0, __SampleByteLength))
+            yield break;
+
+        var delta = max - min;
+        var k = delta / __MaxValue;
+
+        const int default_samples_count = 512;
+        var samples_count = double.IsInfinity(Tmin) || double.IsInfinity(Tmax)
+            ? default_samples_count
+            : Math.Min(default_samples_count, (int)((Tmax - Tmin) / dt));
+        var buffer_size = samples_count * __SampleByteLength;
+        var buffer = ArrayPool<byte>.Shared.Rent(buffer_size);
+        try
+        {
+            int readed_bytes_count;
+            var sample_index = 0;
+            if (Tmin > t0)
+            {
+                t0 += (int)((Tmin - t0) / dt) * dt;
+                if (t0 < Tmin)
+                    t0 += dt;
+            }
+
+            do
+            {
+                readed_bytes_count = DataStream.Read(buffer, 0, buffer_size);
+                for (var i = 0; i < readed_bytes_count; i += __SampleByteLength)
+                {
+                    var t = t0 + sample_index * dt;
+                    if (t > Tmax)
+                        yield break;
+
+                    var code = buffer[i];
+                    var sample = code * k + min;
+
+                    yield return sample;
+                    sample_index++;
+                }
+            }
+            while (readed_bytes_count == buffer_size);
+        }
+        finally
+        {
+            ArrayPool<byte>.Shared.Return(buffer);
+        }
+    }
 }
