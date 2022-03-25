@@ -121,7 +121,8 @@ public abstract class FileSignal : IEnumerable<double>, ICollection
 
     public abstract IEnumerable<double> GetValues(double Tmin = double.NegativeInfinity, double Tmax = double.PositiveInfinity);
 
-    public DigitalSignal GetSignal(double Tmin = double.NegativeInfinity, double Tmax = double.PositiveInfinity) => new SamplesDigitalSignal(dt, GetValues(Tmin, Tmax));
+    public DigitalSignal GetSignal(double Tmin = double.NegativeInfinity, double Tmax = double.PositiveInfinity) => 
+        new SamplesDigitalSignal(dt, GetValues(Tmin, Tmax), Math.Max(Tmin, t0));
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
