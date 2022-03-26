@@ -43,8 +43,4 @@
     <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.7.0" PrivateAssets="All" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Signals\Implementations\Samples\Base\" />
-  </ItemGroup>
-
 </Project>
