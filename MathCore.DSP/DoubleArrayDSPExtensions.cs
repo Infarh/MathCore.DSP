@@ -89,8 +89,8 @@ public static class DoubleArrayDSPExtensions
     /// <returns>Значение комплексного коэффициента передачи рекуррентного фильтра на заданной частоте</returns>
     public static Complex GetTransmissionCoefficient(IReadOnlyList<double> A, IReadOnlyList<double> B, double f)
     {
-        //var p = new Complex(0, 2 * Math.PI * f);
-        var p = Complex.Exp(-2 * Math.PI * f);
+        //var p = new Complex(0, Consts.pi2 * f);
+        var p = Complex.Exp(-Consts.pi2 * f);
 
         static Complex Sum(IReadOnlyList<double> V, Complex p)
         {
@@ -111,6 +111,32 @@ public static class DoubleArrayDSPExtensions
         }
 
         return Sum(B, p) / Sum(A, p);
+    }
+
+    public static Complex GetAnalogTransmissionCoefficientFromPoles(
+        IEnumerable<Complex> Zeros,
+        IEnumerable<Complex> Poles,
+        double f)
+    {
+        var p = Complex.ImValue(Consts.pi2 * f);
+
+        var P0 = Complex.Real;
+        foreach (var p0 in Zeros)
+        {
+            if (p0 == p) 
+                return 0;
+            P0 *= p - p0;
+        }
+
+        var Pp = Complex.Real;
+        foreach (var pp in Poles)
+        {
+            if (p == pp)
+                return new Complex(double.PositiveInfinity, double.PositiveInfinity);
+            Pp *= p - pp;
+        }
+
+        return P0 / Pp;
     }
 
     /// <summary>Выполнение фильтрации очередного отсчёта цифрового сигнала с помощью коэффициентов рекуррентного фильтра</summary>
