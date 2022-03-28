@@ -20,7 +20,7 @@ public class EllipticBandSop : UnitTest
     [TestMethod]
     public void Creation()
     {
-        const double fd = 5000;         // Частота дискретизации
+        const double fd = 10;         // Частота дискретизации
         const double dt = 1 / fd;       // Период дискретизации
 
         const double Rp = 1;    // Неоднородность АЧХ в интервале пропускания не более 1 дБ
