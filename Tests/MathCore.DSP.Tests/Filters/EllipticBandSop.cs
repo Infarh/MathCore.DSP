@@ -39,10 +39,10 @@ public class EllipticBandSop : UnitTest
         const double wsh = fsh * Consts.pi2; // 12
         const double wph = fph * Consts.pi2; // 15
 
-        const double wc = wsl * wsh; // 45
-        const double dw = wsh - wsl; // 4
+        const double wc = wsl * wsh; // 48
+        const double dw = wsh - wsl; // 8
 
-        var wp = wc / wph > wpl             // 3
+        var wp = wc / wph > wpl             // 15
             ? wph
             : wpl;
         var w0 = Abs(dw * wp / (wc - wp.Pow2()));
@@ -53,14 +53,42 @@ public class EllipticBandSop : UnitTest
         f0.AssertEquals(0.10790165633348836);
         w0.AssertEquals(0.67796610169491522);
 
+        var Fpl = DigitalFilter.ToAnalogFrequency(fpl, dt);
+        var Fsl = DigitalFilter.ToAnalogFrequency(fsl, dt);
+        var Fsh = DigitalFilter.ToAnalogFrequency(fsh, dt);
+        var Fph = DigitalFilter.ToAnalogFrequency(fph, dt);
+
+        Fpl.AssertEquals(0.31937518051807723);
+        Fsl.AssertEquals(0.64524608331077715);
+        Fsh.AssertEquals(2.1776750959738593);
+        Fph.AssertEquals(2.9653636313402);
+
+        var Wpl = Consts.pi2 * Fpl;
+        var Wsl = Consts.pi2 * Fsl;
+        var Wsh = Consts.pi2 * Fsh;
+        var Wph = Consts.pi2 * Fph;
+
+        var Wc = Wsl * Wsh;
+        var dW = Wsh - Wsl;
+
+        var Wp = Wc / Wph > Wpl
+            ? Wph
+            : Wpl;
+        var W0 = Abs(dW * Wp / (Wc - Wp.Pow2()));
+        const double W1 = 1;
+        var F0 = W0 / Consts.pi2;
+        const double F1 = 1 / Consts.pi2;
+
         var eps_p = Sqrt(10.Power(Rp / 10) - 1);
         var eps_s = Sqrt(10.Power(Rs / 10) - 1);
 
         eps_p.AssertEquals(0.50884713990958752);
         eps_s.AssertEquals(99.994999874993752);
 
-        var kw = f0 / f1;
+        var kw = W0 / W1;
         var k_eps = eps_p / eps_s;
+
+        kw.AssertEquals(0.615059351152204);
 
         var Kw = FullEllipticIntegral(kw);
         var Tw = FullEllipticIntegralComplimentary(kw);
@@ -70,18 +98,8 @@ public class EllipticBandSop : UnitTest
         var double_N = T_eps * Kw / (K_eps * Tw);
         var N = (int)Ceiling(double_N);
 
-        double_N.AssertEquals(4.0903829785068888);
-        N.AssertEquals(5);
-
-        var Fpl = DigitalFilter.ToAnalogFrequency(fpl, dt);
-        var Fsl = DigitalFilter.ToAnalogFrequency(fsl, dt);
-        var Fsh = DigitalFilter.ToAnalogFrequency(fsh, dt);
-        var Fph = DigitalFilter.ToAnalogFrequency(fph, dt);
-
-        Fpl.AssertEquals(0.31830989042792263);
-        Fsl.AssertEquals(0.63661980632063808);
-        Fsh.AssertEquals(1.9098602338357447);
-        Fph.AssertEquals(2.3873259368731512);
+        double_N.AssertEquals(3.7906792606389264);
+        N.AssertEquals(4);
 
         var L = N / 2;
         var r = N % 2;
@@ -100,35 +118,34 @@ public class EllipticBandSop : UnitTest
         var zeros = new Complex[N - r];
         var poles = new Complex[N];
 
-        if (r != 0) poles[0] = Complex.ImValue(w0) * sn_uk(v0_complex, k_W);
+        if (r != 0) poles[0] = Complex.ImValue(W0) * sn_uk(v0_complex, k_W);
         for (var i = 0; i < L; i++)
         {
             // Меняем местами действительную и мнимую часть вместо домножения на комплексную единицу
             var (p_im, p_re) = cd_uk(u[i] - v0_complex, k_W);
 
-            var pp = new Complex(-p_re * w0, p_im * w0);
+            var pp = new Complex(-p_re * W0, p_im * W0);
 
             poles[r + 2 * i] = pp;
             poles[r + 2 * i + 1] = pp.ComplexConjugate;
 
-            var p0_im = w0 / (k_W * cd_uk(u[i], k_W));
+            var p0_im = W0 / (k_W * cd_uk(u[i], k_W));
             zeros[2 * i] = (0, p0_im);
             zeros[2 * i + 1] = zeros[2 * i].ComplexConjugate;
         }
 
         zeros.AssertEquals(
-            (0, +0.85003902981662161),
-            (0, -0.85003902981662161),
-            (0, +1.1961277565481045),
-            (0, -1.1961277565481045)
+            (0, +0.98996902542422383),
+            (0, -0.98996902542422383),
+            (0, +2.1682610011632977),
+            (0, -2.1682610011632977)
             );
 
         poles.AssertEquals(
-            -0.26125040018686613,
-            (-0.033844548398070828, +0.67674444106992981),
-            (-0.033844548398070828, -0.67674444106992981),
-            (-0.14854693514997036, +0.5023959058648525),
-            (-0.14854693514997036, -0.5023959058648525)
+            (-0.064754226306376769, +0.61119112677499909),
+            (-0.064754226306376769, -0.61119112677499909),
+            (-0.22406033752875973, +0.29436910772471786),
+            (-0.22406033752875973, -0.29436910772471786)
             );
 
         var pzf_zeros = AnalogBasedFilter.TransformToBandStop(zeros, Fsl, Fsh);
@@ -141,69 +158,105 @@ public class EllipticBandSop : UnitTest
                 (0, -wc_sqrt));
 
         pzf_zeros.AssertEquals(
-            (+5.128308140332369E-16, +3.6694932282406674),
-            (-5.128308140332369E-16, -13.08083231510096),
-            (+5.128308140332369E-16, +13.08083231510096),
-            (-5.128308140332369E-16, -3.6694932282406674),
+            (+5.44664340994985E-16, +4.0319948722574663),
+            (-5.44664340994985E-16, -13.758092567621574),
+            (+5.44664340994985E-16, +13.758092567621574),
+            (-5.44664340994985E-16, -4.0319948722574663),
 
-            (+4.7106421190832123E-16, +4.3489356903400047),
-            (-4.7106421190832123E-16, -11.037189100458273),
-            (+4.7106421190832123E-16, +11.037189100458273),
-            (-4.7106421190832123E-16, -4.3489356903400047),
-            (0, +wc_sqrt),
-            (0, -wc_sqrt)
+            (+4.758917038943161E-16, +5.551565428550191),
+            (-4.758917038943161E-16, -9.9922372164459166),
+            (+4.758917038943161E-16, +9.9922372164459166),
+            (-4.758917038943161E-16, -5.551565428550191)
             );
 
         pzf_poles.AssertEquals(
-            -1.6571848295652529,
-            -28.964799063847966,
+            (-0.22795541315219781, +2.9727034750401131),
+            (-1.4225863599870872, -18.551555137033667),
+            (-0.22795541315219781, -2.9727034750401131),
+            (-1.4225863599870872, +18.551555137033667),
 
-            (-0.10370546264251768, +3.1986700805557033),
-            (-0.48601305764408786, -14.99048735363515),
-            (-0.10370546264251768, -3.1986700805557033),
-            (-0.48601305764408786, +14.99048735363515),
-
-            (-0.57541229376599867, +2.6505995694839637),
-            (-3.75433472888858, -17.294100463097848),
-            (-0.57541229376599867, -2.6505995694839637),
-            (-3.75433472888858, +17.294100463097848)
+            (-1.1307190536141292, +1.7343356882717966),
+            (-14.633073912059702, -22.444710941843681),
+            (-1.1307190536141292, -1.7343356882717966),
+            (-14.633073912059702, +22.444710941843681)
         );
 
-        var h_f00 = DoubleArrayDSPExtensions.GetAnalogTransmissionCoefficientFromPoles(
+        var h_F00 = DoubleArrayDSPExtensions.GetAnalogTransmissionCoefficientFromPoles(
             pzf_zeros,
             pzf_poles,
             0)
            .Abs;
 
-        var h_hpl = DoubleArrayDSPExtensions.GetAnalogTransmissionCoefficientFromPoles(
+        var h_Fpl = DoubleArrayDSPExtensions.GetAnalogTransmissionCoefficientFromPoles(
             pzf_zeros,
             pzf_poles,
-            fpl)
+            Fpl)
            .Abs;
 
-        var h_hsl = DoubleArrayDSPExtensions.GetAnalogTransmissionCoefficientFromPoles(
+        var h_Fsl = DoubleArrayDSPExtensions.GetAnalogTransmissionCoefficientFromPoles(
             pzf_zeros,
             pzf_poles,
-            fsl)
+            Fsl)
             .Abs;
 
-        var fc = (fsl * fsh).Sqrt();
-        var h_hfc = DoubleArrayDSPExtensions.GetAnalogTransmissionCoefficientFromPoles(
+        var Fc = (Fsl * Fsh).Sqrt();
+        var h_Fc = DoubleArrayDSPExtensions.GetAnalogTransmissionCoefficientFromPoles(
             pzf_zeros,
             pzf_poles,
-            fc)
+            Fc)
            .Abs;
 
-        var h_hsh = DoubleArrayDSPExtensions.GetAnalogTransmissionCoefficientFromPoles(
+        var h_Fsh = DoubleArrayDSPExtensions.GetAnalogTransmissionCoefficientFromPoles(
             pzf_zeros,
             pzf_poles,
-            fsh).Abs;
+            Fsh).Abs;
 
-        var h_hph = DoubleArrayDSPExtensions.GetAnalogTransmissionCoefficientFromPoles(
+        var h_Fph = DoubleArrayDSPExtensions.GetAnalogTransmissionCoefficientFromPoles(
             pzf_zeros,
             pzf_poles,
-            fph)
+            Fph)
            .Abs;
+
+        h_F00.AssertGreaterOrEqualsThan(Gp);
+        h_Fpl.AssertGreaterOrEqualsThan(Gp);
+        h_Fsl.AssertLessOrEqualsThan(Gs);
+        h_Fc.AssertLessOrEqualsThan(Gs, 1e-2);
+        h_Fsh.AssertLessOrEqualsThan(Gs, 1e-3);
+        h_Fph.AssertGreaterOrEqualsThan(Gp);
+
+        var z_zeros = DigitalFilter.ToZArray(pzf_zeros, dt);
+        var z_poles = DigitalFilter.ToZArray(pzf_poles, dt);
+
+        z_zeros.AssertEquals(
+            (0.92188968196320531, +0.38745246713600884),
+            (0.35757714717701156, -0.9338836029274471),
+            (0.35757714717701156, +0.9338836029274471),
+            (0.92188968196320531, -0.38745246713600884),
+
+            (0.85692452818129894, +0.51544190070390872),
+            (0.60049677950867342, -0.79962717425042007),
+            (0.60049677950867342, +0.79962717425042007),
+            (0.85692452818129894, -0.51544190070390872));
+
+        z_poles.AssertEquals(
+            (0.93565642115019709, +0.28446436884548237),
+            (0.067011448261103043, -0.92401175944069935),
+            (0.93565642115019709, -0.28446436884548237),
+            (0.067011448261103043, +0.92401175944069935),
+
+            (+0.88031182726988344, +0.15432943378971034),
+            (-0.18664227822550081, -0.52711402412329078),
+            (+0.88031182726988344, -0.15432943378971034),
+            (-0.18664227822550081, +0.52711402412329078)
+            );
+
+        var G_norm = (N.IsOdd() ? 1 : Gp)
+            / (z_zeros.Multiply(z => 1 - z) / z_poles.Multiply(z => 1 - z)).Abs;
+
+        var B = GetCoefficientsInverted(z_zeros).ToArray(b => b * G_norm).ToRe();
+        var A = GetCoefficientsInverted(z_poles).ToRe();
+
+        Assert.Fail();
 
         //var filter = new DSP.Filters.EllipticBandStop(dt, fsl, fpl, fph, fsh, Gp, Gs);
 
@@ -224,7 +277,5 @@ public class EllipticBandSop : UnitTest
 
         //h_sh.AssertThatValue().LessThan(-Rs);
         //h_fd.AssertThatValue().LessThan(-Rs);
-
-        Assert.Fail();
     }
 }

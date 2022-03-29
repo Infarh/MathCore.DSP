@@ -113,6 +113,36 @@ public static class DoubleArrayDSPExtensions
         return Sum(B, p) / Sum(A, p);
     }
 
+    public static Complex GetDigitalTransmissionCoefficientFromPoles(
+        IEnumerable<Complex> Zeros,
+        IEnumerable<Complex> Poles,
+        double f,
+        double dt)
+    {
+        var z = Complex.Exp(-Consts.pi2 * f * dt);
+
+        var P0 = Complex.Real;
+        var one = Complex.Real;
+        foreach (var z0 in Zeros)
+        {
+            var zz = z0 * z;
+            if (one == zz)
+                return 0;
+            P0 *= 1 - zz;
+        }
+
+        var Pp = Complex.Real;
+        foreach (var zp in Poles)
+        {
+            var zz = zp * z;
+            if (one == zz)
+                return new Complex(double.PositiveInfinity, double.PositiveInfinity);
+            Pp *= 1 - zp;
+        }
+
+        return P0 / Pp;
+    }
+
     public static Complex GetAnalogTransmissionCoefficientFromPoles(
         IEnumerable<Complex> Zeros,
         IEnumerable<Complex> Poles,
