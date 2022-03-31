@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
 
 using MathCore.DSP.Filters;
 
@@ -15,7 +14,7 @@ using static MathCore.SpecialFunctions.EllipticJacobi;
 namespace MathCore.DSP.Tests.Filters;
 
 [TestClass]
-public class EllipticBandSop : UnitTest
+public class EllipticBandStop : UnitTest
 {
     [TestMethod]
     public void Creation()
@@ -79,19 +78,22 @@ public class EllipticBandSop : UnitTest
         var F0 = W0 / Consts.pi2;
         const double F1 = 1 / Consts.pi2;
 
+        W0.AssertEquals(0.615059351152204);
+        F0.AssertEquals(0.0978897360307671);
+
         var eps_p = Sqrt(10.Power(Rp / 10) - 1);
         var eps_s = Sqrt(10.Power(Rs / 10) - 1);
 
         eps_p.AssertEquals(0.50884713990958752);
         eps_s.AssertEquals(99.994999874993752);
 
-        var kw = W0 / W1;
+        var kW = W0 / W1;
         var k_eps = eps_p / eps_s;
 
-        kw.AssertEquals(0.615059351152204);
+        kW.AssertEquals(0.615059351152204);
 
-        var Kw = FullEllipticIntegral(kw);
-        var Tw = FullEllipticIntegralComplimentary(kw);
+        var Kw = FullEllipticIntegral(kW);
+        var Tw = FullEllipticIntegralComplimentary(kW);
         var K_eps = FullEllipticIntegral(k_eps);
         var T_eps = FullEllipticIntegralComplimentary(k_eps);
 
@@ -167,7 +169,7 @@ public class EllipticBandSop : UnitTest
             (-4.758917038943161E-16, -9.9922372164459166),
             (+4.758917038943161E-16, +9.9922372164459166),
             (-4.758917038943161E-16, -5.551565428550191)
-            );
+            ); 
 
         pzf_poles.AssertEquals(
             (-0.22795541315219781, +2.9727034750401131),
@@ -264,9 +266,15 @@ public class EllipticBandSop : UnitTest
         var h_fph = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fph, dt).Abs.AssertGreaterOrEqualsThan(Gp);
         var h_fd5 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fd / 2, dt).Abs.AssertGreaterOrEqualsThan(Gp);
 
-        Assert.Fail();
 
-        //var filter = new DSP.Filters.EllipticBandStop(dt, fsl, fpl, fph, fsh, Gp, Gs);
+        var filter = new DSP.Filters.EllipticBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs);
+
+        var filter_A = filter.A;
+        var filter_B = filter.B;
+
+        Assert.That.Collection(filter_A).IsEqualTo(A, 1.156e-14);
+        Assert.That.Collection(filter_B).IsEqualTo(B, 1.156e-14);
+
 
         //var h_f0 = filter.GetTransmissionCoefficient(0).Power.In_dB_byPower();
         //var h_sl = filter.GetTransmissionCoefficient(fsl).Power.In_dB_byPower();
@@ -285,5 +293,51 @@ public class EllipticBandSop : UnitTest
 
         //h_sh.AssertThatValue().LessThan(-Rs);
         //h_fd.AssertThatValue().LessThan(-Rs);
+    }
+
+    [TestMethod]
+    public void TransmissionCoefficient()
+    {
+        const double fd = 10;         // Частота дискретизации
+        const double dt = 1 / fd;       // Период дискретизации
+
+        const double Rp = 1;    // Неоднородность АЧХ в интервале пропускания не более 1 дБ
+        const double Rs = 40;   // Уровень подавления более 40 дБ
+
+        var Gp = (-Rp).From_dB();   // Значения АЧХ в интервале пропускания
+        var Gs = (-Rs).From_dB();   // Значения АЧХ в интервале подавления
+
+        const double fpl = 2 / Consts.pi2;  // нижняя частота границы полосы пропускания
+        const double fsl = 4 / Consts.pi2;  // нижняя частота границы полосы заграждения
+        const double fsh = 12 / Consts.pi2; // верхняя частота границы полосы заграждения
+        const double fph = 15 / Consts.pi2; // верхняя частота границы полосы пропускания
+
+        var filter = new DSP.Filters.EllipticBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs);
+
+        var h_f0 = filter.GetTransmissionCoefficient(0);
+        var h_pl = filter.GetTransmissionCoefficient(fpl);
+        var h_sl = filter.GetTransmissionCoefficient(fsl);
+        var h_c0 = filter.GetTransmissionCoefficient((fpl * fph).Sqrt());
+        var h_sh = filter.GetTransmissionCoefficient(fsh);
+        var h_ph = filter.GetTransmissionCoefficient(fph);
+        var h_fd = filter.GetTransmissionCoefficient(fd / 2);
+
+        var h_f0_db = h_f0.Power.In_dB_byPower();
+        var h_pl_db = h_pl.Power.In_dB_byPower();
+        var h_sl_db = h_sl.Power.In_dB_byPower();
+        var h_c0_db = h_c0.Power.In_dB_byPower();
+        var h_sh_db = h_sh.Power.In_dB_byPower();
+        var h_ph_db = h_ph.Power.In_dB_byPower();
+        var h_fd_db = h_fd.Power.In_dB_byPower();
+
+        h_f0_db.AssertGreaterOrEqualsThan(-Rp);
+        h_pl_db.AssertGreaterOrEqualsThan(-Rp);
+
+        h_sl_db.AssertLessOrEqualsThan(-Rs);
+        h_c0_db.AssertLessOrEqualsThan(-Rs);
+        h_sh_db.AssertLessOrEqualsThan(-Rs);
+
+        h_ph_db.AssertGreaterOrEqualsThan(-Rp);
+        h_fd_db.AssertGreaterOrEqualsThan(-Rp, 1e-14);
     }
 }

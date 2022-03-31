@@ -197,7 +197,7 @@ public abstract class AnalogBasedFilter : IIR
         /// <summary>Отношение частотных полос заграждения и пропускания</summary>
         public double kw => fs / fp;
         /// <summary>Отношение частотных полос заграждения и пропускания цифрового фильтра</summary>
-        public double kW => Fs / Fp;
+        public double kW => Ws / Wp;
 
         /// <summary>Инициализация новой спецификации фильтра</summary>
         /// <param name="dt">Период дискретизации</param>
@@ -236,7 +236,7 @@ public abstract class AnalogBasedFilter : IIR
             ws = pi2 * fp;
 
             Wp = pi2 * Fp;
-            Ws = pi2 * Fp;
+            Ws = pi2 * Fs;
         }
 
         public void Deconstruct(out double dt, out double fp, out double fs, out double Gp, out double Gs) =>

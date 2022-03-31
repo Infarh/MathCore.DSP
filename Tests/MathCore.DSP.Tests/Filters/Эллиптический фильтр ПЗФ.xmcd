@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?validation-md5-digest 11523381255f19e18edcc5fad81ad5a3?>
+<?validation-md5-digest edaf01c239481a77cadd75aaae36819c?>
 <worksheet version="3.0.3" xmlns="http://schemas.mathsoft.com/worksheet30" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ws="http://schemas.mathsoft.com/worksheet30" xmlns:ml="http://schemas.mathsoft.com/math30" xmlns:u="http://schemas.mathsoft.com/units10" xmlns:p="http://schemas.mathsoft.com/provenance10">
 	<pointReleaseData/>
 	<metadata>
@@ -13,9 +13,9 @@
 			<revisedBy>shmachilin@gmail.com</revisedBy>
 		</userData>
 		<identityInfo>
-			<revision>59</revision>
+			<revision>60</revision>
 			<documentID>E637FB68-CDC0-4D8F-842E-C496A5A8CDA2</documentID>
-			<versionID>EC053020-F2D5-4DAF-AF9F-8E0E6C140F1F</versionID>
+			<versionID>3C2FBCCD-51BC-42E4-BE8F-A5A531C891BD</versionID>
 			<parentVersionID>00000000-0000-0000-0000-000000000000</parentVersionID>
 			<branchID>00000000-0000-0000-0000-000000000000</branchID>
 		</identityInfo>
@@ -484,10 +484,10 @@
 				<region region-id="3678" left="492" top="75" width="48" height="18" align-x="509.25" align-y="84" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 					<math optimize="false" disable-calc="false">
 						<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-							<originRef doc-id="15962D88-714E-4605-B644-042997D304AC" version-id="FD447AFB-E461-4DD8-80C4-BDA53A20E2F3" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844292" is-modified="false" region-id="0" href="C:\Users\shmac\Documents\Фильтры.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+							<originRef doc-id="15962D88-714E-4605-B644-042997D304AC" version-id="FD447AFB-E461-4DD8-80C4-BDA53A20E2F3" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311414956" is-modified="false" region-id="0" href="C:\Users\shmac\Documents\Фильтры.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 								<hash/>
 							</originRef>
-							<parentRef doc-id="15962D88-714E-4605-B644-042997D304AC" version-id="FD447AFB-E461-4DD8-80C4-BDA53A20E2F3" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845652" is-modified="false" region-id="0" href="C:\Users\shmac\Documents\Фильтры.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+							<parentRef doc-id="15962D88-714E-4605-B644-042997D304AC" version-id="FD447AFB-E461-4DD8-80C4-BDA53A20E2F3" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416156" is-modified="false" region-id="0" href="C:\Users\shmac\Documents\Фильтры.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 								<hash/>
 							</parentRef>
 							<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -1169,10 +1169,10 @@
 				<region region-id="1662" left="6" top="295.5" width="158.25" height="43.5" align-x="76.5" align-y="318" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 					<math optimize="false" disable-calc="false">
 						<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-							<originRef doc-id="54B92E68-9089-4067-A230-7D6584C28FF1" version-id="7A71F6A5-9373-48EA-8388-263D9D324775" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844812" is-modified="false" region-id="0" href="C:\Users\shmac\Documents\Фильтр Баттерворта2.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+							<originRef doc-id="54B92E68-9089-4067-A230-7D6584C28FF1" version-id="7A71F6A5-9373-48EA-8388-263D9D324775" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311414516" is-modified="false" region-id="0" href="C:\Users\shmac\Documents\Фильтр Баттерворта2.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 								<hash/>
 							</originRef>
-							<parentRef doc-id="3837120E-A912-44A1-8621-2337095BB324" version-id="A96358B7-814A-4E13-8DBF-2B87D1F6815D" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844852" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Фильтр Баттерворта ППФ.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+							<parentRef doc-id="3837120E-A912-44A1-8621-2337095BB324" version-id="A96358B7-814A-4E13-8DBF-2B87D1F6815D" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311414796" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Фильтр Баттерворта ППФ.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 								<hash/>
 							</parentRef>
 							<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -1223,10 +1223,10 @@
 				<region region-id="1663" left="192" top="301.5" width="185.25" height="43.5" align-x="261.75" align-y="324" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 					<math optimize="false" disable-calc="false">
 						<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-							<originRef doc-id="54B92E68-9089-4067-A230-7D6584C28FF1" version-id="7A71F6A5-9373-48EA-8388-263D9D324775" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844892" is-modified="false" region-id="0" href="C:\Users\shmac\Documents\Фильтр Баттерворта2.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+							<originRef doc-id="54B92E68-9089-4067-A230-7D6584C28FF1" version-id="7A71F6A5-9373-48EA-8388-263D9D324775" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416356" is-modified="false" region-id="0" href="C:\Users\shmac\Documents\Фильтр Баттерворта2.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 								<hash/>
 							</originRef>
-							<parentRef doc-id="3837120E-A912-44A1-8621-2337095BB324" version-id="A96358B7-814A-4E13-8DBF-2B87D1F6815D" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845652" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Фильтр Баттерворта ППФ.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+							<parentRef doc-id="3837120E-A912-44A1-8621-2337095BB324" version-id="A96358B7-814A-4E13-8DBF-2B87D1F6815D" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416756" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Фильтр Баттерворта ППФ.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 								<hash/>
 							</parentRef>
 							<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -1295,10 +1295,10 @@
 				<region region-id="1848" left="12" top="354" width="138" height="32.25" align-x="71.25" align-y="372" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 					<math optimize="false" disable-calc="false">
 						<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-							<originRef doc-id="54B92E68-9089-4067-A230-7D6584C28FF1" version-id="7A71F6A5-9373-48EA-8388-263D9D324775" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844652" is-modified="false" region-id="0" href="C:\Users\shmac\Documents\Фильтр Баттерворта2.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+							<originRef doc-id="54B92E68-9089-4067-A230-7D6584C28FF1" version-id="7A71F6A5-9373-48EA-8388-263D9D324775" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416876" is-modified="false" region-id="0" href="C:\Users\shmac\Documents\Фильтр Баттерворта2.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 								<hash/>
 							</originRef>
-							<parentRef doc-id="3837120E-A912-44A1-8621-2337095BB324" version-id="A96358B7-814A-4E13-8DBF-2B87D1F6815D" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845292" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Фильтр Баттерворта ППФ.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+							<parentRef doc-id="3837120E-A912-44A1-8621-2337095BB324" version-id="A96358B7-814A-4E13-8DBF-2B87D1F6815D" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416036" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Фильтр Баттерворта ППФ.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 								<hash/>
 							</parentRef>
 							<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -1337,10 +1337,10 @@
 				<region region-id="2362" left="198" top="354" width="137.25" height="32.25" align-x="257.25" align-y="372" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 					<math optimize="false" disable-calc="false">
 						<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-							<originRef doc-id="54B92E68-9089-4067-A230-7D6584C28FF1" version-id="7A71F6A5-9373-48EA-8388-263D9D324775" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845732" is-modified="false" region-id="0" href="C:\Users\shmac\Documents\Фильтр Баттерворта2.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+							<originRef doc-id="54B92E68-9089-4067-A230-7D6584C28FF1" version-id="7A71F6A5-9373-48EA-8388-263D9D324775" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415356" is-modified="false" region-id="0" href="C:\Users\shmac\Documents\Фильтр Баттерворта2.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 								<hash/>
 							</originRef>
-							<parentRef doc-id="3837120E-A912-44A1-8621-2337095BB324" version-id="A96358B7-814A-4E13-8DBF-2B87D1F6815D" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845692" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Фильтр Баттерворта ППФ.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+							<parentRef doc-id="3837120E-A912-44A1-8621-2337095BB324" version-id="A96358B7-814A-4E13-8DBF-2B87D1F6815D" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311414516" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Фильтр Баттерворта ППФ.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 								<hash/>
 							</parentRef>
 							<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -1379,10 +1379,10 @@
 				<region region-id="1850" left="24" top="404.25" width="105.75" height="30" align-x="66.75" align-y="420" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 					<math optimize="false" disable-calc="false">
 						<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-							<originRef doc-id="E57B5962-5F2B-4B37-95B0-05D04B040ADA" version-id="20F1AE4C-39A3-411E-852B-A3372ABD8FC6" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845332" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+							<originRef doc-id="E57B5962-5F2B-4B37-95B0-05D04B040ADA" version-id="20F1AE4C-39A3-411E-852B-A3372ABD8FC6" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416316" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 								<hash/>
 							</originRef>
-							<parentRef doc-id="E57B5962-5F2B-4B37-95B0-05D04B040ADA" version-id="20F1AE4C-39A3-411E-852B-A3372ABD8FC6" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845452" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+							<parentRef doc-id="E57B5962-5F2B-4B37-95B0-05D04B040ADA" version-id="20F1AE4C-39A3-411E-852B-A3372ABD8FC6" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415716" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 								<hash/>
 							</parentRef>
 							<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -1424,10 +1424,10 @@
 				<region region-id="1852" left="24" top="450" width="170.25" height="32.25" align-x="99" align-y="468" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 					<math optimize="false" disable-calc="false">
 						<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-							<originRef doc-id="E57B5962-5F2B-4B37-95B0-05D04B040ADA" version-id="20F1AE4C-39A3-411E-852B-A3372ABD8FC6" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845452" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+							<originRef doc-id="E57B5962-5F2B-4B37-95B0-05D04B040ADA" version-id="20F1AE4C-39A3-411E-852B-A3372ABD8FC6" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415716" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 								<hash/>
 							</originRef>
-							<parentRef doc-id="E57B5962-5F2B-4B37-95B0-05D04B040ADA" version-id="20F1AE4C-39A3-411E-852B-A3372ABD8FC6" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845652" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+							<parentRef doc-id="E57B5962-5F2B-4B37-95B0-05D04B040ADA" version-id="20F1AE4C-39A3-411E-852B-A3372ABD8FC6" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416756" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 								<hash/>
 							</parentRef>
 							<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -1468,10 +1468,10 @@
 				<region region-id="1853" left="222" top="450" width="165" height="32.25" align-x="289.5" align-y="468" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 					<math optimize="false" disable-calc="false">
 						<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-							<originRef doc-id="E57B5962-5F2B-4B37-95B0-05D04B040ADA" version-id="20F1AE4C-39A3-411E-852B-A3372ABD8FC6" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845652" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+							<originRef doc-id="E57B5962-5F2B-4B37-95B0-05D04B040ADA" version-id="20F1AE4C-39A3-411E-852B-A3372ABD8FC6" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416756" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 								<hash/>
 							</originRef>
-							<parentRef doc-id="E57B5962-5F2B-4B37-95B0-05D04B040ADA" version-id="20F1AE4C-39A3-411E-852B-A3372ABD8FC6" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844612" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+							<parentRef doc-id="E57B5962-5F2B-4B37-95B0-05D04B040ADA" version-id="20F1AE4C-39A3-411E-852B-A3372ABD8FC6" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415796" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 								<hash/>
 							</parentRef>
 							<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -1554,10 +1554,10 @@
 		<region region-id="3713" left="24" top="369" width="109.5" height="16.5" align-x="42.75" align-y="378" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844652" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416556" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844732" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415876" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -1598,10 +1598,10 @@
 		<region region-id="3714" left="168" top="369" width="108.75" height="16.5" align-x="186" align-y="378" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845172" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416596" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845292" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416116" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -1642,10 +1642,10 @@
 		<region region-id="3715" left="294" top="369" width="116.25" height="16.5" align-x="315" align-y="378" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844772" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416436" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844692" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416156" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -1686,10 +1686,10 @@
 		<region region-id="3716" left="426" top="369" width="117" height="16.5" align-x="447.75" align-y="378" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845452" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416076" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845252" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416636" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -1730,10 +1730,10 @@
 		<region region-id="3717" left="24" top="399" width="78.75" height="16.5" align-x="45.75" align-y="408" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845332" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416756" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845492" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416956" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -1772,10 +1772,10 @@
 		<region region-id="3718" left="168" top="399" width="77.25" height="16.5" align-x="189" align-y="408" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844812" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416836" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845252" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416636" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -1814,10 +1814,10 @@
 		<region region-id="3719" left="294" top="399" width="87.75" height="16.5" align-x="318" align-y="408" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844732" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415956" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845572" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415796" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -1856,10 +1856,10 @@
 		<region region-id="3720" left="426" top="399" width="89.25" height="16.5" align-x="450.75" align-y="408" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845172" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416356" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845452" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416876" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -1898,10 +1898,10 @@
 		<region region-id="3721" left="24" top="429" width="87.75" height="16.5" align-x="42" align-y="438" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845612" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416956" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845092" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416916" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -1931,10 +1931,10 @@
 		<region region-id="3722" left="162" top="429" width="96" height="16.5" align-x="183.75" align-y="438" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844852" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415996" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845292" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415836" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -1964,10 +1964,10 @@
 		<region region-id="3763" left="18" top="458.25" width="104.25" height="31.5" align-x="63" align-y="474" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="E57B5962-5F2B-4B37-95B0-05D04B040ADA" version-id="09E09A4C-ED73-466A-9733-846BCC8D80BF" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844692" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ФНЧ.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="E57B5962-5F2B-4B37-95B0-05D04B040ADA" version-id="09E09A4C-ED73-466A-9733-846BCC8D80BF" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415756" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ФНЧ.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="E57B5962-5F2B-4B37-95B0-05D04B040ADA" version-id="09E09A4C-ED73-466A-9733-846BCC8D80BF" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845092" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ФНЧ.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="E57B5962-5F2B-4B37-95B0-05D04B040ADA" version-id="09E09A4C-ED73-466A-9733-846BCC8D80BF" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416916" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ФНЧ.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -2014,10 +2014,10 @@
 		<region region-id="3723" left="24" top="501" width="135.75" height="16.5" align-x="44.25" align-y="510" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845092" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416916" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845292" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415836" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -2054,10 +2054,10 @@
 		<region region-id="3724" left="174" top="501" width="134.25" height="16.5" align-x="193.5" align-y="510" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844892" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415956" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844652" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415996" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -2094,10 +2094,10 @@
 		<region region-id="3725" left="324" top="501" width="140.25" height="16.5" align-x="346.5" align-y="510" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844692" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416116" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845012" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415756" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -2134,10 +2134,10 @@
 		<region region-id="3726" left="480" top="501" width="141.75" height="16.5" align-x="503.25" align-y="510" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845452" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416276" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845332" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416836" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -2175,10 +2175,10 @@
 			<math optimize="false" disable-calc="false">
 				<ml:eval placeholderMultiplicationStyle="default" xmlns:ml="http://schemas.mathsoft.com/math30">
 					<ml:provenance expr-id="1">
-						<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845252" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+						<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416596" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 							<hash/>
 						</originRef>
-						<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845692" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+						<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416876" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 							<hash/>
 						</parentRef>
 						<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -2212,10 +2212,10 @@
 			<math optimize="false" disable-calc="false">
 				<ml:eval placeholderMultiplicationStyle="default" xmlns:ml="http://schemas.mathsoft.com/math30">
 					<ml:provenance expr-id="1">
-						<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844732" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+						<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416636" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 							<hash/>
 						</originRef>
-						<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845252" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+						<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416596" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 							<hash/>
 						</parentRef>
 						<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -2249,10 +2249,10 @@
 			<math optimize="false" disable-calc="false">
 				<ml:eval placeholderMultiplicationStyle="default" xmlns:ml="http://schemas.mathsoft.com/math30">
 					<ml:provenance expr-id="1">
-						<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845452" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+						<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416076" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 							<hash/>
 						</originRef>
-						<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844732" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+						<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416636" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 							<hash/>
 						</parentRef>
 						<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -2286,10 +2286,10 @@
 			<math optimize="false" disable-calc="false">
 				<ml:eval placeholderMultiplicationStyle="default" xmlns:ml="http://schemas.mathsoft.com/math30">
 					<ml:provenance expr-id="1">
-						<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844812" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+						<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416036" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 							<hash/>
 						</originRef>
-						<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845452" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+						<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416076" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 							<hash/>
 						</parentRef>
 						<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -2322,10 +2322,10 @@
 		<region region-id="3731" left="24" top="573" width="101.25" height="16.5" align-x="46.5" align-y="582" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844812" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416036" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845172" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415996" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -2364,10 +2364,10 @@
 		<region region-id="3732" left="174" top="573" width="99.75" height="16.5" align-x="195.75" align-y="582" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845092" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416676" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844612" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416476" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -2406,10 +2406,10 @@
 		<region region-id="3733" left="324" top="573" width="110.25" height="16.5" align-x="348.75" align-y="582" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845452" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416236" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844692" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415876" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -2448,10 +2448,10 @@
 		<region region-id="3734" left="474" top="573" width="111.75" height="16.5" align-x="499.5" align-y="582" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845612" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416676" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844732" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415756" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -2490,10 +2490,10 @@
 		<region region-id="3735" left="18" top="609" width="105.75" height="16.5" align-x="36.75" align-y="618" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845452" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416116" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845492" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415796" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -2523,10 +2523,10 @@
 		<region region-id="3736" left="126" top="609" width="114" height="16.5" align-x="148.5" align-y="618" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844812" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415996" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845172" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416716" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -2556,10 +2556,10 @@
 		<region region-id="3748" left="306" top="640.5" width="219.75" height="100.5" align-x="324.75" align-y="660" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844892" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416756" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845492" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415796" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -2631,10 +2631,10 @@
 		<region region-id="3737" left="24" top="646.5" width="261" height="100.5" align-x="42" align-y="666" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845612" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416556" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844732" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416356" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -2706,10 +2706,10 @@
 		<region region-id="3753" left="552" top="646.5" width="80.25" height="31.5" align-x="567" align-y="666" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844812" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416396" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845092" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416076" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -2748,10 +2748,10 @@
 		<region region-id="3754" left="648" top="646.5" width="87" height="31.5" align-x="664.5" align-y="666" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845452" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415916" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844732" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416356" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -2790,10 +2790,10 @@
 		<region region-id="3755" left="24" top="777" width="31.5" height="16.5" align-x="42.75" align-y="786" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844532" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416396" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845492" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416916" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -2814,10 +2814,10 @@
 		<region region-id="3756" left="78" top="777" width="30.75" height="16.5" align-x="96" align-y="786" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844532" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416396" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844612" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415876" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -2838,10 +2838,10 @@
 		<region region-id="3758" left="132" top="766.5" width="87" height="31.5" align-x="148.5" align-y="786" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844532" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416396" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844772" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416636" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -2880,10 +2880,10 @@
 		<region region-id="3760" left="228" top="766.5" width="84.75" height="31.5" align-x="243" align-y="786" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844652" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416956" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845492" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="DEFFB4F3-D826-4A49-9F61-D775DFA8C012" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416916" is-modified="false" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -3137,10 +3137,10 @@
 			<math optimize="false" disable-calc="false">
 				<ml:eval placeholderMultiplicationStyle="default" xmlns:ml="http://schemas.mathsoft.com/math30">
 					<ml:provenance expr-id="1">
-						<originRef doc-id="E57B5962-5F2B-4B37-95B0-05D04B040ADA" version-id="09E09A4C-ED73-466A-9733-846BCC8D80BF" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844772" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ФНЧ.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+						<originRef doc-id="E57B5962-5F2B-4B37-95B0-05D04B040ADA" version-id="09E09A4C-ED73-466A-9733-846BCC8D80BF" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415956" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ФНЧ.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 							<hash/>
 						</originRef>
-						<parentRef doc-id="E57B5962-5F2B-4B37-95B0-05D04B040ADA" version-id="09E09A4C-ED73-466A-9733-846BCC8D80BF" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845172" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ФНЧ.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+						<parentRef doc-id="E57B5962-5F2B-4B37-95B0-05D04B040ADA" version-id="09E09A4C-ED73-466A-9733-846BCC8D80BF" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415836" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ФНЧ.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 							<hash/>
 						</parentRef>
 						<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -3195,10 +3195,10 @@
 			<math optimize="false" disable-calc="false">
 				<ml:eval placeholderMultiplicationStyle="default" xmlns:ml="http://schemas.mathsoft.com/math30">
 					<ml:provenance expr-id="1">
-						<originRef doc-id="E57B5962-5F2B-4B37-95B0-05D04B040ADA" version-id="09E09A4C-ED73-466A-9733-846BCC8D80BF" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844892" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ФНЧ.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+						<originRef doc-id="E57B5962-5F2B-4B37-95B0-05D04B040ADA" version-id="09E09A4C-ED73-466A-9733-846BCC8D80BF" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416236" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ФНЧ.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 							<hash/>
 						</originRef>
-						<parentRef doc-id="E57B5962-5F2B-4B37-95B0-05D04B040ADA" version-id="09E09A4C-ED73-466A-9733-846BCC8D80BF" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844852" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ФНЧ.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+						<parentRef doc-id="E57B5962-5F2B-4B37-95B0-05D04B040ADA" version-id="09E09A4C-ED73-466A-9733-846BCC8D80BF" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415916" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ФНЧ.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 							<hash/>
 						</parentRef>
 						<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -3663,17 +3663,6 @@
 				<p style="Normal" margin-left="inherit" margin-right="inherit" text-indent="inherit" text-align="inherit" list-style-type="inherit" tabs="inherit">Полюса</p>
 			</text>
 		</region>
-		<region region-id="3882" left="390" top="1395" width="50.25" height="16.5" align-x="406.5" align-y="1404" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
-			<math optimize="false" disable-calc="false">
-				<ml:eval placeholderMultiplicationStyle="default" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<ml:id xml:space="preserve" subscript="0">υ</ml:id>
-					<result xmlns="http://schemas.mathsoft.com/math30">
-						<ml:real>0.22726933697655322</ml:real>
-					</result>
-				</ml:eval>
-			</math>
-			<rendering item-idref="66"/>
-		</region>
 		<region region-id="1039" left="30" top="1407" width="195.75" height="98.25" align-x="48" align-y="1416" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:define xmlns:ml="http://schemas.mathsoft.com/math30">
@@ -3804,19 +3793,19 @@
 					</ml:program>
 				</ml:define>
 			</math>
-			<rendering item-idref="67"/>
+			<rendering item-idref="66"/>
 		</region>
 		<region region-id="3861" left="570" top="1416" width="210.75" height="499.5" align-x="570" align-y="1416" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
-			<plot disable-calc="false" item-idref="68"/>
-			<rendering item-idref="69"/>
+			<plot disable-calc="false" item-idref="67"/>
+			<rendering item-idref="68"/>
 		</region>
 		<region region-id="3846" left="246" top="1456.5" width="96.75" height="35.25" align-x="263.25" align-y="1476" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="E637FB68-CDC0-4D8F-842E-C496A5A8CDA2" version-id="D65C07D4-299D-4870-90B3-A99015E0EEF2" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845172" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="E637FB68-CDC0-4D8F-842E-C496A5A8CDA2" version-id="D65C07D4-299D-4870-90B3-A99015E0EEF2" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416556" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844532" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416476" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -3844,7 +3833,7 @@
 					</ml:define>
 				</ml:provenance>
 			</math>
-			<rendering item-idref="70">
+			<rendering item-idref="69">
 				<element-image-map>
 					<box left="1.5" top="0.75" width="95.25" height="33.75" expr-idref="1" xmlns="http://schemas.mathsoft.com/worksheet30"/>
 				</element-image-map>
@@ -3853,10 +3842,10 @@
 		<region region-id="3847" left="360" top="1450.5" width="144" height="41.25" align-x="391.5" align-y="1476" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="E637FB68-CDC0-4D8F-842E-C496A5A8CDA2" version-id="D65C07D4-299D-4870-90B3-A99015E0EEF2" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844652" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="E637FB68-CDC0-4D8F-842E-C496A5A8CDA2" version-id="D65C07D4-299D-4870-90B3-A99015E0EEF2" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416636" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845172" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416556" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -3905,7 +3894,7 @@
 					</ml:define>
 				</ml:provenance>
 			</math>
-			<rendering item-idref="71">
+			<rendering item-idref="70">
 				<element-image-map>
 					<box left="1.5" top="0.75" width="142.5" height="39.75" expr-idref="1" xmlns="http://schemas.mathsoft.com/worksheet30"/>
 				</element-image-map>
@@ -3956,7 +3945,7 @@
 					<unit format-units="true" simplify-units="true" fractional-unit-exponent="false"/>
 				</resultFormat>
 			</math>
-			<rendering item-idref="72"/>
+			<rendering item-idref="71"/>
 		</region>
 		<region region-id="3879" left="912" top="1527" width="45.75" height="16.5" align-x="928.5" align-y="1536" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -3967,7 +3956,7 @@
 					</result>
 				</ml:eval>
 			</math>
-			<rendering item-idref="73"/>
+			<rendering item-idref="72"/>
 		</region>
 		<region region-id="3187" left="48" top="1532.25" width="123.75" height="62.25" align-x="63.75" align-y="1566" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -3996,7 +3985,7 @@
 					<unit format-units="true" simplify-units="true" fractional-unit-exponent="false"/>
 				</resultFormat>
 			</math>
-			<rendering item-idref="74"/>
+			<rendering item-idref="73"/>
 		</region>
 		<region region-id="3188" left="240" top="1532.25" width="210.75" height="62.25" align-x="256.5" align-y="1566" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -4029,11 +4018,11 @@
 					<unit format-units="true" simplify-units="true" fractional-unit-exponent="false"/>
 				</resultFormat>
 			</math>
-			<rendering item-idref="75"/>
+			<rendering item-idref="74"/>
 		</region>
 		<region region-id="2010" left="6" top="1608" width="523.5" height="222.75" align-x="6" align-y="1608" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
-			<plot disable-calc="false" item-idref="76"/>
-			<rendering item-idref="77"/>
+			<plot disable-calc="false" item-idref="75"/>
+			<rendering item-idref="76"/>
 		</region>
 		<region region-id="2564" left="108" top="1844.25" width="60" height="37.5" align-x="119.25" align-y="1860" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -4063,7 +4052,7 @@
 					</ml:apply>
 				</ml:apply>
 			</math>
-			<rendering item-idref="78"/>
+			<rendering item-idref="77"/>
 		</region>
 		<region region-id="2016" left="30" top="1856.25" width="60.75" height="12" align-x="56.25" align-y="1866" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<text use-page-width="false" push-down="false" lock-width="false">
@@ -4362,7 +4351,7 @@
 					</ml:program>
 				</ml:define>
 			</math>
-			<rendering item-idref="79"/>
+			<rendering item-idref="78"/>
 		</region>
 		<region region-id="2725" left="336" top="1887" width="212.25" height="138" align-x="436.5" align-y="1896" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -4443,7 +4432,7 @@
 					</ml:program>
 				</ml:define>
 			</math>
-			<rendering item-idref="80"/>
+			<rendering item-idref="79"/>
 		</region>
 		<region region-id="3595" left="330" top="2139.75" width="168" height="96.75" align-x="361.5" align-y="2190" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -4535,7 +4524,7 @@
 					</ml:apply>
 				</ml:define>
 			</math>
-			<rendering item-idref="81"/>
+			<rendering item-idref="80"/>
 		</region>
 		<region region-id="2073" left="30" top="2289" width="135" height="36.75" align-x="65.25" align-y="2310" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -4555,7 +4544,7 @@
 					</ml:apply>
 				</ml:define>
 			</math>
-			<rendering item-idref="82"/>
+			<rendering item-idref="81"/>
 		</region>
 		<region region-id="3408" left="168" top="2299.5" width="185.25" height="18" align-x="189.75" align-y="2310" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -4598,7 +4587,7 @@
 					</ml:eval>
 				</ml:define>
 			</math>
-			<rendering item-idref="83"/>
+			<rendering item-idref="82"/>
 		</region>
 		<region region-id="2091" left="30" top="2337" width="130.5" height="36.75" align-x="65.25" align-y="2358" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -4618,7 +4607,7 @@
 					</ml:apply>
 				</ml:define>
 			</math>
-			<rendering item-idref="84"/>
+			<rendering item-idref="83"/>
 		</region>
 		<region region-id="3409" left="168" top="2347.5" width="185.25" height="18" align-x="189.75" align-y="2358" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -4661,7 +4650,7 @@
 					</ml:eval>
 				</ml:define>
 			</math>
-			<rendering item-idref="85"/>
+			<rendering item-idref="84"/>
 		</region>
 		<region region-id="3558" left="372" top="2324.25" width="157.5" height="62.25" align-x="476.25" align-y="2358" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -4718,7 +4707,7 @@
 					</result>
 				</ml:eval>
 			</math>
-			<rendering item-idref="86"/>
+			<rendering item-idref="85"/>
 		</region>
 		<region region-id="3597" left="654" top="2324.25" width="192" height="62.25" align-x="759.75" align-y="2358" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -4779,7 +4768,7 @@
 					</result>
 				</ml:eval>
 			</math>
-			<rendering item-idref="87"/>
+			<rendering item-idref="86"/>
 		</region>
 		<region region-id="3410" left="210" top="2379" width="66.75" height="16.5" align-x="258.75" align-y="2388" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -4793,7 +4782,7 @@
 					</result>
 				</ml:eval>
 			</math>
-			<rendering item-idref="88"/>
+			<rendering item-idref="87"/>
 		</region>
 		<region region-id="3411" left="288" top="2379" width="66" height="16.5" align-x="336" align-y="2388" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -4807,7 +4796,7 @@
 					</result>
 				</ml:eval>
 			</math>
-			<rendering item-idref="89"/>
+			<rendering item-idref="88"/>
 		</region>
 		<region region-id="3560" left="534" top="2327.25" width="78.75" height="128.25" align-x="554.25" align-y="2394" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -4843,7 +4832,7 @@
 					</result>
 				</ml:eval>
 			</math>
-			<rendering item-idref="90"/>
+			<rendering item-idref="89"/>
 		</region>
 		<region region-id="3561" left="852" top="2333.25" width="116.25" height="128.25" align-x="873" align-y="2400" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -4887,7 +4876,7 @@
 					</result>
 				</ml:eval>
 			</math>
-			<rendering item-idref="91"/>
+			<rendering item-idref="90"/>
 		</region>
 		<region region-id="2378" left="30" top="2385.75" width="174" height="96.75" align-x="61.5" align-y="2436" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -4975,7 +4964,7 @@
 					</ml:apply>
 				</ml:define>
 			</math>
-			<rendering item-idref="92"/>
+			<rendering item-idref="91"/>
 		</region>
 		<region region-id="3101" left="222" top="2420.25" width="103.5" height="37.5" align-x="258" align-y="2436" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -5008,7 +4997,7 @@
 					</ml:apply>
 				</ml:define>
 			</math>
-			<rendering item-idref="93"/>
+			<rendering item-idref="92"/>
 		</region>
 		<region region-id="3600" left="366" top="2402.25" width="162.75" height="62.25" align-x="470.25" align-y="2436" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -5065,7 +5054,7 @@
 					</result>
 				</ml:eval>
 			</math>
-			<rendering item-idref="94"/>
+			<rendering item-idref="93"/>
 		</region>
 		<region region-id="3599" left="654" top="2414.25" width="196.5" height="62.25" align-x="759.75" align-y="2448" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -5126,7 +5115,7 @@
 					</result>
 				</ml:eval>
 			</math>
-			<rendering item-idref="95"/>
+			<rendering item-idref="94"/>
 		</region>
 		<region region-id="3412" left="222" top="2469" width="66" height="16.5" align-x="270" align-y="2478" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -5140,7 +5129,7 @@
 					</result>
 				</ml:eval>
 			</math>
-			<rendering item-idref="96"/>
+			<rendering item-idref="95"/>
 		</region>
 		<region region-id="3413" left="306" top="2469" width="66.75" height="16.5" align-x="354.75" align-y="2478" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -5154,7 +5143,7 @@
 					</result>
 				</ml:eval>
 			</math>
-			<rendering item-idref="97"/>
+			<rendering item-idref="96"/>
 		</region>
 		<region region-id="2514" left="960" top="2524.5" width="170.25" height="28.5" align-x="1092" align-y="2538" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -5190,7 +5179,7 @@
 					</result>
 				</ml:eval>
 			</math>
-			<rendering item-idref="98"/>
+			<rendering item-idref="97"/>
 		</region>
 		<region region-id="2505" left="18" top="2493.75" width="708" height="96.75" align-x="49.5" align-y="2544" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -5596,7 +5585,7 @@
 					</ml:apply>
 				</ml:define>
 			</math>
-			<rendering item-idref="99"/>
+			<rendering item-idref="98"/>
 		</region>
 		<region region-id="2540" left="774" top="2499.75" width="127.5" height="96.75" align-x="863.25" align-y="2550" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -5670,7 +5659,7 @@
 					</result>
 				</ml:eval>
 			</math>
-			<rendering item-idref="100"/>
+			<rendering item-idref="99"/>
 		</region>
 		<region region-id="2508" left="12" top="2613" width="676.5" height="134.25" align-x="43.5" align-y="2682" show-border="true" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -6002,19 +5991,19 @@
 					</ml:apply>
 				</ml:define>
 			</math>
-			<rendering item-idref="101"/>
+			<rendering item-idref="100"/>
 		</region>
 		<region region-id="2032" left="36" top="2790" width="309" height="517.5" align-x="36" align-y="2790" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
-			<plot disable-calc="false" item-idref="102"/>
-			<rendering item-idref="103"/>
+			<plot disable-calc="false" item-idref="101"/>
+			<rendering item-idref="102"/>
 		</region>
 		<region region-id="3768" left="390" top="2802" width="788.25" height="456.75" align-x="390" align-y="2802" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
-			<plot disable-calc="false" item-idref="104"/>
-			<rendering item-idref="105"/>
+			<plot disable-calc="false" item-idref="103"/>
+			<rendering item-idref="104"/>
 		</region>
 		<region region-id="3863" left="36" top="3343.5" width="397.5" height="40.5" align-x="51" align-y="3366" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<text use-page-width="false" push-down="false" lock-width="true">
-				<p style="Normal" margin-left="inherit" margin-right="inherit" text-indent="inherit" text-align="inherit" list-style-type="inherit" tabs="inherit">Делаем преобразование плоскости p в плоскость z путём подстановки <region region-id="1254" left="360" top="3344.25" width="74.25" height="39.75" align-x="371.25" align-y="3366" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
+				<p style="Normal" margin-left="inherit" margin-right="inherit" text-indent="inherit" text-align="inherit" list-style-type="inherit" tabs="inherit">Делаем преобразование плоскости p в плоскость z путём подстановки <region region-id="1254" left="358.5" top="3344.25" width="74.25" height="39.75" align-x="369.75" align-y="3366" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 						<math optimize="false" disable-calc="false">
 							<ml:apply xmlns:ml="http://schemas.mathsoft.com/math30">
 								<ml:equal/>
@@ -6050,7 +6039,7 @@
 								</ml:apply>
 							</ml:apply>
 						</math>
-						<rendering item-idref="106"/>
+						<rendering item-idref="105"/>
 					</region>
 				</p>
 			</text>
@@ -6058,10 +6047,10 @@
 		<region region-id="3864" left="468" top="3346.5" width="87" height="35.25" align-x="508.5" align-y="3366" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="E57B5962-5F2B-4B37-95B0-05D04B040ADA" version-id="09E09A4C-ED73-466A-9733-846BCC8D80BF" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845452" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ФНЧ.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="E57B5962-5F2B-4B37-95B0-05D04B040ADA" version-id="09E09A4C-ED73-466A-9733-846BCC8D80BF" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415956" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ФНЧ.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845332" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416636" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -6099,7 +6088,7 @@
 					</ml:define>
 				</ml:provenance>
 			</math>
-			<rendering item-idref="107">
+			<rendering item-idref="106">
 				<element-image-map>
 					<box left="1.5" top="0.75" width="85.5" height="33.75" expr-idref="1" xmlns="http://schemas.mathsoft.com/worksheet30"/>
 				</element-image-map>
@@ -6108,10 +6097,10 @@
 		<region region-id="3865" left="60" top="3392.25" width="114" height="39.75" align-x="88.5" align-y="3414" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845292" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415916" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845612" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416876" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -6159,7 +6148,7 @@
 					</ml:define>
 				</ml:provenance>
 			</math>
-			<rendering item-idref="108">
+			<rendering item-idref="107">
 				<element-image-map>
 					<box left="1.5" top="0.75" width="112.5" height="38.25" expr-idref="1" xmlns="http://schemas.mathsoft.com/worksheet30"/>
 				</element-image-map>
@@ -6168,10 +6157,10 @@
 		<region region-id="3866" left="48" top="3447" width="66" height="22.5" align-x="63" align-y="3462" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844692" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415956" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845612" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416876" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -6192,7 +6181,7 @@
 					</ml:define>
 				</ml:provenance>
 			</math>
-			<rendering item-idref="109">
+			<rendering item-idref="108">
 				<element-image-map>
 					<box left="1.5" top="0.75" width="64.5" height="21" expr-idref="1" xmlns="http://schemas.mathsoft.com/worksheet30"/>
 				</element-image-map>
@@ -6201,10 +6190,10 @@
 		<region region-id="3867" left="138" top="3447" width="67.5" height="22.5" align-x="153.75" align-y="3462" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845092" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416916" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844692" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415956" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -6225,24 +6214,24 @@
 					</ml:define>
 				</ml:provenance>
 			</math>
-			<rendering item-idref="110">
+			<rendering item-idref="109">
 				<element-image-map>
 					<box left="1.5" top="0.75" width="66" height="21" expr-idref="1" xmlns="http://schemas.mathsoft.com/worksheet30"/>
 				</element-image-map>
 			</rendering>
 		</region>
 		<region region-id="3868" left="588" top="3480" width="298.5" height="283.5" align-x="588" align-y="3480" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
-			<plot disable-calc="false" item-idref="111"/>
-			<rendering item-idref="112"/>
+			<plot disable-calc="false" item-idref="110"/>
+			<rendering item-idref="111"/>
 		</region>
 		<region region-id="3869" left="42" top="3497.25" width="94.5" height="128.25" align-x="55.5" align-y="3564" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:eval placeholderMultiplicationStyle="default" xmlns:ml="http://schemas.mathsoft.com/math30">
 					<ml:provenance expr-id="1">
-						<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844692" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+						<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311415956" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 							<hash/>
 						</originRef>
-						<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845012" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+						<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416436" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 							<hash/>
 						</parentRef>
 						<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -6288,7 +6277,7 @@
 					</result>
 				</ml:eval>
 			</math>
-			<rendering item-idref="113">
+			<rendering item-idref="112">
 				<element-image-map>
 					<box left="1.5" top="58.5" width="7.5" height="15" expr-idref="1" xmlns="http://schemas.mathsoft.com/worksheet30"/>
 				</element-image-map>
@@ -6298,10 +6287,10 @@
 			<math optimize="false" disable-calc="false">
 				<ml:eval placeholderMultiplicationStyle="default" xmlns:ml="http://schemas.mathsoft.com/math30">
 					<ml:provenance expr-id="1">
-						<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845012" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+						<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416436" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 							<hash/>
 						</originRef>
-						<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845092" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+						<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416916" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 							<hash/>
 						</parentRef>
 						<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -6347,7 +6336,7 @@
 					</result>
 				</ml:eval>
 			</math>
-			<rendering item-idref="114">
+			<rendering item-idref="113">
 				<element-image-map>
 					<box left="1.5" top="58.5" width="8.25" height="15" expr-idref="1" xmlns="http://schemas.mathsoft.com/worksheet30"/>
 				</element-image-map>
@@ -6356,10 +6345,10 @@
 		<region region-id="3871" left="348" top="3543.75" width="159.75" height="96.75" align-x="369" align-y="3594" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
 				<ml:provenance expr-id="1" xmlns:ml="http://schemas.mathsoft.com/math30">
-					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622844812" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<originRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416556" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</originRef>
-					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="622845612" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
+					<parentRef doc-id="896C22FA-BD01-45B3-8476-604E7E28C77A" version-id="5FB47891-AF9D-451B-9707-4EDD12E32223" branch-id="00000000-0000-0000-0000-000000000000" revision-num="311416876" is-modified="true" region-id="0" href="C:\Users\shmac\src\lib\Math.Core\MathCore.DSP\MathCore.DSP\Tests\MathCore.DSP.Tests\Filters\Эллиптический фильтр ПЗФ3.xmcd" xmlns="http://schemas.mathsoft.com/provenance10">
 						<hash/>
 					</parentRef>
 					<comment xmlns="http://schemas.mathsoft.com/provenance10"/>
@@ -6441,7 +6430,7 @@
 					</ml:define>
 				</ml:provenance>
 			</math>
-			<rendering item-idref="115">
+			<rendering item-idref="114">
 				<element-image-map>
 					<box left="1.5" top="0.75" width="158.25" height="95.25" expr-idref="1" xmlns="http://schemas.mathsoft.com/worksheet30"/>
 				</element-image-map>
@@ -6467,7 +6456,7 @@
 					</ml:matrix>
 				</ml:define>
 			</math>
-			<rendering item-idref="116"/>
+			<rendering item-idref="115"/>
 		</region>
 		<region region-id="3872" left="30" top="3669.75" width="183.75" height="96.75" align-x="63" align-y="3720" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
 			<math optimize="false" disable-calc="false">
@@ -6575,15 +6564,15 @@
 					</ml:apply>
 				</ml:define>
 			</math>
-			<rendering item-idref="117"/>
+			<rendering item-idref="116"/>
 		</region>
 		<region region-id="3877" left="12" top="3804" width="1131.75" height="344.25" align-x="12" align-y="3804" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
-			<plot disable-calc="false" item-idref="118"/>
-			<rendering item-idref="119"/>
+			<plot disable-calc="false" item-idref="117"/>
+			<rendering item-idref="118"/>
 		</region>
 		<region region-id="1525" left="1440" top="4392" width="408.75" height="183.75" align-x="1440" align-y="4392" show-border="false" show-highlight="false" is-protected="true" z-order="0" background-color="inherit" tag="">
-			<plot disable-calc="false" item-idref="120"/>
-			<rendering item-idref="121"/>
+			<plot disable-calc="false" item-idref="119"/>
+			<rendering item-idref="120"/>
 		</region>
 	</regions>
 	<binaryContent>
@@ -8279,17 +8268,7 @@ oeGT0Y1h8xFz4Ih7hFin4A2+tGCl7eQTX8HtlnEu0OcB+Fhd3IWwa9F8FOaMp+ANF9AmIWwu
 UATc8D73f4kj7DF8Mwc8Y9vZbuTd5JNgbFmgsgWbDQClcmrvs3SczwF4dbj/D8BDp/Ntz+0u
 3qA5G7e11Q56CnHTgKz57+JwfAsvCjSh3ML7P4WO38HrAnU4boAL1DE1XKCOqeECdUyMGP8A
 aZLPLpEzo/AAAAAASUVORK5CYII=</item>
-		<item item-id="66">iVBORw0KGgoAAAANSUhEUgAAAEMAAAAWCAYAAACbiSE3AAAAAXNSR0IArs4c6QAAAARnQU1B
-AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAF/SURBVFhH7ZXRDYQgDEDZh3nYwSH8
-YAAn4dNJ/PDHTyfhaAUsSD245BLvwkvMXapB+lqqsJ1Il0HoMghdBuE5MlZtpRBWCGn16mMJ
-q9US7ufPcHFjFcbOSxl/i+EhMmDjPhGUolwkZdUqJmqUS05qp4GPW2OSNYy6rpnzDBlGWRHL
-dlT6toqMMDYOayov6YYoY55nO44jtlNgGAaMfZtVSyLjqLA8+/0KJB06gHITV3freWLm0zTh
-L8jY9x3/b9uWyKmDnuHsYsoNMmjyb2W4TireZ+L0KN0RMwUBy7LgpilBEoJtCIlxQ+4z2mS4
-+VKqPhuvOyJAknlJBhyfg/dD7qC9M6CitTODG4T8gHT75hbLSDLPjwV0S+yM1iHXRCa6WGG4
-Jc93kjnAxRG379p9pm3ggE6AwQkS6BFpHnKtlI6gj8Fr8bMZOow8x8UDNZ/UwEUGR/OQ+0G6
-DEK1DJf9F2fGM6iXUTnkfpkGGY7SkPsj2mT8OV0GocsgdBkRa18iDqvt79JWCAAAAABJRU5E
-rkJggg==</item>
-		<item item-id="67">iVBORw0KGgoAAAANSUhEUgAAAQUAAACDCAYAAACECA7gAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="66">iVBORw0KGgoAAAANSUhEUgAAAQUAAACDCAYAAACECA7gAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAA7OSURBVHhe7Z3LcawwEEWdj+OZHByE
 FxOA83AVS++dgxezeUtn4AzmqfWBbqEvCAYx91RRHhDo231pwIiXO+iaYRjuN/u7D266zuC4
 dCEKLy8vegGS2/V679O9hvv12peUPRMQhW4Z7peOHet2vXQqaOcHotAp5FRdn2xv165F7cxA
@@ -8362,7 +8341,7 @@ bbOyATgxnYoCTXdltrnZbczMODQFViotztvbm1eGgbZRGgDPQqeioHDRwDjjhhEDHRGk0jT+
 T7kOQL90LgqRS4JU2gpIFLgIQBTAGYEoVABRAM9Ap6Jgnh6Y7f6lQSptJbinAJ6AfiOFh+A9
 fcjcvASgRyAKtehLE6pP+8sTAI4ARAEAIIAoAAAEEAUAgACeBgBg3O//AW5tn9tcUuIUAAAA
 AElFTkSuQmCC</item>
-		<item item-id="68" content-encoding="gzip">H4sIAAAAAAAA/2xUS1MTQRDuyea5SQgBIsKCQR4iiCEsKE9hiIA8ApFwF0OyQixDYlgsjinP
+		<item item-id="67" content-encoding="gzip">H4sIAAAAAAAA/2xUS1MTQRDuyea5SQgBIsKCQR4iiCEsKE9hiIA8ApFwF0OyQixDYlgsjinP
 ljfPXvwDVlneLW8e/D2WF+zpXpYITGp2erq//vbr6c1EAEDg3MOpk63hM2i9zVuH5eqxD9SY
 whkqVYvs85JvVsEqxdzBa6tokwfylO/Bp//kqJapnrE7izOAjrwL3Mb5B3EvAwBxpPsbutyr
 kYixKA94NDLa3Jcv23a9fHBqW4KQczhj0Dy8c/3/7X1E4LXrlmWQw8QZrZHpN7t+ADR8AfMz
@@ -8378,7 +8357,7 @@ gtx2FGWvKJI7XBpS5RyqHfncocpdUu06VDmQeYdq91qT5R7dQbGSuX9YL9SO9l9V65WCzXcL
 8oBdLxQtc0WjkOEAk6IVhKFwHUHhFUKowHlHSHjwZ2gYSApNGF6kSmLcEHCOhk8YnobEkF9h
 FEuAMGgEFUaBQ4ihdB0xlB5GDKVHEEPpUYVRWS2EQSOmMArMomM7pxWrXi4W3vCxBEn8Os4S
 frZlOkd1M+vOmV4ZkebNPwAAAP//AwAIZJg4hQYAAA==</item>
-		<item item-id="69">iVBORw0KGgoAAAANSUhEUgAAARkAAAKaCAYAAAAK3C38AAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="68">iVBORw0KGgoAAAANSUhEUgAAARkAAAKaCAYAAAAK3C38AAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAB5XSURBVHhe7d0BdulMAEfxLuTbgfXY
 T9ZjPfbjy6hURBDP3Jg/9/fOnFNeqyPMbYTqz0GSQEZGEsrISEIZGUkoIyMJZWQkoYyMJJSR
 kYQyMpJQRkYSyshIQhkZSSgjIwllZCShjAzkJ2jTJs21+PkJm2/a9q0836xrH8TIcIwMy8iE
@@ -8524,7 +8503,7 @@ mfl56t8YGd3Qh+Pqla+3F+7c/10u3rnL68/tA/PiL3n3npvr/cjMz1P/zsjopvL7QOe1ONpb
 mT6tfPQoMv3/jxZ2bU/NdfLw6vLhETvPb2RkdFv/MGT5bzaXyEyP0YxON/Vb2CVCp7mVh1rj
 EPlb2NUZGd21/D1aSlROew/HMQ5Ov6hXeJ+Wp95P5nTM6B3z/DZGRg8sfbe5Epkbx0B8Z7yv
 ZmRUye3I6LsZGVXw6KCwvpmRkQQ6HP4Ha/gTK70MivoAAAAASUVORK5CYII=</item>
-		<item item-id="70">iVBORw0KGgoAAAANSUhEUgAAAIEAAAAvCAYAAADEtqnOAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="69">iVBORw0KGgoAAAANSUhEUgAAAIEAAAAvCAYAAADEtqnOAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAT1SURBVHhe7ZuLkYQwCIa3n61n+7Ee
 67EfD8gLCDF6rkbd/DPe6Bkjwgcmur7mriYax3Ge/Prxmuh8JXUIGmgahrkckqM0zsNgY9ch
 OF3j/CkE42hNw8eEr0NwsjAQjRjAk5sAXhCCaR7er/n1kst7jefgIt+vdzsnV23H/UY2kt3Y
@@ -8550,7 +8529,7 @@ FfKOcG2C8/lxKSAoedG6HdsWweZt5HFX/fjE7YM+KoPGG0DwbUHAfuLjE1/BcPHncHDKhCB/
 7HpOcEdB9lnZ0EZ5AGra8vFJvs+BIa8/B/GxEGDJM0tyYx368YkJgQIG2vz/3UHXl3TgxycE
 Act8Y9BovcbuEDTQYb8n8BC4SmFVi52/J+j6rg75ZVF2O+Aqf4DSIXiSFiEoq0PwGFUGjQvq
 EPy85vkP7dVStaSpsjAAAAAASUVORK5CYII=</item>
-		<item item-id="71">iVBORw0KGgoAAAANSUhEUgAAAMAAAAA3CAYAAABaS0WmAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="70">iVBORw0KGgoAAAANSUhEUgAAAMAAAAA3CAYAAABaS0WmAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAbwSURBVHhe7ZzrkaswDIW3n9STfqiH
 f7eX9JMryQ8kWQZDCBCsb4adsNig2OfINkn4eztOx7gBnK5xAzhd4wZwusYN0MD4/Hs/hlfc
 c+6EG2CB1/B4//25Ae6KG6ABNIEb4J64ARpYb4Dx/fx7vgcaPR5v9851cQM0sM4Ar/fw+PNp
@@ -8585,7 +8564,7 @@ ti+EzsvIeld/MFY4BoZeWCC7ATaih859DbA3INauHowVRzDc4rWCQbWx0MTyf26ARn7KAJB1
 rex3DqXoWg2w5sFY5bFgCtkOpRndAK2IoTxMB64jsgCakrLgxQI75MFYpgGUWaDMZ98F6hrW
 oNjYKxdffXPAg7HIACwpGQtk6yvZboA1xEb+1ucAd+brvwfIfVMbJXb4PYDjfMJXfxFGBqgl
 pvrDsdwAzj2YNUAdN4BzA7YurN0ATte83/8BXG2Sb6b+1V0AAAAASUVORK5CYII=</item>
-		<item item-id="72">iVBORw0KGgoAAAANSUhEUgAAAYUAAAAYCAYAAAAVrOFhAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="71">iVBORw0KGgoAAAANSUhEUgAAAYUAAAAYCAYAAAAVrOFhAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAfuSURBVHhe7Z3LceMwDEDTj+tRDyki
 BxewfWRGx9zTQw6+7HE7SAdegF8ABPhRZCdW+GYysUAKBEAS0MfZfboeiHVdr5fw+fhcnL+T
 yWSyJw9VFJanp+uT+FliXlzP1/PvqQieC/h8w7qwLmW8n1LAJ5PJEXmsomAmpMv1fMvs+INZ
@@ -8625,7 +8604,7 @@ u9hQFADrpceNsRLSuuxkxw98p+CoxvvriTp++wl/8IV3/IwvvvkL6FkUJpOjs60ofBNmQoJk
 vk+uIo9i7nwXtJndfO9hFoXJ5OgcoyhgMrf+jZJRvukuaCu93zDah1kUJpOjc5CiAJA/Kf81
 XNab/necJbMoTCZH5zhFAbis8z/uvy2zKEwmR+exikJ4AUp/Zo66HfiiXcZ7tz8UnEwmP5KH
 KgqTyWQyuSXX639stq7b2Ij8WgAAAABJRU5ErkJggg==</item>
-		<item item-id="73">iVBORw0KGgoAAAANSUhEUgAAAD0AAAAWCAYAAABzCZQcAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="72">iVBORw0KGgoAAAANSUhEUgAAAD0AAAAWCAYAAABzCZQcAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAF2SURBVFhH7ZTBkYQgEEXJh3jIwSA8
 EIB5WOXRuzl48OLRDMygl4bWQWlYpsadXZd5VVODLcL/3Q0CCuRjuhQKNz1pkEJBR49vx+4v
 QAgJeqIYywRa4jwB6iA2Fg8h0x0ou+Fvmcb9yWwy+aQzcBWL8/yNSnfKE+wqFup3cRm0QSwe
@@ -8634,7 +8613,7 @@ rFbXDbF4ipNpszkKzsjWleSa5ubkfHsmMK2UydxLbf18pY1S7x1/pl1FH0HfNBdPwbZ3zofI
 uq40epXT7c0lnYriZJ1veyaegEx71cGsYeZtdVwSmqZhDW4VvAQrHtfzRFNsL+Su69QJsXiE
 LMVt29LoyLIsdqO7kaUYK71R1zUMw0BPx3d34WnTOB7HkZ5cEu5GlmlsYWxxrPB2dtA4/v/b
 Ss/zvJvt+34fV1V14Q3+Pu53C13Ax3QpFGga4Avmd4a2b6SfpwAAAABJRU5ErkJggg==</item>
-		<item item-id="74">iVBORw0KGgoAAAANSUhEUgAAAKUAAABTCAYAAAD+4MfeAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="73">iVBORw0KGgoAAAANSUhEUgAAAKUAAABTCAYAAAD+4MfeAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAprSURBVHhe7Z3Rkds6DEX995pIB9tE
 mnAh6cD1+C+9uB8/gATFSwKgKO8modY4M55ZgRAIgleU7NDx5RkEi7GkKB/32/N2f8hRcEY+
 M4fLifJ+vT6vdzkITs3jTnN5Oy7MpUT5uIUgvx0kzI+DwlxHlI/b82NGkex3uTwvl4+nN9bH
@@ -8686,7 +8665,7 @@ F4Bnz+g4melxIZ3IzHEV2FetqgTZm3SafnsoDyN3j0VESdAgPw4kzrS3F7jFpALBSpMKKz7Y
 B9jRnCZa7GWVcfvKjZu9GYLXr+SnbomefSL/vXHhmNDXHVeJ0V0chXZlzSu7539klWTWESXB
 z3JY2+AbQOI++pHfUqJk+AoMYX4PHi8IkllOlMyD/9+b+/HBBOvw4P9y8MU5XFKUwTvzfP4P
 +U8rVxnqWJgAAAAASUVORK5CYII=</item>
-		<item item-id="75">iVBORw0KGgoAAAANSUhEUgAAARkAAABTCAYAAACrpHOpAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="74">iVBORw0KGgoAAAANSUhEUgAAARkAAABTCAYAAACrpHOpAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAABAdSURBVHhe7Z3teevICoDzb5s4HaSJ
 bSKFnA5Sj/9tL+nHF+ZDAwwgRrZy5YT3ebxrIcTwJSQ7x/bbPUmS5EQuO2S+bp/3z9tX20qS
 5P/JI+fjJYfM7ePj/nFrG0mSXIKvG5yXn+uD5nJD5uszB0ySXBYYNO+Lg+ZaQ+br8/5+ZMLg
@@ -8765,7 +8744,7 @@ BZKUJkNzWEx+9ah6lpwyNaa2FgK+dztaCMxO1zVOIvUqTezLRpb6ZYgYuqodxx9qa/9EeQIH
 a+nF0KG+ujkC1Boovpl2nHp1Qr3l2SH7tl2OvlpLVb/e6RSZks+VuxjkWkMGwNeNMpdJklwE
 GErzXzF9LjdkELyK5KBJkmvxdWDAIJccMsgXvgt/Ww8oSZLn84X/ePDg+XjZIZMkyU/gfv8f
 3ruHrdwhdpsAAAAASUVORK5CYII=</item>
-		<item item-id="76" content-encoding="gzip">H4sIAAAAAAAA/2xTS2/TQBCetR07dpPm0ZQ8HMgDQnhIqLG40FOpKqhQASn9AcFNTGtESHBc
+		<item item-id="75" content-encoding="gzip">H4sIAAAAAAAA/2xTS2/TQBCetR07dpPm0ZQ8HMgDQnhIqLG40FOpKqhQASn9AcFNTGtESHBc
 VIlLxI0L/wBx4cIdcYcbHPgB/BUOYR5JCKhrze7Mt9/Mzox3UwCgUA5RHNZ1nJPBy25wHI5e
 JIDGbRR7MOoLZjB2h2jD/uOjZ0E/ZgS67K/hbE5OxrujM4EPUCwEukviQ/JFeYLTN+S/tf/a
 NH5ZkpQGms5Kfnn43TiOwqPTOFDM3EbJwOowtpv/2AkOYMRRELgMeCjpMaumV/4KME1Y3gdc
@@ -8777,7 +8756,7 @@ Rtzk25gZeL3jyB+f9J6OoqEfW8zdpEvN8J4f+3JZKvNLQ178EKiND6h61sly/LNwco/jyEOg
 jvTUouU8ZviBqp6PHpyDLoJbceT3A29P/qE7J9ZUFpSrkOfi/1Eu7s4qCa2gsQoVWy/oyjUw
 UsXSHQOpMJvVVEK52nQHvU3h1ZTFLFSSxAHk2MjBBGrKQc6MkDXksHsKOeyeJg55rTMHlQxx
 iCxZZx6dDoMo7PvPpS/yivdRBng7Q24kPVJn3tT/RmrV+AMAAP//AwBYw6ujkAQAAA==</item>
-		<item item-id="77">iVBORw0KGgoAAAANSUhEUgAAAroAAAEpCAYAAAB854FpAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="76">iVBORw0KGgoAAAANSUhEUgAAAroAAAEpCAYAAAB854FpAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAADt/SURBVHhe7Z3BddvKEkSVj+JRDg7C
 C8XhBHyOdj8Ar18C2rzly8AZ8GMoQoIIgAS6qwpNoO6c8SNhdnX3YKbZn5+Sn07GGGOMMcbs
 EDe6xhhjjDFml7jRNcYYY4wxu8SNrjHGGGOM2SVudI0xxhhjzC5xo2uMMcYYY3aJG11jjDHG
@@ -9062,7 +9041,7 @@ Y8wsP3/+vDz64t9//z09PfntwxhTH1cqY4wxswwb3WFzO9UAG2NMNdzoGmOMmWX4FQU3usaY
 R8ONrjHGmFlac9u+k/vr16/RY2OMqY4rlTHGmFn67+O2+fv378/Hf//+vbzCGGPq4kbXGGOM
 McbsEje6xhhjjDFml7jRNcYYY4wxu8SNrjHGGGOM2SGn0/8BKDZbCJ0cXrUAAAAASUVORK5C
 YII=</item>
-		<item item-id="78">iVBORw0KGgoAAAANSUhEUgAAAFAAAAAyCAYAAADLLVz8AAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="77">iVBORw0KGgoAAAANSUhEUgAAAFAAAAAyCAYAAADLLVz8AAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAKqSURBVGhD7ZrNsYIwEIDph3rSg0V4
 oAD7cIajd3vwwMWjHdhBHhuycY0BNyzK+sg3kyd/vgkfm02CqWxBRBEopAgUUgQK+QmBt9vN
 VlXlPrXxEwL3+70TuNvt/BE9qBcIUXc6nezlcnES4ZPL/X73W59DvUAadSAQSszhcEjKGrve
@@ -9077,7 +9056,7 @@ yDobyRqa7wvEOfcC61IG+ALhZ9CsNTQMviyQzLkZPx3w4AvMW0PDY70IDHc8SM2LQjq5j8rE
 3JmuUkivoclHiUBJT5vXhBHYfruGhsFKAnk/HfDgC4QIzVpDw2A1gXgD8nd+fIGsNTTwQP1x
 zoNV0IQV4eqGD5SXm4tAwvN0jceXBZJhjLr3fIPAKnNQ+v0I1EzcOvr9d+8ji8AY2okwWkkR
 KKQIFFIECikCRVj7B8MbAxQq9cvgAAAAAElFTkSuQmCC</item>
-		<item item-id="79">iVBORw0KGgoAAAANSUhEUgAAAZEAAAHvCAYAAACVCeLmAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="78">iVBORw0KGgoAAAANSUhEUgAAAZEAAAHvCAYAAACVCeLmAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAEPxSURBVHhe7Z3NkaS6tkbP7DpxPSgn
 rhPpQ0/PvAdpQPvRETl7PW8felCTHpYH5UG9vYUEAsSftPlfKyKjkgI2SEjfhyQS/SN88eHD
 hw8fPpmff7725P35/Hr571DK6+v5fPfftyEUJNgWm3qzfXmB67Gziby+HhRiU96fj01NGRPZ
@@ -9402,7 +9381,7 @@ urSciUTmoMZRdz1FhqLbdbqk5pmIxJhhNABQDiYCRQybiKBdSikx9yYS9u1NjVuv77Qm1GzC
 PiMmQSsEYDukPmIikE8Q9SH0txo9ve91ZxkiRpP9eDEALAYTgSKmTER5PTpGspKJvGMgAJuD
 iUARc0xEeX89v54vFfjqSaxqP7vfcbw/Q3wA2BJMBAAAMvn6+n+DQhcLcgMn3gAAAABJRU5E
 rkJggg==</item>
-		<item item-id="80">iVBORw0KGgoAAAANSUhEUgAAARsAAAC4CAYAAADT0kjVAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="79">iVBORw0KGgoAAAANSUhEUgAAARsAAAC4CAYAAADT0kjVAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAABOrSURBVHhe7Z3Llaw2EIYnn4lncnAQ
 XnQAzsPn9NJ75+DFbLx0Bs5grNIDCgFCAhXQ7e87h3vFSy+qfgQ9qD5+TuL5fP58xzSczbfv
 f/j/cMzfbOzlFLH5fjx+MPWref48HufK/cfHh1/gXPr4W397OcESnj9fJxs5LPP9+DpV9BGb
@@ -9498,7 +9477,7 @@ alFs6gVwxo53Nlvkj2aX4PqJb6PgNszFpjfBeZPjyahh+v4i0TAlghcbJQhR0PZqzUSsJO9D
 eUVyQdzh+EfZM2UHYgNm2IuNGL0atRScrto5otikulePskoMeR4YIeXoF8Q96tgE89nAzUjO
 cBeqZurLRw2Q8e0eW/dJG2IDZtxNbKpAbMxAbMCM1xObHS+poRrEBgBO4OfnPzldPmRc+2+B
 AAAAAElFTkSuQmCC</item>
-		<item item-id="81">iVBORw0KGgoAAAANSUhEUgAAAOAAAACBCAYAAADZhbYeAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="80">iVBORw0KGgoAAAANSUhEUgAAAOAAAACBCAYAAADZhbYeAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAv1SURBVHhe7Z0LkqsgEEWzn1lP9pP1
 uB73k6H52fwUFAPIPVW+SiaGEMOhG1Df6wsmZP0uy6ofl7MuiygB1AACTsjy+VwUaP1+Pot+
 DK4AAWdj/XyruLOIchAGLwMBJ2P9vL9VYpcQ+Q0DLwMBp0Kkju+r6afhXFnL+/X9g7gWCDgT
@@ -9557,7 +9536,7 @@ lurjlhRgOJ50U6bU0goEBF2D2xIC0Jhhb8z7wY15QQ3sEkZ8HAPOAwHBAXxGbwkWksE1ICDY
 h9YR2SCMZvseMTHSCRDwcej1KLMAfzFi0ZQ6XxT3n4NrQMBHQenith6lZPTHbWwff4uENgh4
 LxDwcRydkVEGBLwXCPg4jgQsi4AYA94LBHwcdSOgUwYtR2AWtCoQ8GEcnZN4CqwD3gYEBKAh
 EBCAhkBAABoCAQFoxvf7D2tqEdjk9mryAAAAAElFTkSuQmCC</item>
-		<item item-id="82">iVBORw0KGgoAAAANSUhEUgAAALQAAAAxCAYAAABzsINZAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="81">iVBORw0KGgoAAAANSUhEUgAAALQAAAAxCAYAAABzsINZAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAWtSURBVHhe7Z3NdaMwEIB92ya2Azex
 TdBDrnvPgQLSR97TbXNPDznQQDpIB+yMftDoF0kIEvB87/k5gD2S4WMYyaz3NjPMhcgKPYlx
 HsWkl/bhiDaYxyEptBiGeRB6YWcmAW2NLDWznajQ03iczAsg9Z2lZjYSCj2N8/1wmxViuM/s
@@ -9586,7 +9565,7 @@ XrzEwYAZMePfNlUHU0O1GZp/245pxQqNWTYn3VJShJdFX1h/8r5O6MiXEQxTCBF6RaSg5LCg
 sLlvo+qEhhOr51wp81AQoZV4yUv9UUKv1fIMk8ERWkoblWllBN6xhub6mdmCK3Rz/erNcngl
 Q7nQK3U8w6zgCQ3gJb9FqmXQ6GVYzN4mu6/E5ezMbCUUGsB54MMTJYj/HTe2MNciKjTC/9c3
 c0aSQiN4g/a48x3aeCfa3m0wj0NWaIY5F/P8H5nUJ5fzDWlPAAAAAElFTkSuQmCC</item>
-		<item item-id="83">iVBORw0KGgoAAAANSUhEUgAAAPcAAAAYCAYAAAAmnmsEAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="82">iVBORw0KGgoAAAANSUhEUgAAAPcAAAAYCAYAAAAmnmsEAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAUlSURBVHhe7ZzbdYQgEIa3n63HHlLG
 FpBKfEwlefAlj+kgHRhmABkGhpuy66rfOZ6zugjD8P+A5nKbT8Y4jvNkPl+cnQn1cFTOZe7x
 MT8uZ19QJqWJg/r7ROae5sdRR/FiFePwOORu7jzmHod52Jm3b7fb2xyHZofa2ILTmHscht1t
@@ -9613,7 +9592,7 @@ cwt14hjXmjuHrBug3NwZMB8kVphUStt6sTZ6UbeEmATSFwB2e+eOVsH1Rq0aL/xnDWvM7VYs
 daAK9Qqor7XsmGJ10rHUY+jOW9ogRHSDgAFZDM0sbdiDxZxoy3uuPxB15n53in6Rox9WXBcd
 QHM3LCyT2sWsnFf2yumU5t4MP5/L3B1pMvf1DxIvNuQydw/oY8bKR4gDcSntyVzmvngO8/wP
 9/caBGfXFC0AAAAASUVORK5CYII=</item>
-		<item item-id="84">iVBORw0KGgoAAAANSUhEUgAAAK4AAAAxCAYAAABDPJJ4AAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="83">iVBORw0KGgoAAAANSUhEUgAAAK4AAAAxCAYAAABDPJJ4AAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAUlSURBVHhe7Z3bldsgEED9lybSgZtI
 EyokHage/aUX9aPM8BDDa3gIvJY99xyfrCzvgOEygFZ2Hocg3BBW3H1bj3XbzdEcXlGG8Hlk
 xd2W5Vg2czCZfYOyVpFXqCcp7r6+TtoTkPcp8gqVxOLu6/F8ubWabXke4q5QQyDufqywRPgZ
@@ -9640,7 +9619,7 @@ JZy4mDU5uc6lQDzVhWKGF8DbxE1c0BeEACJuQZhoqeBAMamo18SFAXT5OqTw6RBxtWDZKfpV
 4pbW2oIAeOIqOZPSFHbDA9e4sr4VavDF7V5fBlcVgqm+XtzCOlsQDIG4AE7VPfKcm7cgY2I2
 ttm6EFeyrVBLLC6A11FfnvhA8FGf6Rc+n6S4iPxfvsI7kxUXecn/nr7OL0P4PFhxBeE9OY7/
 OimHVlrVeDEAAAAASUVORK5CYII=</item>
-		<item item-id="85">iVBORw0KGgoAAAANSUhEUgAAAPcAAAAYCAYAAAAmnmsEAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="84">iVBORw0KGgoAAAANSUhEUgAAAPcAAAAYCAYAAAAmnmsEAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAUlSURBVHhe7ZzbdYQgEIa3n63HHlLG
 FpBKfEwlefAlj+kgHRhmABkGhpuy66rfOZ6zugjD8P+A5nKbT8Y4jvNkPl+cnQn1cFTOZe7x
 MT8uZ19QJqWJg/r7ROae5sdRR/FiFePwOORu7jzmHod52Jm3b7fb2xyHZofa2ILTmHscht1t
@@ -9667,7 +9646,7 @@ cwt14hjXmjuHrBug3NwZMB8kVphUStt6sTZ6UbeEmATSFwB2e+eOVsH1Rq0aL/xnDWvM7VYs
 daAK9Qqor7XsmGJ10rHUY+jOW9ogRHSDgAFZDM0sbdiDxZxoy3uuPxB15n53in6Rox9WXBcd
 QHM3LCyT2sWsnFf2yumU5t4MP5/L3B1pMvf1DxIvNuQydw/oY8bKR4gDcSntyVzmvngO8/wP
 9/caBGfXFC0AAAAASUVORK5CYII=</item>
-		<item item-id="86">iVBORw0KGgoAAAANSUhEUgAAANIAAABTCAYAAADqdVk/AAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="85">iVBORw0KGgoAAAANSUhEUgAAANIAAABTCAYAAADqdVk/AAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAkOSURBVHhe7Z27kds6FIaV3SbcwTZx
 m1APTp1vwALch2eUXefbgwMlDrcDd6CLgweJNw8ggCDk/5vRrB4kQRDnw4MkuJcHAOBpIBI4
 jPtteSy3u/50Pp7ZP4gEDuF2vT6uN/3hxNxvYj+XcpkgEujOfZlDohUh01uhTBAJ9OW+PN4K
@@ -9712,7 +9691,7 @@ IuVarVAkkf6iPm8iqfER/0ZqsTxz5gJEAt2g4OYFrAp2c7IhdTKhSCS6FUz/vIkkKGmRCsZ5
 EAn0g4KWGYgrzljIonCM5IqpXnJfCkQqmfICkUBHCrp3hNfFc/HO2nldrrBrt1HXIvHHeARE
 An2h7tFeQEqBRKvhj0dk0PsSUOviiWDWp1ckrU0k1ZJF0/IonYAJkUB3TjGpsgQhZuncMYgE
 DmHkpMoSaidgQiRwGCMmVZbwzARMiATA0zwe/wOVJddxIKcbpQAAAABJRU5ErkJggg==</item>
-		<item item-id="87">iVBORw0KGgoAAAANSUhEUgAAAQAAAABTCAYAAABwH9mLAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="86">iVBORw0KGgoAAAANSUhEUgAAAQAAAABTCAYAAABwH9mLAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAu6SURBVHhe7Z27kdy6EobXu0mcDDaJ
 m8TmIPf4MiYA5aGq8a585SBjHZnKQBnMReNBNkA0HiQe5Mz/VU1pFgSJBtj9o8khobcHAOBl
 gQCA4Xzeb4/b/dP+BY5yZDwhAGAo94+Px8fd/gGa8XlX43qrFwEIABjG5w3B3xUlAu+VIgAB
@@ -9770,7 +9749,7 @@ HLbQIWMcFQA9IzoBIFuWoDeBmDl0FUk7pLaFewAevE5GAGpeNYcAgAGQU++/DDgsAJvgcbaY
 dDxz6CqyAhBtm76z2T3MSoJLAXMcKcjVsSo6BAEAY6C0dE+kaee3KbDbXwcAC9xIHR2I4X4W
 vu1IZrKhwFaxbVvv6KrAtQvNQADAMLouyAK0YNT+5AoBAEPptiDLi7N3oRkIABhO+wVZXpsj
 C81AAAB4WR6P/wOZqwi+j8UtRgAAAABJRU5ErkJggg==</item>
-		<item item-id="88">iVBORw0KGgoAAAANSUhEUgAAAFkAAAAWCAYAAACrBTAWAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="87">iVBORw0KGgoAAAANSUhEUgAAAFkAAAAWCAYAAACrBTAWAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAI+SURBVFhH5ZmLsYQgDEXph3roh3qo
 h37YBIIE+Yg7COvsnXGeikI4uUHXJ9xmGWOcpf25sr7vX9BWyFZr9ywG47R+JoV3tBGycWoB
 AKvVw4m81jbIOPklJrN6STJ72gTZOi1XOQwqRuqp677V0gkh/CYHErgJ8vyJtzU7oRC7kKEK
@@ -9783,7 +9762,7 @@ iq+N0IacORQPA9QUKgVI7d61WXv+a8uoU4LOkfnxWcDFeH31nDx1TfZx8gffMGSeUbYO0sSL
 DRkNVBpkpTZBrky8CRlUtJVl2oZcSehibYKMUPi3C760VFxXhZwnpAkZ7v3TbxeoG58hPWTm
 3MpDsQX5+c+p19oI+QYAghwfNoXbEXpsy0D//ffkoKH/jBTLxYgsvMPv9nDQdshD+gry7+gF
 kC8eii/QO5z8ajn3AWxPOWduewZiAAAAAElFTkSuQmCC</item>
-		<item item-id="89">iVBORw0KGgoAAAANSUhEUgAAAFgAAAAWCAYAAABEx1soAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="88">iVBORw0KGgoAAAANSUhEUgAAAFgAAAAWCAYAAABEx1soAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIuSURBVFhH7ZmJccQgDEXpx/XQD/VQ
 D/0QCSQQ5ljvhiOT5M94Yi8sx9OX1naUPyxrrXd0Pk8ujPsTdBSwM8avw2C9MfND964OArZe
 LwbgjF4YwGc6Bhg3v9xgziwP4isdAuy8uXa4C7LkMlNrvDOXV0qF43oQvEOA52+8rdmBhHWr
@@ -9796,7 +9775,7 @@ fF6NTYBlNEXdo01Xn5OKhwXoW97Us3PpkCsZAE79B45HaNKV2wCDUsbA8aT0ZAdvFcAv3A4K
 gGUGZd3T/DlgNE5tjJ06BLix8SWAG4HcrEOAEYp8FyHLScNxn9bgqmzt1zHACPX560QMgLiL
 uLmyB3jt69BnOgj4TQDpR/BWRtDd7P4C8p9/Hxy17D8a4oHnpI4D/u36B7xY/4CXyvsvcxny
 n/IGSOAAAAAASUVORK5CYII=</item>
-		<item item-id="90">iVBORw0KGgoAAAANSUhEUgAAAGkAAACrCAYAAABlorKFAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="89">iVBORw0KGgoAAAANSUhEUgAAAGkAAACrCAYAAABlorKFAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAjlSURBVHhe7Z3rceM6DEb9b5tIB25i
 m3Ah6UD16N/24n58Ab4EPiCRkvauEH1nxjMJTdIWjkDKIuM8PuDymJL0nqfPNL/Db7Y48t7N
 SJpfr89rDr8Y5T3TMUzjokxIek/2BSVI1HNQ1PUlvafPc6eh+fXQ5XK/j8fn8Xh+ZMze05PK
@@ -9841,7 +9820,7 @@ MXsOWE7ixaORidVmkgZanbq8CPRIJg3MuZeW5A6680D66MlOrU5dfmT3UO98xFxbUldQB+g5
 e7U6RXl2+UxyxnYPUQYOzLcXl0RwcI5cQFD75vDnAlrsHirrKOVHdw+NZBFzfUkEf5444ulS
 kPjRjxYmJDE8/lsX9d4hiDEjiXnzt0DO4wd5Bd78Rb0737spSffk8/kPVAezHbFcyZ4AAAAA
 SUVORK5CYII=</item>
-		<item item-id="91">iVBORw0KGgoAAAANSUhEUgAAAJsAAACrCAYAAABxG+4hAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="90">iVBORw0KGgoAAAANSUhEUgAAAJsAAACrCAYAAABxG+4hAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAA10SURBVHhe7Z3bkeM4DEX7b5OYDDqJ
 TaIDmQwcj/82l87HC/AhgSRAkZIMy933VLlqDEsUH0eg7KZGHw8AnHg72b7vt8ft/p3eAW+O
 9P9byXb/+np83dMb8DK+7zQOt3nh3ka27xtEuxQk3OekcO8h2/ft8XmmaVzex8fj4+PzoffX
@@ -9907,7 +9886,7 @@ ek0qKy4h8SYy25WfXTV6vcZcXzYemANTaS2OhDtY/ajoYJZH6VA6o9VyrXjBuGxc/6U4qpf8
 1qvFNax2DsW7slHfaAUYvIFsBKfqiUYt8MDnM1XZv+1U8V7sm2NBXKU8K24zJhvXbyk3vOKg
 W/GmDYkhqQRrXEz9ynQ9k9WY95CN4N9yhsYR+EAn4+zPUm8jG8PXKBDu9XzvEI15K9mYb/7W
 dJ9vKDiHb/7Rd2f/v51s4F15PP4H7WdAIMlW6hsAAAAASUVORK5CYII=</item>
-		<item item-id="92">iVBORw0KGgoAAAANSUhEUgAAAOgAAACBCAYAAADKUvbqAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="91">iVBORw0KGgoAAAANSUhEUgAAAOgAAACBCAYAAADKUvbqAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAvXSURBVHhe7Z0JtqMgEEX/fno92U/W
 43qynzSFoCUUCEZkevcc+2QwOHyuVQzaf18wAZ/vsnzM6/v4LIsqGZQEgk7A8n4XEunzfb8X
 8xqUAIKOzuf9LerQospHGC0GBB2cz/v1LRrj1AXgBUOLAUGHRqWgr1LpreXaNpbX3/cfxD4F
@@ -9966,7 +9945,7 @@ Br+yDdHIbSRQFggKIvDexsUbRAflgaAgDI2jsoYf9UQO3VnTIBB0KMxYm52g8GPEo+EAPlHA
 fQ/KA0GHgdLRfaxtldVtN7J13EUIjRC0PhB0KM5mq+QBQesDQYfiTNC8CIo2aH0g6FDcG0EP
 ZdBwC3pxHweCDsTZfM9LYBy0KhAUgIaBoAA0DAQFoGEgKADN8v3+B24zaWdEGXRdAAAAAElF
 TkSuQmCC</item>
-		<item item-id="93">iVBORw0KGgoAAAANSUhEUgAAAIoAAAAyCAYAAACDHkN8AAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="92">iVBORw0KGgoAAAANSUhEUgAAAIoAAAAyCAYAAACDHkN8AAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAUJSURBVHhe7Z3BcaswEEC5/SZ+B27i
 N+Eecs09BwpIH5nhltzTQw40kA7SAV+7kmAlFiStZEKcfTOexMLGSHralTAk3aQoGagolYxD
 P/XD6J79bPbqoqJUMFyv03VwT+6EcTB16teyqChCxv7+JJkxslwiWVQUCWM/XSot+fz8nLqu
@@ -9992,7 +9971,7 @@ KKL7lRPoLaUSck65oygkghi56r4hzheFuzeZKytBb1IXYaJDKoc4UZZ0UfulX9lk1j88XBnK
 68t3JYYUaI9fRSliabhNVqnnZODx+Tqk5k9muxNJRSkEJne7EpxcFDj+5DzLQ+ZkKkopIMJm
 Q9sRasN6bcq5Dbhcz1yC6R/7qyIj/ZyZOOKZ5/wEPZyPqSgSICRnjspTQiezG5FP/yBxI+79
 T5zHUUZFqUD/aYKSzV39G5Ze/w2LUsU0/QdEjOM5V8NK/gAAAABJRU5ErkJggg==</item>
-		<item item-id="94">iVBORw0KGgoAAAANSUhEUgAAANkAAABTCAYAAAASlaLIAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="93">iVBORw0KGgoAAAANSUhEUgAAANkAAABTCAYAAAASlaLIAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAlKSURBVHhe7Z27kds6FIY3u024g23i
 NqEenDp3oALch2eUXefuwYESh+7AHejiBwHwgARIgMSD5P7fjGYlig88zgeAFMh9exFCqkLJ
 SDOej/vr/niaT+diT9opGWnC43Z73R7mw0l5PlQe7vmiUTJSnef9/II5lGjvmaJRMlKX5/31
@@ -10039,7 +10018,7 @@ k5KReiBoEwMxjZTe0fZMI8tiin1mSJZzyxIlIxUpPGRM6T3UOrIH9C6zK4lmF2PkPpMlUyJn
 nG9SMlIXBPGeCyCQJjR81EIMv2kNQ8T5OvqyvV2uX0ag4D7FsHXlXCv3xltKRqpziBtmS6EE
 zf1pgpKRJvS8YbYUW2+8pWSkGT1umC3FnhtvKRkhVXm9/gfbw6GnLB4p1gAAAABJRU5ErkJg
 gg==</item>
-		<item item-id="95">iVBORw0KGgoAAAANSUhEUgAAAQYAAABTCAYAAAB9AanMAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="94">iVBORw0KGgoAAAANSUhEUgAAAQYAAABTCAYAAAB9AanMAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAt1SURBVHhe7Z3BldyqEoZn95K4GUwS
 L4nJwdu796IDcB4+p3fPe+fgRW+8dAbOoB+FQCpQlQAJEJr+v3N0ZlpCUhWq+gG1RL89AQAg
 AsIAuvO43563+8N9Aq04Us8QBtCV+8fH8+PuPoDmPO6mvm/l4gBhAN143CAKp2DE4b1QHCAM
@@ -10096,7 +10075,7 @@ MIL1kyjxYvExVR8SwlDyqj+EAXSAgn3/cEJLts0k9ERd+TB52LcBKpWEIbYjgNlB9kW9ktUx
 NR82hcGUS9UVA8IA+mASY9dEOTahXDec7y+tt4nhWlu/Xer6s33TJhUIg2STZge3lX1uNUt0
 6cRAEAbQjaYT5QAdIyKlXxlDGEBXmk2UA0T2TgwEYQDdqT9RDpA4MjEQhAEAEPF8/h8MWtLA
 zE/ohgAAAABJRU5ErkJggg==</item>
-		<item item-id="96">iVBORw0KGgoAAAANSUhEUgAAAFgAAAAWCAYAAABEx1soAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="95">iVBORw0KGgoAAAANSUhEUgAAAFgAAAAWCAYAAABEx1soAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIuSURBVFhH7ZmJccQgDEXpx/XQD/VQ
 D/0QCSQQ5ljvhiOT5M94Yi8sx9OX1naUPyxrrXd0Pk8ujPsTdBSwM8avw2C9MfND964OArZe
 LwbgjF4YwGc6Bhg3v9xgziwP4isdAuy8uXa4C7LkMlNrvDOXV0qF43oQvEOA52+8rdmBhHWr
@@ -10109,7 +10088,7 @@ fF6NTYBlNEXdo01Xn5OKhwXoW97Us3PpkCsZAE79B45HaNKV2wCDUsbA8aT0ZAdvFcAv3A4K
 gGUGZd3T/DlgNE5tjJ06BLix8SWAG4HcrEOAEYp8FyHLScNxn9bgqmzt1zHACPX560QMgLiL
 uLmyB3jt69BnOgj4TQDpR/BWRtDd7P4C8p9/Hxy17D8a4oHnpI4D/u36B7xY/4CXyvsvcxny
 n/IGSOAAAAAASUVORK5CYII=</item>
-		<item item-id="97">iVBORw0KGgoAAAANSUhEUgAAAFkAAAAWCAYAAACrBTAWAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="96">iVBORw0KGgoAAAANSUhEUgAAAFkAAAAWCAYAAACrBTAWAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAI+SURBVFhH5ZmLsYQgDEXph3roh3qo
 h37YBIIE+Yg7COvsnXGeikI4uUHXJ9xmGWOcpf25sr7vX9BWyFZr9ywG47R+JoV3tBGycWoB
 AKvVw4m81jbIOPklJrN6STJ72gTZOi1XOQwqRuqp677V0gkh/CYHErgJ8vyJtzU7oRC7kKEK
@@ -10122,7 +10101,7 @@ iq+N0IacORQPA9QUKgVI7d61WXv+a8uoU4LOkfnxWcDFeH31nDx1TfZx8gffMGSeUbYO0sSL
 DRkNVBpkpTZBrky8CRlUtJVl2oZcSehibYKMUPi3C760VFxXhZwnpAkZ7v3TbxeoG58hPWTm
 3MpDsQX5+c+p19oI+QYAghwfNoXbEXpsy0D//ffkoKH/jBTLxYgsvMPv9nDQdshD+gry7+gF
 kC8eii/QO5z8ajn3AWxPOWduewZiAAAAAElFTkSuQmCC</item>
-		<item item-id="98">iVBORw0KGgoAAAANSUhEUgAAAOMAAAAmCAYAAAA2qyxLAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="97">iVBORw0KGgoAAAANSUhEUgAAAOMAAAAmCAYAAAA2qyxLAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAV2SURBVHhe7Z3b0aMwDIXztk38HdDE
 NpFCtgPq4W17oR9W8gUE+CKDxQLWN5OZJFwsH+v4lmTymRRFuQWXmHEc+qkfRvdKUcK0nifi
 Zhy+3+k7uBeKkmEcIF/6Ng0pasaxVyMqBwBDdg0aUs6MYz916kTlIMO3m1rzo5AZx6mH6ala
@@ -10150,7 +10129,7 @@ wXVJAzxWr6QZeagZzwBmTO30objLtKXwccl66V48V6/M5g6Tuj+hujf1zQi9YXR3DBfwNFlK
 H610kR7Vy8wK1IyHgR6xNdMoQpxf9z4JATO2JaAiCe4gt7M0ETCjXee0MrVQBMnsP7wNETPi
 urElERUZWlovIjJm1Kmqcpr29h6EzAjgFEM3cpSDtDYqInJmBPAzIvWjUgx05OJfuL8homZE
 9M9SlRL0z1KF0b8RVzjgl9P1b8QVRfnPTNM/7TjGhL5IhZ0AAAAASUVORK5CYII=</item>
-		<item item-id="99">iVBORw0KGgoAAAANSUhEUgAAA7AAAACBCAYAAAD5c1ZXAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="98">iVBORw0KGgoAAAANSUhEUgAAA7AAAACBCAYAAAD5c1ZXAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAACwjSURBVHhe7Z29sduw0oad3exWcDpw
 E7cJ9eDUuQMV4D48o+xz7h4cKHHoDtyBvl2QoABySS5IEFgS7zPDORIORQD7A+wS/Pn0Ag3y
 fD0ez/5zOs/Hg44AbAGdAgAAAACA64MEtkEe9/vOZOX5ut8f/WdgAegUAAAAAAC0ABLY1nje
@@ -10362,7 +10341,7 @@ jgZ+UAutH7RljwCAvCCBBQAchJWgpa1ASRO4M4+bzeD9ecqgnUmxd/jB0cAPaqH1g7bsEQCQ
 FySwAICDoAClDyLD7UMoOzaOkdtx5diJ+6fh+bi/7g87QfLzbqs9SwxXR4Tbh1AmGloNm4Qf
 zAE/2I7aD9S+AQAA6yCBBQCAi8HBIQCtAz8AAIBrgtEdAAAAAAAAAMAJeL3+H/ZIMFYtbZyt
 AAAAAElFTkSuQmCC</item>
-		<item item-id="100">iVBORw0KGgoAAAANSUhEUgAAAKoAAACBCAYAAABQHSF3AAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="99">iVBORw0KGgoAAAANSUhEUgAAAKoAAACBCAYAAABQHSF3AAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAn4SURBVHhe7Z2LsYMgEEXTz6vHflKP
 9aSfvL0IuiKoGAWRe2acycf4icddWDF5fYvy+fb9xz5O59P3sgTSAkVF7d/vH0X7fN/v3j4m
 T6acqJ/39xTHelkOw+rjKSbq5919T4mFInxHUx9PIVElZXe/pn3HsWX13ev7R8GroYyoEgX/
@@ -10412,7 +10391,7 @@ UXfC26XLQlETKPIDFG/+AAWoS9SxtNVuW61VKhJV94Kl99tg0btl6hEVdVjVSEz9bylSNxeK
 amuCrtD/YwREuUYX3/3n5NlcJCrS9FQTHKT125VqHn8KhEqK2jbXR1TzOHSVJQ2K2jYFRU2L
 qGyjtk01EXW2DJSp2OtvistE3bpufQjWUZvlwohKyHlQVFIFFJVUAUUlFfD9/gMJoJa3VMUl
 kQAAAABJRU5ErkJggg==</item>
-		<item item-id="101">iVBORw0KGgoAAAANSUhEUgAAA4YAAACzCAYAAADVLAKOAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="100">iVBORw0KGgoAAAANSUhEUgAAA4YAAACzCAYAAADVLAKOAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAC4ESURBVHhe7Z3BlZy8EkYdwYtgMph4
 Ogdv/70XHYDz8DksvXcOXvTGS2fgDPpVCQRCSCBAgIB7z2Gmm0aApFKpPiTgi/BmYWFhYWFh
 YWFhYWFhufXy5Q0A56R6Pt+v5vMyXu/ns2o+AwAAAMBdQRgCnJXX851F01Wyn3XqEgAAAABO
@@ -10633,7 +10612,7 @@ Pv7kykKFoYAdXohFdogwBIBtEP+MgwaALbieMFSqxzmD8lAZ35XXZDCulCsMFezw/Cy3Q4Qh
 AGyD+GccNABsgQQgTRDoLqGYxP7mEkr7EVh3RIzzqp7vZzUV0JWHltfdeT3DdWdeiu7ZVuyB
 Ial2vTXY4XmZZYcfgXWJBjfHrgEAxEfgoAEA7gD+HkoAOwQAKJH3+//EytdtBP8nQQAAAABJ
 RU5ErkJggg==</item>
-		<item item-id="102" content-encoding="gzip">H4sIAAAAAAAA/2xUS1MTQRDuyWuTQAhEQMkGeYkoIIYlKCDg8BSQBAmInqSWZIFYhMSwWFR5
+		<item item-id="101" content-encoding="gzip">H4sIAAAAAAAA/2xUS1MTQRDuyWuTQAhEQMkGeYkoIIYlKCDg8BSQBAmInqSWZIFYhMSwWFR5
 SXnyYPkDvHjxD1hledbyZln+Fu8esKd7E6Iwqc7M9Hzf149Mph4ABNoGWpDWbvz2Wy/S1l6u
 cOgFNRJogWwhwz4P+cYVLJ9Z23luZWzyQJr4Lvz2He0XZwsn7F5F09CRrgKTaHG0Nw0APzH6
 RNPZXo3fGiflApebFpFq8BnbLuV2jm1LEHICLQy1wzPR/c/eSwIeu2RZOjkMtFCRlj6j7RtA
@@ -10650,7 +10629,7 @@ N22NDlvQAuSeN22TCVGHqFj0rKrFAFoK1PumblLQPMkdLZIOP6sxtGcC+P3jcYofELHtC72r
 F3gr4ppdMjOWMe+mI90BdohGELrCNfuFRwihDk6bA8KFH92NBx3CLXQPSnXguS7gFBdeobvK
 Eo98CqNUNMLgwq8wChxADNGDiCF6HWKIXo8YoocURrEaCIOLsMIoMCcdTh3nrVIuYx5wW/yU
 /BJaFq9wjvqoXvyg09P/Rn3t5i8AAAD//wMAwq98zN0GAAA=</item>
-		<item item-id="103">iVBORw0KGgoAAAANSUhEUgAAAZwAAAKyCAYAAADhD2jiAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="102">iVBORw0KGgoAAAANSUhEUgAAAZwAAAKyCAYAAADhD2jiAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAACiESURBVHhe7d3dUSNbtoXRMuR6UPbg
 TT9gRztwIvChn9sBHGhLuEpAhRAJiIXygxJjZOw4wAH9TLT2REKFft0BQEDhAJBQOAAkFA4A
 CYUDQELhAJBQOAAkFA4ACYUDQELhAJBQOAAkFA7ABbm5+nX3+/r28b1Ht9d3v3/9uvv16/fd
@@ -10845,7 +10824,7 @@ dS8+dj4fug5HD8Gd9jucbS8/l0HhwHtuP/KXlpfCOf6dzvOHmlY37G/116KXQnq8zMvDcUel
 9CWXn4ugcOAEp7+WzFIwj/ce7tfLstn/v6dNe7fBB68n86HXw3n83dN3uvz8/RQOnOTUV8tc
 Cue13++s84qf/BQKB87q44UDP4XCgbN57wkF8LMpHAACd3f/D0fSsu/ZRlECAAAAAElFTkSu
 QmCC</item>
-		<item item-id="104" content-encoding="gzip">H4sIAAAAAAAA/2xUS1MTQRDu2d3sJktehIcmGwgBlKCIyQAqnJACzQG1Kv4AaklWEgsMhoWi
+		<item item-id="103" content-encoding="gzip">H4sIAAAAAAAA/2xUS1MTQRDu2d3sJktehIcmGwgBlKCIyQAqnJACzQG1Kv4AaklWEgsMhoWi
 ykvKH+DZi+XFi3fL8mp5woP/x1PsRwhIMane6fn26296e3oSBwCF9hLNZd/EZzR4Wwv2Wu03
 EaCxjBZrtOuCWYytEu2g/mL3dVAPGYEaxxv4tI+ahxvtU4G30RwEagPiM4pF3sckwIwN8Dd9
 sabxIylJGWCY7GQGmz8Ow05r9zgMFDPX0FJweVhr0/+tIyxghZ0g8BjQaIlDdm2d/QnQjTj6
@@ -10859,7 +10838,7 @@ S5Pn+s1OUXyBqWInaFvs08r1T1tHT1hHLnAebUcNqkujhz9Q+evR7WvQc3En7Pj1QG/KcXl9
 YkGlQXkKeR6eBHoYhZ6hPOJNxkZN5Vmok3NM16LXvV5BRZRndNcx1hZaQTnMQicqEgUVQw5u
 X1AucnqEDCGHw+PI4fAEcSgqyRx0UsQhsuScen58EHRadX9fqhLl3KtoDWzDFpeR/lrcfkmv
 jPjlxT8AAAD//wMAN7cY8EYFAAA=</item>
-		<item item-id="105">iVBORw0KGgoAAAANSUhEUgAABBsAAAJhCAYAAAAAK7hZAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="104">iVBORw0KGgoAAAANSUhEUgAABBsAAAJhCAYAAAAAK7hZAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAM4ASURBVHhe7Z3LmdzM0azpD+2hDzJC
 C9ohB/Q89EHr3wFutDweyIM5Xd3ADAYDoAuVERnZmHhL+PqGjLygKrsGIoc/3owxxhhjjDHG
 GGOA+GaDMcYYY4wxxhhjoPhmgzHGGGOMMcYYY6D4ZoMxxhhjjDHGGGOg+GaDMcYYY4wxxhhj
@@ -11838,7 +11817,7 @@ Zx/897//ffvxw9sfY4wxho2/bY0xxhhzSZY3G5Y3GLZuQhhjjDEGi282GGOMMeaSLP+6hG82
 GGOMMbn4ZoMxxhhjLkm7wdB+R8O//vWvL8+NMcYYw8XftsYYY4y5JPPvZ2jHv//97/fn//vf
 /6YzjDHGGMPCNxuMMcYYY4wxxhgDxTcbjDHGGGOMMcYYA8U3G4wxxhhjjDHGGAPFNxuMMcYY
 Y4wxxhgD5O3t/wNfLWyxnJ1o8QAAAABJRU5ErkJggg==</item>
-		<item item-id="106">iVBORw0KGgoAAAANSUhEUgAAAGMAAAA1CAYAAABV7FV/AAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="105">iVBORw0KGgoAAAANSUhEUgAAAGMAAAA1CAYAAABV7FV/AAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJbSURBVHhe7ZqLsYMgEEXth3rox3qo
 h34Ii6iLgqghcdV7ZshLJm+McNjlI50DYoAMQUCGICBDEJBxEUZ3TvU2fhqAjAuwvXJdBxli
 ICGQIQTIEARk/AzretWFcWBVtIn/kwIZgoAMQbxWBlW8lC6uINxPTGNcyONlTBUXJKMEIkMQ
@@ -11852,7 +11831,7 @@ tY3RESJXqfheWAQfhIS88qiORCBDEJDxM44/R4cMQUCGIF4rgyou6dlIuJ+YxriQx8uYKi5I
 RglERoIfiHV+p/ofQEbCThn8+E/DqIOMhH0ycNb2C7ZlbKwRCg/XRmizr1FQBCAj4cCYQamq
 pQkPZCTslZE+Y8FZ273wwbYqZJ+M1SPkRhHyisi4C5AhCMgQBGSIwbkP5DKDfgBKx6YAAAAA
 SUVORK5CYII=</item>
-		<item item-id="107">iVBORw0KGgoAAAANSUhEUgAAAHQAAAAvCAYAAAAy0+4TAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="106">iVBORw0KGgoAAAANSUhEUgAAAHQAAAAvCAYAAAAy0+4TAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAOSSURBVHhe7ZqNkeMgDIXTj+txP9RD
 Pe6HkzAEAeIvwXaW05vhZs/JYq8+PQljv4xoKQnQxSRAF5MAXUwCNNNh1PYyrxeOzajDHWal
 zW6/B2PX7tizEqCJDrW/IeodQG0KEHNC8A74oczWhH+PBGhNFtQOPmQ0FSIkx15KnDEJ0JoQ
@@ -11871,7 +11850,7 @@ UDh+/V4uLf2tZCUx+JE6PwQU/4BrHmG5IHr3FYDe8ejuv3vR+rKgOpfabGefVDzwPNReU6H6
 2ly4eTWB08VXMkqOz+ZMrgkkQAu690XrTrFA43MIUEZYyqgTr3/RulN2TuJIZqtVgCaytyq+
 9BVd5h14jlDy0jJ6DdAwf15FBOhE9W1ffqEO1wvQaUr62WUlV4Deo7S/TQdKy3x5wSZAp6lv
 +/JqCdCZci61Lnr+RWvRChKgi0mALiYBupSM+Qf4sGZyGeNbXgAAAABJRU5ErkJggg==</item>
-		<item item-id="108">iVBORw0KGgoAAAANSUhEUgAAAJgAAAA1CAYAAAC9QCIRAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="107">iVBORw0KGgoAAAANSUhEUgAAAJgAAAA1CAYAAAC9QCIRAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAARQSURBVHhe7Z3bkaMwEEX9t0lMBiSx
 SRDIZEA8/G0u5MOqhQQtoUcjIyzDPVVUjceYEdJRd/MY85oBqAgEizCNwzyMk3kFUqT6CoIF
 GPt+7kfzAoiYRtVnw14yCOYxDZCrGCVZ50kGwTjTMHewK8nYv3YScca+m/nbEGxlmgeVGqFX
@@ -11894,7 +11873,7 @@ lkiHIIKVgBQpBoKVAMHEQLASGhWMBqmlI3XdHpNCc5JBMI4STDIrr2QdzC8Nrfh2HY494doY
 LUumBaNJwaIRX/x73zz2d8OcDKtpIZiFrhs2ZliVGozSZFW76E9skxWCrbSXJs8X7Iq7Ydx6
 FoJxKLRXnt1ieEGebZNMsCvuhsGzijLgaWtvoCaFf7oHggXA8yKPg+dFHgRPvJUzDXjiLfgI
 8/wfbSw+snh0e2wAAAAASUVORK5CYII=</item>
-		<item item-id="109">iVBORw0KGgoAAAANSUhEUgAAAFgAAAAeCAYAAAColNlFAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="108">iVBORw0KGgoAAAANSUhEUgAAAFgAAAAeCAYAAAColNlFAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJzSURBVGhD7VmLkYUgDLSQ64B67Id6
 qId+uCT8MSB+T27YGWeegrhsNhF5i5l4FFPgG6HlaqR2Jw5T4FuhzCpEJvIU+G5oacSymFVZ
 lf9cYLUuZgFCh48f5lrP8eJ9Aqw8HXw3yMHiOw7+X5g1+FEMv4pQSpmC/8egiWOKYQTWUkIC
@@ -11908,7 +11887,7 @@ j3hLyblTYA7e5h51gZ8ETLSszQ3n7HGuC2yhZHvNjeOF+zH4LA8Mgg36AAJHsgEPCaxh2ef2
 ySvIy2idRzRFU2CKUCCzrWdvId+LSFOXeeneWYNLuNIUh68IDNc79yKSiOFgzDLqHeRfe220
 OV8S2AUsvFArAqdbqzsCA2iQejF/C4f2g2ucqWY69190MY0hoBzR7zSThtwPthjiHw2ZB24o
 gUfEFPhhTIEfhTG/WYnq5NAP7+8AAAAASUVORK5CYII=</item>
-		<item item-id="110">iVBORw0KGgoAAAANSUhEUgAAAFoAAAAeCAYAAACsYQl4AAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="109">iVBORw0KGgoAAAANSUhEUgAAAFoAAAAeCAYAAACsYQl4AAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJwSURBVGhD7VntsYQgDLSQ1wH12A/1
 UA/98EgA+Y7hPBVv3Jn7caK42WwCxy3mxSV4hT4BWq5Gav/F4xX6FCizCpGJ/Qp9FrQ0YlnM
 qpzaUwit1sUsltTw569xjfO5+Dlhrf06+iygo8Vcjv49vD36EvzErkMpZYoYJoRGnikeJbSW
@@ -11922,7 +11901,7 @@ kq4ONGZ4vtn2AJAM915CaIsqGBcEwe8kRMIbukJbMHhTQmtbCf68vgOYL5mfSrpP9gdCd4I7
 GflZhxPOlWyjwhi89xxNAudPEtcT2l7nnXWUEw4uON9F/uuRBIP3IaGxwmJr6gmdHuuyhI4N
 /47+HME+j97jjT3Vjx10Nc4h7Baues/IeXQnU3eC9Q/L7by1XUzzBD5OaBYm5E0IvbPgTIs5
 edOOfvElGPMPUzy1KEDb+VMAAAAASUVORK5CYII=</item>
-		<item item-id="111" content-encoding="gzip">H4sIAAAAAAAA/2xTQU8TURCet9t2d0vbpaWg7VYWQYWKYPsApUUTIMRoRE3qXbJsV6ihFpfF
+		<item item-id="110" content-encoding="gzip">H4sIAAAAAAAA/2xTQU8TURCet9t2d0vbpaWg7VYWQYWKYPsApUUTIMRoRE3qXbJsV6ihFpfF
 oKfGs/HmxYN68A+YGO/Gu38J582UWoTXvM57M9988/abTAoABO6nuJN01vHfDF41gp1W52Uc
 1FrEbTU7Pvti5KspWNt/sv0i8CPyQIPyNfxPHOzur3eO2L2J20BHow98hHsY60zkAD4j3aeR
 f3e1SjY/SgNNp0OuX3wtisLW9mEUCELWcdswuGL1yVP3OBHEojAIHHJI3Ol9OiZk4RdAN27I
@@ -11936,7 +11915,7 @@ Pd2COaaamee6c+i6yaXmqFSFWzBd5RZUJLegusAayUXWaEFp1EAlYYk1WoBbrNHSfy24ze7q
 HtAVwyAchcubIiaEcNB77OhCEwryNW+hVxdODLlcPGL4GA9x4WjdVcxOCEcnGoMweDCZwhUW
 YpDYFUnEUPoQYig9hRhKTyuMysoQBg+2wigwv9p+fNgOwpbv7bEuJr3+Pu4mNrVFQto9VXU4
 s1KDl78AAAD//wMAYOMSj18FAAA=</item>
-		<item item-id="112">iVBORw0KGgoAAAANSUhEUgAAAY4AAAF6CAYAAAAOB79zAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="111">iVBORw0KGgoAAAANSUhEUgAAAY4AAAF6CAYAAAAOB79zAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAB9cSURBVHhe7d3teas4EIZhF7IduB73
 41LOb+pxP14ULHsQA0gg0Eg897lmN07wB0iaN9hOcnsDAJCA4AAAJCE4AABJCA4AQBKCAwCQ
 hOAAACQhOAAASQgOAEASggMAkITgAAAkITgAAEkIDgBAEoIDAJCE4AAAJCE4Ftw4PMjodmM+
@@ -12087,7 +12066,7 @@ y/221x2/ePc0eR5n/PFcDo6UcUGNCA5Uzf1upbjvbNeCo/963A0dyz8NNalzvoOPPp7B01rj
 p6aMHEschuBA3fpGG/fbXF1wyOYbXOY3ug6ij6d7+u9z/FzYidd0OJbtIzhQvbi/H+GCYu47
 +L4J8jckvqL/Hsf37IhjeTUEBxoQ8xfrXHDo71rir9aF+AuAWEZw4CLmgwNAGoIDF+Cej/88
 RSWfiwewCcEBAEjwfv8PizuEYi3/PeAAAAAASUVORK5CYII=</item>
-		<item item-id="113">iVBORw0KGgoAAAANSUhEUgAAAH4AAACrCAYAAACg0CgUAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="112">iVBORw0KGgoAAAANSUhEUgAAAH4AAACrCAYAAACg0CgUAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAzfSURBVHhe7Z3Rceu4Dobzdps4HaSJ
 bSKFnA5cj9+2F/fjC4CkCFIACcnyKjLwzXgmoSAKwE+QyiHX+/UMXPJrhH/cb8/b/ZF/Cyy8
 krNfIfz95+f5c8+/BJt43CF3t+3iny784xaivwyI/71R/HOFf9ye35rqeO3r6/n19f3UYnrc
@@ -12150,7 +12129,7 @@ CLNd+LVPY+GZ/azip+9OldOEpyA0J61r/CK2YkPtvfBQFYMkb8a0xnPWPo2FZ/YT4a3rO3Ke
 8KIoBZzWchCNwAxKQrk/TYOr3EkVAG1H6m7ylSP4NBSe2w+F3zagTxQewKA0ZylInGZZoLmt
 3EIJy1PxkhzoczQ9H/dnHGPm68gn6Zpon2YTahMG15ZqR84VHsB1WtAn2AIMlK1/pZwuPIJV
 GOLv47FDdORXCI887rfn7b49AM88bvtz9muED/5Lns//A/P1Npi5DCSkAAAAAElFTkSuQmCC</item>
-		<item item-id="114">iVBORw0KGgoAAAANSUhEUgAAAIYAAACrCAYAAACjS+R5AAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="113">iVBORw0KGgoAAAANSUhEUgAAAIYAAACrCAYAAACjS+R5AAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAA2ESURBVHhe7ZzRleMqDIbn7TaxHUwT
 28QUsh2knrxtL+knF4EwAiQsbGed8fzfOTknQwSWpR/ZCYw/ngAovJUwHvfb83Z/8F9gL3vi
 +TbCuH99Pb/u/Ac4jMc9xPU2L463EMbjBlG8lCCOz0lxnC+Mx+356VEF2X18PD8+Pp/WOT5u
@@ -12217,7 +12196,7 @@ nojT0Yq99xhLkLW+IQnWYBUjAQkmfE2QTS0M++ay8XVFGN77C+JcYShB8EFlk0+ySnSPKozq
 YuH2tmL5v/p5hRFY89Xwky47S3t81UmvfU3VKNop4pupFsT5wgjQNX+LNoATqiwzqgi8hTAI
 Uj/EcTyPDaIg3kYYxIP+X/M+fxJA50GPUNgYz7cSBngXns//ARpMBwmT5hsiAAAAAElFTkSu
 QmCC</item>
-		<item item-id="115">iVBORw0KGgoAAAANSUhEUgAAANUAAACBCAYAAABXX/9iAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="114">iVBORw0KGgoAAAANSUhEUgAAANUAAACBCAYAAABXX/9iAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAArbSURBVHhe7Z0NkoMgDEb3Pj1P79Pz
 eB7v000QMCAiKG2JfG/GmdZVal2eCT/avzdIML+nabav65inifYGIwOpEkyv1wUx5vfrNdnX
 YEQgVcz8el92YqIyEK6GBVJFzK/n+3KcITGfsGpYIFUApW7PK6mf41w50/Pv/YCM6oFUEoow
@@ -12271,7 +12250,7 @@ te2yfLyysPxdV8hjqXDrB+iM3tsjR1LR33toF34QSKURTp86rZg+Jabj821OkU7jdnrQLVof
 OQCNDCiVHUdxg74XIwt3G8vB2Pg9GI/BpOJUbR1HWQSL20Fim3hJhCBIBWLGjVTmdWrEvw5I
 BWIg1UaqukiFNhWIgVQXI1VQBneto/dveIaT6mhu2ikwTgUEA0YqAD4LpAKgMZAKgMZAKgCa
 8n7/A8B2KdQATy6fAAAAAElFTkSuQmCC</item>
-		<item item-id="116">iVBORw0KGgoAAAANSUhEUgAAAGMAAACdCAYAAACgo8b8AAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="115">iVBORw0KGgoAAAANSUhEUgAAAGMAAACdCAYAAACgo8b8AAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAbQSURBVHhe7Z3RtaMgEEDzt028DtLE
 NpFCXgfW49/2Yj8uA4yOgEYRZIC553g2ZpOIc5nBKC++ZoENVcqYxmEexsmu1cVR26uTMX4+
 82e0K5UyjWofBl9IVTKmoX4RC0rI2xFSj4xpmN9fTYzz5/WaX7AUsDYN70vbHT/vmfqoRMY0
@@ -12306,7 +12285,7 @@ d4gcG2TdW52JbLymeKo22bZWIMME9HTAvABjNriPAXe9AGRMrEKGDvBZG0EZuM5PBv0xyTpk
 XClVWgYJMNRy788C9IqitAy1fbLxSmQoIJ3PRM3KWAZTMn2T2xRP9ydW65GhgOPxrz68MsUU
 1bncQ/aqZABwY8dDIRXImAIigOpkAJP6DjGo7wo+ZgwoWXq+AbdsDbe9UhltMs//Aa7XumL8
 KagbAAAAAElFTkSuQmCC</item>
-		<item item-id="117">iVBORw0KGgoAAAANSUhEUgAAAPUAAACBCAYAAAAYAvyyAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="116">iVBORw0KGgoAAAANSUhEUgAAAPUAAACBCAYAAAAYAvyyAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAyZSURBVHhe7Z3btaM4EEXv3yTRGdwk
 JgkH0hk4Hv4mF+fjqdIDSkKABAhK6Oy16GXftjGW2apSicfPF3TM5zsMH/e4jM8w0LuBRiB1
 xwzv9wExP9/3e3CPgSYgda983t/DTg60DoRrdUDqTvm8X9/DcZY6hhesVgek7hJKnV9HUm/P
@@ -12368,7 +12347,7 @@ uwOaBDfIW4A6vKVpP0gN1INb2YbgVrbgEeCm85bPGzedB2cyTofdNH0DsoDUIBNZ4R1mBzwA
 PUBqkAfPc4uBbc1rboFjQOrH4uZR/UEnByMrT9vIg0Hi50APkPqRcKo8zaNaweNxsHhNvCRC
 MKRuB0j9WM494glStwOkfixbUpdFaoyp2wFSP5ZzI3WwDp7aQvVbLZD6oVQ5Nhnz1E0AqQF4
 GJAagIcBqQF4GJAagEfx/f4Pzjua7eN35m0AAAAASUVORK5CYII=</item>
-		<item item-id="118" content-encoding="gzip">H4sIAAAAAAAA/+xWzXIbRRDulVa/sS3/O7ESy04U24BlpNHKkvyTrGRJNmADZeCWKpcsrWJR
+		<item item-id="117" content-encoding="gzip">H4sIAAAAAAAA/+xWzXIbRRDulVa/sS3/O7ESy04U24BlpNHKkvyTrGRJNmADZeCWKpcsrWJR
 tmXkDWXCxcUD8AIUxYULd4ozFDcOFC/BI3ACyvmmeyU7KVfuVDGq2e75+puent6dHg0QkYH+
 EXqUdT+eYeezPedpu3MSIN0s9Eiz0xDMZKyoaceNDw4+dRouI7TH8314Bs8OT8udc4F30EMA
 9vrEXfRh9D/GiP7CEt9MXI11exiToHzk87My2l+85Lrd9sEz1zGYuYoeo+vNXL3/0jjADky3
@@ -12389,7 +12368,7 @@ p9366eF+q9M9rrshNk7oasiwrpNSPae9Ksq10e/dHD+gZ/oFNFo/b5/V2I/8fbiLvt+7ZaRd
 4oeL6GZ05wa05zzkdusNR1X8bIp7xIQxTEbcAC+OrUHDLGg+1mg6Yo77jbgJR9Mhf9TU6OVl
 wggYcd+FjclBI+5nLyFmQQmLj4QRAQfrJ4woOJcauQUOTx8Ah6cPao6eNcQcKDHN0WQJOvb+
 s2On227UjyQtYQ4e7wEHoY2fXlz/s4l6OX2lDVwfvAAAAP//AwCiaK2LxQkAAA==</item>
-		<item item-id="119">iVBORw0KGgoAAAANSUhEUgAABeUAAAHLCAYAAABGT/OmAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="118">iVBORw0KGgoAAAANSUhEUgAABeUAAAHLCAYAAABGT/OmAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAJVsSURBVHhe7b3Nmes8k2V7DCkP0pYe
 piE9r0Ha0Q7U8+TsGlDjnvYgHehhW6ErMAkl+AOKAIJERGAtFM8nUiS4Y4MKBvGqlP8eAAAA
 AAAAAAAAAABwC0zKAwAAAAAAAAAAAADcBJPyAAAAAAAAAAAAAAA3waQ8AAAAAAAAAAAAAMBN
@@ -13100,7 +13079,7 @@ AAAAgBq+v1/fcz9F6f5/JJP0f79t8/h4rsdVAAAAAIArYFIeAAAAAABU8PP9/fgu+KJ66f5b
 w6Q8AAAAAAAMSpiEn39XflqYkAcAAACA62FSHgAAAAAABmX78zUAAAAAAFfDpDwAAAAAAAwK
 k/IAAAAAcD9MygMAAAAAwID8PL4+5p+t+fh6rgEAAAAA3AOT8gAAAAAAAAAAAAAAt/B4/P+s
 DvnsiW6W5wAAAABJRU5ErkJggg==</item>
-		<item item-id="120" content-encoding="gzip">H4sIAAAAAAAA/2xVW08TQRQ+s71sW6jIRQG3WgEVRdEyoCIoHipKUQQpqHhJSGkXrRHBshrj
+		<item item-id="119" content-encoding="gzip">H4sIAAAAAAAA/2xVW08TQRQ+s71sW6jIRQG3WgEVRdEyoCIoHipKUQQpqHhJSGkXrRHBshrj
 U+MP8M1nY+JPMD5rfDPGN9/9Ez5pgmfOmRaIDpmdM99+5/Kdzg6NAKBoztNMsB2iZ8x/mvcf
 lNeeRMCMIZrx0lpRsDBj5wxttTi7/MgvBoxAnv0dekY3Hq5n114IPE3TJSBfJ16nWXUBfu4F
 eBcH+NG+tTfjV0SKcsAJsdFSTz4eBJXy8rPAV8wcodkE20d4pHvHPsIBwkHF9z0GNM3kOptR
@@ -13118,7 +13097,7 @@ s/tsh0O1h7nQ6N4Cj22zSxRelDeucBy5nek7hiVluTI26Q9U6v/o9H/QWnA3qBSKvp7g/DYp
 QFrtBuUp4nn0+ykDb6biqs1RniF6IRVSXpgCpVWYeLBJRkR5ThXJNSqktHKZQ0bMcAw5ThzK
 nlYJ4rB7A3HYvZE47J40HOO1izlkNBmOIUvJTTPPVv1KuVh4LE2JcenmxJTooJe5i+bfRqLW
 1p2jccfuLwAAAP//AwCtrnFNIwcAAA==</item>
-		<item item-id="121">iVBORw0KGgoAAAANSUhEUgAAAiEAAAD1CAYAAACGJyWXAAAAAXNSR0IArs4c6QAAAARnQU1B
+		<item item-id="120">iVBORw0KGgoAAAANSUhEUgAAAiEAAAD1CAYAAACGJyWXAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAk6SURBVHhe7d0BdppKAIZR98N62A/r
 YT3uhzIICaLGBFt/Jr33nXmvamLyPNPydRjMaQAACBAhAECECAEAIkQIABAhQgCACBECAESI
 EAAgoroIOZ1OhmEYhmFUMr5SZYQAAMcnQgCACBECAESIEAAgQoQAABEiBACIECEAQIQIAQAi
