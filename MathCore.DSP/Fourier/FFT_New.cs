@@ -80,7 +80,7 @@ public static class fft
         result = FFT(result);//, n);
 
         for (var i = 0; i < N; i++)
-            result[i] = result[i].ComplexConjugate; // / N;
+            result[i] = result[i].ComplexConjugate * N; // / N;
         return result;
     }
 

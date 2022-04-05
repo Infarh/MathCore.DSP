@@ -54,6 +54,7 @@ public class EllipticBandStop : UnitTest
         f0.AssertEquals(0.10790165633348836);
         w0.AssertEquals(0.67796610169491522);
 
+        // Преобразуем частоты аналогового фильтра в частоты цифрового фильтра с учётом заданной частоты дискретизации
         var Fpl = DigitalFilter.ToAnalogFrequency(fpl, dt);
         var Fsl = DigitalFilter.ToAnalogFrequency(fsl, dt);
         var Fsh = DigitalFilter.ToAnalogFrequency(fsh, dt);
@@ -72,11 +73,18 @@ public class EllipticBandStop : UnitTest
         var Wc = Wsl * Wsh;
         var dW = Wsh - Wsl;
 
+        // Выбор опорной частоты
+        // Если   Wc / Wph > Wpl
+        // то есть      Wc > Wpl*Wph
+        // то есть Wsl*Wsh > Wpl*Wph
+        // то есть центральная частота по границам подавления > центральной частоты по границам пропускания
+        // то выбираем в качестве опорной частоты выбираем верхнюю границу пропускания
+        // иначе, выбираем нижнюю границу пропускания
         var Wp = Wc / Wph > Wpl
             ? Wph
             : Wpl;
-        var W0 = Abs(dW * Wp / (Wc - Wp.Pow2()));
-        const double W1 = 1;
+        var W0 = Abs(dW * Wp / (Wc - Wp.Pow2()));   // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
+        const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
         var F0 = W0 / Consts.pi2;
         const double F1 = 1 / Consts.pi2;
 
@@ -100,13 +108,13 @@ public class EllipticBandStop : UnitTest
         var T_eps = FullEllipticIntegralComplimentary(k_eps);
 
         var double_N = T_eps * Kw / (K_eps * Tw);
-        var N = (int)Ceiling(double_N);
+        var N = (int)Ceiling(double_N);             // порядок фильтра
 
         double_N.AssertEquals(3.7906792606389264);
         N.AssertEquals(4);
 
-        var L = N / 2;
-        var r = N % 2;
+        var L = N / 2;  // число парных полюсов
+        var r = N % 2;  // 1, или 0 - число непарных полюсов
 
         var u = Enumerable.Range(1, L).ToArray(i => (2 * i - 1d) / N);
         var m = (1 - k_eps * k_eps).Sqrt();
@@ -398,7 +406,7 @@ public class EllipticBandStop : UnitTest
 
         const double Rp = 1;    // Неоднородность АЧХ в интервале пропускания не более 1 дБ
         const double Rs = 40;   // Уровень подавления более 40 дБ
-
+        
         var Gp = (-Rp).From_dB();   // Значения АЧХ в интервале пропускания
         var Gs = (-Rs).From_dB();   // Значения АЧХ в интервале подавления
 
@@ -410,95 +418,127 @@ public class EllipticBandStop : UnitTest
         var filter = new DSP.Filters.EllipticBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs);
 
         const double total_time = 1 / fpl;
-        const int samples_count = (int)(total_time * fd) + 1;
+        //const int samples_count = (int)(total_time * fd) + 1;
 
+        // Метод формирования гармонического сигнала на заданной частоте
         static EnumerableSignal GetSinSignal(double f0) => MathEnumerableSignal.Sin(dt, f0, (int)(100 * fd / (fpl * 0.1)));
 
-        var x_low     = GetSinSignal(fpl * 0.1);
-        var x_pl99    = GetSinSignal(fpl * 0.99);
-        var x_pl      = GetSinSignal(fpl);
-        var x_pl_sl   = GetSinSignal(fpl + (fsl - fpl) * 0.1);
-        var x_sl_pl   = GetSinSignal(fsl - (fsl - fpl) * 0.1);
-        var x_sl      = GetSinSignal(fsl);
-        var x_sl_sh   = GetSinSignal(fsl + (fsh - fsl) * 0.1);
-        var x_c0      = GetSinSignal((fsl * fsh).Sqrt());
-        var x_sh_sl   = GetSinSignal(fsh - (fsh - fsl) * 0.1);
-        var x_sh      = GetSinSignal(fsh);
-        var x_sh_ph   = GetSinSignal(fsh + (fph - fsh) * 0.1);
-        var x_ph_sh   = GetSinSignal(fph - (fph - fsh) * 0.1);
-        var x_ph      = GetSinSignal(fph);
-        var x_ph_fd05 = GetSinSignal(fph + (fd / 2 - fph) * 0.1);
-        var x_fd05    = GetSinSignal(0.9 * (fd / 2));
+        var x_low     = GetSinSignal(fpl * 0.1);                    // частота, близкая к нулю
+        var x_pl99    = GetSinSignal(fpl * 0.99);                   // частота чуть ниже нижней границы пропускания
+        var x_pl      = GetSinSignal(fpl);                          // частота на нижней границе пропускания
 
+        var x_pl_sl   = GetSinSignal(fpl + (fsl - fpl) * 0.1);      // частота выше нижней границы пропускания
+        var x_sl_pl   = GetSinSignal(fsl - (fsl - fpl) * 0.1);      // частота ниже нижней границы подавления
+
+        var x_sl      = GetSinSignal(fsl);                          // частота на границе подавления
+        var x_sl_sh   = GetSinSignal(fsl + (fsh - fsl) * 0.1);      // частота выше нижней границы подавления
+        var x_c0      = GetSinSignal((fsl * fsh).Sqrt());           // частота в середине полосы подавления
+        var x_sh_sl   = GetSinSignal(fsh - (fsh - fsl) * 0.1);      // частота ниже верхней границы подавления
+        var x_sh      = GetSinSignal(fsh);                          // частота на границе подавления
+
+        var x_sh_ph   = GetSinSignal(fsh + (fph - fsh) * 0.1);      // частота выше верхней границы подавления
+        var x_ph_sh   = GetSinSignal(fph - (fph - fsh) * 0.1);      // частота ниже верхней границы пропускания
+
+        var x_ph      = GetSinSignal(fph);                          // частота на верхней границе пропускания
+        var x_ph_fd05 = GetSinSignal(fph + (fd / 2 - fph) * 0.1);   // частота выше верхней границы пропускания
+        var x_fd05    = GetSinSignal(0.9 * (fd / 2));               // частота ниже половины частоты дискретизации
+
+        // Индивидуальная фильтрация каждой частотной составляющей
         var y_low = filter.ProcessIndividual(x_low);
         var y_pl99 = filter.ProcessIndividual(x_pl99);
         var y_pl = filter.ProcessIndividual(x_pl);
+
         var y_pl_sl = filter.ProcessIndividual(x_pl_sl);
         var y_sl_pl = filter.ProcessIndividual(x_sl_pl);
+        
         var y_sl = filter.ProcessIndividual(x_sl);
         var y_sl_sh = filter.ProcessIndividual(x_sl_sh);
         var y_c0 = filter.ProcessIndividual(x_c0);
         var y_sh_sl = filter.ProcessIndividual(x_sh_sl);
         var y_sh = filter.ProcessIndividual(x_sh);
+        
         var y_sh_ph = filter.ProcessIndividual(x_sh_ph);
         var y_ph_sh = filter.ProcessIndividual(x_ph_sh);
+        
         var y_ph = filter.ProcessIndividual(x_ph);
         var y_ph_fd05 = filter.ProcessIndividual(x_ph_fd05);
         var y_fd05 = filter.ProcessIndividual(x_fd05);
 
+        // Рассчёт коэффициентов передачи по мощности
         var k_low = y_low.Power / x_low.Power;
         var k_pl99 = y_pl99.Power / x_pl99.Power;
         var k_pl = y_pl.Power / x_pl.Power;
+        
         var k_pl_sl = y_pl_sl.Power / x_pl_sl.Power;
         var k_sl_pl = y_sl_pl.Power / x_sl_pl.Power;
+        
         var k_sl = y_sl.Power / x_sl.Power;
         var k_sl_sh = y_sl_sh.Power / x_sl_sh.Power;
         var k_c0 = y_c0.Power / x_c0.Power;
         var k_sh_sl = y_sh_sl.Power / x_sh_sl.Power;
         var k_sh = y_sh.Power / x_sh.Power;
+        
         var k_sh_ph = y_sh_ph.Power / x_sh_ph.Power;
         var k_ph_sh = y_ph_sh.Power / x_ph_sh.Power;
+        
         var k_ph = y_ph.Power / x_ph.Power;
         var k_ph_fd05 = y_ph_fd05.Power / x_ph_fd05.Power;
         var k_fd05 = y_fd05.Power / x_fd05.Power;
 
+        // Рассчёт коэффициентов передачи по мощности в логарифмическим масштабе
         var k_low_db = k_low.In_dB_byPower();
         var k_pl99_db = k_pl99.In_dB_byPower();
         var k_pl_db = k_pl.In_dB_byPower();
+        
         var k_pl_sl_db = k_pl_sl.In_dB_byPower();
         var k_sl_pl_db = k_sl_pl.In_dB_byPower();
+       
         var k_sl_db = k_sl.In_dB_byPower();
         var k_sl_sh_db = k_sl_sh.In_dB_byPower();
         var k_c0_db = k_c0.In_dB_byPower();
         var k_sh_sl_db = k_sh_sl.In_dB_byPower();
         var k_sh_db = k_sh.In_dB_byPower();
+        
         var k_sh_ph_db = k_sh_ph.In_dB_byPower();
         var k_ph_sh_db = k_ph_sh.In_dB_byPower();
+       
         var k_ph_db = k_ph.In_dB_byPower();
         var k_ph_fd05_db = k_ph_fd05.In_dB_byPower();
         var k_fd05_db = k_fd05.In_dB_byPower();
 
-        k_low_db.AssertGreaterOrEqualsThan(-Rp);
-        k_pl99_db.AssertGreaterOrEqualsThan(-Rp);
-        k_pl_db.AssertGreaterOrEqualsThan(-Rp);
+        // Сравнение коэффициентов передачи с заданными параметрами фильтрации
+        k_low_db.AssertGreaterOrEqualsThan(-Rp);        // Коэффициенты передачи в нижней полосе пропускания
+        k_pl99_db.AssertGreaterOrEqualsThan(-Rp);       // должны быть меньше, чем заданный уровень
+        k_pl_db.AssertGreaterOrEqualsThan(-Rp);         // неравномерности АЧХ (допуск) Rp - не более -1дБ
 
-        k_pl_sl_db.AssertGreaterOrEqualsThan(-Rs);
-        k_sl_pl_db.AssertLessOrEqualsThan(-Rp);
+        // Коэффициенты передачи в переходной полосе
+        // между полосой пропускания и полосой заграждения
+        k_pl_sl_db.AssertGreaterOrEqualsThan(-Rs);      // Коэффициент передачи у нижнего края переходной полосы не должен быть ниже уровня подавления Rs (-40дБ), но может быть всё ещё порядка уровня пропускания Rp (-1дБ)
+        k_sl_pl_db.AssertLessOrEqualsThan(-Rp);         // Коэффициент передачи у верхнего края переходной полосы должен быть гарантировано меньше коэффициента пропускания Rp (-1дБ) и должен приближаться к уровню Rs (-40дБ)
 
-        k_sl_db.AssertLessOrEqualsThan(-Rs);
-        k_sl_sh_db.AssertLessOrEqualsThan(-Rs);
-        k_c0_db.AssertLessOrEqualsThan(-Rs, 1.5);
-        k_sh_sl_db.AssertLessOrEqualsThan(-Rs, 1.5);
-        k_sh_db.AssertLessOrEqualsThan(-Rs);
+        // Коэффициенты передачи в полосе заграждения
+        // должны бытьниже уровня подавления Rs
+        k_sl_db.AssertLessOrEqualsThan(-Rs);            // Коэффициент передачи на нижней границе полосы заграждения должен быть не больше Rs (-40дБ и ниже)
+        k_sl_sh_db.AssertLessOrEqualsThan(-Rs);         // Коэффициент передачи у нижнего края полосы заграждения должен быть меньше Rs
+        k_c0_db.AssertLessOrEqualsThan(-Rs, 1.5);       // Коэффициент передачи на центральной частоте полосы заграждения
+        k_sh_sl_db.AssertLessOrEqualsThan(-Rs, 1.5);    // Коэффициент передачи у верхнего края полосы подавления
+        k_sh_db.AssertLessOrEqualsThan(-Rs);            // Коэффициент передачи на верхней границе полосы подавления
 
+        // Коэффициенты передачи в переходной полосе
+        // между верхней полосой заграждения и верхней
+        // полосой пропускания
         k_sh_ph_db.AssertLessThan(-Rp);
         k_ph_sh_db.AssertGreaterOrEqualsThan(-Rs);
         k_ph_sh_db.AssertLessOrEqualsThan(-Rp);
 
+        // Коэффициенты передачи в верхней полосе пропускания
+        // от верхней границы полосы пропускания до частоты,
+        // близкой к половине частоты дискретизации
         k_ph_db.AssertGreaterOrEqualsThan(-Rp, 0.01);
         k_ph_fd05_db.AssertGreaterOrEqualsThan(-Rp);
         k_fd05_db.AssertGreaterOrEqualsThan(-Rp);
 
+        // Суммарный сигнал
         var x = 
             x_low + 
             x_pl99 +
@@ -516,22 +556,15 @@ public class EllipticBandStop : UnitTest
             x_ph_fd05 +
             x_fd05;
 
+        // Фильтрация суммарного гармонического сигнала
         var y = filter.ProcessIndividual(x);
 
-        var X = x.GetSpectrum();
-        var Y = y.GetSpectrum();
+        var X = x.GetSpectrum();    // Спектр входного сигнала фильтра
+        var Y = y.GetSpectrum();    // Спектр выходного сигнала фильтра
 
-        var H = Y / X;
+        var H = Y / X;              // Коэффициент передачи фильтра как отношение спектров на выходе и на входе
 
-        //var h_fpl099 = H.GetValue(fpl * 0.99).Power.In_dB_byPower();
-        //var h_fpl = H.GetValue(fpl).Power.In_dB_byPower();
-
-        //var h_fsl = H.GetValue(fsl).Power.In_dB_byPower();
-        //var h_c0 = H.GetValue((fsl * fsh).Sqrt()).Power.In_dB_byPower();
-        //var h_fsh = H.GetValue(fsh).Power.In_dB_byPower();
-
-        //var h_fph = H.GetValue(fpl).Power.In_dB_byPower();
-
+        // Извлекаем из спетра коэффициенты передачи на частотах гармонических составляющих исходного сигнала
         var h_low     = H.GetValue(fpl * 0.1).Power.In_dB_byPower();
         var h_pl99    = H.GetValue(fpl * 0.99).Power.In_dB_byPower();
         var h_pl      = H.GetValue(fpl).Power.In_dB_byPower();
@@ -552,6 +585,7 @@ public class EllipticBandStop : UnitTest
         var h_ph_fd05 = H.GetValue(fph + (fd / 2 - fph) * 0.1).Power.In_dB_byPower();
         var h_fd05    = H.GetValue(0.9 * (fd / 2)).Power.In_dB_byPower();
 
+        // Тест фактических коэффициентов передачи
         h_low.AssertGreaterOrEqualsThan(-Rp);
         h_pl99.AssertGreaterOrEqualsThan(-Rp);
         h_pl.AssertGreaterOrEqualsThan(-Rp);
