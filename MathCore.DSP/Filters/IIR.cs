@@ -3,6 +3,7 @@
 using static System.Array;
 
 using static MathCore.Polynom.Array;
+// ReSharper disable ArgumentsStyleOther
 
 namespace MathCore.DSP.Filters;
 
@@ -63,7 +64,9 @@ public class IIR : DigitalFilter
             ? throw new ArgumentNullException(nameof(filter))
             : new IIR(
                 B: Multiply(
-                    Sum(Multiply(_B, filter._A), Multiply(filter._B, _A)),
+                    Sum(
+                        Multiply(_B, filter._A), 
+                        Multiply(filter._B, _A)), 
                     0.5),
                 A: Multiply(_A, filter._A));
 }

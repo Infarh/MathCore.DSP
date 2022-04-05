@@ -13,7 +13,7 @@ namespace MathCore.DSP.Filters;
 //[KnownType(typeof(EllipticBandPass))]
 public abstract class EllipticFilter : AnalogBasedFilter
 {
-    protected static (Complex[] Zeros, Complex[] Poles) GetNormedZeros(int N, double EpsP, double EpsS)
+    protected static (Complex[] Zeros, Complex[] Poles) GetNormedZeros(int N, double EpsP, double EpsS, double W0 = 1)
     {
         var k_eps = EpsP / EpsS;
 
@@ -32,18 +32,20 @@ public abstract class EllipticFilter : AnalogBasedFilter
             var poles = new Complex[N];     // Массив полюсов
 
             // Если фильтр нечётный, то первым полюсом будет действительный полюс
-            if (r != 0) poles[0] = Complex.i * sn_uk(v0_complex, k_w);
+            if (r != 0) poles[0] = Complex.ImValue(W0) * sn_uk(v0_complex, k_w);
             for (var i = 0; i < L; i++)
             {
                 // Меняем местами действительную и мнимую часть вместо домножения на комплексную единицу
                 var (p_im, p_re) = cd_uk(u[i] - v0_complex, k_w);
 
-                poles[r + 2 * i] = (-p_re, p_im);
-                poles[r + 2 * i + 1] = poles[r + 2 * i].ComplexConjugate;
+                var p = new Complex(-p_re * W0, p_im * W0);
+                poles[r + 2 * i] = p;
+                poles[r + 2 * i + 1] = p.ComplexConjugate;
 
                 var p0_im = 1 / (k_w * cd_uk(u[i], k_w));
-                zeros[2 * i] = (0, p0_im);
-                zeros[2 * i + 1] = zeros[2 * i].ComplexConjugate;
+                var p0 = new Complex(0, p0_im * W0);
+                zeros[2 * i] = p0;
+                zeros[2 * i + 1] = p0.ComplexConjugate;
             }
 
         return (zeros, poles);

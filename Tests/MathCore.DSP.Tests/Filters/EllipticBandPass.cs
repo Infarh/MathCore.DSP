@@ -2,7 +2,6 @@
 using System.Linq;
 
 using MathCore.DSP.Filters;
-using MathCore.DSP.Tests.Service;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting.Extensions;

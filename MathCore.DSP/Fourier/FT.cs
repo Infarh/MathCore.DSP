@@ -1,4 +1,5 @@
 ﻿using MathCore.Annotations;
+using MathCore.DSP.Signals;
 
 using static MathCore.Complex;
 using static MathCore.Consts;
@@ -34,14 +35,13 @@ public static class FT
 
     /* -------------------------------------------------------------------------------------------- */
 
-    public static Complex[] FourierTransform(this IEnumerable<double> Values, bool IsInverse = false)
-        => Values.ToArray().FourierTransform(IsInverse);
-
+    public static Complex[] GetFourierTransform(this IEnumerable<double> Values, bool IsInverse = false)
+        => Values.ToArray().GetFourierTransform(IsInverse);
 
     /// <summary>Прямое преобразование отсчётов функции в спектр</summary>
     /// <param name="Values">Массив отсчётов функции</param>
     /// <param name="IsInverse">Обратное преобразование</param>
-    public static Complex[] FourierTransform(this double[] Values, bool IsInverse = false)
+    public static Complex[] GetFourierTransform(this double[] Values, bool IsInverse = false)
     {
         if (Values is null) throw new ArgumentNullException(nameof(Values));
 
@@ -71,7 +71,7 @@ public static class FT
     /// <param name="Values">Массив отсчётов функции</param>
     /// <param name="IsInverse">Обратное преобразование</param>
     /// <param name="progress">Метод информирования о прогрессе операции</param>
-    public static Complex[] FourierTransform(this double[] Values, bool IsInverse, [CanBeNull] Action<double> progress)
+    public static Complex[] GetFourierTransform(this double[] Values, bool IsInverse, Action<double>? progress)
     {
         if (Values is null) throw new ArgumentNullException(nameof(Values));
 
@@ -102,7 +102,7 @@ public static class FT
     /// <summary>Прямое преобразование отсчётов функции в спектр</summary>
     /// <param name="Values">Массив отсчётов функции</param>
     /// <param name="Inverse">Обратное преобразование</param>
-    public static Complex[] FourierTransform(this Complex[] Values, bool Inverse = false)
+    public static Complex[] GetFourierTransform(this Complex[] Values, bool Inverse = false)
     {
         if (Values is null) throw new ArgumentNullException(nameof(Values));
 
@@ -131,7 +131,7 @@ public static class FT
     /// <param name="Values">Массив отсчётов функции</param>
     /// <param name="Inverse">Обратное преобразование</param>
     /// <param name="progress">Метод индикации прогресса выполнения</param>
-    public static Complex[] FourierTransform(this Complex[] Values, bool Inverse, [CanBeNull] Action<double> progress)
+    public static Complex[] GetFourierTransform(this Complex[] Values, bool Inverse, [CanBeNull] Action<double> progress)
     {
         if (Values is null) throw new ArgumentNullException(nameof(Values));
 

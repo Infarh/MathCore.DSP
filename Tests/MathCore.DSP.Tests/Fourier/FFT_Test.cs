@@ -62,7 +62,7 @@ public sealed class FFT_Test
         const int samples_count = 16;
         var signal = f.Sampling(0, dt, samples_count).ToArray();
 
-        var spectrum = signal.FourierTransform();
+        var spectrum = signal.GetFourierTransform();
         Clear(spectrum);
         var spectrum_abs = spectrum.ToAbs() ?? throw new AssertInconclusiveException();
         var spectrum_arg = spectrum.ToArgDeg() ?? throw new AssertInconclusiveException();

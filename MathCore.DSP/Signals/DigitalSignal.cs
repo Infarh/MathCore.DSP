@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 
+using MathCore.DSP.Fourier;
 using MathCore.DSP.Signals.Operations;
 // ReSharper disable UnusedMember.Global
 // ReSharper disable VirtualMemberNeverOverridden.Global
@@ -98,6 +99,12 @@ public abstract class DigitalSignal : IEnumerable<double>, ICollection
     /// <summary>Получить отсчёты сигнала в виде массива</summary>
     /// <returns>Массив отсчётов сигнала</returns>
     public virtual double[] GetSamples() => this.ToArray();
+
+    public virtual DigitalSpectrum GetSpectrum()
+    {
+        var spectrum_samples = this.ToArray().FastFourierTransform();
+        return new(1 / _dt, spectrum_samples, t0);
+    }
 
     /// <summary>Копирование отсчётов сигнала в массив</summary>
     /// <param name="Destination">Массив места назначения</param>

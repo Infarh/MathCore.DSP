@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 
 using static System.Math;
+// ReSharper disable InconsistentNaming
 
 namespace MathCore.DSP.Filters;
 
@@ -13,7 +14,6 @@ public abstract class ChebyshevFilter : AnalogBasedFilter
     protected static double arcch(double x) => Log(x + Sqrt(x * x - 1));
 
     /// <summary>Типы фильтров Чебышева</summary>
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public enum ChebyshevType : byte
     {
         /// <summary>Фильтр Чебышева первого рода - основной фильтр, пропускающий нижнюю полосу частот</summary>

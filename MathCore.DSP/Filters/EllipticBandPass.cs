@@ -61,19 +61,12 @@ public class EllipticBandPass : EllipticFilter
         double fsh,
         double Gp = 0.891250938,
         double Gs = 0.031622777)
-        : this(fsl, fpl, fph, fsh, GetSpecification(dt, fsl, fpl, fph, fsh, Gp, Gs))
+        : this(fpl, fph, GetSpecification(dt, fsl, fpl, fph, fsh, Gp, Gs))
     {
 
     }
 
-    private EllipticBandPass(
-        double fsl,
-        double fpl,
-        double fph,
-        double fsh,
-        Specification Spec)
-        : this(Initialize(fpl, fph, Spec), Spec)
-    { }
+    private EllipticBandPass(double fpl, double fph, Specification Spec) : this(Initialize(fpl, fph, Spec), Spec) { }
 
     private EllipticBandPass((double[] A, double[] B) Polynoms, Specification Spec) : this(Polynoms.B, Polynoms.A, Spec) { }
 
