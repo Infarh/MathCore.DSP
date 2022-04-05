@@ -216,7 +216,7 @@ public class BandPassRLCTests : UnitTest
         var s3 = new SamplesDigitalSignal(dt, samples_count, t => 1 * Cos(2 * PI * (f0 + Df / 2) * t));
 
         var s = s0 + s1 + s2 + s3;
-        s.FourierTransform().ToAbsArg(out var abs_S, out var arg_S);
+        s.GetFourierTransform().ToAbsArg(out var abs_S, out var arg_S);
         var abs_S_25 = abs_S[25];
         var abs_S_30 = abs_S[30];
         var abs_S_35 = abs_S[35];
@@ -226,7 +226,7 @@ public class BandPassRLCTests : UnitTest
         var arg_S_35 = arg_S[35];
 
         var y = rlc.ProcessIndividual(s);
-        y.FourierTransform().ToAbsArg(out var abs_Y, out var arg_Y);
+        y.GetFourierTransform().ToAbsArg(out var abs_Y, out var arg_Y);
         Assert.That.Value(abs_Y[0]).IsEqual(0, 1.68e-3);
         var abs_Y_25 = abs_Y[25];
         var abs_Y_30 = abs_Y[30];

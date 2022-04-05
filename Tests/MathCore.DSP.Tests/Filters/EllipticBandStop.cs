@@ -2,6 +2,8 @@
 using System.Linq;
 
 using MathCore.DSP.Filters;
+using MathCore.DSP.Fourier;
+using MathCore.DSP.Signals;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting.Extensions;
@@ -169,7 +171,7 @@ public class EllipticBandStop : UnitTest
             (-4.758917038943161E-16, -9.9922372164459166),
             (+4.758917038943161E-16, +9.9922372164459166),
             (-4.758917038943161E-16, -5.551565428550191)
-            ); 
+            );
 
         pzf_poles.AssertEquals(
             (-0.22795541315219781, +2.9727034750401131),
@@ -346,106 +348,23 @@ public class EllipticBandStop : UnitTest
     {
         double[] expected_h =
         {
-            +0.183172689114915,
-            -0.381198732755215,
-            +0.453076019965961,
-            -0.062912057693868,
-            -0.148022513286273,
-            +0.18172091735402,
-            +0.159684282091557,
-            -0.008939212573129,
-            +0.013823995278017,
-            +0.135554059168909,
-            +0.148284929774527,
-            +0.056004332116796,
-            +0.025548260646322,
-            +0.094885335574295,
-            +0.122424902141717,
-            +0.052056841966505,
-            +0.001065090591171,
-            +0.034442621318458,
-            +0.060123873245061,
-            +0.011354378464955,
-            -0.040356296485409,
-            -0.027077829275585,
-            +0.000044420317663,
-            -0.023128237897633,
-            -0.060594561288147,
-            -0.052073449389965,
-            -0.020287979095019,
-            -0.020266904487746,
-            -0.040437370172537,
-            -0.032826559076297,
-            -0.001936058603854,
-            +0.009350356552149,
-            -0.001974752761781,
-            -0.00056232124794,
-            +0.019999566957344,
-            +0.029535095680068,
-            +0.018056789899852,
-            +0.009963027702425,
-            +0.017209104658635,
-            +0.020821399249043,
-            +0.008568929474867,
-            -0.004180055131952,
-            -0.004063764912808,
-            -0.00166722069071,
-            -0.009121510302649,
-            -0.018330967469683,
-            -0.01732889400521,
-            -0.011188193780463,
-            -0.010799046197802,
-            -0.013412032494572,
-            -0.009639736372143,
-            -0.001057609445802,
-            +0.003494178337189,
-            +0.003566818086069,
-            +0.006082217413436,
-            +0.011810433583898,
-            +0.014477215040405,
-            +0.012283432231163,
-            +0.010234382169118,
-            +0.010569981365131,
-            +0.009473710757618,
-            +0.004823124654922,
-            +0.000020902414037,
-            -0.002183356432381,
-            -0.003852259835463,
-            -0.007157959668392,
-            -0.010220735160551,
-            -0.010618965224709,
-            -0.009453240708199,
-            -0.008889556020284,
-            -0.008341509961118,
-            -0.00605603302088,
-            -0.002581994165077,
-            +0.000153890697998,
-            +0.001980517842253,
-            +0.004143387218973,
-            +0.006602558130809,
-            +0.007990170563372,
-            +0.007946215986297,
-            +0.007482399464124,
-            +0.007031634927994,
-            +0.005870874162197,
-            +0.003706126172102,
-            +0.00136164680583,
-            -0.000511736057887,
-            -0.002227698614659,
-            -0.004088678238406,
-            -0.005601108583327,
-            -0.006228765259648,
-            -0.006182802571738,
-            -0.005889948947828,
-            -0.005244962394558,
-            -0.003961757092649,
-            -0.002250752695381,
-            -0.000592009948249,
-            +0.000896174847138,
-            +0.002368363895985,
-            +0.003718994249984,
-            +0.004606024681828,
-            +0.004926740575332
+            +0.183172689114915, -0.381198732755215, +0.453076019965961, -0.062912057693868, -0.148022513286273, +0.181720917354020,
+            +0.159684282091557, -0.008939212573129, +0.013823995278017, +0.135554059168909, +0.148284929774527, +0.056004332116796,
+            +0.025548260646322, +0.094885335574295, +0.122424902141717, +0.052056841966505, +0.001065090591171, +0.034442621318458,
+            +0.060123873245061, +0.011354378464955, -0.040356296485409, -0.027077829275585, +0.000044420317663, -0.023128237897633,
+            -0.060594561288147, -0.052073449389965, -0.020287979095019, -0.020266904487746, -0.040437370172537, -0.032826559076297,
+            -0.001936058603854, +0.009350356552149, -0.001974752761781, -0.000562321247940, +0.019999566957344, +0.029535095680068,
+            +0.018056789899852, +0.009963027702425, +0.017209104658635, +0.020821399249043, +0.008568929474867, -0.004180055131952,
+            -0.004063764912808, -0.001667220690710, -0.009121510302649, -0.018330967469683, -0.017328894005210, -0.011188193780463,
+            -0.010799046197802, -0.013412032494572, -0.009639736372143, -0.001057609445802, +0.003494178337189, +0.003566818086069,
+            +0.006082217413436, +0.011810433583898, +0.014477215040405, +0.012283432231163, +0.010234382169118, +0.010569981365131,
+            +0.009473710757618, +0.004823124654922, +0.000020902414037, -0.002183356432381, -0.003852259835463, -0.007157959668392,
+            -0.010220735160551, -0.010618965224709, -0.009453240708199, -0.008889556020284, -0.008341509961118, -0.006056033020880,
+            -0.002581994165077, +0.000153890697998, +0.001980517842253, +0.004143387218973, +0.006602558130809, +0.007990170563372,
+            +0.007946215986297, +0.007482399464124, +0.007031634927994, +0.005870874162197, +0.003706126172102, +0.001361646805830,
+            -0.000511736057887, -0.002227698614659, -0.004088678238406, -0.005601108583327, -0.006228765259648, -0.006182802571738,
+            -0.005889948947828, -0.005244962394558, -0.003961757092649, -0.002250752695381, -0.000592009948249, +0.000896174847138,
+            +0.002368363895985, +0.003718994249984, +0.004606024681828, +0.004926740575332
         };
 
         const double fd = 10;         // Частота дискретизации
@@ -469,5 +388,188 @@ public class EllipticBandStop : UnitTest
         var error2 = expected_h.Zip(actual_h, (e, a) => (e - a).Pow2() / 2).Sum();
 
         Assert.That.Value(error2).LessThan(1e-10);
+    }
+
+    [TestMethod]
+    public void SignalProcessing()
+    {
+        const double fd = 10;         // Частота дискретизации
+        const double dt = 1 / fd;       // Период дискретизации
+
+        const double Rp = 1;    // Неоднородность АЧХ в интервале пропускания не более 1 дБ
+        const double Rs = 40;   // Уровень подавления более 40 дБ
+
+        var Gp = (-Rp).From_dB();   // Значения АЧХ в интервале пропускания
+        var Gs = (-Rs).From_dB();   // Значения АЧХ в интервале подавления
+
+        const double fpl = 2 / Consts.pi2;  // нижняя частота границы полосы пропускания
+        const double fsl = 4 / Consts.pi2;  // нижняя частота границы полосы заграждения
+        const double fsh = 12 / Consts.pi2; // верхняя частота границы полосы заграждения
+        const double fph = 15 / Consts.pi2; // верхняя частота границы полосы пропускания
+
+        var filter = new DSP.Filters.EllipticBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs);
+
+        const double total_time = 1 / fpl;
+        const int samples_count = (int)(total_time * fd) + 1;
+
+        static EnumerableSignal GetSinSignal(double f0) => MathEnumerableSignal.Sin(dt, f0, (int)(100 * fd / (fpl * 0.1)));
+
+        var x_low     = GetSinSignal(fpl * 0.1);
+        var x_pl99    = GetSinSignal(fpl * 0.99);
+        var x_pl      = GetSinSignal(fpl);
+        var x_pl_sl   = GetSinSignal(fpl + (fsl - fpl) * 0.1);
+        var x_sl_pl   = GetSinSignal(fsl - (fsl - fpl) * 0.1);
+        var x_sl      = GetSinSignal(fsl);
+        var x_sl_sh   = GetSinSignal(fsl + (fsh - fsl) * 0.1);
+        var x_c0      = GetSinSignal((fsl * fsh).Sqrt());
+        var x_sh_sl   = GetSinSignal(fsh - (fsh - fsl) * 0.1);
+        var x_sh      = GetSinSignal(fsh);
+        var x_sh_ph   = GetSinSignal(fsh + (fph - fsh) * 0.1);
+        var x_ph_sh   = GetSinSignal(fph - (fph - fsh) * 0.1);
+        var x_ph      = GetSinSignal(fph);
+        var x_ph_fd05 = GetSinSignal(fph + (fd / 2 - fph) * 0.1);
+        var x_fd05    = GetSinSignal(0.9 * (fd / 2));
+
+        var y_low = filter.ProcessIndividual(x_low);
+        var y_pl99 = filter.ProcessIndividual(x_pl99);
+        var y_pl = filter.ProcessIndividual(x_pl);
+        var y_pl_sl = filter.ProcessIndividual(x_pl_sl);
+        var y_sl_pl = filter.ProcessIndividual(x_sl_pl);
+        var y_sl = filter.ProcessIndividual(x_sl);
+        var y_sl_sh = filter.ProcessIndividual(x_sl_sh);
+        var y_c0 = filter.ProcessIndividual(x_c0);
+        var y_sh_sl = filter.ProcessIndividual(x_sh_sl);
+        var y_sh = filter.ProcessIndividual(x_sh);
+        var y_sh_ph = filter.ProcessIndividual(x_sh_ph);
+        var y_ph_sh = filter.ProcessIndividual(x_ph_sh);
+        var y_ph = filter.ProcessIndividual(x_ph);
+        var y_ph_fd05 = filter.ProcessIndividual(x_ph_fd05);
+        var y_fd05 = filter.ProcessIndividual(x_fd05);
+
+        var k_low = y_low.Power / x_low.Power;
+        var k_pl99 = y_pl99.Power / x_pl99.Power;
+        var k_pl = y_pl.Power / x_pl.Power;
+        var k_pl_sl = y_pl_sl.Power / x_pl_sl.Power;
+        var k_sl_pl = y_sl_pl.Power / x_sl_pl.Power;
+        var k_sl = y_sl.Power / x_sl.Power;
+        var k_sl_sh = y_sl_sh.Power / x_sl_sh.Power;
+        var k_c0 = y_c0.Power / x_c0.Power;
+        var k_sh_sl = y_sh_sl.Power / x_sh_sl.Power;
+        var k_sh = y_sh.Power / x_sh.Power;
+        var k_sh_ph = y_sh_ph.Power / x_sh_ph.Power;
+        var k_ph_sh = y_ph_sh.Power / x_ph_sh.Power;
+        var k_ph = y_ph.Power / x_ph.Power;
+        var k_ph_fd05 = y_ph_fd05.Power / x_ph_fd05.Power;
+        var k_fd05 = y_fd05.Power / x_fd05.Power;
+
+        var k_low_db = k_low.In_dB_byPower();
+        var k_pl99_db = k_pl99.In_dB_byPower();
+        var k_pl_db = k_pl.In_dB_byPower();
+        var k_pl_sl_db = k_pl_sl.In_dB_byPower();
+        var k_sl_pl_db = k_sl_pl.In_dB_byPower();
+        var k_sl_db = k_sl.In_dB_byPower();
+        var k_sl_sh_db = k_sl_sh.In_dB_byPower();
+        var k_c0_db = k_c0.In_dB_byPower();
+        var k_sh_sl_db = k_sh_sl.In_dB_byPower();
+        var k_sh_db = k_sh.In_dB_byPower();
+        var k_sh_ph_db = k_sh_ph.In_dB_byPower();
+        var k_ph_sh_db = k_ph_sh.In_dB_byPower();
+        var k_ph_db = k_ph.In_dB_byPower();
+        var k_ph_fd05_db = k_ph_fd05.In_dB_byPower();
+        var k_fd05_db = k_fd05.In_dB_byPower();
+
+        k_low_db.AssertGreaterOrEqualsThan(-Rp);
+        k_pl99_db.AssertGreaterOrEqualsThan(-Rp);
+        k_pl_db.AssertGreaterOrEqualsThan(-Rp);
+
+        k_pl_sl_db.AssertGreaterOrEqualsThan(-Rs);
+        k_sl_pl_db.AssertLessOrEqualsThan(-Rp);
+
+        k_sl_db.AssertLessOrEqualsThan(-Rs);
+        k_sl_sh_db.AssertLessOrEqualsThan(-Rs);
+        k_c0_db.AssertLessOrEqualsThan(-Rs, 1.5);
+        k_sh_sl_db.AssertLessOrEqualsThan(-Rs, 1.5);
+        k_sh_db.AssertLessOrEqualsThan(-Rs);
+
+        k_sh_ph_db.AssertLessThan(-Rp);
+        k_ph_sh_db.AssertGreaterOrEqualsThan(-Rs);
+        k_ph_sh_db.AssertLessOrEqualsThan(-Rp);
+
+        k_ph_db.AssertGreaterOrEqualsThan(-Rp, 0.01);
+        k_ph_fd05_db.AssertGreaterOrEqualsThan(-Rp);
+        k_fd05_db.AssertGreaterOrEqualsThan(-Rp);
+
+        var x = 
+            x_low + 
+            x_pl99 +
+            x_pl +
+            x_pl_sl +
+            x_sl_pl +
+            x_sl +
+            x_sl_sh +
+            x_c0 +
+            x_sh_sl +
+            x_sh +
+            x_sh_ph +
+            x_ph_sh +
+            x_ph +
+            x_ph_fd05 +
+            x_fd05;
+
+        var y = filter.ProcessIndividual(x);
+
+        var X = x.GetSpectrum();
+        var Y = y.GetSpectrum();
+
+        var H = Y / X;
+
+        //var h_fpl099 = H.GetValue(fpl * 0.99).Power.In_dB_byPower();
+        //var h_fpl = H.GetValue(fpl).Power.In_dB_byPower();
+
+        //var h_fsl = H.GetValue(fsl).Power.In_dB_byPower();
+        //var h_c0 = H.GetValue((fsl * fsh).Sqrt()).Power.In_dB_byPower();
+        //var h_fsh = H.GetValue(fsh).Power.In_dB_byPower();
+
+        //var h_fph = H.GetValue(fpl).Power.In_dB_byPower();
+
+        var h_low     = H.GetValue(fpl * 0.1).Power.In_dB_byPower();
+        var h_pl99    = H.GetValue(fpl * 0.99).Power.In_dB_byPower();
+        var h_pl      = H.GetValue(fpl).Power.In_dB_byPower();
+
+        var h_pl_sl   = H.GetValue(fpl + (fsl - fpl) * 0.1).Power.In_dB_byPower();
+        var h_sl_pl   = H.GetValue(fsl - (fsl - fpl) * 0.1).Power.In_dB_byPower();
+
+        var h_sl      = H.GetValue(fsl).Power.In_dB_byPower();
+        var h_sl_sh   = H.GetValue(fsl + (fsh - fsl) * 0.1).Power.In_dB_byPower();
+        var h_c0      = H.GetValue((fsl * fsh).Sqrt()).Power.In_dB_byPower();
+        var h_sh_sl   = H.GetValue(fsh - (fsh - fsl) * 0.1).Power.In_dB_byPower();
+        var h_sh      = H.GetValue(fsh).Power.In_dB_byPower();
+                      
+        var h_sh_ph   = H.GetValue(fsh + (fph - fsh) * 0.1).Power.In_dB_byPower();
+        var h_ph_sh   = H.GetValue(fph - (fph - fsh) * 0.1).Power.In_dB_byPower();
+                      
+        var h_ph      = H.GetValue(fph).Power.In_dB_byPower();
+        var h_ph_fd05 = H.GetValue(fph + (fd / 2 - fph) * 0.1).Power.In_dB_byPower();
+        var h_fd05    = H.GetValue(0.9 * (fd / 2)).Power.In_dB_byPower();
+
+        h_low.AssertGreaterOrEqualsThan(-Rp);
+        h_pl99.AssertGreaterOrEqualsThan(-Rp);
+        h_pl.AssertGreaterOrEqualsThan(-Rp);
+
+        h_pl_sl.AssertGreaterOrEqualsThan(-Rs);
+        h_sl_pl.AssertLessOrEqualsThan(-Rp).GreaterOrEqualsThan(-Rs);
+
+        h_sl.AssertLessOrEqualsThan(-Rs);
+        h_sl_sh.AssertLessOrEqualsThan(-Rs);
+        h_c0.AssertLessOrEqualsThan(-Rs);
+        h_sh_sl.AssertLessOrEqualsThan(-Rs);
+        h_sh.AssertLessOrEqualsThan(-Rs);
+
+        h_sh_ph.AssertLessOrEqualsThan(-Rp);
+        h_ph_sh.AssertLessOrEqualsThan(-Rp).GreaterOrEqualsThan(-Rs);
+
+        h_ph.AssertGreaterOrEqualsThan(-Rp);
+        h_ph_fd05.AssertGreaterOrEqualsThan(-Rp);
+        h_fd05.AssertGreaterOrEqualsThan(-Rp);
     }
 }
