@@ -78,23 +78,13 @@ public class ButterworthBandStop : ButterworthFilter
     /// <returns>Кортеж, содержащий массивы A - коэффициенты полинома знаменателя и B - коэффициенты полинома числителя</returns>
     private static (double[] A, double[] B) Initialize(double fpl, double fsl, double fsh, double fph, Specification Spec)
     {
-        static void DWL(Complex z)
-        {
-            FormattableString formattable_string = $"({z.Re:F18}, {z.Im:F18}),";
-            Debug.WriteLine(formattable_string.ToString(CultureInfo.InvariantCulture));
-        }
-
         // Пересчитываем аналоговые частоты полосы заграждения в цифровые
         var dt = Spec.dt;
-        var Fpl = ToAnalogFrequency(fpl, dt);
-        var Fsl = ToAnalogFrequency(fsl, dt);
-        var Fsh = ToAnalogFrequency(fsh, dt);
-        var Fph = ToAnalogFrequency(fph, dt);
 
-        var Wpl = Consts.pi2 * Fpl;
-        var Wsl = Consts.pi2 * Fsl;
-        var Wsh = Consts.pi2 * Fsh;
-        var Wph = Consts.pi2 * Fph;
+        var Wpl = Consts.pi2 * ToAnalogFrequency(fpl, dt);
+        var Wsl = Consts.pi2 * ToAnalogFrequency(fsl, dt);
+        var Wsh = Consts.pi2 * ToAnalogFrequency(fsh, dt);
+        var Wph = Consts.pi2 * ToAnalogFrequency(fph, dt);
 
         var Wc = Wsl * Wsh;
         var dW = Wsh - Wsl;
@@ -109,18 +99,18 @@ public class ButterworthBandStop : ButterworthFilter
 
         // Переносим нули и полюса аналогового нормированного ФНЧ в полосы ПЗФ
         var pzf_zeros = Enumerable.Range(0, 2 * N).Select(i => i % 2 == 0 ? Complex.ImValue(sqrtWc) : Complex.ImValue(-sqrtWc));
-        var pzf_poles = TransformToBandStop(poles, Fsl, Fsh);
+        var pzf_poles = TransformToBandStopW(poles, Wsl, Wsh);
 
         // Преобразуем аналоговые нули и полюса в нули и полюса цифрового фильтра с помощью Z-преобразования
         var z_zeros = ToZArray(pzf_zeros, dt);
         var z_poles = ToZArray(pzf_poles, dt);
 
-        // Выычисляем коэффициент нормировки фильтра на нулевой частоте 
+        // Вычисляем коэффициент нормировки фильтра на нулевой частоте 
         var G_norm = (N.IsOdd() ? 1 : Spec.Gp)
             / (z_zeros.Multiply(z => 1 - z) / z_poles.Multiply(z => 1 - z)).Abs;
 
         // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
-        var B = GetCoefficientsInverted(z_zeros).ToArray(b => b * G_norm).ToRe();
+        var B = GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * G_norm);
         var A = GetCoefficientsInverted(z_poles).ToRe();
 
         return (A, B);

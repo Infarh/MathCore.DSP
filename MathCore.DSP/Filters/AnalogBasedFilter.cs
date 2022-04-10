@@ -309,10 +309,16 @@ public abstract class AnalogBasedFilter : IIR
     /// <param name="fmin">Нижняя частота среза</param>
     /// <param name="fmax">Верхняя частота среза</param>
     /// <returns>Нули и полюса ПЗФ</returns>
-    public static IEnumerable<Complex> TransformToBandStop(IEnumerable<Complex> Normed, double fmin, double fmax)
+    public static IEnumerable<Complex> TransformToBandStop(IEnumerable<Complex> Normed, double fmin, double fmax) =>
+        TransformToBandStopW(Normed, pi2 * fmin, pi2 * fmax);
+
+    /// <summary>Метод преобразования нулей и полюсов нормированного ФНЧ в нули и полюса ПЗФ</summary>
+    /// <param name="Normed">Нормированные нули и полюса ФНЧ</param>
+    /// <param name="w_min">Нижняя частота среза</param>
+    /// <param name="w_max">Верхняя частота среза</param>
+    /// <returns>Нули и полюса ПЗФ</returns>
+    public static IEnumerable<Complex> TransformToBandStopW(IEnumerable<Complex> Normed, double w_min, double w_max)
     {
-        var w_min = pi2 * fmin;
-        var w_max = pi2 * fmax;
         var dw05 = (w_max - w_min) / 2;
         var wc2 = w_min * w_max;
 
