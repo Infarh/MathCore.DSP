@@ -6,7 +6,6 @@ using MathCore.DSP.Filters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting.Extensions;
 
-using static System.Linq.Enumerable;
 using static System.Math;
 using static MathCore.Polynom.Array;
 using static MathCore.SpecialFunctions;

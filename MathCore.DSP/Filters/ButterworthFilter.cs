@@ -13,29 +13,28 @@ public abstract class ButterworthFilter : AnalogBasedFilter
     /// <summary>Получить список полюсов нормированного фильтра</summary>
     /// <param name="N">Число полюсов</param>
     /// <param name="EpsP">Затухание фильтра</param>
+    /// <param name="W0">Множитель коэффициента затухания</param>
     /// <returns>Массив полюсов нормированного фильтра</returns>
     /// <exception cref="ArgumentOutOfRangeException">Если число полюсов меньше 1</exception>
-    protected static IEnumerable<Complex> GetNormPoles(int N, double EpsP)
+    protected static IEnumerable<Complex> GetNormPoles(int N, double EpsP, double W0 = 1)
     {
         if (N <= 0) throw new ArgumentOutOfRangeException(nameof(N), N, "Число полюсов должно быть больше 0");
 
         var r = N % 2; // Нечётность порядка фильтра
 
         // Радиус окружности размещения полюсов фильтра
-        var alpha = EpsP.Pow(-1d / N);
-
-        // Угловой шаг между полюсами
-        var dth = PI / N;
+        var alpha = W0 * EpsP.Pow(-1d / N);
 
         // Если порядок фильтра нечётный, то первым добавляем центральный полюс
         if (r != 0) yield return -alpha;
         // Расчёт полюсов
-        for (var i = r; i < N; i += 2)
+        // Угловой шаг между полюсами
+        for (var (i, th0) = (r, Consts.pi05 / N); i < N; i += 2)
         {
-            var w = dth * (i + 1 - r - 0.5);
+            var w = th0 * (i - r + 1);
             var sin = -alpha * Sin(w);
-            var cos = alpha * Cos(w);
-            yield return new Complex(sin, cos);
+            var cos = +alpha * Cos(w);
+            yield return new Complex(sin, +cos);
             yield return new Complex(sin, -cos);
         }
     }
