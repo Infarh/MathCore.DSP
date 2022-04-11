@@ -420,7 +420,7 @@ public class ButterworthBandStop
 
         var error2 = expected_h.Zip(actual_h, (e, a) => (e - a).Pow2() / 2).Sum();
 
-        Assert.That.Value(error2).LessThan(1e-10);
+        Assert.That.Value(error2).LessThan(6e-15);
     }
 
     [TestMethod]
