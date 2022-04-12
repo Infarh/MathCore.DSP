@@ -1,7 +1,6 @@
 ﻿using MathCore.DSP.Filters;
 using System;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -21,12 +20,6 @@ public class ButterworthBandStop
     [TestMethod]
     public void Creation()
     {
-        static void DWL(Complex z)
-        {
-            FormattableString formattable_string = $"({z.Re:F18}, {z.Im:F18}),";
-            Debug.WriteLine(formattable_string.ToString(CultureInfo.InvariantCulture));
-        }
-
         const double fd = 10;           // Частота дискретизации
         const double dt = 1 / fd;       // Период дискретизации
 

@@ -1,10 +1,11 @@
-﻿using static System.Math;
+﻿using MathCore.DSP.Infrastructure;
+
+using static System.Math;
 using static MathCore.Polynom.Array;
-// ReSharper disable InconsistentNaming
 
 namespace MathCore.DSP.Filters;
 
-public class ButterworthBandStop : ButterworthFilter
+public class ChebyshevBandStop : ChebyshevFilter
 {
     /// <summary>Формирование спецификации фильтра</summary>
     /// <param name="dt">Период дискретизации сигнала</param>
@@ -88,8 +89,8 @@ public class ButterworthBandStop : ButterworthFilter
             : Wpl;
         var W0 = Abs(dW * Wp / (Wc - Wp.Pow2()));
 
-        var N = (int)Ceiling(Log(Spec.kEps) / Log(Spec.kW));
-        var poles = GetNormPoles(N, Spec.EpsP, W0);
+        var N = (int)Ceiling(arcch(Spec.kEps) / arcch(Spec.kW));
+        var poles = GetNormedPolesI(N, Spec.EpsP, W0);
 
         // Переносим нули и полюса аналогового нормированного ФНЧ в полосы ПЗФ
         var pzf_zeros = Enumerable.Range(0, 2 * N).Select(i => i % 2 == 0 ? Complex.ImValue(sqrtWc) : Complex.ImValue(-sqrtWc));
@@ -102,7 +103,6 @@ public class ButterworthBandStop : ButterworthFilter
         // Вычисляем коэффициент нормировки фильтра на нулевой частоте 
         var G_norm = (N.IsOdd() ? 1 : Spec.Gp)
             / (z_zeros.Multiply(z => 1 - z) / z_poles.Multiply(z => 1 - z)).Abs;
-
         // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
         var B = GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * G_norm);
         var A = GetCoefficientsInverted(z_poles).ToRe();
@@ -118,31 +118,31 @@ public class ButterworthBandStop : ButterworthFilter
     /// <param name="fph">Верхняя граница полосы пропускания</param>
     /// <param name="Gp">Уровень АЧХ в полосе пропускания (по умолчанию -1дБ)</param>
     /// <param name="Gs">Уровень АЧХ в полосе подавления (по умолчанию -30дБ)</param>
-    public ButterworthBandStop(
+    public ChebyshevBandStop(
         double dt,
         double fpl,
         double fsl,
         double fsh,
         double fph,
         double Gp = 0.89125093813374556,
-        double Gs = 0.031622777) 
+        double Gs = 0.031622777)
         : this(fpl, fsl, fsh, fph, GetSpecification(dt, fpl, fsl, fsh, fph, Gp, Gs)) { }
 
     /// <summary>Инициализация нового эллиптического полосозаграждающего фильтра (ПЗФ)</summary>
     /// <param name="fsl">Нижняя граница полосы подавления</param>
     /// <param name="fsh">Верхняя граница полосы подавления</param>
     /// <param name="Spec">Спецификация фильтра</param>
-    private ButterworthBandStop(double fpl,double fsl, double fsh, double fph, Specification Spec) 
+    private ChebyshevBandStop(double fpl, double fsl, double fsh, double fph, Specification Spec)
         : this(Initialize(fpl, fsl, fsh, fph, Spec), Spec) { }
 
     /// <summary>Инициализация нового эллиптического полосозаграждающего фильтра (ПЗФ)</summary>
     /// <param name="Polynoms">Кортеж с коэффициентами полиномов знаменателя и числителя функции фильтра</param>
     /// <param name="Spec">Спецификация фильтра</param>
-    private ButterworthBandStop((double[] A, double[] B) Polynoms, Specification Spec) : this(Polynoms.B, Polynoms.A, Spec) { }
+    private ChebyshevBandStop((double[] A, double[] B) Polynoms, Specification Spec) : this(Polynoms.B, Polynoms.A, Spec) { }
 
     /// <summary>Инициализация нового эллиптического полосозаграждающего фильтра (ПЗФ)</summary>
     /// <param name="B">Коэффициенты полинома числителя</param>
     /// <param name="A">Коэффициенты полинома знаменателя</param>
     /// <param name="Spec">Спецификация фильтра</param>
-    private ButterworthBandStop(double[] B, double[] A, Specification Spec) : base(B, A, Spec) { }
+    private ChebyshevBandStop(double[] B, double[] A, Specification Spec) : base(B, A, Spec) { }
 }
