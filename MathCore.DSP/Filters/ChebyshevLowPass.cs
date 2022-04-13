@@ -47,7 +47,7 @@ public class ChebyshevLowPass : ChebyshevFilter
         for (var i = 0; i < B!.Length; i++)
             B[i] *= g_norm;
 
-        return (A!, B!);
+        return (A, B);
     }
 
     private static (double[] A, double[] B) InitializeIICorrected(Specification Spec)
@@ -66,14 +66,11 @@ public class ChebyshevLowPass : ChebyshevFilter
 
         var g_norm = 1 / (z_zeros.Multiply(z => 1 - z).Re / z_poles.Multiply(z => 1 - z).Re);
 
-        for (var i = 0; i < B!.Length; i++)
+        for (var i = 0; i < B.Length; i++)
             B[i] *= g_norm;
 
-        return (A!, B!);
+        return (A, B);
     }
-
-    /// <summary>Тип фильтра</summary>
-    public ChebyshevType FilterType { get; }
 
     /// <summary>Инициализация нового фильтра Чебышева нижних частот</summary>
     /// <param name="dt">Период дискретизации</param>
@@ -92,7 +89,7 @@ public class ChebyshevLowPass : ChebyshevFilter
             ChebyshevType.II => InitializeII(Spec),
             ChebyshevType.IICorrected => InitializeIICorrected(Spec),
             _ => throw new InvalidEnumArgumentException(nameof(Type), (int)Type, typeof(ChebyshevType))
-        }, Spec) => FilterType = Type;
+        }, Spec, Type) { }
 
-    private ChebyshevLowPass((double[] A, double[] B) config, Specification Spec) : base(config.B, config.A, Spec) { }
+    private ChebyshevLowPass((double[] A, double[] B) config, Specification Spec, ChebyshevType Type) : base(config.B, config.A, Spec, Type) { }
 }

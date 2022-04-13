@@ -1,4 +1,6 @@
-﻿using MathCore.DSP.Infrastructure;
+﻿using System.ComponentModel;
+
+using MathCore.DSP.Infrastructure;
 
 using static System.Math;
 using static MathCore.Polynom.Array;
@@ -71,7 +73,7 @@ public class ChebyshevBandStop : ChebyshevFilter
     /// <param name="fph">Верхняя частота полосы пропускания</param>
     /// <param name="Spec">Спецификация фильтра</param>
     /// <returns>Кортеж, содержащий массивы A - коэффициенты полинома знаменателя и B - коэффициенты полинома числителя</returns>
-    private static (double[] A, double[] B) Initialize(double fpl, double fsl, double fsh, double fph, Specification Spec)
+    private static (double[] A, double[] B) InitializeI(double fpl, double fsl, double fsh, double fph, Specification Spec)
     {
         // Пересчитываем аналоговые частоты полосы заграждения в цифровые
         var dt = Spec.dt;
@@ -110,6 +112,90 @@ public class ChebyshevBandStop : ChebyshevFilter
         return (A, B);
     }
 
+    private static (double[] A, double[] B) InitializeII(double fpl, double fsl, double fsh, double fph, Specification Spec)
+    {
+        // Пересчитываем аналоговые частоты полосы заграждения в цифровые
+        var dt = Spec.dt;
+
+        var Wpl = Consts.pi2 * ToAnalogFrequency(fpl, dt);
+        var Wsl = Consts.pi2 * ToAnalogFrequency(fsl, dt);
+        var Wsh = Consts.pi2 * ToAnalogFrequency(fsh, dt);
+        var Wph = Consts.pi2 * ToAnalogFrequency(fph, dt);
+
+        var Wc = Wsl * Wsh;
+        var dW = Wsh - Wsl;
+        var Wp = Wc / Wph > Wpl
+            ? Wph
+            : Wpl;
+        var W0 = Abs(dW * Wp / (Wc - Wp.Pow2()));
+
+        var N = (int)Ceiling(arcch(Spec.kEps) / arcch(Spec.kW));
+        var (zeros, poles) = GetNormedPolesII(N, Spec.EpsP, W0);
+
+        // Переносим нули и полюса аналогового нормированного ФНЧ в полосы ПЗФ
+        var pzf_zeros = TransformToBandStopW(zeros, Wsl, Wsh);
+        var pzf_poles = TransformToBandStopW(poles, Wsl, Wsh);
+
+        // Преобразуем аналоговые нули и полюса в нули и полюса цифрового фильтра с помощью Z-преобразования
+        var z_zeros = ToZArray(pzf_zeros, dt);
+        var z_poles = ToZArray(pzf_poles, dt);
+
+        // Вычисляем коэффициент нормировки фильтра на нулевой частоте 
+        var G_norm = (N.IsOdd() ? 1 : Spec.Gp)
+            / (z_zeros.Multiply(z => 1 - z) / z_poles.Multiply(z => 1 - z)).Abs;
+
+        // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
+        var B = GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * G_norm);
+        var A = GetCoefficientsInverted(z_poles).ToRe();
+
+        return (A, B);
+    }
+
+    private static (double[] A, double[] B) InitializeIICorrected(double fpl, double fsl, double fsh, double fph, Specification Spec)
+    {
+        // Пересчитываем аналоговые частоты полосы заграждения в цифровые
+        var dt = Spec.dt;
+
+        var Wpl = Consts.pi2 * ToAnalogFrequency(fpl, dt);
+        var Wsl = Consts.pi2 * ToAnalogFrequency(fsl, dt);
+        var Wsh = Consts.pi2 * ToAnalogFrequency(fsh, dt);
+        var Wph = Consts.pi2 * ToAnalogFrequency(fph, dt);
+
+        var Wc = Wsl * Wsh;
+        var dW = Wsh - Wsl;
+        var sqrtWc = Wc.Sqrt();
+        var Wp = Wc / Wph > Wpl
+            ? Wph
+            : Wpl;
+        var W0 = Abs(dW * Wp / (Wc - Wp.Pow2()));
+
+        var N = (int)Ceiling(arcch(Spec.kEps) / arcch(Spec.kW));
+        var (zeros, poles) = GetNormedPolesII(N, Spec.EpsP, W0);
+
+        // Переносим нули и полюса аналогового нормированного ФНЧ в полосы ПЗФ
+        var pzf_zeros = TransformToBandStopW(zeros, Wsl, Wsh);
+        var pzf_poles = TransformToBandStopW(poles, Wsl, Wsh);
+
+        var kw = Spec.kw;
+        var z_zeros = N.IsEven()
+            ? ToZArray(zeros, Spec.dt, Spec.Wp * kw)
+            : ToZ(zeros, Spec.dt, Spec.Wp * kw).Prepend(-1).ToArray();
+        var z_poles = ToZArray(poles, Spec.dt, Spec.Wp * kw);
+
+        // Преобразуем аналоговые нули и полюса в нули и полюса цифрового фильтра с помощью Z-преобразования
+        //var z_zeros = ToZArray(pzf_zeros, dt);
+        //var z_poles = ToZArray(pzf_poles, dt);
+
+        // Вычисляем коэффициент нормировки фильтра на нулевой частоте 
+        var G_norm = 1 / (z_zeros.Multiply(z => 1 - z).Re / z_poles.Multiply(z => 1 - z).Re);
+
+        // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
+        var B = GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * G_norm);
+        var A = GetCoefficientsInverted(z_poles).ToRe();
+
+        return (A, B);
+    }
+
     /// <summary>Инициализация нового эллиптического полосозаграждающего фильтра (ПЗФ)</summary>
     /// <param name="dt">Период дискретизации цифрового сигнала</param>
     /// <param name="fpl">Нижняя граница полосы пропускания</param>
@@ -118,6 +204,7 @@ public class ChebyshevBandStop : ChebyshevFilter
     /// <param name="fph">Верхняя граница полосы пропускания</param>
     /// <param name="Gp">Уровень АЧХ в полосе пропускания (по умолчанию -1дБ)</param>
     /// <param name="Gs">Уровень АЧХ в полосе подавления (по умолчанию -30дБ)</param>
+    /// <param name="Type">Тип фильтра I или II</param>
     public ChebyshevBandStop(
         double dt,
         double fpl,
@@ -125,24 +212,37 @@ public class ChebyshevBandStop : ChebyshevFilter
         double fsh,
         double fph,
         double Gp = 0.89125093813374556,
-        double Gs = 0.031622777)
-        : this(fpl, fsl, fsh, fph, GetSpecification(dt, fpl, fsl, fsh, fph, Gp, Gs)) { }
+        double Gs = 0.031622777, 
+        ChebyshevType Type = ChebyshevType.I)
+        : this(fpl, fsl, fsh, fph, GetSpecification(dt, fpl, fsl, fsh, fph, Gp, Gs), Type) { }
 
     /// <summary>Инициализация нового эллиптического полосозаграждающего фильтра (ПЗФ)</summary>
+    /// <param name="fpl">Нижняя граница полосы пропускания</param>
     /// <param name="fsl">Нижняя граница полосы подавления</param>
     /// <param name="fsh">Верхняя граница полосы подавления</param>
+    /// <param name="fph">Верхняя граница полосы пропускания</param>
     /// <param name="Spec">Спецификация фильтра</param>
-    private ChebyshevBandStop(double fpl, double fsl, double fsh, double fph, Specification Spec)
-        : this(Initialize(fpl, fsl, fsh, fph, Spec), Spec) { }
+    /// <param name="Type">Тип фильтра I или II</param>
+    private ChebyshevBandStop(double fpl, double fsl, double fsh, double fph, Specification Spec, ChebyshevType Type)
+        : this(Type switch
+        {
+            ChebyshevType.I => InitializeI(fpl, fsl, fsh, fph, Spec),
+            ChebyshevType.II => InitializeII(fpl, fsl, fsh, fph, Spec),
+            ChebyshevType.IICorrected => InitializeIICorrected(fpl, fsl, fsh, fph, Spec),
+            _ => throw new InvalidEnumArgumentException(nameof(Type), (int)Type, typeof(ChebyshevType))
+        }, Spec, Type) { }
 
     /// <summary>Инициализация нового эллиптического полосозаграждающего фильтра (ПЗФ)</summary>
     /// <param name="Polynoms">Кортеж с коэффициентами полиномов знаменателя и числителя функции фильтра</param>
     /// <param name="Spec">Спецификация фильтра</param>
-    private ChebyshevBandStop((double[] A, double[] B) Polynoms, Specification Spec) : this(Polynoms.B, Polynoms.A, Spec) { }
+    /// <param name="Type">Тип фильтра I или II</param>
+    private ChebyshevBandStop((double[] A, double[] B) Polynoms, Specification Spec, ChebyshevType Type) 
+        : this(Polynoms.B, Polynoms.A, Spec, Type) { }
 
     /// <summary>Инициализация нового эллиптического полосозаграждающего фильтра (ПЗФ)</summary>
     /// <param name="B">Коэффициенты полинома числителя</param>
     /// <param name="A">Коэффициенты полинома знаменателя</param>
     /// <param name="Spec">Спецификация фильтра</param>
-    private ChebyshevBandStop(double[] B, double[] A, Specification Spec) : base(B, A, Spec) { }
+    /// <param name="Type">Тип фильтра I или II</param>
+    private ChebyshevBandStop(double[] B, double[] A, Specification Spec, ChebyshevType Type) : base(B, A, Spec, Type) { }
 }

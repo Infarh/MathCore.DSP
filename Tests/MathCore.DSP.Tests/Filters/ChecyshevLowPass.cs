@@ -20,11 +20,8 @@ using static MathCore.Polynom.Array;
 namespace MathCore.DSP.Tests.Filters;
 
 [TestClass]
-public class ChecyshevLowPass : UnitTest
+public class ChecyshevLowPass : ChebyshevFiltersTests
 {
-    private static double arcsh(double x) => Log(x + Sqrt(x * x + 1));
-    private static double arcch(double x) => Log(x + Sqrt(x * x - 1));
-
     [TestMethod]
     public void TypeI_Creation()
     {

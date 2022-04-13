@@ -416,7 +416,7 @@ public class EllipticBandStop : UnitTest
 
         var filter = new DSP.Filters.EllipticBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs);
 
-        const double total_time = 1 / fpl;
+        //const double total_time = 1 / fpl;
         //const int samples_count = (int)(total_time * fd) + 1;
 
         // Метод формирования гармонического сигнала на заданной частоте
