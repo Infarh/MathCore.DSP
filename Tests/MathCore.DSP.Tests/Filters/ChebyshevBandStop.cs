@@ -20,7 +20,7 @@ namespace MathCore.DSP.Tests.Filters;
 public class ChebyshevBandStop : ChebyshevFiltersTests
 {
     [TestMethod]
-    public void TypeI_Creation()
+    public void TypeI_Even_Creation()
     {
         const double fd = 10;           // Частота дискретизации
         const double dt = 1 / fd;       // Период дискретизации
@@ -238,7 +238,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
     }
 
     [TestMethod]
-    public void TypeII_Creation()
+    public void TypeII_Even_Creation()
     {
         const double fd = 10;           // Частота дискретизации
         const double dt = 1 / fd;       // Период дискретизации
@@ -483,7 +483,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
     }
 
     [TestMethod]
-    public void TypeIICorrected_Creation()
+    public void TypeIICorrected_Even_Creation()
     {
         const double fd = 10;           // Частота дискретизации
         const double dt = 1 / fd;       // Период дискретизации
@@ -734,7 +734,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
     }
 
     [TestMethod]
-    public void TypeI_ImpulseResponse()
+    public void TypeI_Even_ImpulseResponse()
     {
         double[] expected_h =
         {
@@ -785,7 +785,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
     }
 
     [TestMethod]
-    public void TypeII_ImpulseResponse()
+    public void TypeII_Even_ImpulseResponse()
     {
         double[] expected_h =
         {
@@ -811,40 +811,6 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
             -0.00191036263714600, -0.00118343873029951, -0.00044533357857117, +0.00026500264660073, +0.00091337095312089
         };
 
-        double[] B =
-        {
-            /*[ 0]*/ 0.10613121177849884,
-            /*[ 1]*/ -0.7938791308754953,
-            /*[ 2]*/ 2.9741147335779883,
-            /*[ 3]*/ -7.369174808371755,
-            /*[ 4]*/ 13.437301081373876,
-            /*[ 5]*/ -18.967481201975538,
-            /*[ 6]*/ 21.2267482527737,
-            /*[ 7]*/ -18.967481201975538,
-            /*[ 8]*/ 13.437301081373876,
-            /*[ 9]*/ -7.369174808371757,
-            /*[10]*/ 2.9741147335779887,
-            /*[11]*/ -0.7938791308754953,
-            /*[12]*/ 0.10613121177849884,
-        };
-
-        double[] A =
-        {
-            /*[ 0]*/ 1,
-            /*[ 1]*/ -5.020620415717195,
-            /*[ 2]*/ 11.694881589513276,
-            /*[ 3]*/ -17.746887514727327,
-            /*[ 4]*/ 20.75141302204056,
-            /*[ 5]*/ -19.854306107028577,
-            /*[ 6]*/ 15.390215910405962,
-            /*[ 7]*/ -9.590110281996715,
-            /*[ 8]*/ 4.845454719738335,
-            /*[ 9]*/ -1.9390067913582834,
-            /*[10]*/ 0.5682507052659562,
-            /*[11]*/ -0.11013917161753861,
-            /*[12]*/ 0.011626359270396867,
-        };
-
         const double fd = 10;           // Частота дискретизации
         const double dt = 1 / fd;       // Период дискретизации
 
@@ -861,9 +827,6 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
 
         var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
 
-        filter.B.AssertEquals(B);
-        filter.A.AssertEquals(A);
-
         var actual_h = filter.GetImpulseResponse(expected_h.Length);
 
         var error2 = expected_h.Zip(actual_h, (e, a) => (e - a).Pow2() / 2).Sum();
@@ -873,7 +836,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
     }
 
     [TestMethod]
-    public void TypeIICorrected_ImpulseResponse()
+    public void TypeIICorrected_Even_ImpulseResponse()
     {
         double[] expected_h =
         {
@@ -924,7 +887,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
     }
 
     [TestMethod]
-    public void TypeI_SignalProcessing()
+    public void TypeI_Even_SignalProcessing()
     {
         const double fd = 10;         // Частота дискретизации
         const double dt = 1 / fd;       // Период дискретизации
