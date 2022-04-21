@@ -1,4 +1,5 @@
 ﻿using System.Data;
+// ReSharper disable InconsistentNaming
 
 namespace MathCore.DSP.Filters;
 
@@ -70,9 +71,9 @@ public class EllipticBandStop : EllipticFilter
     private static (double[] A, double[] B) Initialize(double fsl, double fsh, Specification Spec)
     {
         var kW = 1 / Spec.kW;
-        var k_eps = 1 / Spec.kEps;
+        var kEps = 1 / Spec.kEps;
 
-        var N = (int)Math.Ceiling(T(k_eps) * K(kW) / (K(k_eps) * T(kW))); // Порядок фильтра
+        var N = (int)Math.Ceiling(T(kEps) * K(kW) / (K(kEps) * T(kW))); // Порядок фильтра
 
         // Нули и полюса аналогового прототипа - эллиптического ФНЧ
         var (zeros, poles) = GetNormedZeros(N, Spec.EpsP, Spec.EpsS, Spec.Wp);
@@ -99,12 +100,12 @@ public class EllipticBandStop : EllipticFilter
         var z_zeros = ToZArray(pzf_zeros, dt);
         var z_poles = ToZArray(pzf_poles, dt);
 
-        // Выычисляем коэффициент нормировки фильтра на нулевой частоте 
+        // Вычисляем коэффициент нормировки фильтра на нулевой частоте 
         var G_norm = (N.IsOdd() ? 1 : Spec.Gp)
             / (z_zeros.Multiply(z => 1 - z) / z_poles.Multiply(z => 1 - z)).Abs;
 
         // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
-        var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToArray(b => b * G_norm).ToRe();
+        var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * G_norm);
         var A = Polynom.Array.GetCoefficientsInverted(z_poles).ToRe();
 
         return (A, B);
@@ -126,10 +127,7 @@ public class EllipticBandStop : EllipticFilter
         double fph,
         double Gp = 0.89125093813374556,
         double Gs = 0.031622777)
-        : this(fsl, fsh, GetSpecification(dt, fpl, fsl, fsh, fph, Gp, Gs))
-    {
-
-    }
+        : this(fsl, fsh, GetSpecification(dt, fpl, fsl, fsh, fph, Gp, Gs)) { }
 
     /// <summary>Инициализация нового эллиптического полосозаграждающего фильтра (ПЗФ)</summary>
     /// <param name="fsl">Нижняя граница полосы подавления</param>

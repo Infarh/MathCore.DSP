@@ -1,4 +1,6 @@
-﻿using static System.Array;
+﻿using System.Net.NetworkInformation;
+
+using static System.Array;
 using static System.Math;
 
 namespace MathCore.DSP.Filters;
@@ -34,8 +36,8 @@ public class EllipticHighPass : EllipticFilter
 
         // Переходим из p-плоскости в z-плоскость
         var dt = opt.dt;
-        var z_zeros = ToZArray(translated_zeros, dt);
-        var z_poles = ToZArray(translated_poles, dt);
+        var z_zeros = ToZArray(zz, dt);
+        var z_poles = ToZArray(pp, dt);
         //var z_poles = translated_poles.ToArray(p => ToZ(p, dt));
         // Вычисляем нормирующий множитель
         //var kz = GetNormalizeCoefficient(translated_poles, dt);
@@ -43,7 +45,7 @@ public class EllipticHighPass : EllipticFilter
         var Gz0 = (z_zeros.Multiply(z => 1 + z) / z_poles.Multiply(z => 1 + z)).Abs;
         var G_norm = (is_odd ? 1 : opt.Gp) / Gz0;
 
-        var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToArray(v => (v * G_norm).Re);
+        var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToArray(v => v.Re * G_norm);
         var A = Polynom.Array.GetCoefficientsInverted(z_poles).ToRe();
 
         return (A, B);

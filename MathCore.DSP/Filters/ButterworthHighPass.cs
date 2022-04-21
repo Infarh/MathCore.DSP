@@ -1,7 +1,6 @@
 ﻿using static System.Math;
 
 using static MathCore.Polynom.Array;
-using static MathCore.SpecialFunctions;
 
 namespace MathCore.DSP.Filters;
 
@@ -31,7 +30,7 @@ public class ButterworthHighPass : ButterworthFilter
         var k = WpN * kz / Spec.EpsP;
 
         var B = GetCoefficientsInverted(z_zeros).ToArray(v => (v * k).Re);
-        var A = GetCoefficientsInverted(z_poles).ToRe()!;
+        var A = GetCoefficientsInverted(z_poles).ToRe();
 
         return (A, B);
     }

@@ -26,7 +26,7 @@ public class ChebyshevLowPass : ChebyshevFilter
            .Range(0, N + 1)
            .ToArray(i => g_norm * BinomialCoefficient(N, i));
 
-        return (A!, B!);
+        return (A, B);
     }
 
     private static (double[] A, double[] B) InitializeII(Specification Spec)
@@ -44,8 +44,9 @@ public class ChebyshevLowPass : ChebyshevFilter
 
         var g_norm = 1 / (z_zeros.Multiply(z => 1 - z).Re / z_poles.Multiply(z => 1 - z).Re);
 
-        for (var i = 0; i < B!.Length; i++)
-            B[i] *= g_norm;
+        B.Multiply(g_norm);
+        //for (var i = 0; i < B.Length; i++)
+        //    B[i] *= g_norm;
 
         return (A, B);
     }
@@ -66,8 +67,9 @@ public class ChebyshevLowPass : ChebyshevFilter
 
         var g_norm = 1 / (z_zeros.Multiply(z => 1 - z).Re / z_poles.Multiply(z => 1 - z).Re);
 
-        for (var i = 0; i < B.Length; i++)
-            B[i] *= g_norm;
+        B.Multiply(g_norm);
+        //for (var i = 0; i < B.Length; i++)
+        //    B[i] *= g_norm;
 
         return (A, B);
     }

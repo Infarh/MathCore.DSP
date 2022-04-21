@@ -6,7 +6,7 @@ namespace MathCore.DSP;
 public static class DoubleArrayDSPExtensions
 {
     internal static Vector<double> ToVector(this double[] array) => new(array);
-        
+
     /// <summary>Вычислить значение коэффициента передачи фильтра, заданного импульсной характеристикой</summary>
     /// <param name="ImpulseResponse">Массив отсчётов импульсной характеристики</param>
     /// <param name="f">Частота вычисления коэффициента передачи</param>
@@ -153,7 +153,7 @@ public static class DoubleArrayDSPExtensions
         var P0 = Complex.Real;
         foreach (var p0 in Zeros)
         {
-            if (p0 == p) 
+            if (p0 == p)
                 return 0;
             P0 *= p - p0;
         }
@@ -177,7 +177,7 @@ public static class DoubleArrayDSPExtensions
     /// <returns>Обработанное значение</returns>
     public static double FilterSample(
         this double[] State,
-        double[] A, 
+        double[] A,
         double[] B,
         double Sample)
     {
@@ -189,6 +189,7 @@ public static class DoubleArrayDSPExtensions
         if (A.Length == b_length)
             for (var i = State.Length - 1; i >= 1; i--)
             {
+                //(State[i], result, input) = (State[i - 1], result + State[i - 1] * B[i] * a0, input - State[i - 1] * A[i] * a0);
                 var v = State[i - 1];
                 State[i] = v;
                 result += v * B[i] * a0;
@@ -219,7 +220,7 @@ public static class DoubleArrayDSPExtensions
     public static IEnumerable<double> FilterIIR(
         this IEnumerable<double> samples,
         double[] A,
-        double[] B, 
+        double[] B,
         double[] State)
     {
         if (samples is null) throw new ArgumentNullException(nameof(samples));
@@ -233,8 +234,8 @@ public static class DoubleArrayDSPExtensions
     }
 
     public static IEnumerable<double> FilterIIR(
-        this IEnumerable<double> samples, 
-        double[] A, 
+        this IEnumerable<double> samples,
+        double[] A,
         double[] B)
         => samples.FilterIIR(A, B, new double[A.Length]);
 }

@@ -21,10 +21,10 @@ public class EllipticBandPass : EllipticFilter
 
     private static (double[] A, double[] B) Initialize(double fpl, double fph, Specification Spec)
     {
-        var k_W = 1 / Spec.kw;
-        var k_eps = 1 / Spec.kEps;
+        var kW = 1 / Spec.kw;
+        var kEps = 1 / Spec.kEps;
 
-        var N = (int)Ceiling(T(k_eps) * K(k_W) / (K(k_eps) * T(k_W))); // Порядок фильтра
+        var N = (int)Ceiling(T(kEps) * K(kW) / (K(kEps) * T(kW))); // Порядок фильтра
 
         var (zeros, poles) = GetNormedZeros(N, Spec.EpsP, Spec.EpsS);
 
@@ -50,7 +50,7 @@ public class EllipticBandPass : EllipticFilter
         var B = GetCoefficientsInverted(z_zeros).ToArray(b => b.Re / norm);
         var A = GetCoefficientsInverted(z_poles).ToRe();
 
-        return (A!, B!);
+        return (A, B);
     }
 
     public EllipticBandPass(
@@ -61,10 +61,7 @@ public class EllipticBandPass : EllipticFilter
         double fsh,
         double Gp = 0.891250938,
         double Gs = 0.031622777)
-        : this(fpl, fph, GetSpecification(dt, fsl, fpl, fph, fsh, Gp, Gs))
-    {
-
-    }
+        : this(fpl, fph, GetSpecification(dt, fsl, fpl, fph, fsh, Gp, Gs)) { }
 
     private EllipticBandPass(double fpl, double fph, Specification Spec) : this(Initialize(fpl, fph, Spec), Spec) { }
 

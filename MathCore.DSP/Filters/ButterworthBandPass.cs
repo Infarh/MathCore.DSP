@@ -40,7 +40,7 @@ public class ButterworthBandPass : ButterworthFilter
         kz0 /= Spec.EpsP;
 
         var B = GetCoefficientsInverted(ppf_zeros_z).ToArray(v => (v * kz0).Re);
-        var A = GetCoefficientsInverted(ppf_poles_z).ToRe()!;
+        var A = GetCoefficientsInverted(ppf_poles_z).ToRe();
 
         return (A, B);
     }
