@@ -133,7 +133,11 @@ public class ChebyshevBandStop : ChebyshevFilter
         var (zeros, poles) = GetNormedPolesII(N, Spec.EpsS, W0);
 
         // Переносим нули и полюса аналогового нормированного ФНЧ в полосы ПЗФ
-        var pzf_zeros = TransformToBandStopW(zeros, Wsl, Wsh);
+        var sqrtWc = Wc.Sqrt();
+        var is_even = N.IsEven();
+        var pzf_zeros = is_even 
+            ? TransformToBandStopW(zeros, Wsl, Wsh)
+            : TransformToBandStopW(zeros, Wsl, Wsh).AppendLast((0, +sqrtWc), (0, -sqrtWc));
         var pzf_poles = TransformToBandStopW(poles, Wsl, Wsh);
 
         // Преобразуем аналоговые нули и полюса в нули и полюса цифрового фильтра с помощью Z-преобразования
@@ -162,7 +166,7 @@ public class ChebyshevBandStop : ChebyshevFilter
 
         var Wc = Wsl * Wsh;
         var dW = Wsh - Wsl;
-        //var sqrtWc = Wc.Sqrt();
+        var sqrt_wc = Wc.Sqrt();
         var Wp = Wc / Wph > Wpl
             ? Wph
             : Wpl;
@@ -172,7 +176,10 @@ public class ChebyshevBandStop : ChebyshevFilter
         var (zeros, poles) = GetNormedPolesII(N, Spec.EpsS, W0 * Spec.kW);
 
         // Переносим нули и полюса аналогового нормированного ФНЧ в полосы ПЗФ
-        var pzf_zeros = TransformToBandStopW(zeros, Wsl, Wsh);
+        var is_even = N.IsEven();
+        var pzf_zeros = is_even
+            ? TransformToBandStopW(zeros, Wsl, Wsh)
+            : TransformToBandStopW(zeros, Wsl, Wsh).AppendLast((0, +sqrt_wc), (0, -sqrt_wc));
         var pzf_poles = TransformToBandStopW(poles, Wsl, Wsh);
 
         // Преобразуем аналоговые нули и полюса в нули и полюса цифрового фильтра с помощью Z-преобразования
@@ -182,6 +189,7 @@ public class ChebyshevBandStop : ChebyshevFilter
         // Вычисляем коэффициент нормировки фильтра на нулевой частоте 
         var re_to_im = z_zeros.Multiply(z => 1 - z) / z_poles.Multiply(z => 1 - z);
         var G_norm = 1 / re_to_im.Abs;
+        G_norm.ToDebug();
 
         // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
         var B = GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * G_norm);

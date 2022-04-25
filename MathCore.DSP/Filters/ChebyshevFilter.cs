@@ -47,15 +47,14 @@ public abstract class ChebyshevFilter : AnalogBasedFilter
 
     protected static (Complex[] Zeros, Complex[] Poles) GetNormedPolesII(int N, double EpsS, double W0 = 1)
     {
-        var r = N % 2;                              // Нечётность порядка фильтра
-        
         var beta = arcsh(EpsS) / N;
-
         var sh = Sinh(beta);
         var ch = Cosh(beta);
 
         var poles = new Complex[N];                 // Массив полюсов фильтра
-        if (r != 0) poles[0] = -W0 / sh;            // Если порядок фильтра нечётный, то первым добавляем центральный полюс
+        if (N.IsOdd())
+            poles[0] = -W0 / sh;                    // Если порядок фильтра нечётный, то первым добавляем центральный полюс
+        var r = N % 2;                              // Нечётность порядка фильтра
         for (var (i, dth) = (r, 0.5 * PI / N); i < poles.Length; i += 2)   // Расчёт полюсов
         {
             var (cos, sin) = Complex.Exp(dth * (i - r + 1));
@@ -65,7 +64,7 @@ public abstract class ChebyshevFilter : AnalogBasedFilter
         }
 
         var zeros = new Complex[N - r];
-        for (var (n, dth, L) = (1, PI / N, N / 2); n <= L; n++) 
+        for (var (n, dth, L) = (1, PI / N, N / 2); n <= L; n++)
             (zeros[2 * n - 2], zeros[2 * n - 1]) = Complex.Conjugate(0, W0 / Cos(dth * (n - 0.5)));
 
         return (zeros, poles);
