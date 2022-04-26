@@ -1333,12 +1333,12 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
 
         var poles = new Complex[N];
         if (N.IsOdd())
-            poles[0] = -(W0 / kW) / sh;
+            poles[0] = -1 / sh;
         for (var (i, dth) = (r, Consts.pi05 / N); i < poles.Length; i += 2)   // Расчёт полюсов
         {
-            var (cos, sin) = Complex.Exp(dth * (i - r + 1));
+            var (sin, cos) = Complex.SinCos(dth * (i - r + 1));
             var z = new Complex(-sin * sh, cos * ch);
-            var norm = (W0 / kW) / z.Power;
+            var norm = 1 / z.Power;
             (poles[i], poles[i + 1]) = Complex.Conjugate(z.Re * norm, z.Im * norm);
         }
 
@@ -1359,6 +1359,18 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
             /*[ 5]*/ (-0.851790250586702435, +0.641693653548654708),
             /*[ 6]*/ (-0.851790250586702435, -0.641693653548654708)
         );
+
+        Complex[] poles1 = {
+            /*[ 0]*/ (-1.202981071917573752, 0.000000000000000000),
+            /*[ 1]*/ (-0.112686910985844060, 0.772336560883440382),
+            /*[ 2]*/ (-0.112686910985844060, -0.772336560883440382),
+            /*[ 3]*/ (-0.397988375745020995, 0.780702692783778462),
+            /*[ 4]*/ (-0.397988375745020995, -0.780702692783778462),
+            /*[ 5]*/ (-0.851790250586702546, 0.641693653548654819),
+            /*[ 6]*/ (-0.851790250586702546, -0.641693653548654819),
+        };
+
+        //poles.Zip(poles1, (p, p1) => p - p1).ToDebugEnum();
 
         //zeros.AsEnumerable().ToRe().Sum(v => v * v).ToDebug();
         zeros.AsEnumerable().ToRe().Sum(v => v * v).AssertEquals(0);
@@ -1424,6 +1436,8 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
             /*[13]*/ (-4.967670040533056053, +09.906936083142635852)
         );
 
+        //pzf_poles.Zip(pzf_poles1, (p, p1) => p - p1).ToDebugEnum();
+
         var z_zeros = DigitalFilter.ToZArray(pzf_zeros, dt);
         var z_poles = DigitalFilter.ToZArray(pzf_poles, dt);
 
@@ -1465,8 +1479,8 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
 
         var re_to_im = z_zeros.Multiply(z => 1 - z) / z_poles.Multiply(z => 1 - z);
 
-        var G_norm = 1 / re_to_im.Abs;
-        G_norm.ToDebug();
+        var G_norm = 1 / re_to_im.Re;
+        //G_norm.ToDebug();
 
         G_norm.AssertEquals(0.22881500023034296);
 
@@ -1501,15 +1515,8 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
 
         var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
 
-        try
-        {
-            filter.B.AssertEquals(B);
-            filter.A.AssertEquals(A);
-        }
-        catch (Exception )
-        {
-            Assert.Fail();
-        }
+        filter.B.AssertEquals(B);
+        filter.A.AssertEquals(A);
     }
 
     [TestMethod]
@@ -1666,6 +1673,57 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
     }
 
     [TestMethod]
+    public void TypeII_Odd_ImpulseResponse()
+    {
+        double[] expected_h =
+        {
+            +0.14070756712330665, -0.32825969995649673, +0.47106622467692844, -0.23043531279864370, -0.03854744867834650,
+            +0.23182995956020150, +0.02991639158078585, -0.07252318793021478, +0.10797864809945124, +0.15869538680745160,
+            +0.02493429637195324, +0.01415841365118995, +0.12724577678351554, +0.12817037135712680, +0.03813600964044966,
+            +0.04118796331741659, +0.10718030959279506, +0.09021392671061740, +0.02292884611175169, +0.02343697352817929,
+            +0.06152791760342690, +0.04162193102694615, -0.00945462066028003, -0.01337432980780893, +0.00835060028738142,
+            -0.00663828390770037, -0.03978064602489056, -0.04017229813325618, -0.02251912180897142, -0.02750929506095161,
+            -0.04315612236878769, -0.03699675600909061, -0.01914720381450367, -0.01614237691259401, -0.02037867639741215,
+            -0.01128817642517591, +0.00421484916113197, +0.00893359194710357, +0.00779777423602078, +0.01395777137136056,
+            +0.02288281467881818, +0.02365819001137046, +0.01972732458481696, +0.01974699059848409, +0.02099681273862940,
+            +0.01678327061681784, +0.00969276975246535, +0.00556445645112601, +0.00285586892250456, -0.00251160193990123,
+            -0.00868787140500440, -0.01186069877782131, -0.01306212965070205, -0.01498482673548182, -0.01655978566555560,
+            -0.01554703495877278, -0.01287297182793961, -0.01052236316079329, -0.00805082251799172, -0.00426549185782252,
+            +0.00001796272599173, +0.00337141819734970, +0.00599397826500036, +0.00861431606260068, +0.01072754333765069,
+            +0.01150524773129065, +0.01121857817644415, +0.01050634849433266, +0.00923339385921275, +0.00707138130156770,
+            +0.00439341967168809, +0.00178076655209992, -0.00071851420765528, -0.00321747362609982, -0.00542341384399943,
+            -0.00696194417143695, -0.00784847155984053, -0.00823878146115010, -0.00805850451019054, -0.00720491019589881,
+            -0.00583701559035437, -0.00420093398386269, -0.00238242059785154, -0.00042970744235579, +0.00146833665995138,
+            +0.00310107163760347, +0.00439626720179740, +0.00533900170322450, +0.00585477125153213, +0.00588187297455566,
+            +0.00546692907072331, +0.00470394244771775, +0.00365141939072080, +0.00237168355087302, +0.00098471595732180,
+            -0.00037750530157191, -0.00162817418287264, -0.00270224227578939, -0.00352248632076450, -0.00402781595501177
+        };
+
+        const double fd = 10;           // Частота дискретизации
+        const double dt = 1 / fd;       // Период дискретизации
+
+        const double Rp = 1;    // Неоднородность АЧХ в интервале пропускания не более 1 дБ
+        const double Rs = 40;   // Уровень подавления более 40 дБ
+
+        var Gp = (-Rp).From_dB();   // Значения АЧХ в интервале пропускания
+        var Gs = (-Rs).From_dB();   // Значения АЧХ в интервале подавления
+
+        const double fpl = 2 / Consts.pi2;  // нижняя частота границы полосы пропускания
+        const double fsl = 4 / Consts.pi2;  // нижняя частота границы полосы заграждения
+        const double fsh = 12 / Consts.pi2; // верхняя частота границы полосы заграждения
+        const double fph = 14 / Consts.pi2; // верхняя частота границы полосы пропускания
+
+        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+
+        var actual_h = filter.GetImpulseResponse(expected_h.Length);
+
+        var error = expected_h.Zip(actual_h, (e, a) => (e - a).Pow2()).Average().Sqrt();
+        error.ToDebug();
+
+        Assert.That.Value(error).LessThan(5.36e-12);
+    }
+
+    [TestMethod]
     public void TypeIICorrected_Even_ImpulseResponse()
     {
         double[] expected_h =
@@ -1714,6 +1772,57 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         error2.ToDebug();
 
         Assert.That.Value(error2).LessThan(3.15e-18);
+    }
+
+    [TestMethod]
+    public void TypeIICorrected_Odd_ImpulseResponse()
+    {
+        double[] expected_h =
+        {
+            +0.22881500022931373, -0.44664275856193460, +0.47358299185039120, +0.02307987508704328, -0.15678168951627006,
+            +0.10218005448231729, +0.23153945606384074, +0.08734899468490825, -0.01440115295783170, +0.08020284319872750,
+            +0.18380972040665028, +0.13544097316529410, +0.03185074186421728, +0.02701393820572644, +0.09347467595244445,
+            +0.09919652249784168, +0.02220189399682204, -0.03554405564211223, -0.01713849711003434, +0.01536584487112376,
+            -0.00774868836672680, -0.06010997069818232, -0.07177526859472418, -0.03685495602038790, -0.01236147966455513,
+            -0.02698923454290885, -0.04473288188041932, -0.02700884161234825, +0.01060802412713162, +0.02714734080237191,
+            +0.01661361399901176, +0.00966779653657926, +0.02361645056853234, +0.03961968939724947, +0.03493561758837013,
+            +0.01585963553576044, +0.00477255452260211, +0.00690332363299641, +0.00681140883365204, -0.00541263184543605,
+            -0.02006876855209103, -0.02381237262454140, -0.01834517891928529, -0.01514153339479393, -0.01760459374985310,
+            -0.01783167256219973, -0.01010270768944888, +0.00070638555392700, +0.00687276872494584, +0.00826486904657544,
+            +0.01043482685867396, +0.01517629802500484, +0.01815170389947627, +0.01580771680094576, +0.01032618355055682,
+            +0.00594563800008821, +0.00320519343540165, -0.00051540729980875, -0.00604265571242141, -0.01083109815374692,
+            -0.01250596706202954, -0.01175919221920397, -0.01066856612993569, -0.00957336331041529, -0.00712798763737360,
+            -0.00289512944074976, +0.00164863981692409, +0.00491787818256083, +0.00690093733314759, +0.00843657374403079,
+            +0.00955071587439764, +0.00938215599752991, +0.00755065630171347, +0.00479265898352213, +0.00205986801628473,
+            -0.00044215488484536, -0.00296571701584633, -0.00535019788396005, -0.00694116704651249, -0.00732316431107390,
+            -0.00672590698429617, -0.00559455692367545, -0.00405862765446835, -0.00204091065494762, +0.00028665487048555,
+            +0.00244000298377643, +0.00401910824644050, +0.00496866090419134, +0.00538941174728274, +0.00525956689912978,
+            +0.00448032749233809, +0.00312234928628582, +0.00147601793156162, -0.00015860892867822, -0.00163441644596733,
+            -0.00288335645194253, -0.00377852000072013, -0.00416048380510373, -0.00397910346586083, -0.00333789128109529,
+        };
+
+        const double fd = 10;           // Частота дискретизации
+        const double dt = 1 / fd;       // Период дискретизации
+
+        const double Rp = 1;    // Неоднородность АЧХ в интервале пропускания не более 1 дБ
+        const double Rs = 40;   // Уровень подавления более 40 дБ
+
+        var Gp = (-Rp).From_dB();   // Значения АЧХ в интервале пропускания
+        var Gs = (-Rs).From_dB();   // Значения АЧХ в интервале подавления
+
+        const double fpl = 2 / Consts.pi2;  // нижняя частота границы полосы пропускания
+        const double fsl = 4 / Consts.pi2;  // нижняя частота границы полосы заграждения
+        const double fsh = 12 / Consts.pi2; // верхняя частота границы полосы заграждения
+        const double fph = 14 / Consts.pi2; // верхняя частота границы полосы пропускания
+
+        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+
+        var actual_h = filter.GetImpulseResponse(expected_h.Length);
+
+        var error2 = expected_h.Zip(actual_h, (e, a) => (e - a).Pow2()).Average().Sqrt();
+        //error2.ToDebug();
+
+        Assert.That.Value(error2).LessThan(5.9e-10);
     }
 
     [TestMethod]
@@ -1782,7 +1891,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         var y_ph_fd05 = filter.ProcessIndividual(x_ph_fd05);
         var y_fd05 = filter.ProcessIndividual(x_fd05);
 
-        // Рассчёт коэффициентов передачи по мощности
+        // Расчёт коэффициентов передачи по мощности
         var k_low = y_low.Power / x_low.Power;
         var k_pl99 = y_pl99.Power / x_pl99.Power;
         var k_pl = y_pl.Power / x_pl.Power;
@@ -1803,7 +1912,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         var k_ph_fd05 = y_ph_fd05.Power / x_ph_fd05.Power;
         var k_fd05 = y_fd05.Power / x_fd05.Power;
 
-        // Рассчёт коэффициентов передачи по мощности в логарифмическим масштабе
+        // Расчёт коэффициентов передачи по мощности в логарифмическим масштабе
         var k_low_db = k_low.In_dB_byPower();
         var k_pl99_db = k_pl99.In_dB_byPower();
         var k_pl_db = k_pl.In_dB_byPower();
@@ -1835,7 +1944,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         k_sl_pl_db.AssertLessOrEqualsThan(-Rp);         // Коэффициент передачи у верхнего края переходной полосы должен быть гарантировано меньше коэффициента пропускания Rp (-1дБ) и должен приближаться к уровню Rs (-40дБ)
 
         // Коэффициенты передачи в полосе заграждения
-        // должны бытьниже уровня подавления Rs
+        // должны быть ниже уровня подавления Rs
         k_sl_db.AssertLessOrEqualsThan(-Rs, 2.16);      // Коэффициент передачи на нижней границе полосы заграждения должен быть не больше Rs (-40дБ и ниже)
         k_sl_sh_db.AssertLessOrEqualsThan(-Rs);         // Коэффициент передачи у нижнего края полосы заграждения должен быть меньше Rs
         k_c0_db.AssertLessOrEqualsThan(-Rs, 1.5);       // Коэффициент передачи на центральной частоте полосы заграждения
@@ -1991,7 +2100,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         var y_ph_fd05 = filter.ProcessIndividual(x_ph_fd05);
         var y_fd05 = filter.ProcessIndividual(x_fd05);
 
-        // Рассчёт коэффициентов передачи по мощности
+        // Расчёт коэффициентов передачи по мощности
         var k_low = y_low.Power / x_low.Power;
         var k_pl99 = y_pl99.Power / x_pl99.Power;
         var k_pl = y_pl.Power / x_pl.Power;
@@ -2012,7 +2121,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         var k_ph_fd05 = y_ph_fd05.Power / x_ph_fd05.Power;
         var k_fd05 = y_fd05.Power / x_fd05.Power;
 
-        // Рассчёт коэффициентов передачи по мощности в логарифмическим масштабе
+        // Расчёт коэффициентов передачи по мощности в логарифмическим масштабе
         var k_low_db = k_low.In_dB_byPower();
         var k_pl99_db = k_pl99.In_dB_byPower();
         var k_pl_db = k_pl.In_dB_byPower();
@@ -2044,7 +2153,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         k_sl_pl_db.AssertLessOrEqualsThan(-Rp);         // Коэффициент передачи у верхнего края переходной полосы должен быть гарантировано меньше коэффициента пропускания Rp (-1дБ) и должен приближаться к уровню Rs (-40дБ)
 
         // Коэффициенты передачи в полосе заграждения
-        // должны бытьниже уровня подавления Rs
+        // должны быть ниже уровня подавления Rs
         k_sl_db.AssertLessOrEqualsThan(-Rs, 2.16);      // Коэффициент передачи на нижней границе полосы заграждения должен быть не больше Rs (-40дБ и ниже)
         k_sl_sh_db.AssertLessOrEqualsThan(-Rs);         // Коэффициент передачи у нижнего края полосы заграждения должен быть меньше Rs
         k_c0_db.AssertLessOrEqualsThan(-Rs, 1.5);       // Коэффициент передачи на центральной частоте полосы заграждения
@@ -2125,6 +2234,848 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         h_c0.AssertLessOrEqualsThan(-Rs);
         h_sh_sl.AssertLessOrEqualsThan(-Rs);
         h_sh.AssertLessOrEqualsThan(-Rs);
+
+        h_sh_ph.AssertLessOrEqualsThan(-Rp);
+        h_ph_sh.AssertLessOrEqualsThan(-Rp).GreaterOrEqualsThan(-Rs);
+
+        h_ph.AssertGreaterOrEqualsThan(-Rp);
+        h_ph_fd05.AssertGreaterOrEqualsThan(-Rp);
+        h_fd05.AssertGreaterOrEqualsThan(-Rp);
+    }
+
+    [TestMethod]
+    public void TypeII_Even_SignalProcessing()
+    {
+        const double fd = 10;         // Частота дискретизации
+        const double dt = 1 / fd;       // Период дискретизации
+
+        const double Rp = 1;    // Неоднородность АЧХ в интервале пропускания не более 1 дБ
+        const double Rs = 40;   // Уровень подавления более 40 дБ
+
+        var Gp = (-Rp).From_dB();   // Значения АЧХ в интервале пропускания
+        var Gs = (-Rs).From_dB();   // Значения АЧХ в интервале подавления
+
+        const double fpl = 2 / Consts.pi2;  // нижняя частота границы полосы пропускания
+        const double fsl = 4 / Consts.pi2;  // нижняя частота границы полосы заграждения
+        const double fsh = 12 / Consts.pi2; // верхняя частота границы полосы заграждения
+        const double fph = 15 / Consts.pi2; // верхняя частота границы полосы пропускания
+
+        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+
+        //const double total_time = 1 / fpl;
+        //const int samples_count = (int)(total_time * fd) + 1;
+
+        // Метод формирования гармонического сигнала на заданной частоте
+        static EnumerableSignal GetSinSignal(double f0) => MathEnumerableSignal.Sin(dt, f0, (int)(100 * fd / (fpl * 0.1)));
+
+        var x_low = GetSinSignal(fpl * 0.1);                    // частота, близкая к нулю
+        var x_pl99 = GetSinSignal(fpl * 0.99);                   // частота чуть ниже нижней границы пропускания
+        var x_pl = GetSinSignal(fpl);                          // частота на нижней границе пропускания
+
+        var x_pl_sl = GetSinSignal(fpl + (fsl - fpl) * 0.1);      // частота выше нижней границы пропускания
+        var x_sl_pl = GetSinSignal(fsl - (fsl - fpl) * 0.1);      // частота ниже нижней границы подавления
+
+        var x_sl = GetSinSignal(fsl);                          // частота на границе подавления
+        var x_sl_sh = GetSinSignal(fsl + (fsh - fsl) * 0.1);      // частота выше нижней границы подавления
+        var x_c0 = GetSinSignal((fsl * fsh).Sqrt());           // частота в середине полосы подавления
+        var x_sh_sl = GetSinSignal(fsh - (fsh - fsl) * 0.1);      // частота ниже верхней границы подавления
+        var x_sh = GetSinSignal(fsh);                          // частота на границе подавления
+
+        var x_sh_ph = GetSinSignal(fsh + (fph - fsh) * 0.1);      // частота выше верхней границы подавления
+        var x_ph_sh = GetSinSignal(fph - (fph - fsh) * 0.1);      // частота ниже верхней границы пропускания
+
+        var x_ph = GetSinSignal(fph);                          // частота на верхней границе пропускания
+        var x_ph_fd05 = GetSinSignal(fph + (fd / 2 - fph) * 0.1);   // частота выше верхней границы пропускания
+        var x_fd05 = GetSinSignal(0.9 * (fd / 2));               // частота ниже половины частоты дискретизации
+
+        // Индивидуальная фильтрация каждой частотной составляющей
+        var y_low = filter.ProcessIndividual(x_low);
+        var y_pl99 = filter.ProcessIndividual(x_pl99);
+        var y_pl = filter.ProcessIndividual(x_pl);
+
+        var y_pl_sl = filter.ProcessIndividual(x_pl_sl);
+        var y_sl_pl = filter.ProcessIndividual(x_sl_pl);
+
+        var y_sl = filter.ProcessIndividual(x_sl);
+        var y_sl_sh = filter.ProcessIndividual(x_sl_sh);
+        var y_c0 = filter.ProcessIndividual(x_c0);
+        var y_sh_sl = filter.ProcessIndividual(x_sh_sl);
+        var y_sh = filter.ProcessIndividual(x_sh);
+
+        var y_sh_ph = filter.ProcessIndividual(x_sh_ph);
+        var y_ph_sh = filter.ProcessIndividual(x_ph_sh);
+
+        var y_ph = filter.ProcessIndividual(x_ph);
+        var y_ph_fd05 = filter.ProcessIndividual(x_ph_fd05);
+        var y_fd05 = filter.ProcessIndividual(x_fd05);
+
+        // Расчёт коэффициентов передачи по мощности
+        var k_low = y_low.Power / x_low.Power;
+        var k_pl99 = y_pl99.Power / x_pl99.Power;
+        var k_pl = y_pl.Power / x_pl.Power;
+
+        var k_pl_sl = y_pl_sl.Power / x_pl_sl.Power;
+        var k_sl_pl = y_sl_pl.Power / x_sl_pl.Power;
+
+        var k_sl = y_sl.Power / x_sl.Power;
+        var k_sl_sh = y_sl_sh.Power / x_sl_sh.Power;
+        var k_c0 = y_c0.Power / x_c0.Power;
+        var k_sh_sl = y_sh_sl.Power / x_sh_sl.Power;
+        var k_sh = y_sh.Power / x_sh.Power;
+
+        var k_sh_ph = y_sh_ph.Power / x_sh_ph.Power;
+        var k_ph_sh = y_ph_sh.Power / x_ph_sh.Power;
+
+        var k_ph = y_ph.Power / x_ph.Power;
+        var k_ph_fd05 = y_ph_fd05.Power / x_ph_fd05.Power;
+        var k_fd05 = y_fd05.Power / x_fd05.Power;
+
+        // Расчёт коэффициентов передачи по мощности в логарифмическим масштабе
+        var k_low_db = k_low.In_dB_byPower();
+        var k_pl99_db = k_pl99.In_dB_byPower();
+        var k_pl_db = k_pl.In_dB_byPower();
+
+        var k_pl_sl_db = k_pl_sl.In_dB_byPower();
+        var k_sl_pl_db = k_sl_pl.In_dB_byPower();
+
+        var k_sl_db = k_sl.In_dB_byPower();
+        var k_sl_sh_db = k_sl_sh.In_dB_byPower();
+        var k_c0_db = k_c0.In_dB_byPower();
+        var k_sh_sl_db = k_sh_sl.In_dB_byPower();
+        var k_sh_db = k_sh.In_dB_byPower();
+
+        var k_sh_ph_db = k_sh_ph.In_dB_byPower();
+        var k_ph_sh_db = k_ph_sh.In_dB_byPower();
+
+        var k_ph_db = k_ph.In_dB_byPower();
+        var k_ph_fd05_db = k_ph_fd05.In_dB_byPower();
+        var k_fd05_db = k_fd05.In_dB_byPower();
+
+        // Сравнение коэффициентов передачи с заданными параметрами фильтрации
+        k_low_db.AssertGreaterOrEqualsThan(-Rp);        // Коэффициенты передачи в нижней полосе пропускания
+        k_pl99_db.AssertGreaterOrEqualsThan(-Rp);       // должны быть меньше, чем заданный уровень
+        k_pl_db.AssertGreaterOrEqualsThan(-Rp);         // неравномерности АЧХ (допуск) Rp - не более -1дБ
+
+        // Коэффициенты передачи в переходной полосе
+        // между полосой пропускания и полосой заграждения
+        k_pl_sl_db.AssertGreaterOrEqualsThan(-Rs);      // Коэффициент передачи у нижнего края переходной полосы не должен быть ниже уровня подавления Rs (-40дБ), но может быть всё ещё порядка уровня пропускания Rp (-1дБ)
+        k_sl_pl_db.AssertLessOrEqualsThan(-Rp);         // Коэффициент передачи у верхнего края переходной полосы должен быть гарантировано меньше коэффициента пропускания Rp (-1дБ) и должен приближаться к уровню Rs (-40дБ)
+
+        // Коэффициенты передачи в полосе заграждения
+        // должны быть ниже уровня подавления Rs
+        k_sl_db.AssertLessOrEqualsThan(-Rs, 2.16);      // Коэффициент передачи на нижней границе полосы заграждения должен быть не больше Rs (-40дБ и ниже)
+        k_sl_sh_db.AssertLessOrEqualsThan(-Rs);         // Коэффициент передачи у нижнего края полосы заграждения должен быть меньше Rs
+        k_c0_db.AssertLessOrEqualsThan(-Rs, 1.5);       // Коэффициент передачи на центральной частоте полосы заграждения
+        k_sh_sl_db.AssertLessOrEqualsThan(-Rs, 1.5);    // Коэффициент передачи у верхнего края полосы подавления
+        k_sh_db.AssertLessOrEqualsThan(-Rs, 0.36);      // Коэффициент передачи на верхней границе полосы подавления
+
+        // Коэффициенты передачи в переходной полосе
+        // между верхней полосой заграждения и верхней
+        // полосой пропускания
+        k_sh_ph_db.AssertLessThan(-Rp);
+        k_ph_sh_db.AssertLessThan(-Rs);
+        k_ph_sh_db.AssertLessThan(-Rp);
+
+        // Коэффициенты передачи в верхней полосе пропускания
+        // от верхней границы полосы пропускания до частоты,
+        // близкой к половине частоты дискретизации
+        k_ph_db.AssertLessThan(-Rp, 0.01);
+        k_ph_fd05_db.AssertGreaterOrEqualsThan(-Rs);
+        k_fd05_db.AssertGreaterOrEqualsThan(-Rp);
+
+        // Суммарный сигнал
+        var x =
+            x_low +
+            x_pl99 +
+            x_pl +
+            x_pl_sl +
+            x_sl_pl +
+            x_sl +
+            x_sl_sh +
+            x_c0 +
+            x_sh_sl +
+            x_sh +
+            x_sh_ph +
+            x_ph_sh +
+            x_ph +
+            x_ph_fd05 +
+            x_fd05;
+
+        // Фильтрация суммарного гармонического сигнала
+        var y = filter.ProcessIndividual(x);
+
+        var X = x.GetSpectrum();    // Спектр входного сигнала фильтра
+        var Y = y.GetSpectrum();    // Спектр выходного сигнала фильтра
+
+        var H = Y / X;              // Коэффициент передачи фильтра как отношение спектров на выходе и на входе
+
+        // Извлекаем из спетра коэффициенты передачи на частотах гармонических составляющих исходного сигнала
+        var h_low = H.GetValue(fpl * 0.1).Power.In_dB_byPower();
+        var h_pl99 = H.GetValue(fpl * 0.99).Power.In_dB_byPower();
+        var h_pl = H.GetValue(fpl).Power.In_dB_byPower();
+
+        var h_pl_sl = H.GetValue(fpl + (fsl - fpl) * 0.1).Power.In_dB_byPower();
+        var h_sl_pl = H.GetValue(fsl - (fsl - fpl) * 0.1).Power.In_dB_byPower();
+
+        var h_sl = H.GetValue(fsl).Power.In_dB_byPower();
+        var h_sl_sh = H.GetValue(fsl + (fsh - fsl) * 0.1).Power.In_dB_byPower();
+        var h_c0 = H.GetValue((fsl * fsh).Sqrt()).Power.In_dB_byPower();
+        var h_sh_sl = H.GetValue(fsh - (fsh - fsl) * 0.1).Power.In_dB_byPower();
+        var h_sh = H.GetValue(fsh).Power.In_dB_byPower();
+
+        var h_sh_ph = H.GetValue(fsh + (fph - fsh) * 0.1).Power.In_dB_byPower();
+        var h_ph_sh = H.GetValue(fph - (fph - fsh) * 0.1).Power.In_dB_byPower();
+
+        var h_ph = H.GetValue(fph).Power.In_dB_byPower();
+        var h_ph_fd05 = H.GetValue(fph + (fd / 2 - fph) * 0.1).Power.In_dB_byPower();
+        var h_fd05 = H.GetValue(0.9 * (fd / 2)).Power.In_dB_byPower();
+
+        (-Rp).ToDebug();
+        (-Rs).ToDebug();
+
+        // Тест фактических коэффициентов передачи
+        h_low.AssertGreaterOrEqualsThan(-Rp);
+        h_pl99.AssertGreaterOrEqualsThan(-Rp);
+        h_pl.AssertGreaterOrEqualsThan(-Rp);
+
+        h_pl_sl.AssertGreaterOrEqualsThan(-Rs);
+        h_sl_pl.AssertLessOrEqualsThan(-Rp);
+
+        h_sl.AssertLessOrEqualsThan(-Rs);
+        h_sl_sh.AssertLessOrEqualsThan(-Rs);
+        h_c0.AssertLessOrEqualsThan(-Rs);
+        h_sh_sl.AssertLessOrEqualsThan(-Rs);
+        h_sh.AssertLessOrEqualsThan(-Rs);
+
+        h_sh_ph.AssertLessOrEqualsThan(-Rp);
+        h_ph_sh.AssertLessOrEqualsThan(-Rp);
+
+        h_ph.AssertLessOrEqualsThan(-Rp);
+        h_ph_fd05.AssertLessOrEqualsThan(-Rp);
+        h_fd05.AssertGreaterOrEqualsThan(-Rp);
+    }
+
+    [TestMethod]
+    public void TypeII_Odd_SignalProcessing()
+    {
+        const double fd = 10;         // Частота дискретизации
+        const double dt = 1 / fd;       // Период дискретизации
+
+        const double Rp = 1;    // Неоднородность АЧХ в интервале пропускания не более 1 дБ
+        const double Rs = 40;   // Уровень подавления более 40 дБ
+
+        var Gp = (-Rp).From_dB();   // Значения АЧХ в интервале пропускания
+        var Gs = (-Rs).From_dB();   // Значения АЧХ в интервале подавления
+
+        const double fpl = 2 / Consts.pi2;  // нижняя частота границы полосы пропускания
+        const double fsl = 4 / Consts.pi2;  // нижняя частота границы полосы заграждения
+        const double fsh = 12 / Consts.pi2; // верхняя частота границы полосы заграждения
+        const double fph = 14 / Consts.pi2; // верхняя частота границы полосы пропускания
+
+        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+
+        //const double total_time = 1 / fpl;
+        //const int samples_count = (int)(total_time * fd) + 1;
+
+        // Метод формирования гармонического сигнала на заданной частоте
+        static EnumerableSignal GetSinSignal(double f0) => MathEnumerableSignal.Sin(dt, f0, (int)(100 * fd / (fpl * 0.1)));
+
+        var x_low = GetSinSignal(fpl * 0.1);                    // частота, близкая к нулю
+        var x_pl99 = GetSinSignal(fpl * 0.99);                   // частота чуть ниже нижней границы пропускания
+        var x_pl = GetSinSignal(fpl);                          // частота на нижней границе пропускания
+
+        var x_pl_sl = GetSinSignal(fpl + (fsl - fpl) * 0.1);      // частота выше нижней границы пропускания
+        var x_sl_pl = GetSinSignal(fsl - (fsl - fpl) * 0.1);      // частота ниже нижней границы подавления
+
+        var x_sl = GetSinSignal(fsl);                          // частота на границе подавления
+        var x_sl_sh = GetSinSignal(fsl + (fsh - fsl) * 0.1);      // частота выше нижней границы подавления
+        var x_c0 = GetSinSignal((fsl * fsh).Sqrt());           // частота в середине полосы подавления
+        var x_sh_sl = GetSinSignal(fsh - (fsh - fsl) * 0.1);      // частота ниже верхней границы подавления
+        var x_sh = GetSinSignal(fsh);                          // частота на границе подавления
+
+        var x_sh_ph = GetSinSignal(fsh + (fph - fsh) * 0.1);      // частота выше верхней границы подавления
+        var x_ph_sh = GetSinSignal(fph - (fph - fsh) * 0.1);      // частота ниже верхней границы пропускания
+
+        var x_ph = GetSinSignal(fph);                          // частота на верхней границе пропускания
+        var x_ph_fd05 = GetSinSignal(fph + (fd / 2 - fph) * 0.1);   // частота выше верхней границы пропускания
+        var x_fd05 = GetSinSignal(0.9 * (fd / 2));               // частота ниже половины частоты дискретизации
+
+        // Индивидуальная фильтрация каждой частотной составляющей
+        var y_low = filter.ProcessIndividual(x_low);
+        var y_pl99 = filter.ProcessIndividual(x_pl99);
+        var y_pl = filter.ProcessIndividual(x_pl);
+
+        var y_pl_sl = filter.ProcessIndividual(x_pl_sl);
+        var y_sl_pl = filter.ProcessIndividual(x_sl_pl);
+
+        var y_sl = filter.ProcessIndividual(x_sl);
+        var y_sl_sh = filter.ProcessIndividual(x_sl_sh);
+        var y_c0 = filter.ProcessIndividual(x_c0);
+        var y_sh_sl = filter.ProcessIndividual(x_sh_sl);
+        var y_sh = filter.ProcessIndividual(x_sh);
+
+        var y_sh_ph = filter.ProcessIndividual(x_sh_ph);
+        var y_ph_sh = filter.ProcessIndividual(x_ph_sh);
+
+        var y_ph = filter.ProcessIndividual(x_ph);
+        var y_ph_fd05 = filter.ProcessIndividual(x_ph_fd05);
+        var y_fd05 = filter.ProcessIndividual(x_fd05);
+
+        // Расчёт коэффициентов передачи по мощности
+        var k_low = y_low.Power / x_low.Power;
+        var k_pl99 = y_pl99.Power / x_pl99.Power;
+        var k_pl = y_pl.Power / x_pl.Power;
+
+        var k_pl_sl = y_pl_sl.Power / x_pl_sl.Power;
+        var k_sl_pl = y_sl_pl.Power / x_sl_pl.Power;
+
+        var k_sl = y_sl.Power / x_sl.Power;
+        var k_sl_sh = y_sl_sh.Power / x_sl_sh.Power;
+        var k_c0 = y_c0.Power / x_c0.Power;
+        var k_sh_sl = y_sh_sl.Power / x_sh_sl.Power;
+        var k_sh = y_sh.Power / x_sh.Power;
+
+        var k_sh_ph = y_sh_ph.Power / x_sh_ph.Power;
+        var k_ph_sh = y_ph_sh.Power / x_ph_sh.Power;
+
+        var k_ph = y_ph.Power / x_ph.Power;
+        var k_ph_fd05 = y_ph_fd05.Power / x_ph_fd05.Power;
+        var k_fd05 = y_fd05.Power / x_fd05.Power;
+
+        // Расчёт коэффициентов передачи по мощности в логарифмическим масштабе
+        var k_low_db = k_low.In_dB_byPower();
+        var k_pl99_db = k_pl99.In_dB_byPower();
+        var k_pl_db = k_pl.In_dB_byPower();
+
+        var k_pl_sl_db = k_pl_sl.In_dB_byPower();
+        var k_sl_pl_db = k_sl_pl.In_dB_byPower();
+
+        var k_sl_db = k_sl.In_dB_byPower();
+        var k_sl_sh_db = k_sl_sh.In_dB_byPower();
+        var k_c0_db = k_c0.In_dB_byPower();
+        var k_sh_sl_db = k_sh_sl.In_dB_byPower();
+        var k_sh_db = k_sh.In_dB_byPower();
+
+        var k_sh_ph_db = k_sh_ph.In_dB_byPower();
+        var k_ph_sh_db = k_ph_sh.In_dB_byPower();
+
+        var k_ph_db = k_ph.In_dB_byPower();
+        var k_ph_fd05_db = k_ph_fd05.In_dB_byPower();
+        var k_fd05_db = k_fd05.In_dB_byPower();
+
+        // Сравнение коэффициентов передачи с заданными параметрами фильтрации
+        k_low_db.AssertGreaterOrEqualsThan(-Rp);        // Коэффициенты передачи в нижней полосе пропускания
+        k_pl99_db.AssertGreaterOrEqualsThan(-Rp);       // должны быть меньше, чем заданный уровень
+        k_pl_db.AssertGreaterOrEqualsThan(-Rp);         // неравномерности АЧХ (допуск) Rp - не более -1дБ
+
+        // Коэффициенты передачи в переходной полосе
+        // между полосой пропускания и полосой заграждения
+        k_pl_sl_db.AssertGreaterOrEqualsThan(-Rs);      // Коэффициент передачи у нижнего края переходной полосы не должен быть ниже уровня подавления Rs (-40дБ), но может быть всё ещё порядка уровня пропускания Rp (-1дБ)
+        k_sl_pl_db.AssertLessOrEqualsThan(-Rp);         // Коэффициент передачи у верхнего края переходной полосы должен быть гарантировано меньше коэффициента пропускания Rp (-1дБ) и должен приближаться к уровню Rs (-40дБ)
+
+        // Коэффициенты передачи в полосе заграждения
+        // должны быть ниже уровня подавления Rs
+        k_sl_db.AssertLessOrEqualsThan(-Rs, 2.16);      // Коэффициент передачи на нижней границе полосы заграждения должен быть не больше Rs (-40дБ и ниже)
+        k_sl_sh_db.AssertLessOrEqualsThan(-Rs);         // Коэффициент передачи у нижнего края полосы заграждения должен быть меньше Rs
+        k_c0_db.AssertLessOrEqualsThan(-Rs, 1.5);       // Коэффициент передачи на центральной частоте полосы заграждения
+        k_sh_sl_db.AssertLessOrEqualsThan(-Rs, 1.5);    // Коэффициент передачи у верхнего края полосы подавления
+        k_sh_db.AssertLessOrEqualsThan(-Rs, 0.36);      // Коэффициент передачи на верхней границе полосы подавления
+
+        // Коэффициенты передачи в переходной полосе
+        // между верхней полосой заграждения и верхней
+        // полосой пропускания
+        k_sh_ph_db.AssertLessThan(-Rp);
+        k_ph_sh_db.AssertLessThan(-Rs);
+        k_ph_sh_db.AssertLessThan(-Rp);
+
+        // Коэффициенты передачи в верхней полосе пропускания
+        // от верхней границы полосы пропускания до частоты,
+        // близкой к половине частоты дискретизации
+        k_ph_db.AssertLessThan(-Rp, 0.01);
+        k_ph_fd05_db.AssertGreaterOrEqualsThan(-Rs);
+        k_fd05_db.AssertGreaterOrEqualsThan(-Rp);
+
+        // Суммарный сигнал
+        var x =
+            x_low +
+            x_pl99 +
+            x_pl +
+            x_pl_sl +
+            x_sl_pl +
+            x_sl +
+            x_sl_sh +
+            x_c0 +
+            x_sh_sl +
+            x_sh +
+            x_sh_ph +
+            x_ph_sh +
+            x_ph +
+            x_ph_fd05 +
+            x_fd05;
+
+        // Фильтрация суммарного гармонического сигнала
+        var y = filter.ProcessIndividual(x);
+
+        var X = x.GetSpectrum();    // Спектр входного сигнала фильтра
+        var Y = y.GetSpectrum();    // Спектр выходного сигнала фильтра
+
+        var H = Y / X;              // Коэффициент передачи фильтра как отношение спектров на выходе и на входе
+
+        // Извлекаем из спетра коэффициенты передачи на частотах гармонических составляющих исходного сигнала
+        var h_low = H.GetValue(fpl * 0.1).Power.In_dB_byPower();
+        var h_pl99 = H.GetValue(fpl * 0.99).Power.In_dB_byPower();
+        var h_pl = H.GetValue(fpl).Power.In_dB_byPower();
+
+        var h_pl_sl = H.GetValue(fpl + (fsl - fpl) * 0.1).Power.In_dB_byPower();
+        var h_sl_pl = H.GetValue(fsl - (fsl - fpl) * 0.1).Power.In_dB_byPower();
+
+        var h_sl = H.GetValue(fsl).Power.In_dB_byPower();
+        var h_sl_sh = H.GetValue(fsl + (fsh - fsl) * 0.1).Power.In_dB_byPower();
+        var h_c0 = H.GetValue((fsl * fsh).Sqrt()).Power.In_dB_byPower();
+        var h_sh_sl = H.GetValue(fsh - (fsh - fsl) * 0.1).Power.In_dB_byPower();
+        var h_sh = H.GetValue(fsh).Power.In_dB_byPower();
+
+        var h_sh_ph = H.GetValue(fsh + (fph - fsh) * 0.1).Power.In_dB_byPower();
+        var h_ph_sh = H.GetValue(fph - (fph - fsh) * 0.1).Power.In_dB_byPower();
+
+        var h_ph = H.GetValue(fph).Power.In_dB_byPower();
+        var h_ph_fd05 = H.GetValue(fph + (fd / 2 - fph) * 0.1).Power.In_dB_byPower();
+        var h_fd05 = H.GetValue(0.9 * (fd / 2)).Power.In_dB_byPower();
+
+        (-Rp).ToDebug();
+        (-Rs).ToDebug();
+
+        // Тест фактических коэффициентов передачи
+        h_low.AssertGreaterOrEqualsThan(-Rp);
+        h_pl99.AssertGreaterOrEqualsThan(-Rp);
+        h_pl.AssertGreaterOrEqualsThan(-Rp);
+
+        h_pl_sl.AssertGreaterOrEqualsThan(-Rs);
+        h_sl_pl.AssertLessOrEqualsThan(-Rp);
+
+        h_sl.AssertLessOrEqualsThan(-Rs);
+        h_sl_sh.AssertLessOrEqualsThan(-Rs);
+        h_c0.AssertLessOrEqualsThan(-Rs);
+        h_sh_sl.AssertLessOrEqualsThan(-Rs);
+        h_sh.AssertLessOrEqualsThan(-Rs);
+
+        h_sh_ph.AssertLessOrEqualsThan(-Rp);
+        h_ph_sh.AssertLessOrEqualsThan(-Rp);
+
+        h_ph.AssertLessOrEqualsThan(-Rp);
+        h_ph_fd05.AssertLessOrEqualsThan(-Rp);
+        h_fd05.AssertGreaterOrEqualsThan(-Rp);
+    }
+
+    [TestMethod]
+    public void TypeIICorrected_Even_SignalProcessing()
+    {
+        const double fd = 10;         // Частота дискретизации
+        const double dt = 1 / fd;       // Период дискретизации
+
+        const double Rp = 1;    // Неоднородность АЧХ в интервале пропускания не более 1 дБ
+        const double Rs = 40;   // Уровень подавления более 40 дБ
+
+        var Gp = (-Rp).From_dB();   // Значения АЧХ в интервале пропускания
+        var Gs = (-Rs).From_dB();   // Значения АЧХ в интервале подавления
+
+        const double fpl = 2 / Consts.pi2;  // нижняя частота границы полосы пропускания
+        const double fsl = 4 / Consts.pi2;  // нижняя частота границы полосы заграждения
+        const double fsh = 12 / Consts.pi2; // верхняя частота границы полосы заграждения
+        const double fph = 15 / Consts.pi2; // верхняя частота границы полосы пропускания
+
+        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+
+        //const double total_time = 1 / fpl;
+        //const int samples_count = (int)(total_time * fd) + 1;
+
+        // Метод формирования гармонического сигнала на заданной частоте
+        static EnumerableSignal GetSinSignal(double f0) => MathEnumerableSignal.Sin(dt, f0, (int)(100 * fd / (fpl * 0.1)));
+
+        var x_low = GetSinSignal(fpl * 0.1);                    // частота, близкая к нулю
+        var x_pl99 = GetSinSignal(fpl * 0.99);                   // частота чуть ниже нижней границы пропускания
+        var x_pl = GetSinSignal(fpl);                          // частота на нижней границе пропускания
+
+        var x_pl_sl = GetSinSignal(fpl + (fsl - fpl) * 0.1);      // частота выше нижней границы пропускания
+        var x_sl_pl = GetSinSignal(fsl - (fsl - fpl) * 0.1);      // частота ниже нижней границы подавления
+
+        var x_sl = GetSinSignal(fsl);                          // частота на границе подавления
+        var x_sl_sh = GetSinSignal(fsl + (fsh - fsl) * 0.1);      // частота выше нижней границы подавления
+        var x_c0 = GetSinSignal((fsl * fsh).Sqrt());           // частота в середине полосы подавления
+        var x_sh_sl = GetSinSignal(fsh - (fsh - fsl) * 0.1);      // частота ниже верхней границы подавления
+        var x_sh = GetSinSignal(fsh);                          // частота на границе подавления
+
+        var x_sh_ph = GetSinSignal(fsh + (fph - fsh) * 0.1);      // частота выше верхней границы подавления
+        var x_ph_sh = GetSinSignal(fph - (fph - fsh) * 0.1);      // частота ниже верхней границы пропускания
+
+        var x_ph = GetSinSignal(fph);                          // частота на верхней границе пропускания
+        var x_ph_fd05 = GetSinSignal(fph + (fd / 2 - fph) * 0.1);   // частота выше верхней границы пропускания
+        var x_fd05 = GetSinSignal(0.9 * (fd / 2));               // частота ниже половины частоты дискретизации
+
+        // Индивидуальная фильтрация каждой частотной составляющей
+        var y_low = filter.ProcessIndividual(x_low);
+        var y_pl99 = filter.ProcessIndividual(x_pl99);
+        var y_pl = filter.ProcessIndividual(x_pl);
+
+        var y_pl_sl = filter.ProcessIndividual(x_pl_sl);
+        var y_sl_pl = filter.ProcessIndividual(x_sl_pl);
+
+        var y_sl = filter.ProcessIndividual(x_sl);
+        var y_sl_sh = filter.ProcessIndividual(x_sl_sh);
+        var y_c0 = filter.ProcessIndividual(x_c0);
+        var y_sh_sl = filter.ProcessIndividual(x_sh_sl);
+        var y_sh = filter.ProcessIndividual(x_sh);
+
+        var y_sh_ph = filter.ProcessIndividual(x_sh_ph);
+        var y_ph_sh = filter.ProcessIndividual(x_ph_sh);
+
+        var y_ph = filter.ProcessIndividual(x_ph);
+        var y_ph_fd05 = filter.ProcessIndividual(x_ph_fd05);
+        var y_fd05 = filter.ProcessIndividual(x_fd05);
+
+        // Расчёт коэффициентов передачи по мощности
+        var k_low = y_low.Power / x_low.Power;
+        var k_pl99 = y_pl99.Power / x_pl99.Power;
+        var k_pl = y_pl.Power / x_pl.Power;
+
+        var k_pl_sl = y_pl_sl.Power / x_pl_sl.Power;
+        var k_sl_pl = y_sl_pl.Power / x_sl_pl.Power;
+
+        var k_sl = y_sl.Power / x_sl.Power;
+        var k_sl_sh = y_sl_sh.Power / x_sl_sh.Power;
+        var k_c0 = y_c0.Power / x_c0.Power;
+        var k_sh_sl = y_sh_sl.Power / x_sh_sl.Power;
+        var k_sh = y_sh.Power / x_sh.Power;
+
+        var k_sh_ph = y_sh_ph.Power / x_sh_ph.Power;
+        var k_ph_sh = y_ph_sh.Power / x_ph_sh.Power;
+
+        var k_ph = y_ph.Power / x_ph.Power;
+        var k_ph_fd05 = y_ph_fd05.Power / x_ph_fd05.Power;
+        var k_fd05 = y_fd05.Power / x_fd05.Power;
+
+        // Расчёт коэффициентов передачи по мощности в логарифмическим масштабе
+        var k_low_db = k_low.In_dB_byPower();
+        var k_pl99_db = k_pl99.In_dB_byPower();
+        var k_pl_db = k_pl.In_dB_byPower();
+
+        var k_pl_sl_db = k_pl_sl.In_dB_byPower();
+        var k_sl_pl_db = k_sl_pl.In_dB_byPower();
+
+        var k_sl_db = k_sl.In_dB_byPower();
+        var k_sl_sh_db = k_sl_sh.In_dB_byPower();
+        var k_c0_db = k_c0.In_dB_byPower();
+        var k_sh_sl_db = k_sh_sl.In_dB_byPower();
+        var k_sh_db = k_sh.In_dB_byPower();
+
+        var k_sh_ph_db = k_sh_ph.In_dB_byPower();
+        var k_ph_sh_db = k_ph_sh.In_dB_byPower();
+
+        var k_ph_db = k_ph.In_dB_byPower();
+        var k_ph_fd05_db = k_ph_fd05.In_dB_byPower();
+        var k_fd05_db = k_fd05.In_dB_byPower();
+
+        // Сравнение коэффициентов передачи с заданными параметрами фильтрации
+        k_low_db.AssertGreaterOrEqualsThan(-Rp);        // Коэффициенты передачи в нижней полосе пропускания
+        k_pl99_db.AssertGreaterOrEqualsThan(-Rp);       // должны быть меньше, чем заданный уровень
+        k_pl_db.AssertGreaterOrEqualsThan(-Rp);         // неравномерности АЧХ (допуск) Rp - не более -1дБ
+
+        // Коэффициенты передачи в переходной полосе
+        // между полосой пропускания и полосой заграждения
+        k_pl_sl_db.AssertGreaterOrEqualsThan(-Rs);      // Коэффициент передачи у нижнего края переходной полосы не должен быть ниже уровня подавления Rs (-40дБ), но может быть всё ещё порядка уровня пропускания Rp (-1дБ)
+        k_sl_pl_db.AssertLessOrEqualsThan(-Rp);         // Коэффициент передачи у верхнего края переходной полосы должен быть гарантировано меньше коэффициента пропускания Rp (-1дБ) и должен приближаться к уровню Rs (-40дБ)
+
+        // Коэффициенты передачи в полосе заграждения
+        // должны быть ниже уровня подавления Rs
+        k_sl_db.AssertLessOrEqualsThan(-Rs, 2.94);      // Коэффициент передачи на нижней границе полосы заграждения должен быть не больше Rs (-40дБ и ниже)
+        k_sl_sh_db.AssertLessOrEqualsThan(-Rs);         // Коэффициент передачи у нижнего края полосы заграждения должен быть меньше Rs
+        k_c0_db.AssertLessOrEqualsThan(-Rs, 0.4);       // Коэффициент передачи на центральной частоте полосы заграждения
+        k_sh_sl_db.AssertLessOrEqualsThan(-Rs, 0.5);    // Коэффициент передачи у верхнего края полосы подавления
+        k_sh_db.AssertLessOrEqualsThan(-Rs, 1.1);       // Коэффициент передачи на верхней границе полосы подавления
+
+        // Коэффициенты передачи в переходной полосе
+        // между верхней полосой заграждения и верхней
+        // полосой пропускания
+        k_sh_ph_db.AssertLessThan(-Rp);
+        k_ph_sh_db.AssertGreaterOrEqualsThan(-Rs);
+        k_ph_sh_db.AssertLessOrEqualsThan(-Rp, 0.18);
+
+        // Коэффициенты передачи в верхней полосе пропускания
+        // от верхней границы полосы пропускания до частоты,
+        // близкой к половине частоты дискретизации
+        k_ph_db.AssertGreaterOrEqualsThan(-Rp);
+        k_ph_fd05_db.AssertGreaterOrEqualsThan(-Rp);
+        k_fd05_db.AssertGreaterOrEqualsThan(-Rp);
+
+        // Суммарный сигнал
+        var x =
+            x_low +
+            x_pl99 +
+            x_pl +
+            x_pl_sl +
+            x_sl_pl +
+            x_sl +
+            x_sl_sh +
+            x_c0 +
+            x_sh_sl +
+            x_sh +
+            x_sh_ph +
+            x_ph_sh +
+            x_ph +
+            x_ph_fd05 +
+            x_fd05;
+
+        // Фильтрация суммарного гармонического сигнала
+        var y = filter.ProcessIndividual(x);
+
+        var X = x.GetSpectrum();    // Спектр входного сигнала фильтра
+        var Y = y.GetSpectrum();    // Спектр выходного сигнала фильтра
+
+        var H = Y / X;              // Коэффициент передачи фильтра как отношение спектров на выходе и на входе
+
+        // Извлекаем из спетра коэффициенты передачи на частотах гармонических составляющих исходного сигнала
+        var h_low = H.GetValue(fpl * 0.1).Power.In_dB_byPower();
+        var h_pl99 = H.GetValue(fpl * 0.99).Power.In_dB_byPower();
+        var h_pl = H.GetValue(fpl).Power.In_dB_byPower();
+
+        var h_pl_sl = H.GetValue(fpl + (fsl - fpl) * 0.1).Power.In_dB_byPower();
+        var h_sl_pl = H.GetValue(fsl - (fsl - fpl) * 0.1).Power.In_dB_byPower();
+
+        var h_sl = H.GetValue(fsl).Power.In_dB_byPower();
+        var h_sl_sh = H.GetValue(fsl + (fsh - fsl) * 0.1).Power.In_dB_byPower();
+        var h_c0 = H.GetValue((fsl * fsh).Sqrt()).Power.In_dB_byPower();
+        var h_sh_sl = H.GetValue(fsh - (fsh - fsl) * 0.1).Power.In_dB_byPower();
+        var h_sh = H.GetValue(fsh).Power.In_dB_byPower();
+
+        var h_sh_ph = H.GetValue(fsh + (fph - fsh) * 0.1).Power.In_dB_byPower();
+        var h_ph_sh = H.GetValue(fph - (fph - fsh) * 0.1).Power.In_dB_byPower();
+
+        var h_ph = H.GetValue(fph).Power.In_dB_byPower();
+        var h_ph_fd05 = H.GetValue(fph + (fd / 2 - fph) * 0.1).Power.In_dB_byPower();
+        var h_fd05 = H.GetValue(0.9 * (fd / 2)).Power.In_dB_byPower();
+
+        // Тест фактических коэффициентов передачи
+        h_low.AssertGreaterOrEqualsThan(-Rp);
+        h_pl99.AssertGreaterOrEqualsThan(-Rp);
+        h_pl.AssertGreaterOrEqualsThan(-Rp);
+
+        h_pl_sl.AssertGreaterOrEqualsThan(-Rs);
+        h_sl_pl.AssertLessOrEqualsThan(-Rp).GreaterOrEqualsThan(-Rs);
+
+        h_sl.AssertLessOrEqualsThan(-Rs);
+        h_sl_sh.AssertLessOrEqualsThan(-Rs);
+        h_c0.AssertLessOrEqualsThan(-Rs);
+        h_sh_sl.AssertLessOrEqualsThan(-Rs);
+        h_sh.AssertLessOrEqualsThan(-Rs, 9.5e-4);
+
+        h_sh_ph.AssertLessOrEqualsThan(-Rp);
+        h_ph_sh.AssertLessOrEqualsThan(-Rp, 0.176).GreaterOrEqualsThan(-Rs);
+
+        h_ph.AssertGreaterOrEqualsThan(-Rp);
+        h_ph_fd05.AssertGreaterOrEqualsThan(-Rp);
+        h_fd05.AssertGreaterOrEqualsThan(-Rp);
+    }
+
+    [TestMethod]
+    public void TypeIICorrected_Odd_SignalProcessing()
+    {
+        const double fd = 10;         // Частота дискретизации
+        const double dt = 1 / fd;       // Период дискретизации
+
+        const double Rp = 1;    // Неоднородность АЧХ в интервале пропускания не более 1 дБ
+        const double Rs = 40;   // Уровень подавления более 40 дБ
+
+        var Gp = (-Rp).From_dB();   // Значения АЧХ в интервале пропускания
+        var Gs = (-Rs).From_dB();   // Значения АЧХ в интервале подавления
+
+        const double fpl = 2 / Consts.pi2;  // нижняя частота границы полосы пропускания
+        const double fsl = 4 / Consts.pi2;  // нижняя частота границы полосы заграждения
+        const double fsh = 12 / Consts.pi2; // верхняя частота границы полосы заграждения
+        const double fph = 14 / Consts.pi2; // верхняя частота границы полосы пропускания
+
+        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+
+        //const double total_time = 1 / fpl;
+        //const int samples_count = (int)(total_time * fd) + 1;
+
+        // Метод формирования гармонического сигнала на заданной частоте
+        static EnumerableSignal GetSinSignal(double f0) => MathEnumerableSignal.Sin(dt, f0, (int)(100 * fd / (fpl * 0.1)));
+
+        var x_low = GetSinSignal(fpl * 0.1);                    // частота, близкая к нулю
+        var x_pl99 = GetSinSignal(fpl * 0.99);                   // частота чуть ниже нижней границы пропускания
+        var x_pl = GetSinSignal(fpl);                          // частота на нижней границе пропускания
+
+        var x_pl_sl = GetSinSignal(fpl + (fsl - fpl) * 0.1);      // частота выше нижней границы пропускания
+        var x_sl_pl = GetSinSignal(fsl - (fsl - fpl) * 0.1);      // частота ниже нижней границы подавления
+
+        var x_sl = GetSinSignal(fsl);                          // частота на границе подавления
+        var x_sl_sh = GetSinSignal(fsl + (fsh - fsl) * 0.1);      // частота выше нижней границы подавления
+        var x_c0 = GetSinSignal((fsl * fsh).Sqrt());           // частота в середине полосы подавления
+        var x_sh_sl = GetSinSignal(fsh - (fsh - fsl) * 0.1);      // частота ниже верхней границы подавления
+        var x_sh = GetSinSignal(fsh);                          // частота на границе подавления
+
+        var x_sh_ph = GetSinSignal(fsh + (fph - fsh) * 0.1);      // частота выше верхней границы подавления
+        var x_ph_sh = GetSinSignal(fph - (fph - fsh) * 0.1);      // частота ниже верхней границы пропускания
+
+        var x_ph = GetSinSignal(fph);                          // частота на верхней границе пропускания
+        var x_ph_fd05 = GetSinSignal(fph + (fd / 2 - fph) * 0.1);   // частота выше верхней границы пропускания
+        var x_fd05 = GetSinSignal(0.9 * (fd / 2));               // частота ниже половины частоты дискретизации
+
+        // Индивидуальная фильтрация каждой частотной составляющей
+        var y_low = filter.ProcessIndividual(x_low);
+        var y_pl99 = filter.ProcessIndividual(x_pl99);
+        var y_pl = filter.ProcessIndividual(x_pl);
+
+        var y_pl_sl = filter.ProcessIndividual(x_pl_sl);
+        var y_sl_pl = filter.ProcessIndividual(x_sl_pl);
+
+        var y_sl = filter.ProcessIndividual(x_sl);
+        var y_sl_sh = filter.ProcessIndividual(x_sl_sh);
+        var y_c0 = filter.ProcessIndividual(x_c0);
+        var y_sh_sl = filter.ProcessIndividual(x_sh_sl);
+        var y_sh = filter.ProcessIndividual(x_sh);
+
+        var y_sh_ph = filter.ProcessIndividual(x_sh_ph);
+        var y_ph_sh = filter.ProcessIndividual(x_ph_sh);
+
+        var y_ph = filter.ProcessIndividual(x_ph);
+        var y_ph_fd05 = filter.ProcessIndividual(x_ph_fd05);
+        var y_fd05 = filter.ProcessIndividual(x_fd05);
+
+        // Расчёт коэффициентов передачи по мощности
+        var k_low = y_low.Power / x_low.Power;
+        var k_pl99 = y_pl99.Power / x_pl99.Power;
+        var k_pl = y_pl.Power / x_pl.Power;
+
+        var k_pl_sl = y_pl_sl.Power / x_pl_sl.Power;
+        var k_sl_pl = y_sl_pl.Power / x_sl_pl.Power;
+
+        var k_sl = y_sl.Power / x_sl.Power;
+        var k_sl_sh = y_sl_sh.Power / x_sl_sh.Power;
+        var k_c0 = y_c0.Power / x_c0.Power;
+        var k_sh_sl = y_sh_sl.Power / x_sh_sl.Power;
+        var k_sh = y_sh.Power / x_sh.Power;
+
+        var k_sh_ph = y_sh_ph.Power / x_sh_ph.Power;
+        var k_ph_sh = y_ph_sh.Power / x_ph_sh.Power;
+
+        var k_ph = y_ph.Power / x_ph.Power;
+        var k_ph_fd05 = y_ph_fd05.Power / x_ph_fd05.Power;
+        var k_fd05 = y_fd05.Power / x_fd05.Power;
+
+        // Расчёт коэффициентов передачи по мощности в логарифмическим масштабе
+        var k_low_db = k_low.In_dB_byPower();
+        var k_pl99_db = k_pl99.In_dB_byPower();
+        var k_pl_db = k_pl.In_dB_byPower();
+
+        var k_pl_sl_db = k_pl_sl.In_dB_byPower();
+        var k_sl_pl_db = k_sl_pl.In_dB_byPower();
+
+        var k_sl_db = k_sl.In_dB_byPower();
+        var k_sl_sh_db = k_sl_sh.In_dB_byPower();
+        var k_c0_db = k_c0.In_dB_byPower();
+        var k_sh_sl_db = k_sh_sl.In_dB_byPower();
+        var k_sh_db = k_sh.In_dB_byPower();
+
+        var k_sh_ph_db = k_sh_ph.In_dB_byPower();
+        var k_ph_sh_db = k_ph_sh.In_dB_byPower();
+
+        var k_ph_db = k_ph.In_dB_byPower();
+        var k_ph_fd05_db = k_ph_fd05.In_dB_byPower();
+        var k_fd05_db = k_fd05.In_dB_byPower();
+
+        // Сравнение коэффициентов передачи с заданными параметрами фильтрации
+        k_low_db.AssertGreaterOrEqualsThan(-Rp);        // Коэффициенты передачи в нижней полосе пропускания
+        k_pl99_db.AssertGreaterOrEqualsThan(-Rp);       // должны быть меньше, чем заданный уровень
+        k_pl_db.AssertGreaterOrEqualsThan(-Rp);         // неравномерности АЧХ (допуск) Rp - не более -1дБ
+
+        // Коэффициенты передачи в переходной полосе
+        // между полосой пропускания и полосой заграждения
+        k_pl_sl_db.AssertGreaterOrEqualsThan(-Rs);      // Коэффициент передачи у нижнего края переходной полосы не должен быть ниже уровня подавления Rs (-40дБ), но может быть всё ещё порядка уровня пропускания Rp (-1дБ)
+        k_sl_pl_db.AssertLessOrEqualsThan(-Rp);         // Коэффициент передачи у верхнего края переходной полосы должен быть гарантировано меньше коэффициента пропускания Rp (-1дБ) и должен приближаться к уровню Rs (-40дБ)
+
+        // Коэффициенты передачи в полосе заграждения
+        // должны быть ниже уровня подавления Rs
+        k_sl_db.AssertLessOrEqualsThan(-Rs, 3.6);       // Коэффициент передачи на нижней границе полосы заграждения должен быть не больше Rs (-40дБ и ниже)
+        k_sl_sh_db.AssertLessOrEqualsThan(-Rs, 1.27);   // Коэффициент передачи у нижнего края полосы заграждения должен быть меньше Rs
+        k_c0_db.AssertLessOrEqualsThan(-Rs);            // Коэффициент передачи на центральной частоте полосы заграждения
+        k_sh_sl_db.AssertLessOrEqualsThan(-Rs);         // Коэффициент передачи у верхнего края полосы подавления
+        k_sh_db.AssertLessOrEqualsThan(-Rs, 1.4);       // Коэффициент передачи на верхней границе полосы подавления
+
+        // Коэффициенты передачи в переходной полосе
+        // между верхней полосой заграждения и верхней
+        // полосой пропускания
+        k_sh_ph_db.AssertLessThan(-Rp);
+        k_ph_sh_db.AssertGreaterOrEqualsThan(-Rs);
+        k_ph_sh_db.AssertLessOrEqualsThan(-Rp);
+
+        // Коэффициенты передачи в верхней полосе пропускания
+        // от верхней границы полосы пропускания до частоты,
+        // близкой к половине частоты дискретизации
+        k_ph_db.AssertGreaterOrEqualsThan(-Rp, 0.01);
+        k_ph_fd05_db.AssertGreaterOrEqualsThan(-Rp);
+        k_fd05_db.AssertGreaterOrEqualsThan(-Rp);
+
+        // Суммарный сигнал
+        var x =
+            x_low +
+            x_pl99 +
+            x_pl +
+            x_pl_sl +
+            x_sl_pl +
+            x_sl +
+            x_sl_sh +
+            x_c0 +
+            x_sh_sl +
+            x_sh +
+            x_sh_ph +
+            x_ph_sh +
+            x_ph +
+            x_ph_fd05 +
+            x_fd05;
+
+        // Фильтрация суммарного гармонического сигнала
+        var y = filter.ProcessIndividual(x);
+
+        var X = x.GetSpectrum();    // Спектр входного сигнала фильтра
+        var Y = y.GetSpectrum();    // Спектр выходного сигнала фильтра
+
+        var H = Y / X;              // Коэффициент передачи фильтра как отношение спектров на выходе и на входе
+
+        // Извлекаем из спетра коэффициенты передачи на частотах гармонических составляющих исходного сигнала
+        var h_low = H.GetValue(fpl * 0.1).Power.In_dB_byPower();
+        var h_pl99 = H.GetValue(fpl * 0.99).Power.In_dB_byPower();
+        var h_pl = H.GetValue(fpl).Power.In_dB_byPower();
+
+        var h_pl_sl = H.GetValue(fpl + (fsl - fpl) * 0.1).Power.In_dB_byPower();
+        var h_sl_pl = H.GetValue(fsl - (fsl - fpl) * 0.1).Power.In_dB_byPower();
+
+        var h_sl = H.GetValue(fsl).Power.In_dB_byPower();
+        var h_sl_sh = H.GetValue(fsl + (fsh - fsl) * 0.1).Power.In_dB_byPower();
+        var h_c0 = H.GetValue((fsl * fsh).Sqrt()).Power.In_dB_byPower();
+        var h_sh_sl = H.GetValue(fsh - (fsh - fsl) * 0.1).Power.In_dB_byPower();
+        var h_sh = H.GetValue(fsh).Power.In_dB_byPower();
+
+        var h_sh_ph = H.GetValue(fsh + (fph - fsh) * 0.1).Power.In_dB_byPower();
+        var h_ph_sh = H.GetValue(fph - (fph - fsh) * 0.1).Power.In_dB_byPower();
+
+        var h_ph = H.GetValue(fph).Power.In_dB_byPower();
+        var h_ph_fd05 = H.GetValue(fph + (fd / 2 - fph) * 0.1).Power.In_dB_byPower();
+        var h_fd05 = H.GetValue(0.9 * (fd / 2)).Power.In_dB_byPower();
+
+        // Тест фактических коэффициентов передачи
+        h_low.AssertGreaterOrEqualsThan(-Rp);
+        h_pl99.AssertGreaterOrEqualsThan(-Rp);
+        h_pl.AssertGreaterOrEqualsThan(-Rp);
+
+        h_pl_sl.AssertGreaterOrEqualsThan(-Rs);
+        h_sl_pl.AssertLessOrEqualsThan(-Rp).GreaterOrEqualsThan(-Rs);
+
+        h_sl.AssertLessOrEqualsThan(-Rs);
+        h_sl_sh.AssertLessOrEqualsThan(-Rs);
+        h_c0.AssertLessOrEqualsThan(-Rs);
+        h_sh_sl.AssertLessOrEqualsThan(-Rs);
+        h_sh.AssertLessOrEqualsThan(-Rs, 1.3e-3);
 
         h_sh_ph.AssertLessOrEqualsThan(-Rp);
         h_ph_sh.AssertLessOrEqualsThan(-Rp).GreaterOrEqualsThan(-Rs);

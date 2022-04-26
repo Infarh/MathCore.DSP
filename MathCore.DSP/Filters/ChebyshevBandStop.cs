@@ -172,8 +172,8 @@ public class ChebyshevBandStop : ChebyshevFilter
             : Wpl;
         var W0 = Abs(dW * Wp / (Wc - Wp.Pow2()));
 
-        var N = (int)Ceiling(arcch(Spec.kEps) / arcch(Spec.kW));
-        var (zeros, poles) = GetNormedPolesII(N, Spec.EpsS, W0 * Spec.kW);
+        var N = (int)Ceiling(arcch(Spec.kEps) / arcch(1 / W0));
+        var (zeros, poles) = GetNormedPolesII(N, Spec.EpsS);
 
         // Переносим нули и полюса аналогового нормированного ФНЧ в полосы ПЗФ
         var is_even = N.IsEven();
@@ -188,8 +188,7 @@ public class ChebyshevBandStop : ChebyshevFilter
 
         // Вычисляем коэффициент нормировки фильтра на нулевой частоте 
         var re_to_im = z_zeros.Multiply(z => 1 - z) / z_poles.Multiply(z => 1 - z);
-        var G_norm = 1 / re_to_im.Abs;
-        G_norm.ToDebug();
+        var G_norm = 1 / re_to_im.Re;
 
         // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
         var B = GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * G_norm);

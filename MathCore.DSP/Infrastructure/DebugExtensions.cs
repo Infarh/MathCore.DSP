@@ -46,7 +46,7 @@ internal static class DebugExtensions
         var culture = CultureInfo.InvariantCulture;
         foreach (var (re, im) in items)
         {
-            FormattableString msg = $"/*[{i,4}]*/ ({re:F18}, {im:F18}),";
+            FormattableString msg = $"            /*[{i,2}]*/ ({re:F18}, {im:F18}),";
             Debug.WriteLine(msg.ToString(culture));
             //Debug.WriteLine("    ({0}, {1}), // [{2,4}]", re, im, i);
             i++;

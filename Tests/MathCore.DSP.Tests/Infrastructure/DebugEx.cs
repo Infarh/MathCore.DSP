@@ -11,6 +11,14 @@ namespace System.Diagnostics;
 
 internal static class DebugEx
 {
+
+    public static string ThrowIfNullOrEmpty(this string str, [CallerArgumentExpression("str")] string? StrName = null)
+    {
+        if (string.IsNullOrEmpty(str))
+            throw new ArgumentNullException(StrName, "String is null or empty");
+        return str;
+    }
+
     //public static T ToDebug<T>(this T value)
     //{
     //    Debug.WriteLine(value);
@@ -56,7 +64,7 @@ internal static class DebugEx
         var culture = CultureInfo.InvariantCulture;
         foreach (var (re, im) in items)
         {
-            FormattableString msg = $"/*[{i,2}]*/ ({re:F18}, {im:F18}),";
+            FormattableString msg = $"            /*[{i,2}]*/ ({re:F18}, {im:F18}),";
             Debug.WriteLine(msg.ToString(culture));
             //Debug.WriteLine("    ({0}, {1}), // [{2,4}]", re, im, i);
             i++;
