@@ -2430,9 +2430,6 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         var h_ph_fd05 = H.GetValue(fph + (fd / 2 - fph) * 0.1).Power.In_dB_byPower();
         var h_fd05 = H.GetValue(0.9 * (fd / 2)).Power.In_dB_byPower();
 
-        (-Rp).ToDebug();
-        (-Rs).ToDebug();
-
         // Тест фактических коэффициентов передачи
         h_low.AssertGreaterOrEqualsThan(-Rp);
         h_pl99.AssertGreaterOrEqualsThan(-Rp);
@@ -2641,9 +2638,6 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         var h_ph = H.GetValue(fph).Power.In_dB_byPower();
         var h_ph_fd05 = H.GetValue(fph + (fd / 2 - fph) * 0.1).Power.In_dB_byPower();
         var h_fd05 = H.GetValue(0.9 * (fd / 2)).Power.In_dB_byPower();
-
-        (-Rp).ToDebug();
-        (-Rs).ToDebug();
 
         // Тест фактических коэффициентов передачи
         h_low.AssertGreaterOrEqualsThan(-Rp);

@@ -1,4 +1,6 @@
-﻿using static System.Math;
+﻿using System.Diagnostics;
+
+using static System.Math;
 using static MathCore.Polynom.Array;
 // ReSharper disable InconsistentNaming
 
@@ -6,6 +8,93 @@ namespace MathCore.DSP.Filters;
 
 public class ButterworthBandStop : ButterworthFilter
 {
+    private static void CheckFrequencies(double dt, double fpl, double fsl, double fsh, double fph)
+    {
+        if (dt <= 0)
+            throw new InvalidOperationException($"Период дискретизации dt={dt} не может быть меньше, либо равен нулю")
+            {
+                Data =
+                {
+                    { nameof(dt), dt },
+                    { "fd", 1/dt },
+                    { nameof(fpl), fpl },
+                    { nameof(fsl), fsl },
+                    { nameof(fsh), fsh },
+                    { nameof(fph), fph },
+                }
+            };
+
+        if (1 / dt == 0)
+            throw new InvalidOperationException("Частота дискретизации не может быть равна нулю")
+            {
+                Data =
+                {
+                    { nameof(dt), dt },
+                    { "fd", 1/dt },
+                    { nameof(fpl), fpl },
+                    { nameof(fsl), fsl },
+                    { nameof(fsh), fsh },
+                    { nameof(fph), fph },
+                }
+            };
+
+        if (fpl >= fsl)
+            throw new InvalidOperationException($"Нижняя частота пропускания fpl должна быть ниже нижней частоты среза fsl\r\n  dt={dt}\r\n  fpl={fpl}\r\n  fsl={fsl}\r\n  fsh={fsh}\r\n  fph={fsh}")
+            {
+                Data =
+                {
+                    { nameof(dt), dt },
+                    { "fd", 1/dt },
+                    { nameof(fpl), fpl },
+                    { nameof(fsl), fsl },
+                    { nameof(fsh), fsh },
+                    { nameof(fph), fph },
+                }
+            };
+
+        if (fsl >= fsh)
+            throw new InvalidOperationException($"Нижняя частота среза fsl должна быть ниже верхней частоты среза fsh\r\n  dt={dt}\r\n  fpl={fpl}\r\n  fsl={fsl}\r\n  fsh={fsh}\r\n  fph={fsh}")
+            {
+                Data =
+                {
+                    { nameof(dt), dt },
+                    { "fd", 1/dt },
+                    { nameof(fpl), fpl },
+                    { nameof(fsl), fsl },
+                    { nameof(fsh), fsh },
+                    { nameof(fph), fph },
+                }
+            };
+
+        if (fsh >= fph)
+            throw new InvalidOperationException($"Верхняя частота среза fsh должна быть ниже верхней частоты пропускания fph\r\n  dt={dt}\r\n  fpl={fpl}\r\n  fsl={fsl}\r\n  fsh={fsh}\r\n  fph={fsh}")
+            {
+                Data =
+                {
+                    { nameof(dt), dt },
+                    { "fd", 1/dt },
+                    { nameof(fpl), fpl },
+                    { nameof(fsl), fsl },
+                    { nameof(fsh), fsh },
+                    { nameof(fph), fph },
+                }
+            };
+
+        if (fph >= 1 / dt / 2)
+            throw new InvalidOperationException($"Верхняя частота пропускания fph должна быть ниже половины частоты дискретизации fd={1 / dt} (1 / (dt={dt}))\r\n  dt={dt}\r\n  fpl={fpl}\r\n  fsl={fsl}\r\n  fsh={fsh}\r\n  fph={fsh}")
+            {
+                Data =
+                {
+                    { nameof(dt), dt },
+                    { "fd", 1/dt },
+                    { nameof(fpl), fpl },
+                    { nameof(fsl), fsl },
+                    { nameof(fsh), fsh },
+                    { nameof(fph), fph },
+                }
+            };
+    }
+
     /// <summary>Формирование спецификации фильтра</summary>
     /// <param name="dt">Период дискретизации сигнала</param>
     /// <param name="fpl">Частота нижней границы полосы пропускания</param>
@@ -24,6 +113,8 @@ public class ButterworthBandStop : ButterworthFilter
         double Gp = 0.891250938,
         double Gs = 0.031622777)
     {
+        CheckFrequencies(dt, fpl, fsl, fsh, fph);
+
         if (Gp <= Gs)
             throw new ArgumentOutOfRangeException(
                 nameof(Gp), Gp, $"Уровень АЧХ в полосе пропускания Gp={Gp} был меньше, либо равен уровню АЧХ в полосе заграждения Gs={Gs}");
@@ -52,7 +143,7 @@ public class ButterworthBandStop : ButterworthFilter
             ? Wph
             : Wpl;
         var W0 = Abs(dW * Wp / (Wc - Wp.Pow2())); // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
-        const double W1 = 1;                           // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
+        //const double W1 = 1;                           // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
         var Fp = W0 / Consts.pi2;
         const double Fs = 1 / Consts.pi2;
 
@@ -74,6 +165,7 @@ public class ButterworthBandStop : ButterworthFilter
     {
         // Пересчитываем аналоговые частоты полосы заграждения в цифровые
         var dt = Spec.dt;
+        CheckFrequencies(dt, fpl, fsl, fsh, fph);
 
         var Wpl = Consts.pi2 * ToAnalogFrequency(fpl, dt);
         var Wsl = Consts.pi2 * ToAnalogFrequency(fsl, dt);
@@ -89,6 +181,7 @@ public class ButterworthBandStop : ButterworthFilter
         var W0 = Abs(dW * Wp / (Wc - Wp.Pow2()));
 
         var N = (int)Ceiling(Log(Spec.kEps) / Log(Spec.kW));
+        Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
         var poles = GetNormPoles(N, Spec.EpsP, W0);
 
         // Переносим нули и полюса аналогового нормированного ФНЧ в полосы ПЗФ

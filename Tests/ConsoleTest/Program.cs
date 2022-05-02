@@ -1,6 +1,6 @@
 ﻿using MathCore.DSP.Extensions;
+using MathCore.DSP.Filters;
 using MathCore.DSP.Signals;
-using MathCore.DSP.Signals.IO;
 
 using OxyPlot;
 
@@ -8,8 +8,32 @@ namespace MathCore.DSP;
 
 class Program
 {
-    static void Main()
+    static async Task Main()
     {
+        //var eq = new Equalizer(1, 0.2)
+        //{
+        //    Alpha = 1.2
+        //};
+
+        //const double df = 0.001;
+        //const int N = 10000;
+        //const double fd = N * df;
+        //const double dt = 1 / fd;
+        //var HH = Enumerable.Range(0, N)
+        //   .Select(i => i * df)
+        //   .Select(f => eq.GetTransmissionCoefficient(f, dt))
+        //   .ToAbs();
+
+        //var model = new PlotModel()
+        //   .SetBackground(OxyColors.White)
+        //   .Grid()
+        //   .Line(HH, df)
+        //   .SetMinY(0)
+        //   .ToPNG("test.png")
+        //   .Execute();
+
+        //return;
+
         const double fd = 1000;
         const double dt = 1 / fd;
         const int count = 520;
@@ -17,10 +41,11 @@ class Program
         const double f_min = 295;
         const double f_max = 305;
 
-        Signal.Random.SpectrumBand(dt, count, f_min, f_max)
+        await Signal.Random.SpectrumBand(dt, count, f_min, f_max)
            .Plot()
            .ToPNG($"test[{DateTime.Now:yyyy-MM-ddTHH-mm-ss}].png")
-           .Execute();
+           .Execute()!
+           .WaitAsync();
     }
 }
 

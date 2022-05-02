@@ -361,8 +361,6 @@ public class ButterworthBandStop
         h_sh_db.AssertLessOrEqualsThan(-Rs);
 
         h_ph_db.AssertGreaterOrEqualsThan(-Rp);
-        h_fd_db.ToDebug("h_fd_db");
-        (-Rp).ToDebug("-Rp");
         h_fd_db.AssertGreaterOrEqualsThan(-Rp);
     }
 

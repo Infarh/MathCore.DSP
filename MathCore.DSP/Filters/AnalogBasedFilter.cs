@@ -1,5 +1,7 @@
 ﻿using System.Runtime.Serialization;
 
+using MathCore.DSP.Infrastructure;
+
 using static MathCore.Consts;
 // ReSharper disable InconsistentNaming
 // ReSharper disable ParameterHidesMember
@@ -210,6 +212,13 @@ public abstract class AnalogBasedFilter : IIR
         public Specification(double dt, double fp, double fs, double Gp, double Gs)
         {
             if (!(fp < 1 / (2 * dt))) throw new InvalidOperationException("Частота пропускания должен быть меньше половины полосы дискретизации");
+            if (fp < 0) throw new ArgumentOutOfRangeException(nameof(fp), fp, "Частота среза не может быть меньше 0");
+            if (fs < 0) throw new ArgumentOutOfRangeException(nameof(fs), fs, "Частота полосы подавления не может быть меньше 0");
+            if (Gp < 0) throw new ArgumentOutOfRangeException(nameof(Gp), Gp, "Значение уровня АЧХ в полосе пропускания не может быть отрицательной величиной");
+            if (Gs < 0) throw new ArgumentOutOfRangeException(nameof(Gs), Gs, "Значение уровня АЧХ в полосе заграждения не может быть отрицательной величиной");
+            if (Gp > 1) throw new ArgumentOutOfRangeException(nameof(Gp), Gp, "Значение уровня АЧХ в полосе пропускания не может быть больше 1");
+            if (Gs > 1) throw new ArgumentOutOfRangeException(nameof(Gs), Gs, "Значение уровня АЧХ в полосе заграждения не может быть больше 1");
+            if (Gp <= Gs) throw new InvalidOperationException($"Уровень АЧХ в полосе пропускания Gp должен быть больше уровня в полосе заграждения Gs\r\n  Gp={Gp}\r\n  Gs={Gs}");
 
             this.dt = dt;
             this.fp = fp;
@@ -220,7 +229,8 @@ public abstract class AnalogBasedFilter : IIR
             Rp = -Gp.In_dB();
             Rs = -Gs.In_dB();
 
-            EpsP = (10d.Pow(Rp / 10) - 1).Sqrt();
+            EpsP = (1 / (Gp * Gp) - 1).Sqrt();
+            //EpsP = (10d.Pow(Rp / 10) - 1).Sqrt();
             EpsS = (10d.Pow(Rs / 10) - 1).Sqrt();
 
             //var tEpsP = (1 / Gp.Pow2() - 1).Sqrt();
@@ -288,10 +298,16 @@ public abstract class AnalogBasedFilter : IIR
     /// <param name="fmin">Нижняя частота среза</param>
     /// <param name="fmax">Верхняя частота среза</param>
     /// <returns>Нули и полюса ППФ</returns>
-    public static IEnumerable<Complex> TransformToBandPass(IEnumerable<Complex> Normed, double fmin, double fmax)
+    public static IEnumerable<Complex> TransformToBandPass(IEnumerable<Complex> Normed, double fmin, double fmax) =>
+        TransformToBandPassW(Normed, pi2 * fmin, pi2 * fmax);
+
+    /// <summary>Метод преобразования нулей и полюсов нормированного ФНЧ в нули и полюса ППФ</summary>
+    /// <param name="Normed">Нормированные нули и полюса ФНЧ</param>
+    /// <param name="w_min">Нижняя частота среза</param>
+    /// <param name="w_max">Верхняя частота среза</param>
+    /// <returns>Нули и полюса ППФ</returns>
+    public static IEnumerable<Complex> TransformToBandPassW(IEnumerable<Complex> Normed, double w_min, double w_max)
     {
-        var w_min = pi2 * fmin;
-        var w_max = pi2 * fmax;
         var dw05 = (w_max - w_min) / 2;
         var wc2 = w_min * w_max;
 

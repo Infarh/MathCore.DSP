@@ -22,7 +22,7 @@ internal static class DebugExtensions
         return value;
     }
 
-    public static void ToDebugEnumerable<T>(this IEnumerable<T> items, [CallerArgumentExpression("items")] string? Name = null)
+    public static void ToDebugEnum<T>(this IEnumerable<T> items, [CallerArgumentExpression("items")] string? Name = null)
     {
         if (Name is { Length: > 0 })
             Debug.WriteLine("{0}[] {1} = {{", typeof(T).Name, Name);
@@ -30,12 +30,16 @@ internal static class DebugExtensions
         var culture = CultureInfo.InvariantCulture;
         foreach (var item in items)
         {
-            FormattableString msg = $"/*[{i,2}]*/ {item},";
-            Debug.WriteLine(msg.ToString(culture));
-            //Debug.WriteLine("    {0}, // [{1,4}]", item, i);
+            if (i > 0)
+                Debug.WriteLine(",");
+
+            FormattableString msg = $"/*[{i,2}]*/ {item}";
+            Debug.Write(msg.ToString(culture));
+
             i++;
         }
-        Debug.WriteLine("};");
+        Debug.WriteLine("");
+        Debug.WriteLine("}");
     }
 
     public static void ToDebugEnum(this IEnumerable<Complex> items, [CallerArgumentExpression("items")] string? Name = null)
@@ -46,11 +50,18 @@ internal static class DebugExtensions
         var culture = CultureInfo.InvariantCulture;
         foreach (var (re, im) in items)
         {
-            FormattableString msg = $"            /*[{i,2}]*/ ({re:F18}, {im:F18}),";
-            Debug.WriteLine(msg.ToString(culture));
-            //Debug.WriteLine("    ({0}, {1}), // [{2,4}]", re, im, i);
+            if (i > 0)
+                Debug.WriteLine(",");
+
+            var msg = im == 0
+                ? (FormattableString)
+                $"            /*[{i,2}]*/  {re:F18}"
+                : $"            /*[{i,2}]*/ ({re:F18}, {im:F18})";
+            Debug.Write(msg.ToString(culture));
+
             i++;
         }
-        Debug.WriteLine("};");
+        Debug.WriteLine("");
+        Debug.WriteLine("}");
     }
 }
