@@ -51,7 +51,7 @@ internal static class DebugEx
             if (i > 0)
                 Debug.WriteLine(",");
 
-            FormattableString msg = $"/*[{i,2}]*/ {item}";
+            FormattableString msg = $"            /*[{i,2}]*/ {item}";
             Debug.Write(msg.ToString(culture));
 
             i++;
@@ -66,15 +66,22 @@ internal static class DebugEx
             Debug.WriteLine("Complex[] {0} = {{", (object)Name);
         var i = 0;
         var culture = CultureInfo.InvariantCulture;
-        foreach (var (re, im) in items)
+        foreach (var z in items)
         {
             if (i > 0)
                 Debug.WriteLine(",");
 
-            var msg = im == 0
-                ? (FormattableString)
-                  $"            /*[{i,2}]*/  {re:F18}"
-                : $"            /*[{i,2}]*/ ({re:F18}, {im:F18})";
+            //var msg = im == 0
+            //    ? (FormattableString)
+            //      $"            /*[{i,2}]*/  {re:F18}"
+            //    : $"            /*[{i,2}]*/ ({re:F18}, {im:F18})";
+            var msg = z switch
+            {
+                (var re, 0) => (FormattableString)$"            /*[{i,2}]*/  {re:F18}",
+                (0, var im) => (FormattableString)$"            /*[{i,2}]*/  (0, {im:F18})",
+                var (re, im) => (FormattableString)$"            /*[{i,2}]*/ ({re:F18}, {im:F18})"
+            };
+
             Debug.Write(msg.ToString(culture));
 
             i++;

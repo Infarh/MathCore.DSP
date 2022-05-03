@@ -11,7 +11,7 @@ class Program
     static async Task Main()
     {
         //var eq = new Equalizer(1, 0.2)
-        //{
+        //{ 
         //    Alpha = 1.2
         //};
 

@@ -24,7 +24,7 @@ public class ButterworthHighPass : ButterworthFilter
         //var z_poles = translated_poles.ToArray(p => ToZ(p, dt));
         // Вычисляем нормирующий множитель
         //var kz = GetNormalizeCoefficient(translated_poles, dt);
-        var kz = poles.Multiply();
+        var kz = poles.Mul();
 
         var WpN = Wp.Pow(N);
         var k = WpN * kz / Spec.EpsP;
