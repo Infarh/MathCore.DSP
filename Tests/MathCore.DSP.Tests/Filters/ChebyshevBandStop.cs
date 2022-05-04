@@ -13,6 +13,7 @@ using System.Linq;
 using MathCore.DSP.Signals;
 using MathCore.DSP.Tests.Infrastructure;
 // ReSharper disable RedundantArgumentDefaultValue
+// ReSharper disable InconsistentNaming
 
 namespace MathCore.DSP.Tests.Filters;
 
@@ -49,8 +50,8 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
             : wpl;
         var w0 = Abs(dw * wp / (wc - wp.Pow2()));
         var f0 = w0 / Consts.pi2;
-        const double f1 = 1 / Consts.pi2;   // 0.159
-        var w1 = f1 * Consts.pi2;
+        //const double f1 = 1 / Consts.pi2;   // 0.159
+        //var w1 = f1 * Consts.pi2;
 
         f0.AssertEquals(0.10790165633348836);
         w0.AssertEquals(0.67796610169491522);
@@ -85,7 +86,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
             ? Wph
             : Wpl;
         var W0 = Abs(dW * Wp / (Wc - Wp.Pow2()));   // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
-        const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
+        //const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
         var F0 = W0 / Consts.pi2;
         const double F1 = 1 / Consts.pi2;
 
@@ -267,8 +268,8 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
             : wpl;
         var w0 = Abs(dw * wp / (wc - wp.Pow2()));
         var f0 = w0 / Consts.pi2;
-        const double f1 = 1 / Consts.pi2;   // 0.159
-        var w1 = f1 * Consts.pi2;
+        //const double f1 = 1 / Consts.pi2;   // 0.159
+        //var w1 = f1 * Consts.pi2;
 
         f0.AssertEquals(0.12044157855602888);
         w0.AssertEquals(0.7567567567567566);
@@ -303,7 +304,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
             ? Wph
             : Wpl;
         var W0 = Abs(dW * Wp / (Wc - Wp.Pow2()));   // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
-        const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
+        //const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
         var F0 = W0 / Consts.pi2;
         const double F1 = 1 / Consts.pi2;
 
@@ -494,8 +495,8 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
             : wpl;
         var w0 = Abs(dw * wp / (wc - wp.Pow2()));
         var f0 = w0 / Consts.pi2;
-        const double f1 = 1 / Consts.pi2;   // 0.159
-        var w1 = f1 * Consts.pi2;
+        //const double f1 = 1 / Consts.pi2;   // 0.159
+        //var w1 = f1 * Consts.pi2;
 
         f0.AssertEquals(0.10790165633348836);
         w0.AssertEquals(0.67796610169491522);
@@ -530,7 +531,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
             ? Wph
             : Wpl;
         var W0 = Abs(dW * Wp / (Wc - Wp.Pow2()));   // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
-        const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
+        //const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
         var F0 = W0 / Consts.pi2;
         const double F1 = 1 / Consts.pi2;
 
@@ -748,8 +749,8 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
             : wpl;
         var w0 = Abs(dw * wp / (wc - wp.Pow2()));
         var f0 = w0 / Consts.pi2;
-        const double f1 = 1 / Consts.pi2;   // 0.159
-        var w1 = f1 * Consts.pi2;
+        //const double f1 = 1 / Consts.pi2;   // 0.159
+        //var w1 = f1 * Consts.pi2;
 
         f0.AssertEquals(0.12044157855602888);
         w0.AssertEquals(0.7567567567567566);
@@ -784,7 +785,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
             ? Wph
             : Wpl;
         var W0 = Abs(dW * Wp / (Wc - Wp.Pow2()));   // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
-        const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
+        //const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
         var F0 = W0 / Consts.pi2;
         const double F1 = 1 / Consts.pi2;
 
@@ -1013,8 +1014,8 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
             : wpl;
         var w0 = Abs(dw * wp / (wc - wp.Pow2()));
         var f0 = w0 / Consts.pi2;
-        const double f1 = 1 / Consts.pi2;   // 0.159
-        var w1 = f1 * Consts.pi2;
+        //const double f1 = 1 / Consts.pi2;   // 0.159
+        //var w1 = f1 * Consts.pi2;
 
         f0.AssertEquals(0.10790165633348836);
         w0.AssertEquals(0.67796610169491522);
@@ -1049,7 +1050,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
             ? Wph
             : Wpl;
         var W0 = Abs(dW * Wp / (Wc - Wp.Pow2()));   // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
-        const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
+        //const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
         var F0 = W0 / Consts.pi2;
         const double F1 = 1 / Consts.pi2;
 
@@ -1264,8 +1265,8 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
             : wpl;
         var w0 = Abs(dw * wp / (wc - wp.Pow2()));
         var f0 = w0 / Consts.pi2;
-        const double f1 = 1 / Consts.pi2;   // 0.159
-        var w1 = f1 * Consts.pi2;
+        //const double f1 = 1 / Consts.pi2;   // 0.159
+        //var w1 = f1 * Consts.pi2;
 
         f0.AssertEquals(0.12044157855602888);
         w0.AssertEquals(0.7567567567567566);
@@ -1300,7 +1301,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
             ? Wph
             : Wpl;
         var W0 = Abs(dW * Wp / (Wc - Wp.Pow2()));   // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
-        const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
+        //const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
         var F0 = W0 / Consts.pi2;
         const double F1 = 1 / Consts.pi2;
 

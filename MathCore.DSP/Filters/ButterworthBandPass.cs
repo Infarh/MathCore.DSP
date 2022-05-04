@@ -149,7 +149,7 @@ public class ButterworthBandPass : ButterworthFilter
             ? Wsh
             : Wsl;
         var W0 = Abs(dW * Wp / (Wc - Wp.Pow2())); // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
-        const double W1 = 1;                           // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
+        //const double W1 = 1;                           // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
         var Fp = W0 / Consts.pi2;
         const double Fs = 1 / Consts.pi2;
 

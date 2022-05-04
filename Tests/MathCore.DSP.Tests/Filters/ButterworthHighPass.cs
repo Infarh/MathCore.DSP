@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting.Extensions;
 using static System.Math;
 using static MathCore.Polynom.Array;
 using static MathCore.SpecialFunctions;
+// ReSharper disable InconsistentNaming
 
 namespace MathCore.DSP.Tests.Filters;
 
@@ -27,8 +28,8 @@ public class ButterworthHighPass
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        const double ws = 2 * PI * fs / fd;
-        const double wp = 2 * PI * fp / fd;
+        //const double ws = 2 * PI * fs / fd;
+        //const double wp = 2 * PI * fp / fd;
 
         var Fs = DigitalFilter.ToAnalogFrequency(fs, dt);
         var Fp = DigitalFilter.ToAnalogFrequency(fp, dt);

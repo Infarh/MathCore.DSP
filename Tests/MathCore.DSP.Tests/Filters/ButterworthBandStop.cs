@@ -47,8 +47,8 @@ public class ButterworthBandStop
             : wpl;
         var w0 = Abs(dw * wp / (wc - wp.Pow2()));
         var f0 = w0 / Consts.pi2;
-        const double f1 = 1 / Consts.pi2;   // 0.159
-        var w1 = f1 * Consts.pi2;
+        //const double f1 = 1 / Consts.pi2;   // 0.159
+        //var w1 = f1 * Consts.pi2;
 
         f0.AssertEquals(0.10790165633348836);
         w0.AssertEquals(0.67796610169491522);
@@ -83,7 +83,7 @@ public class ButterworthBandStop
             ? Wph
             : Wpl;
         var W0 = Abs(dW * Wp / (Wc - Wp.Pow2()));   // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
-        const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
+        //const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
         var F0 = W0 / Consts.pi2;
         const double F1 = 1 / Consts.pi2;
 
@@ -433,7 +433,7 @@ public class ButterworthBandStop
 
         var filter = new DSP.Filters.ButterworthBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs);
 
-        const double total_time = 1 / fpl;
+        //const double total_time = 1 / fpl;
         //const int samples_count = (int)(total_time * fd) + 1;
 
         // Метод формирования гармонического сигнала на заданной частоте

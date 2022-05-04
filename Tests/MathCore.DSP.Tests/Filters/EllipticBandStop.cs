@@ -47,8 +47,8 @@ public class EllipticBandStop : UnitTest
             : wpl;
         var w0 = Abs(dw * wp / (wc - wp.Pow2()));
         var f0 = w0 / Consts.pi2;
-        const double f1 = 1 / Consts.pi2;   // 0.159
-        var w1 = f1 * Consts.pi2;
+        //const double f1 = 1 / Consts.pi2;   // 0.159
+        //var w1 = f1 * Consts.pi2;
 
         f0.AssertEquals(0.10790165633348836);
         w0.AssertEquals(0.67796610169491522);
@@ -85,7 +85,7 @@ public class EllipticBandStop : UnitTest
         var W0 = Abs(dW * Wp / (Wc - Wp.Pow2()));   // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
         const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
         var F0 = W0 / Consts.pi2;
-        const double F1 = 1 / Consts.pi2;
+        //const double F1 = 1 / Consts.pi2;
 
         W0.AssertEquals(0.615059351152204);
         F0.AssertEquals(0.0978897360307671);
