@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 
 using MathCore.DSP.Filters;
 
@@ -129,7 +130,7 @@ public class EllipticBandPass : UnitTest
 
         var (L, r) = N.GetDivMod(2);
         (L, r).AssertEquals((2, 0));
-
+        
         var u = Range(1, L).ToArray(i => (2 * i - 1d) / N);
         var m = (1 - kEps * kEps).Sqrt();
 
