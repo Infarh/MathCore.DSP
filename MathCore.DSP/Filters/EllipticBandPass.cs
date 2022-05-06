@@ -4,6 +4,7 @@ using static System.Math;
 
 using static MathCore.Polynom.Array;
 using static MathCore.SpecialFunctions.EllipticJacobi;
+// ReSharper disable InconsistentNaming
 
 namespace MathCore.DSP.Filters;
 
@@ -131,10 +132,10 @@ public class EllipticBandPass : EllipticFilter
         // то есть центральная частота по границам подавления > центральной частоты по границам пропускания
         // то выбираем в качестве опорной частоты выбираем верхнюю границу пропускания
         // иначе, выбираем нижнюю границу пропускания
-        var Wp = Wc / Wsh > Wsl
+        var Ws = Wc / Wsh > Wsl
             ? Wsh
             : Wsl;
-        var W0 = Abs(dW * Wp / (Wc - Wp.Pow2())); // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
+        var W0 = Abs(dW * Ws / (Wc - Ws.Pow2())); // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
         //const double W1 = 1;                    // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
         var Fp = W0 / Consts.pi2;
         const double Fs = 1 / Consts.pi2;
