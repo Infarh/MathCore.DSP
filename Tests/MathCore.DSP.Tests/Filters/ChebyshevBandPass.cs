@@ -83,7 +83,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
             ? Wsh
             : Wsl;
         const double F0 = 1 / Consts.pi2;
-        var W1 = Math.Abs((Wc - Wp.Pow2()) / (dW * Wp));   // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
+        var W1 = Abs((Wc - Wp.Pow2()) / (dW * Wp));   // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
         //const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
         var F1 = W1 / Consts.pi2;
 
@@ -92,7 +92,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
 
         var eps_p = (1 / (Gp * Gp) - 1).Sqrt();
         //var eps_p = Sqrt(10.Power(Rp / 10) - 1);
-        var eps_s = Math.Sqrt(10.Power(Rs / 10) - 1);
+        var eps_s = Sqrt(10.Power(Rs / 10) - 1);
 
         eps_p.AssertEquals(0.5088471399095873);
         eps_s.AssertEquals(99.994999874993752);
@@ -294,7 +294,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
             ? Wsh
             : Wsl;
         const double F0 = 1 / Consts.pi2;
-        var W1 = Math.Abs((Wc - Wp.Pow2()) / (dW * Wp));   // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
+        var W1 = Abs((Wc - Wp.Pow2()) / (dW * Wp));   // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
         //const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
         var F1 = W1 / Consts.pi2;
 
@@ -303,7 +303,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
 
         var eps_p = (1 / (Gp * Gp) - 1).Sqrt();
         //var eps_p = Sqrt(10.Power(Rp / 10) - 1);
-        var eps_s = Math.Sqrt(10.Power(Rs / 10) - 1);
+        var eps_s = Sqrt(10.Power(Rs / 10) - 1);
 
         eps_p.AssertEquals(0.5088471399095873);
         eps_s.AssertEquals(99.994999874993752);
@@ -475,7 +475,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var wp = wc / wsh > wsl             // 15
             ? wsh
             : wsl;
-        var w0 = Math.Abs(dw * wp / (wc - wp.Pow2()));
+        var w0 = Abs(dw * wp / (wc - wp.Pow2()));
         var f0 = w0 / Consts.pi2;
         //const double f1 = 1 / Consts.pi2;   // 0.159
         //var w1 = f1 * Consts.pi2;
@@ -518,7 +518,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
             ? Wsh
             : Wsl;
         //Wp.ToDebug();
-        var W0 = Math.Abs(dW * Wp / (Wc - Wp.Pow2()));   // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
+        var W0 = Abs(dW * Wp / (Wc - Wp.Pow2()));   // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
         //const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
         var F0 = W0 / Consts.pi2;
         const double F1 = 1 / Consts.pi2;
@@ -528,7 +528,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
 
         var eps_p = (1 / (Gp * Gp) - 1).Sqrt();
         //var eps_p = Sqrt(10.Power(Rp / 10) - 1);
-        var eps_s = Math.Sqrt(10.Power(Rs / 10) - 1);
+        var eps_s = Sqrt(10.Power(Rs / 10) - 1);
 
         eps_p.AssertEquals(0.5088471399095873);
         eps_s.AssertEquals(99.994999874993752);
@@ -545,7 +545,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var T_eps = SpecialFunctions.EllipticJacobi.FullEllipticIntegralComplimentary(kEps);
 
         var double_N = T_eps * Kw / (K_eps * Tw);
-        var N = (int)Math.Ceiling(double_N);
+        var N = (int)Ceiling(double_N);
         N.AssertEquals(4);
 
         //var Fp = DigitalFilter.ToAnalogFrequency(f0, dt);
@@ -559,7 +559,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
 
         var kp = m.Power(N) * u.Aggregate(1d, (P, ui) => P * SpecialFunctions.EllipticJacobi.sn_uk(ui, m).Power(4));
 
-        var k_W = Math.Sqrt(1 - kp * kp);
+        var k_W = Sqrt(1 - kp * kp);
 
         //var im_pz = Range(0, L).ToArray(i => 1 / (k_W * cd_uk(u[i], k_W)));
 
@@ -670,8 +670,8 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         g_norm.AssertEquals(0.027089200894329788);
 
         // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
-        var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToArray(b => b * g_norm).ToRe();
-        var A = Polynom.Array.GetCoefficientsInverted(z_poles).ToRe();
+        var B = GetCoefficientsInverted(z_zeros).ToArray(b => b * g_norm).ToRe();
+        var A = GetCoefficientsInverted(z_poles).ToRe();
 
         var h_f00 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0, dt);
         var h_fsl = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fsl, dt);
@@ -751,7 +751,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var wp = wc / wsh > wsl             // 15
             ? wsh
             : wsl;
-        var w0 = Math.Abs(dw * wp / (wc - wp.Pow2()));
+        var w0 = Abs(dw * wp / (wc - wp.Pow2()));
         var f0 = w0 / Consts.pi2;
         //const double f1 = 1 / Consts.pi2;   // 0.159
         //var w1 = f1 * Consts.pi2;
@@ -794,7 +794,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
             ? Wsh
             : Wsl;
         //Wp.ToDebug();
-        var W0 = Math.Abs(dW * Wp / (Wc - Wp.Pow2()));   // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
+        var W0 = Abs(dW * Wp / (Wc - Wp.Pow2()));   // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
         //const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
         var F0 = W0 / Consts.pi2;
         const double F1 = 1 / Consts.pi2;
@@ -804,7 +804,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
 
         var eps_p = (1 / (Gp * Gp) - 1).Sqrt();
         //var eps_p = Sqrt(10.Power(Rp / 10) - 1);
-        var eps_s = Math.Sqrt(10.Power(Rs / 10) - 1);
+        var eps_s = Sqrt(10.Power(Rs / 10) - 1);
 
         eps_p.AssertEquals(0.5088471399095873);
         eps_s.AssertEquals(99.994999874993752);
@@ -821,7 +821,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var T_eps = SpecialFunctions.EllipticJacobi.FullEllipticIntegralComplimentary(kEps);
 
         var double_N = T_eps * Kw / (K_eps * Tw);
-        var N = (int)Math.Ceiling(double_N);
+        var N = (int)Ceiling(double_N);
         N.AssertEquals(4);
 
         //var Fp = DigitalFilter.ToAnalogFrequency(f0, dt);
@@ -835,7 +835,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
 
         var kp = m.Power(N) * u.Aggregate(1d, (P, ui) => P * SpecialFunctions.EllipticJacobi.sn_uk(ui, m).Power(4));
 
-        var k_W = Math.Sqrt(1 - kp * kp);
+        var k_W = Sqrt(1 - kp * kp);
 
         //var im_pz = Range(0, L).ToArray(i => 1 / (k_W * cd_uk(u[i], k_W)));
 
@@ -946,8 +946,8 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         g_norm.AssertEquals(0.027089200894329788);
 
         // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
-        var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToArray(b => b * g_norm).ToRe();
-        var A = Polynom.Array.GetCoefficientsInverted(z_poles).ToRe();
+        var B = GetCoefficientsInverted(z_zeros).ToArray(b => b * g_norm).ToRe();
+        var A = GetCoefficientsInverted(z_poles).ToRe();
 
         var h_f00 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0, dt);
         var h_fsl = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fsl, dt);
@@ -1027,7 +1027,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var wp = wc / wsh > wsl             // 15
             ? wsh
             : wsl;
-        var w0 = Math.Abs(dw * wp / (wc - wp.Pow2()));
+        var w0 = Abs(dw * wp / (wc - wp.Pow2()));
         var f0 = w0 / Consts.pi2;
         //const double f1 = 1 / Consts.pi2;   // 0.159
         //var w1 = f1 * Consts.pi2;
@@ -1070,7 +1070,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
             ? Wsh
             : Wsl;
         //Wp.ToDebug();
-        var W0 = Math.Abs(dW * Wp / (Wc - Wp.Pow2()));   // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
+        var W0 = Abs(dW * Wp / (Wc - Wp.Pow2()));   // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
         //const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
         var F0 = W0 / Consts.pi2;
         const double F1 = 1 / Consts.pi2;
@@ -1080,7 +1080,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
 
         var eps_p = (1 / (Gp * Gp) - 1).Sqrt();
         //var eps_p = Sqrt(10.Power(Rp / 10) - 1);
-        var eps_s = Math.Sqrt(10.Power(Rs / 10) - 1);
+        var eps_s = Sqrt(10.Power(Rs / 10) - 1);
 
         eps_p.AssertEquals(0.5088471399095873);
         eps_s.AssertEquals(99.994999874993752);
@@ -1097,7 +1097,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var T_eps = SpecialFunctions.EllipticJacobi.FullEllipticIntegralComplimentary(kEps);
 
         var double_N = T_eps * Kw / (K_eps * Tw);
-        var N = (int)Math.Ceiling(double_N);
+        var N = (int)Ceiling(double_N);
         N.AssertEquals(4);
 
         //var Fp = DigitalFilter.ToAnalogFrequency(f0, dt);
@@ -1111,7 +1111,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
 
         var kp = m.Power(N) * u.Aggregate(1d, (P, ui) => P * SpecialFunctions.EllipticJacobi.sn_uk(ui, m).Power(4));
 
-        var k_W = Math.Sqrt(1 - kp * kp);
+        var k_W = Sqrt(1 - kp * kp);
 
         //var im_pz = Range(0, L).ToArray(i => 1 / (k_W * cd_uk(u[i], k_W)));
 
@@ -1222,8 +1222,8 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         g_norm.AssertEquals(0.027089200894329788);
 
         // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
-        var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToArray(b => b * g_norm).ToRe();
-        var A = Polynom.Array.GetCoefficientsInverted(z_poles).ToRe();
+        var B = GetCoefficientsInverted(z_zeros).ToArray(b => b * g_norm).ToRe();
+        var A = GetCoefficientsInverted(z_poles).ToRe();
 
         var h_f00 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0, dt);
         var h_fsl = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fsl, dt);
@@ -1303,7 +1303,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var wp = wc / wsh > wsl             // 15
             ? wsh
             : wsl;
-        var w0 = Math.Abs(dw * wp / (wc - wp.Pow2()));
+        var w0 = Abs(dw * wp / (wc - wp.Pow2()));
         var f0 = w0 / Consts.pi2;
         //const double f1 = 1 / Consts.pi2;   // 0.159
         //var w1 = f1 * Consts.pi2;
@@ -1346,7 +1346,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
             ? Wsh
             : Wsl;
         //Wp.ToDebug();
-        var W0 = Math.Abs(dW * Wp / (Wc - Wp.Pow2()));   // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
+        var W0 = Abs(dW * Wp / (Wc - Wp.Pow2()));   // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
         //const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
         var F0 = W0 / Consts.pi2;
         const double F1 = 1 / Consts.pi2;
@@ -1356,7 +1356,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
 
         var eps_p = (1 / (Gp * Gp) - 1).Sqrt();
         //var eps_p = Sqrt(10.Power(Rp / 10) - 1);
-        var eps_s = Math.Sqrt(10.Power(Rs / 10) - 1);
+        var eps_s = Sqrt(10.Power(Rs / 10) - 1);
 
         eps_p.AssertEquals(0.5088471399095873);
         eps_s.AssertEquals(99.994999874993752);
@@ -1373,7 +1373,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var T_eps = SpecialFunctions.EllipticJacobi.FullEllipticIntegralComplimentary(kEps);
 
         var double_N = T_eps * Kw / (K_eps * Tw);
-        var N = (int)Math.Ceiling(double_N);
+        var N = (int)Ceiling(double_N);
         N.AssertEquals(4);
 
         //var Fp = DigitalFilter.ToAnalogFrequency(f0, dt);
@@ -1387,7 +1387,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
 
         var kp = m.Power(N) * u.Aggregate(1d, (P, ui) => P * SpecialFunctions.EllipticJacobi.sn_uk(ui, m).Power(4));
 
-        var k_W = Math.Sqrt(1 - kp * kp);
+        var k_W = Sqrt(1 - kp * kp);
 
         //var im_pz = Range(0, L).ToArray(i => 1 / (k_W * cd_uk(u[i], k_W)));
 
@@ -1498,8 +1498,8 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         g_norm.AssertEquals(0.027089200894329788);
 
         // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
-        var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToArray(b => b * g_norm).ToRe();
-        var A = Polynom.Array.GetCoefficientsInverted(z_poles).ToRe();
+        var B = GetCoefficientsInverted(z_zeros).ToArray(b => b * g_norm).ToRe();
+        var A = GetCoefficientsInverted(z_poles).ToRe();
 
         var h_f00 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0, dt);
         var h_fsl = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fsl, dt);
