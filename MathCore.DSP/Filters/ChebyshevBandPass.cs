@@ -3,6 +3,8 @@ using System.Diagnostics;
 
 using MathCore.DSP.Infrastructure;
 
+using static System.Math;
+
 namespace MathCore.DSP.Filters;
 
 public class ChebyshevBandPass : ChebyshevFilter
@@ -53,7 +55,7 @@ public class ChebyshevBandPass : ChebyshevFilter
             ? Wsh
             : Wsl;
         //const double W0 = 1;                           // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
-        var W1 = Math.Abs((Wc - Ws.Pow2()) / (dW * Ws)); // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
+        var W1 = Abs((Wc - Ws.Pow2()) / (dW * Ws)); // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
         const double Fp = 1 / Consts.pi2;
         var Fs = W1 / Consts.pi2;
 
@@ -88,7 +90,7 @@ public class ChebyshevBandPass : ChebyshevFilter
 
         //(Wsl, Wpl, Wph, Wsh).ToDebug();
 
-        var N = (int)Math.Ceiling(arcch(Spec.kEps) / arcch(Spec.kW));
+        var N = (int)Ceiling(arcch(Spec.kEps) / arcch(Spec.kW));
         Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
 
         var poles = GetNormedPolesI(N, Spec.EpsP);
@@ -138,37 +140,40 @@ public class ChebyshevBandPass : ChebyshevFilter
         var Wph = Consts.pi2 * ToAnalogFrequency(fph, dt);
         var Wsh = Consts.pi2 * ToAnalogFrequency(fsh, dt);
 
-        var Wc = Wsl * Wsh;
-        var dW = Wsh - Wsl;
-
-        var Ws = Wc / Wsh > Wsl
-            ? Wsh
-            : Wsl;
-        var W0 = Math.Abs(dW * Ws / (Wc - Ws.Pow2()));
-
-        var N = (int)Math.Ceiling(arcch(Spec.kEps) / arcch(Spec.kW));
+        var N = (int)Ceiling(arcch(Spec.kEps) / arcch(Spec.kW));
         Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
-        Debug.Fail("Not implemented");
 
-        var (zeros, poles) = GetNormedPolesII(N, Spec.EpsS, W0);
+        var (zeros, poles) = GetNormedPolesII(N, Spec.EpsS);
 
         // Переносим нули и полюса аналогового нормированного ФНЧ в полосы ПЗФ
-        var sqrtWc = Wc.Sqrt();
-        var is_even = N.IsEven();
-        var pzf_zeros = is_even 
-            ? TransformToBandStopW(zeros, Wsl, Wsh)
-            : TransformToBandStopW(zeros, Wsl, Wsh).AppendLast((0, +sqrtWc), (0, -sqrtWc));
-        var pzf_poles = TransformToBandStopW(poles, Wsl, Wsh);
+        var ppf_zeros_enum = TransformToBandPassW(zeros, Wpl, Wph);
+        if (N.IsOdd())
+            ppf_zeros_enum = ppf_zeros_enum.AppendLast(0);
+        var ppf_zeros = ppf_zeros_enum.ToArray();
+        var ppf_poles = TransformToBandPassW(poles, Wpl, Wph);
 
         // Преобразуем аналоговые нули и полюса в нули и полюса цифрового фильтра с помощью Z-преобразования
-        var z_zeros = ToZArray(pzf_zeros, dt);
-        var z_poles = ToZArray(pzf_poles, dt);
+        var z_zeros_enum = DigitalFilter.ToZ(ppf_zeros, dt);
+        if (N.IsOdd())
+            z_zeros_enum = z_zeros_enum.AppendLast(-1);
+        var z_zeros = z_zeros_enum.ToArray();
+        var z_poles = ToZArray(ppf_poles, dt);
 
         // Вычисляем коэффициент нормировки фильтра на нулевой частоте 
-        var G_norm = 1 / (z_zeros.Multiply(z => 1 - z) / z_poles.Multiply(z => 1 - z)).Abs;
+        var ffp0 = DigitalFilter.ToDigitalFrequency((Wpl * Wph).Sqrt() / Consts.pi2, dt);
+        var z0 = Complex.Exp(Consts.pi2 * ffp0 * dt);
+
+        var norm_0 = z_zeros.Multiply(z => z0 - z);
+        var norm_p = z_poles.Multiply(z => z0 - z);
+
+        double g_norm;
+        if (N.IsEven())
+            g_norm = Spec.Gp * (norm_p / norm_0).Re;
+        else
+            g_norm = (z0 * norm_p / norm_0).Abs;
 
         // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
-        var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * G_norm);
+        var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * g_norm);
         var A = Polynom.Array.GetCoefficientsInverted(z_poles).ToRe();
 
         return (A, B);
@@ -196,9 +201,9 @@ public class ChebyshevBandPass : ChebyshevFilter
         var Ws = Wc / Wsh > Wsl
             ? Wsh
             : Wsl;
-        var W0 = Math.Abs(dW * Ws / (Wc - Ws.Pow2()));
+        var W0 = Abs(dW * Ws / (Wc - Ws.Pow2()));
 
-        var N = (int)Math.Ceiling(arcch(Spec.kEps) / arcch(1 / W0));
+        var N = (int)Ceiling(arcch(Spec.kEps) / arcch(1 / W0));
         Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
         Debug.Fail("Not implemented");
 
