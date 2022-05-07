@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 
+using MathCore.DSP.Infrastructure;
+
 namespace MathCore.DSP.Filters;
 
 public class ChebyshevBandPass : ChebyshevFilter
@@ -84,33 +86,38 @@ public class ChebyshevBandPass : ChebyshevFilter
         var Wph = Consts.pi2 * ToAnalogFrequency(fph, dt);
         var Wsh = Consts.pi2 * ToAnalogFrequency(fsh, dt);
 
-        var Wc = Wpl * Wph;
-        var dW = Wph - Wpl;
-        var sqrtWc = Wc.Sqrt();
-        var Ws = Wc / Wsh > Wsl
-            ? Wsh
-            : Wsl;
-        var W0 = Math.Abs((Wc - Ws.Pow2()) / (dW * Ws));
+        //(Wsl, Wpl, Wph, Wsh).ToDebug();
 
         var N = (int)Math.Ceiling(arcch(Spec.kEps) / arcch(Spec.kW));
         Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
-        Debug.Fail("Not implemented");
 
-        var poles = GetNormedPolesI(N, Spec.EpsP, W0);
+        var poles = GetNormedPolesI(N, Spec.EpsP);
 
         // Переносим нули и полюса аналогового нормированного ФНЧ в полосы ПЗФ
-        var pzf_zeros = Enumerable.Range(0, 2 * N).Select(i => i % 2 == 0 ? Complex.ImValue(sqrtWc) : Complex.ImValue(-sqrtWc));
-        var pzf_poles = TransformToBandStopW(poles, Wsl, Wsh);
+        var pzf_poles = TransformToBandPassW(poles, Wpl, Wph);
 
         // Преобразуем аналоговые нули и полюса в нули и полюса цифрового фильтра с помощью Z-преобразования
-        var z_zeros = ToZArray(pzf_zeros, dt);
+        var z_zeros = Enumerable
+           .Repeat(Complex.Real, N)
+           .Concat(Enumerable.Repeat(-Complex.Real, N))
+           .ToArray();
         var z_poles = ToZArray(pzf_poles, dt);
 
+        var Fpl = Wpl / Consts.pi2;
+        var Fph = Wph / Consts.pi2;
+        var ffp0 = ToDigitalFrequency((Fpl * Fph).Sqrt(), dt);
+        var z0 = Complex.Exp(Consts.pi2 * ffp0 * dt);
+
         // Вычисляем коэффициент нормировки фильтра на нулевой частоте 
-        var G_norm = (N.IsOdd() ? 1 : Spec.Gp)
-            / (z_zeros.Multiply(z => 1 - z) / z_poles.Multiply(z => 1 - z)).Abs;
+        var norm_0 = ((z0 - 1) * (z0 + 1)).Pow(N).Abs;
+        var norm_p = z_poles.Multiply(z => z0 - z);
+
+        var g_norm = N.IsEven() 
+            ? Spec.Gp * (norm_p / norm_0).Abs 
+            : (z0 * norm_p / norm_0).Abs;
+
         // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
-        var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * G_norm);
+        var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * g_norm);
         var A = Polynom.Array.GetCoefficientsInverted(z_poles).ToRe();
 
         return (A, B);

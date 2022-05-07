@@ -126,7 +126,7 @@ public class EllipticBandStop : EllipticFilter
         double fsh,
         double fph,
         double Gp = 0.89125093813374556,
-        double Gs = 0.031622777)
+        double Gs = 0.01)
         : this(fsl, fsh, GetSpecification(dt, fpl, fsl, fsh, fph, Gp, Gs)) { }
 
     /// <summary>Инициализация нового эллиптического полосозаграждающего фильтра (ПЗФ)</summary>

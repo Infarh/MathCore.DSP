@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Globalization;
 using System;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -14,6 +13,7 @@ using MathCore.DSP.Signals;
 using MathCore.DSP.Tests.Infrastructure;
 // ReSharper disable RedundantArgumentDefaultValue
 // ReSharper disable InconsistentNaming
+// ReSharper disable HeuristicUnreachableCode
 
 namespace MathCore.DSP.Tests.Filters;
 
@@ -1360,16 +1360,6 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
             /*[ 5]*/ (-0.851790250586702435, +0.641693653548654708),
             /*[ 6]*/ (-0.851790250586702435, -0.641693653548654708)
         );
-
-        Complex[] poles1 = {
-            /*[ 0]*/ (-1.202981071917573752, 0.000000000000000000),
-            /*[ 1]*/ (-0.112686910985844060, 0.772336560883440382),
-            /*[ 2]*/ (-0.112686910985844060, -0.772336560883440382),
-            /*[ 3]*/ (-0.397988375745020995, 0.780702692783778462),
-            /*[ 4]*/ (-0.397988375745020995, -0.780702692783778462),
-            /*[ 5]*/ (-0.851790250586702546, 0.641693653548654819),
-            /*[ 6]*/ (-0.851790250586702546, -0.641693653548654819),
-        };
 
         //poles.Zip(poles1, (p, p1) => p - p1).ToDebugEnum();
 
