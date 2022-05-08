@@ -211,26 +211,34 @@ public class ChebyshevBandPass : ChebyshevFilter
         var (zeros, poles) = GetNormedPolesII(N, Spec.EpsS, Spec.kW);
 
         // Переносим нули и полюса аналогового нормированного ФНЧ в полосы ПЗФ
-        var ppf_zeros = TransformToBandPassW(zeros, Wpl, Wph).ToArray();
+        var ppf_zeros_enum = AnalogBasedFilter.TransformToBandPassW(zeros, Wpl, Wph);
+        if (N.IsOdd())
+            ppf_zeros_enum = ppf_zeros_enum.AppendLast(0);
+        var ppf_zeros = ppf_zeros_enum.ToArray();
         var ppf_poles = TransformToBandPassW(poles, Wpl, Wph).ToArray();
 
         // Преобразуем аналоговые нули и полюса в нули и полюса цифрового фильтра с помощью Z-преобразования
         var z_zeros_enum = ToZ(ppf_zeros, dt);
         if (N.IsOdd())
-            z_zeros_enum = z_zeros_enum.AppendFirst(-1);
+            z_zeros_enum = z_zeros_enum.AppendLast(-1);
         var z_zeros = z_zeros_enum.ToArray();
         var z_poles = ToZArray(ppf_poles, dt);
 
         // Вычисляем коэффициент нормировки фильтра на нулевой частоте 
+        var Fp0 = (Wpl * Wph).Sqrt();
         var ffp0 = ToDigitalFrequency((Wpl * Wph).Sqrt() / Consts.pi2, dt);
         var z0 = Complex.Exp(Consts.pi2 * ffp0 * dt);
 
         var norm_0 = z_zeros.Multiply(z => z0 - z);
         var norm_p = z_poles.Multiply(z => z0 - z);
 
-        var g_norm = N.IsEven()
-            ? Spec.Gp * (norm_p / norm_0).Re
-            : (z0 * norm_p / norm_0).Re;
+        //(norm_0 / norm_p).Re.ToDebug();
+
+        double g_norm;
+        if (N.IsEven())
+            g_norm = Spec.Gp * (norm_p / norm_0).Abs;
+        else
+            g_norm = (z0 * norm_p / norm_0).Abs;
 
         // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
         var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * g_norm);

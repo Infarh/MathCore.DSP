@@ -1198,7 +1198,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         filter.A.AssertEquals(A);
     }
 
-    [TestMethod, Ignore]
+    [TestMethod]
     public void TypeIICorrected_Odd_Creation()
     {
         // http://www.dsplib.ru/content/filters/ch8/ch8.html
@@ -1214,27 +1214,8 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
 
         const double fsl = 2 / Consts.pi2;  // нижняя частота границы полосы пропускания
         const double fpl = 4 / Consts.pi2;  // нижняя частота границы полосы заграждения
-        const double fph = 12 / Consts.pi2; // верхняя частота границы полосы заграждения
+        const double fph = 12.5 / Consts.pi2; // верхняя частота границы полосы заграждения
         const double fsh = 15 / Consts.pi2; // верхняя частота границы полосы пропускания
-
-        const double wsl = fsl * Consts.pi2; //  2
-        const double wpl = fpl * Consts.pi2; //  4
-        const double wph = fph * Consts.pi2; // 12
-        const double wsh = fsh * Consts.pi2; // 15
-
-        const double wc = wpl * wph; // 48
-        const double dw = wph - wpl; // 8
-
-        var wp = wc / wsh > wsl             // 15
-            ? wsh
-            : wsl;
-        var w0 = Abs(dw * wp / (wc - wp.Pow2()));
-        var f0 = w0 / Consts.pi2;
-        //const double f1 = 1 / Consts.pi2;   // 0.159
-        //var w1 = f1 * Consts.pi2;
-
-        f0.AssertEquals(0.10790165633348836);
-        w0.AssertEquals(0.67796610169491522);
 
         // Преобразуем частоты аналогового фильтра в частоты цифрового фильтра с учётом заданной частоты дискретизации
         var Fsl = DigitalFilter.ToAnalogFrequency(fsl, dt);
@@ -1244,7 +1225,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
 
         Fsl.AssertEquals(0.31937518051807723);
         Fpl.AssertEquals(0.64524608331077715);
-        Fph.AssertEquals(2.1776750959738593);
+        Fph.AssertEquals(2.296556302951906);
         Fsh.AssertEquals(2.9653636313402);
 
         var Wsl = Consts.pi2 * Fsl;
@@ -1252,6 +1233,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var Wph = Consts.pi2 * Fph;
         var Wsh = Consts.pi2 * Fsh;
 
+        //(Wsl, Wpl, Wph, Wsh).ToDebug();
         //Wsl.ToDebug();
         //Wpl.ToDebug();
         //Wph.ToDebug();
@@ -1260,6 +1242,8 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var Wc = Wpl * Wph;
         var dW = Wph - Wpl;
 
+        Wc.AssertEquals(58.500854660888386);
+
         // Выбор опорной частоты
         // Если   Wc / Wsh > Wsl
         // то есть      Wc > Wsl*Wsh
@@ -1267,17 +1251,17 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         // то есть центральная частота по границам подавления > центральной частоты по границам пропускания
         // то выбираем в качестве опорной частоты выбираем верхнюю границу пропускания
         // иначе, выбираем нижнюю границу пропускания
-        var Wp = Wc / Wsh > Wsl
+        var Ws = Wc / Wsh > Wsl
             ? Wsh
             : Wsl;
-        //Wp.ToDebug();
-        var W0 = Abs(dW * Wp / (Wc - Wp.Pow2()));   // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
+        const double W0 = 1;
+        const double F0 = W0 / Consts.pi2;
+        var W1 = Abs((Wc - Ws.Pow2()) / (dW * Ws));   // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
         //const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
-        var F0 = W0 / Consts.pi2;
-        const double F1 = 1 / Consts.pi2;
+        var F1 = W1 / Consts.pi2;
 
-        W0.AssertEquals(0.615059351152204);
-        F0.AssertEquals(0.0978897360307671);
+        W1.AssertEquals(1.4931453518033904);
+        F1.AssertEquals(0.23764146349419665);
 
         var eps_p = (1 / (Gp * Gp) - 1).Sqrt();
         //var eps_p = Sqrt(10.Power(Rp / 10) - 1);
@@ -1286,133 +1270,156 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         eps_p.AssertEquals(0.5088471399095873);
         eps_s.AssertEquals(99.994999874993752);
 
-        var kEps = eps_p / eps_s;
-        var kW = F0 / F1;
+        var kEps = eps_s / eps_p;
+        var kW = F1 / F0;
 
-        kEps.AssertEquals(0.005088725841749186);
-        kW.AssertEquals(0.615059351152204);
+        kEps.AssertEquals(196.5128464567198);
+        kW.AssertEquals(1.4931453518033904);
 
-        var Kw = SpecialFunctions.EllipticJacobi.FullEllipticIntegral(kW);
-        var Tw = SpecialFunctions.EllipticJacobi.FullEllipticIntegralComplimentary(kW);
-        var K_eps = SpecialFunctions.EllipticJacobi.FullEllipticIntegral(kEps);
-        var T_eps = SpecialFunctions.EllipticJacobi.FullEllipticIntegralComplimentary(kEps);
+        var N = (int)Ceiling(arcch(kEps) / arcch(kW)); // Порядок фильтра
+        N.AssertEquals(7);
 
-        var double_N = T_eps * Kw / (K_eps * Tw);
-        var N = (int)Ceiling(double_N);
-        N.AssertEquals(4);
+        var beta = arcsh(eps_s) / N;
+        beta.AssertEquals(0.7568989093729265);
 
-        //var Fp = DigitalFilter.ToAnalogFrequency(f0, dt);
-        //var Fs = DigitalFilter.ToAnalogFrequency(f1, dt);
+        var r = N % 2;
+        var sh = Sinh(beta);
+        var ch = Cosh(beta);
 
-        var (L, r) = N.GetDivMod(2);
-        (L, r).AssertEquals((2, 0));
-
-        var u = Enumerable.Range(1, L).ToArray(i => (2 * i - 1d) / N);
-        var m = (1 - kEps * kEps).Sqrt();
-
-        var kp = m.Power(N) * u.Aggregate(1d, (P, ui) => P * SpecialFunctions.EllipticJacobi.sn_uk(ui, m).Power(4));
-
-        var k_W = Sqrt(1 - kp * kp);
-
-        //var im_pz = Range(0, L).ToArray(i => 1 / (k_W * cd_uk(u[i], k_W)));
-
-        var v0_complex = SpecialFunctions.EllipticJacobi.sn_inverse((0, 1 / eps_p), kEps) / N;
+        var poles = new Complex[N];
+        if (N.IsOdd())
+            poles[0] = -kW / sh;
+        for (var (i, dth) = (r, Consts.pi05 / N); i < poles.Length; i += 2)   // Расчёт полюсов
+        {
+            var (sin, cos) = Complex.SinCos(dth * (i - r + 1));
+            var z = new Complex(-sin * sh, cos * ch);
+            var norm = kW / z.Power;
+            (poles[i], poles[i + 1]) = Complex.Conjugate(z.Re * norm, z.Im * norm);
+        }
+        //poles.ToDebugEnum();
 
         var zeros = new Complex[N - r];
-        var poles = new Complex[N];
-
-        if (r != 0) poles[0] = Complex.i * SpecialFunctions.EllipticJacobi.sn_uk(v0_complex, k_W);
-        for (var i = 0; i < L; i++)
+        for (var (n, dth, L) = (1, PI / N, N / 2); n <= L; n++)
         {
-            var (p_im, p_re) = SpecialFunctions.EllipticJacobi.cd_uk(u[i] - v0_complex, k_W);
-            (poles[r + 2 * i], poles[r + 2 * i + 1]) = Complex.Conjugate(-p_re, p_im);
-
-            var p0_im = 1 / (k_W * SpecialFunctions.EllipticJacobi.cd_uk(u[i], k_W));
-            (zeros[2 * i], zeros[2 * i + 1]) = Complex.Conjugate(0, p0_im);
+            var th = dth * (n - 0.5);
+            (zeros[2 * n - 2], zeros[2 * n - 1]) = Complex.Conjugate(0, kW / Cos(th));
         }
 
         zeros.ToRe().Sum(v => v * v).AssertEquals(0);
         //zeros.ToIm().ToDebugEnum();
         zeros.ToIm().AssertEquals(
-            /*[ 0]*/ +1.6095504012250093,
-            /*[ 1]*/ -1.6095504012250093,
-            /*[ 2]*/ +3.5252874329956083,
-            /*[ 3]*/ -3.5252874329956083
+            /*[ 0]*/ +1.5315443666617676,
+            /*[ 1]*/ -1.5315443666617676,
+            /*[ 2]*/ +1.9098045874156100,
+            /*[ 3]*/ -1.9098045874156100,
+            /*[ 4]*/ +3.4413489540773770,
+            /*[ 5]*/ -3.4413489540773770
         );
 
         //poles.ToDebugEnum();
         poles.AssertEquals(
-            /*[ 0]*/ (-0.105281264621164411, 0.993710811208774136),
-            /*[ 1]*/ (-0.105281264621164411, -0.993710811208774136),
-            /*[ 2]*/ (-0.364290595873427714, 0.478602767640667393),
-            /*[ 3]*/ (-0.364290595873427714, -0.478602767640667393)
+            /*[ 0]*/  -1.796225595841184797,
+            /*[ 1]*/ (-0.168257937347595449, +1.153210745910925095),
+            /*[ 2]*/ (-0.168257937347595449, -1.153210745910925095),
+            /*[ 3]*/ (-0.594254493315459098, +1.165702596870488827),
+            /*[ 4]*/ (-0.594254493315459098, -1.165702596870488827),
+            /*[ 5]*/ (-1.271846653374979930, +0.958141896077909005),
+            /*[ 6]*/ (-1.271846653374979930, -0.958141896077909005)
         );
 
-        var ppf_zeros = AnalogBasedFilter.TransformToBandPassW(zeros, Wpl, Wph).ToArray();
+        var ppf_zeros_enum = AnalogBasedFilter.TransformToBandPassW(zeros, Wpl, Wph);
+        if (N.IsOdd())
+            ppf_zeros_enum = ppf_zeros_enum.AppendLast(0);
+        var ppf_zeros = ppf_zeros_enum.ToArray();
         var ppf_poles = AnalogBasedFilter.TransformToBandPassW(poles, Wpl, Wph).ToArray();
 
-        ppf_zeros.ToRe().Sum(v => v * v).AssertEquals(0, 7e-30);
+        ppf_zeros.ToRe().Sum(v => v * v).AssertEquals(0, 1e-25);
         //ppf_zeros.ToIm().ToDebugEnum();
         ppf_zeros.ToIm().AssertEquals(
-            /*[ 0]*/ +18.4966696758644030,
-            /*[ 1]*/ -02.9990565683874317,
-            /*[ 2]*/ +02.9990565683874317,
-            /*[ 3]*/ -18.4966696758644030,
-            /*[ 4]*/ +35.5057109896055700,
-            /*[ 5]*/ -01.5623559460880400,
-            /*[ 6]*/ +01.5623559460880400,
-            /*[ 7]*/ -35.5057109896055700
+            /*[ 0]*/ +18.9737693311404280,
+            /*[ 1]*/ -03.0832489654480346,
+            /*[ 2]*/ +03.0832489654480346,
+            /*[ 3]*/ -18.9737693311404280,
+            /*[ 4]*/ +22.4240043797515440,
+            /*[ 5]*/ -02.6088495912761047,
+            /*[ 6]*/ +02.6088495912761047,
+            /*[ 7]*/ -22.4240043797515440,
+            /*[ 8]*/ +37.2751099522368200,
+            /*[ 9]*/ -01.5694347980689933,
+            /*[10]*/ +01.5694347980689933,
+            /*[11]*/ -37.2751099522368200,
+            /*[12]*/ +00
         );
 
         //ppf_poles.ToDebugEnum();
         ppf_poles.AssertEquals(
-            /*[ 0]*/ (-0.232612131820379653, -04.057810063607998785),
-            /*[ 1]*/ (-0.781092257506547871, +13.625789842998447199),
-            /*[ 2]*/ (-0.232612131820379653, +04.057810063607998785),
-            /*[ 3]*/ (-0.781092257506547871, -13.625789842998447199),
-            /*[ 4]*/ (-1.223131650509463597, -5.3108206312463428490),
-            /*[ 5]*/ (-2.284453268385779001, +09.919064349130305658),
-            /*[ 6]*/ (-1.223131650509463597, +05.310820631246342849),
-            /*[ 7]*/ (-2.284453268385779001, -09.919064349130305658)
+            /*[ 0]*/  -03.995675744110501526,
+            /*[ 1]*/  -14.641041567779060628,
+            /*[ 2]*/ (-0.3337508338309236300, -03.703543651100382306),
+            /*[ 3]*/ (-1.4120073944723849900, +15.668668033213606350),
+            /*[ 4]*/ (-0.3337508338309236300, +03.703543651100382306),
+            /*[ 5]*/ (-1.4120073944723849900, -15.668668033213606350),
+            /*[ 6]*/ (-1.1116896710854820000, -03.410594455978483097),
+            /*[ 7]*/ (-5.0539907584119614300, +15.505327889190112955),
+            /*[ 8]*/ (-1.1116896710854820000, +03.410594455978483097),
+            /*[ 9]*/ (-5.0539907584119614300, -15.505327889190112955),
+            /*[10]*/ (-2.2978152938911033900, -02.656041590088078053),
+            /*[11]*/ (-10.898214535492323662, +12.597231440196788199),
+            /*[12]*/ (-2.2978152938911033940, +02.656041590088078053),
+            /*[13]*/ (-10.898214535492323662, -12.597231440196788199)
         );
 
         var z_zeros_enum = DigitalFilter.ToZ(ppf_zeros, dt);
         if (N.IsOdd())
-            z_zeros_enum = z_zeros_enum.AppendFirst(-1);
+            z_zeros_enum = z_zeros_enum.AppendLast(-1);
         var z_zeros = z_zeros_enum.ToArray();
         var z_poles = DigitalFilter.ToZArray(ppf_poles, dt);
 
         //z_zeros.ToDebugEnum();
         z_zeros.AssertEquals(
-            /*[ 1]*/ (+0.077982915792994864, +0.996954695482409003),
-            /*[ 2]*/ (+0.956017287213403399, -0.293310324654836141),
-            /*[ 3]*/ (+0.956017287213403399, +0.293310324654836141),
-            /*[ 4]*/ (+0.077982915792994864, -0.996954695482409003),
-            /*[ 5]*/ (-0.518262521157172529, +0.855221584832732806),
-            /*[ 6]*/ (+0.987869246083113217, -0.155287966833175056),
-            /*[ 7]*/ (+0.987869246083113217, +0.155287966833175056),
-            /*[ 8]*/ (-0.518262521157172529, -0.855221584832732806)
+            /*[ 0]*/ (+0.052626145968034464, +0.998614284276241992),
+            /*[ 1]*/ (+0.953571306228448101, -0.301167335442891426),
+            /*[ 2]*/ (+0.953571306228448101, +0.301167335442891426),
+            /*[ 3]*/ (+0.052626145968034464, -0.998614284276241992),
+            /*[ 4]*/ (-0.113903273201571217, +0.993491844130573787),
+            /*[ 5]*/ (+0.966538868253713157, -0.256520206133613649),
+            /*[ 6]*/ (+0.966538868253713157, +0.256520206133613649),
+            /*[ 7]*/ (-0.113903273201571217, -0.993491844130573787),
+            /*[ 8]*/ (-0.552931217580533541, +0.833226901044912704),
+            /*[ 9]*/ (+0.987759745284454427, -0.155982965722509054),
+            /*[10]*/ (+0.987759745284454427, +0.155982965722509054),
+            /*[11]*/ (-0.552931217580533541, -0.833226901044912704),
+            /*[12]*/  +1,
+            /*[13]*/  -1
         );
 
         //z_poles.ToDebugEnum();
         z_poles.AssertEquals(
-            /*[ 0]*/ (0.900559137768189522, -0.381172136621393431),
-            /*[ 1]*/ (0.346108870590590256, 0.882619467214864506),
-            /*[ 2]*/ (0.900559137768189522, 0.381172136621393431),
-            /*[ 3]*/ (0.346108870590590256, -0.882619467214864506),
-            /*[ 4]*/ (0.773670946459013353, -0.443838751538377929),
-            /*[ 5]*/ (0.498153041879348002, 0.666845008413482154),
-            /*[ 6]*/ (0.773670946459013353, 0.443838751538377929),
-            /*[ 7]*/ (0.498153041879348002, -0.666845008413482154)
+            /*[ 0]*/  0.666967016330748841,
+            /*[ 1]*/  0.154699691166489295,
+            /*[ 2]*/ (0.904008828827797872, -0.346791886419301199),
+            /*[ 3]*/ (0.216623786479769070, +0.890288980405640307),
+            /*[ 4]*/ (0.904008828827797872, +0.346791886419301199),
+            /*[ 5]*/ (0.216623786479769070, -0.890288980405640307),
+            /*[ 6]*/ (0.846494336983498741, -0.298301246694471001),
+            /*[ 7]*/ (0.154405321789832628, +0.714434407036235508),
+            /*[ 8]*/ (0.846494336983498741, +0.298301246694471001),
+            /*[ 9]*/ (0.154405321789832628, -0.714434407036235508),
+            /*[10]*/ (0.768800593285895784, -0.210693643230012412),
+            /*[11]*/ (0.110059090550493829, +0.452572146519861163),
+            /*[12]*/ (0.768800593285895784, +0.210693643230012412),
+            /*[13]*/ (0.110059090550493829, -0.452572146519861163)
         );
 
-        var Fp0 = (Fpl * Fph).Sqrt().AssertEquals(1.1853844635393842);
-        var ffp0 = DigitalFilter.ToDigitalFrequency(Fp0, dt).AssertEquals(1.1347392325852204);
+        var Fp0 = (Fpl * Fph).Sqrt().AssertEquals(1.2173101328677076);
+        var ffp0 = DigitalFilter.ToDigitalFrequency(Fp0, dt).AssertEquals(1.1626842508705897);
         var z0 = Complex.Exp(Consts.pi2 * ffp0 * dt);
-        z0.AssertEquals(new Complex(0.7564175596225313, 0.6540890424817513));
+        z0.AssertEquals(new Complex(0.7448168130279443, 0.6672689975046767));
 
         var norm_0 = z_zeros.Multiply(z => z0 - z);
         var norm_p = z_poles.Multiply(z => z0 - z);
+
+        //(norm_0 / norm_p).Re.ToDebug();
 
         double g_norm;
         if (N.IsEven())
@@ -1420,7 +1427,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         else
             g_norm = (z0 * norm_p / norm_0).Abs;
 
-        g_norm.AssertEquals(0.027089200894329788);
+        g_norm.AssertEquals(0.03204624482119541);
 
         // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
         var B = GetCoefficientsInverted(z_zeros).ToArray(b => b * g_norm).ToRe();
@@ -1442,36 +1449,18 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         //var h_fsh_db = h_fsh.Power.In_dB_byPower().ToDebug();
         //var h_fd5_db = h_fd5.Power.In_dB_byPower().ToDebug();
 
-        h_f00.Abs.AssertLessOrEqualsThan(Gs, 7e-4);
+        h_f00.Abs.AssertLessOrEqualsThan(Gs);
         h_fsl.Abs.AssertLessOrEqualsThan(Gs);
-        h_fpl.Abs.AssertGreaterOrEqualsThan(Gp);
-        h_fcc.Abs.AssertGreaterOrEqualsThan(Gp, 3.1e-14);
-        h_fph.Abs.AssertGreaterOrEqualsThan(Gp, 0.107);
+        h_fpl.Abs.AssertGreaterOrEqualsThan(Gp, 4.6e-2);
+        h_fcc.Abs.AssertGreaterOrEqualsThan(Gp);
+        h_fph.Abs.AssertGreaterOrEqualsThan(Gp, 4.6e-2);
         h_fsh.Abs.AssertLessOrEqualsThan(Gs);
-        h_fd5.Abs.AssertLessOrEqualsThan(Gs, 4.7e-15);
+        h_fd5.Abs.AssertLessOrEqualsThan(Gs);
 
-        var filter = new DSP.Filters.EllipticBandPass(dt, fsl, fpl, fph, fsh, Gp, Gs);
+        var filter = new DSP.Filters.ChebyshevBandPass(dt, fsl, fpl, fph, fsh, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
 
-        filter.B.AssertEquals(B);
-        filter.A.AssertEquals(A);
-
-        //var h_f0 = filter.GetTransmissionCoefficient(0).Power.In_dB_byPower();
-        //var h_sl = filter.GetTransmissionCoefficient(fsl).Power.In_dB_byPower();
-        //var h_pl = filter.GetTransmissionCoefficient(fpl).Power.In_dB_byPower();
-        //var h_c0 = filter.GetTransmissionCoefficient((fpl * fph).Sqrt()).Power.In_dB_byPower();
-        //var h_ph = filter.GetTransmissionCoefficient(fph).Power.In_dB_byPower();
-        //var h_sh = filter.GetTransmissionCoefficient(fsh).Power.In_dB_byPower();
-        //var h_fd = filter.GetTransmissionCoefficient(fd/2).Power.In_dB_byPower();
-
-        //h_f0.AssertThatValue().LessThan(-Rs);
-        //h_sl.AssertThatValue().LessThan(-Rs);
-
-        //h_pl.AssertThatValue().GreaterThan(-Rp, 1.1);
-        //h_c0.AssertThatValue().GreaterThan(-Rp);
-        //h_ph.AssertThatValue().GreaterThan(-Rp);
-
-        //h_sh.AssertThatValue().LessThan(-Rs);
-        //h_fd.AssertThatValue().LessThan(-Rs);
+        filter.B.AssertEquals(Accuracy.Eps(1e-15), B);
+        filter.A.AssertEquals(Accuracy.Eps(1e-13), A);
     }
 
     [TestMethod, Ignore]
