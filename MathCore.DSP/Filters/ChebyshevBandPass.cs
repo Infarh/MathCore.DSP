@@ -153,24 +153,22 @@ public class ChebyshevBandPass : ChebyshevFilter
         var ppf_poles = TransformToBandPassW(poles, Wpl, Wph);
 
         // Преобразуем аналоговые нули и полюса в нули и полюса цифрового фильтра с помощью Z-преобразования
-        var z_zeros_enum = DigitalFilter.ToZ(ppf_zeros, dt);
+        var z_zeros_enum = ToZ(ppf_zeros, dt);
         if (N.IsOdd())
             z_zeros_enum = z_zeros_enum.AppendLast(-1);
         var z_zeros = z_zeros_enum.ToArray();
         var z_poles = ToZArray(ppf_poles, dt);
 
         // Вычисляем коэффициент нормировки фильтра на нулевой частоте 
-        var ffp0 = DigitalFilter.ToDigitalFrequency((Wpl * Wph).Sqrt() / Consts.pi2, dt);
+        var ffp0 = ToDigitalFrequency((Wpl * Wph).Sqrt() / Consts.pi2, dt);
         var z0 = Complex.Exp(Consts.pi2 * ffp0 * dt);
 
         var norm_0 = z_zeros.Multiply(z => z0 - z);
         var norm_p = z_poles.Multiply(z => z0 - z);
 
-        double g_norm;
-        if (N.IsEven())
-            g_norm = Spec.Gp * (norm_p / norm_0).Re;
-        else
-            g_norm = (z0 * norm_p / norm_0).Abs;
+        var g_norm = N.IsEven() 
+            ? Spec.Gp * (norm_p / norm_0).Re 
+            : (z0 * norm_p / norm_0).Re;
 
         // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
         var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * g_norm);
@@ -201,31 +199,41 @@ public class ChebyshevBandPass : ChebyshevFilter
         var Ws = Wc / Wsh > Wsl
             ? Wsh
             : Wsl;
-        var W0 = Abs(dW * Ws / (Wc - Ws.Pow2()));
+        const double W0 = 1;
+        const double F0 = W0 / Consts.pi2;
+        var W1 = Abs((Wc - Ws.Pow2()) / (dW * Ws));   // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
+        //const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
+        var F1 = W1 / Consts.pi2;
 
-        var N = (int)Ceiling(arcch(Spec.kEps) / arcch(1 / W0));
+        var N = (int)Ceiling(arcch(Spec.kEps) / arcch(Spec.kW));
         Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
-        Debug.Fail("Not implemented");
 
-        var (zeros, poles) = GetNormedPolesII(N, Spec.EpsS);
+        var (zeros, poles) = GetNormedPolesII(N, Spec.EpsS, Spec.kW);
 
         // Переносим нули и полюса аналогового нормированного ФНЧ в полосы ПЗФ
-        var is_even = N.IsEven();
-        var pzf_zeros = is_even
-            ? TransformToBandStopW(zeros, Wsl, Wsh)
-            : TransformToBandStopW(zeros, Wsl, Wsh).AppendLast((0, +sqrt_wc), (0, -sqrt_wc));
-        var pzf_poles = TransformToBandStopW(poles, Wsl, Wsh);
+        var ppf_zeros = TransformToBandPassW(zeros, Wpl, Wph).ToArray();
+        var ppf_poles = TransformToBandPassW(poles, Wpl, Wph).ToArray();
 
         // Преобразуем аналоговые нули и полюса в нули и полюса цифрового фильтра с помощью Z-преобразования
-        var z_zeros = ToZArray(pzf_zeros, dt);
-        var z_poles = ToZArray(pzf_poles, dt);
+        var z_zeros_enum = ToZ(ppf_zeros, dt);
+        if (N.IsOdd())
+            z_zeros_enum = z_zeros_enum.AppendFirst(-1);
+        var z_zeros = z_zeros_enum.ToArray();
+        var z_poles = ToZArray(ppf_poles, dt);
 
         // Вычисляем коэффициент нормировки фильтра на нулевой частоте 
-        var re_to_im = z_zeros.Multiply(z => 1 - z) / z_poles.Multiply(z => 1 - z);
-        var G_norm = 1 / re_to_im.Re;
+        var ffp0 = ToDigitalFrequency((Wpl * Wph).Sqrt() / Consts.pi2, dt);
+        var z0 = Complex.Exp(Consts.pi2 * ffp0 * dt);
+
+        var norm_0 = z_zeros.Multiply(z => z0 - z);
+        var norm_p = z_poles.Multiply(z => z0 - z);
+
+        var g_norm = N.IsEven()
+            ? Spec.Gp * (norm_p / norm_0).Re
+            : (z0 * norm_p / norm_0).Re;
 
         // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
-        var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * G_norm);
+        var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * g_norm);
         var A = Polynom.Array.GetCoefficientsInverted(z_poles).ToRe();
 
         return (A, B);
