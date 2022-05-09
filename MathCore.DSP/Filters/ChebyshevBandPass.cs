@@ -135,10 +135,10 @@ public class ChebyshevBandPass : ChebyshevFilter
         // Пересчитываем аналоговые частоты полосы заграждения в цифровые
         var dt = Spec.dt;
 
-        var Wsl = Consts.pi2 * ToAnalogFrequency(fsl, dt);
+        //var Wsl = Consts.pi2 * ToAnalogFrequency(fsl, dt);
         var Wpl = Consts.pi2 * ToAnalogFrequency(fpl, dt);
         var Wph = Consts.pi2 * ToAnalogFrequency(fph, dt);
-        var Wsh = Consts.pi2 * ToAnalogFrequency(fsh, dt);
+        //var Wsh = Consts.pi2 * ToAnalogFrequency(fsh, dt);
 
         var N = (int)Ceiling(arcch(Spec.kEps) / arcch(Spec.kW));
         Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
@@ -168,7 +168,7 @@ public class ChebyshevBandPass : ChebyshevFilter
 
         var g_norm = N.IsEven() 
             ? Spec.Gp * (norm_p / norm_0).Re 
-            : (z0 * norm_p / norm_0).Re;
+            : (norm_p / norm_0).Re;
 
         // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
         var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * g_norm);
