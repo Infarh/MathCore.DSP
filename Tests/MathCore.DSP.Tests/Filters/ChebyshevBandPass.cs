@@ -2170,7 +2170,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         error2.AssertLessThan(3e-11);
     }
 
-    [TestMethod, Ignore]
+    [TestMethod]
     public void TypeI_Even_SignalProcessing()
     {
         const double fd = 10;           // Частота дискретизации
@@ -2187,7 +2187,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         const double fph = 12 / Consts.pi2; // верхняя частота границы полосы заграждения
         const double fsh = 15 / Consts.pi2; // верхняя частота границы полосы пропускания
 
-        var filter = new DSP.Filters.EllipticBandPass(dt, fsl, fpl, fph, fsh, Gp, Gs);
+        var filter = new DSP.Filters.ChebyshevBandPass(dt, fsl, fpl, fph, fsh, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
 
         //const double total_time = 1 / fpl;
         //const int samples_count = (int)(total_time * fd) + 1;
@@ -2278,6 +2278,26 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var k_sh_fd05_db = k_sh_fd05.In_dB_byPower();
         var k_fd05_db = k_fd05.In_dB_byPower();
 
+        k_low_db.ToDebug();
+        k_sl99_db.ToDebug();
+        k_sl_db.ToDebug();
+
+        k_sl_pl_db.ToDebug();
+        k_pl_sl_db.ToDebug();
+
+        k_pl_db.ToDebug();
+        k_pl_ph_db.ToDebug();
+        k_c0_db.ToDebug();
+        k_ph_pl_db.ToDebug();
+        k_ph_db.ToDebug();
+
+        k_ph_sh_db.ToDebug();
+        k_sh_ph_db.ToDebug();
+
+        k_sh_db.ToDebug();
+        k_sh_fd05_db.ToDebug();
+        k_fd05_db.ToDebug();
+
         // Сравнение коэффициентов передачи с заданными параметрами фильтрации
         k_low_db.AssertLessOrEqualsThan(-Rs);        // Коэффициенты передачи в нижней полосе пропускания
         k_sl99_db.AssertLessOrEqualsThan(-Rs);       // должны быть меньше, чем заданный уровень
@@ -2294,7 +2314,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         k_pl_ph_db.AssertGreaterOrEqualsThan(-Rp);         // Коэффициент передачи у нижнего края полосы заграждения должен быть меньше Rs
         k_c0_db.AssertGreaterOrEqualsThan(-Rp);       // Коэффициент передачи на центральной частоте полосы заграждения
         k_ph_pl_db.AssertGreaterOrEqualsThan(-Rp);    // Коэффициент передачи у верхнего края полосы подавления
-        k_ph_db.AssertGreaterOrEqualsThan(-Rp, 3.7e-3);      // Коэффициент передачи на верхней границе полосы подавления
+        k_ph_db.AssertGreaterOrEqualsThan(-Rp, 6.13e-3);      // Коэффициент передачи на верхней границе полосы подавления
 
         // Коэффициенты передачи в переходной полосе
         // между верхней полосой заграждения и верхней
@@ -2366,11 +2386,11 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         h_pl_sl.AssertLessOrEqualsThan(-Rp);
         h_pl_sl.AssertLessOrEqualsThan(-Rp);
 
-        h_pl.AssertGreaterOrEqualsThan(-Rp);
+        h_pl.AssertGreaterOrEqualsThan(-Rp, 1.17e-4);
         h_pl_ph.AssertGreaterOrEqualsThan(-Rp);
         h_c0.AssertGreaterOrEqualsThan(-Rp);
         h_ph_pl.AssertGreaterOrEqualsThan(-Rp);
-        h_ph.AssertGreaterOrEqualsThan(-Rp, 4e-5);
+        h_ph.AssertGreaterOrEqualsThan(-Rp, 4.9e-6);
 
         h_ph_sh.AssertLessOrEqualsThan(-Rp);
         h_sh_ph.AssertLessOrEqualsThan(-Rp);
@@ -2381,7 +2401,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         h_fd05.AssertLessOrEqualsThan(-Rs);
     }
 
-    [TestMethod, Ignore]
+    [TestMethod]
     public void TypeI_Odd_SignalProcessing()
     {
         const double fd = 10;           // Частота дискретизации
@@ -2395,10 +2415,10 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
 
         const double fsl = 2 / Consts.pi2;  // нижняя частота границы полосы пропускания
         const double fpl = 4 / Consts.pi2;  // нижняя частота границы полосы заграждения
-        const double fph = 12 / Consts.pi2; // верхняя частота границы полосы заграждения
+        const double fph = 12.5 / Consts.pi2; // верхняя частота границы полосы заграждения
         const double fsh = 15 / Consts.pi2; // верхняя частота границы полосы пропускания
 
-        var filter = new DSP.Filters.EllipticBandPass(dt, fsl, fpl, fph, fsh, Gp, Gs);
+        var filter = new DSP.Filters.ChebyshevBandPass(dt, fsl, fpl, fph, fsh, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
 
         //const double total_time = 1 / fpl;
         //const int samples_count = (int)(total_time * fd) + 1;
@@ -2489,6 +2509,26 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var k_sh_fd05_db = k_sh_fd05.In_dB_byPower();
         var k_fd05_db = k_fd05.In_dB_byPower();
 
+        k_low_db.ToDebug();
+        k_sl99_db.ToDebug();
+        k_sl_db.ToDebug();
+
+        k_sl_pl_db.ToDebug();
+        k_pl_sl_db.ToDebug();
+
+        k_pl_db.ToDebug();
+        k_pl_ph_db.ToDebug();
+        k_c0_db.ToDebug();
+        k_ph_pl_db.ToDebug();
+        k_ph_db.ToDebug();
+
+        k_ph_sh_db.ToDebug();
+        k_sh_ph_db.ToDebug();
+
+        k_sh_db.ToDebug();
+        k_sh_fd05_db.ToDebug();
+        k_fd05_db.ToDebug();
+
         // Сравнение коэффициентов передачи с заданными параметрами фильтрации
         k_low_db.AssertLessOrEqualsThan(-Rs);        // Коэффициенты передачи в нижней полосе пропускания
         k_sl99_db.AssertLessOrEqualsThan(-Rs);       // должны быть меньше, чем заданный уровень
@@ -2505,7 +2545,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         k_pl_ph_db.AssertGreaterOrEqualsThan(-Rp);         // Коэффициент передачи у нижнего края полосы заграждения должен быть меньше Rs
         k_c0_db.AssertGreaterOrEqualsThan(-Rp);       // Коэффициент передачи на центральной частоте полосы заграждения
         k_ph_pl_db.AssertGreaterOrEqualsThan(-Rp);    // Коэффициент передачи у верхнего края полосы подавления
-        k_ph_db.AssertGreaterOrEqualsThan(-Rp, 3.7e-3);      // Коэффициент передачи на верхней границе полосы подавления
+        k_ph_db.AssertGreaterOrEqualsThan(-Rp, 8.1e-3);      // Коэффициент передачи на верхней границе полосы подавления
 
         // Коэффициенты передачи в переходной полосе
         // между верхней полосой заграждения и верхней
@@ -2577,11 +2617,11 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         h_pl_sl.AssertLessOrEqualsThan(-Rp);
         h_pl_sl.AssertLessOrEqualsThan(-Rp);
 
-        h_pl.AssertGreaterOrEqualsThan(-Rp);
+        h_pl.AssertGreaterOrEqualsThan(-Rp, 4.56e-4);
         h_pl_ph.AssertGreaterOrEqualsThan(-Rp);
         h_c0.AssertGreaterOrEqualsThan(-Rp);
         h_ph_pl.AssertGreaterOrEqualsThan(-Rp);
-        h_ph.AssertGreaterOrEqualsThan(-Rp, 4e-5);
+        h_ph.AssertGreaterOrEqualsThan(-Rp, 4.9e-6);
 
         h_ph_sh.AssertLessOrEqualsThan(-Rp);
         h_sh_ph.AssertLessOrEqualsThan(-Rp);
@@ -2592,7 +2632,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         h_fd05.AssertLessOrEqualsThan(-Rs);
     }
 
-    [TestMethod, Ignore]
+    [TestMethod]
     public void TypeII_Even_SignalProcessing()
     {
         const double fd = 10;           // Частота дискретизации
@@ -2609,7 +2649,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         const double fph = 12 / Consts.pi2; // верхняя частота границы полосы заграждения
         const double fsh = 15 / Consts.pi2; // верхняя частота границы полосы пропускания
 
-        var filter = new DSP.Filters.EllipticBandPass(dt, fsl, fpl, fph, fsh, Gp, Gs);
+        var filter = new DSP.Filters.ChebyshevBandPass(dt, fsl, fpl, fph, fsh, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
 
         //const double total_time = 1 / fpl;
         //const int samples_count = (int)(total_time * fd) + 1;
@@ -2625,9 +2665,9 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var x_pl_sl = GetSinSignal(fpl - (fpl - fsl) * 0.1);        // частота ниже нижней границы пропускания
 
         var x_pl = GetSinSignal(fpl);                               // частота на границе пропускания
-        var x_pl_ph = GetSinSignal(fpl + (fph - fpl) * 0.1);        // частота выше нижней границы пропускания
+        var x_pl_ph = GetSinSignal(fpl + (fph - fpl) * 0.12);        // частота выше нижней границы пропускания
         var x_c0 = GetSinSignal((fpl * fph).Sqrt());                // частота в середине полосы пропускания
-        var x_ph_pl = GetSinSignal(fph - (fph - fpl) * 0.1);        // частота ниже верхней границы пропускания
+        var x_ph_pl = GetSinSignal(fph - (fph - fpl) * 0.25);        // частота ниже верхней границы пропускания
         var x_ph = GetSinSignal(fph);                               // частота на границе пропускания
 
         var x_ph_sh = GetSinSignal(fph + (fsh - fph) * 0.1);        // частота выше верхней границы пропускания
@@ -2700,6 +2740,26 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var k_sh_fd05_db = k_sh_fd05.In_dB_byPower();
         var k_fd05_db = k_fd05.In_dB_byPower();
 
+        k_low_db.ToDebug();
+        k_sl99_db.ToDebug();
+        k_sl_db.ToDebug();
+
+        k_sl_pl_db.ToDebug();
+        k_pl_sl_db.ToDebug();
+
+        k_pl_db.ToDebug();
+        k_pl_ph_db.ToDebug();
+        k_c0_db.ToDebug();
+        k_ph_pl_db.ToDebug();
+        k_ph_db.ToDebug();
+
+        k_ph_sh_db.ToDebug();
+        k_sh_ph_db.ToDebug();
+
+        k_sh_db.ToDebug();
+        k_sh_fd05_db.ToDebug();
+        k_fd05_db.ToDebug();
+
         // Сравнение коэффициентов передачи с заданными параметрами фильтрации
         k_low_db.AssertLessOrEqualsThan(-Rs);        // Коэффициенты передачи в нижней полосе пропускания
         k_sl99_db.AssertLessOrEqualsThan(-Rs);       // должны быть меньше, чем заданный уровень
@@ -2712,11 +2772,11 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
 
         // Коэффициенты передачи в полосе заграждения
         // должны бытьниже уровня подавления Rs
-        k_pl_db.AssertGreaterOrEqualsThan(-Rs);      // Коэффициент передачи на нижней границе полосы заграждения должен быть не больше Rs (-40дБ и ниже)
-        k_pl_ph_db.AssertGreaterOrEqualsThan(-Rp);         // Коэффициент передачи у нижнего края полосы заграждения должен быть меньше Rs
-        k_c0_db.AssertGreaterOrEqualsThan(-Rp);       // Коэффициент передачи на центральной частоте полосы заграждения
-        k_ph_pl_db.AssertGreaterOrEqualsThan(-Rp);    // Коэффициент передачи у верхнего края полосы подавления
-        k_ph_db.AssertGreaterOrEqualsThan(-Rp, 3.7e-3);      // Коэффициент передачи на верхней границе полосы подавления
+        k_pl_db.AssertLessOrEqualsThan(-Rs, 0.86);      // Коэффициент передачи на нижней границе полосы заграждения должен быть не больше Rs (-40дБ и ниже)
+        k_pl_ph_db.AssertGreaterOrEqualsThan(-Rp * 2);         // Коэффициент передачи у нижнего края полосы заграждения должен быть меньше Rs
+        k_c0_db.AssertGreaterOrEqualsThan(-Rp, 1.5e-3);       // Коэффициент передачи на центральной частоте полосы заграждения
+        k_ph_pl_db.AssertGreaterOrEqualsThan(-Rp * 2);    // Коэффициент передачи у верхнего края полосы подавления
+        k_ph_db.AssertLessOrEqualsThan(-Rs, 0.3);      // Коэффициент передачи на верхней границе полосы подавления
 
         // Коэффициенты передачи в переходной полосе
         // между верхней полосой заграждения и верхней
@@ -2767,9 +2827,9 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var h_pl_sl = H.GetValue(fpl - (fpl - fsl) * 0.1).Power.In_dB_byPower();
 
         var h_pl = H.GetValue(fpl).Power.In_dB_byPower();
-        var h_pl_ph = H.GetValue(fpl + (fph - fpl) * 0.1).Power.In_dB_byPower();
+        var h_pl_ph = H.GetValue(fpl + (fph - fpl) * 0.12).Power.In_dB_byPower();
         var h_c0 = H.GetValue((fpl * fph).Sqrt()).Power.In_dB_byPower();
-        var h_ph_pl = H.GetValue(fph - (fph - fpl) * 0.1).Power.In_dB_byPower();
+        var h_ph_pl = H.GetValue(fph - (fph - fpl) * 0.25).Power.In_dB_byPower();
         var h_ph = H.GetValue(fph).Power.In_dB_byPower();
 
         var h_ph_sh = H.GetValue(fph + (fsh - fph) * 0.1).Power.In_dB_byPower();
@@ -2788,11 +2848,11 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         h_pl_sl.AssertLessOrEqualsThan(-Rp);
         h_pl_sl.AssertLessOrEqualsThan(-Rp);
 
-        h_pl.AssertGreaterOrEqualsThan(-Rp);
-        h_pl_ph.AssertGreaterOrEqualsThan(-Rp);
-        h_c0.AssertGreaterOrEqualsThan(-Rp);
-        h_ph_pl.AssertGreaterOrEqualsThan(-Rp);
-        h_ph.AssertGreaterOrEqualsThan(-Rp, 4e-5);
+        h_pl.AssertLessOrEqualsThan(-Rs);
+        h_pl_ph.AssertGreaterOrEqualsThan(-Rp * 2);
+        h_c0.AssertGreaterOrEqualsThan(-Rp, 1.56e-5);
+        h_ph_pl.AssertGreaterOrEqualsThan(-Rp * 2);
+        h_ph.AssertLessOrEqualsThan(-Rs);
 
         h_ph_sh.AssertLessOrEqualsThan(-Rp);
         h_sh_ph.AssertLessOrEqualsThan(-Rp);
@@ -2803,7 +2863,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         h_fd05.AssertLessOrEqualsThan(-Rs);
     }
 
-    [TestMethod, Ignore]
+    [TestMethod]
     public void TypeII_Odd_SignalProcessing()
     {
         const double fd = 10;           // Частота дискретизации
@@ -2817,10 +2877,10 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
 
         const double fsl = 2 / Consts.pi2;  // нижняя частота границы полосы пропускания
         const double fpl = 4 / Consts.pi2;  // нижняя частота границы полосы заграждения
-        const double fph = 12 / Consts.pi2; // верхняя частота границы полосы заграждения
+        const double fph = 12.5 / Consts.pi2; // верхняя частота границы полосы заграждения
         const double fsh = 15 / Consts.pi2; // верхняя частота границы полосы пропускания
 
-        var filter = new DSP.Filters.EllipticBandPass(dt, fsl, fpl, fph, fsh, Gp, Gs);
+        var filter = new DSP.Filters.ChebyshevBandPass(dt, fsl, fpl, fph, fsh, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
 
         //const double total_time = 1 / fpl;
         //const int samples_count = (int)(total_time * fd) + 1;
@@ -2836,9 +2896,9 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var x_pl_sl = GetSinSignal(fpl - (fpl - fsl) * 0.1);        // частота ниже нижней границы пропускания
 
         var x_pl = GetSinSignal(fpl);                               // частота на границе пропускания
-        var x_pl_ph = GetSinSignal(fpl + (fph - fpl) * 0.1);        // частота выше нижней границы пропускания
+        var x_pl_ph = GetSinSignal(fpl + (fph - fpl) * 0.12);        // частота выше нижней границы пропускания
         var x_c0 = GetSinSignal((fpl * fph).Sqrt());                // частота в середине полосы пропускания
-        var x_ph_pl = GetSinSignal(fph - (fph - fpl) * 0.1);        // частота ниже верхней границы пропускания
+        var x_ph_pl = GetSinSignal(fph - (fph - fpl) * 0.25);        // частота ниже верхней границы пропускания
         var x_ph = GetSinSignal(fph);                               // частота на границе пропускания
 
         var x_ph_sh = GetSinSignal(fph + (fsh - fph) * 0.1);        // частота выше верхней границы пропускания
@@ -2911,6 +2971,26 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var k_sh_fd05_db = k_sh_fd05.In_dB_byPower();
         var k_fd05_db = k_fd05.In_dB_byPower();
 
+        k_low_db.ToDebug();
+        k_sl99_db.ToDebug();
+        k_sl_db.ToDebug();
+
+        k_sl_pl_db.ToDebug();
+        k_pl_sl_db.ToDebug();
+
+        k_pl_db.ToDebug();
+        k_pl_ph_db.ToDebug();
+        k_c0_db.ToDebug();
+        k_ph_pl_db.ToDebug();
+        k_ph_db.ToDebug();
+
+        k_ph_sh_db.ToDebug();
+        k_sh_ph_db.ToDebug();
+
+        k_sh_db.ToDebug();
+        k_sh_fd05_db.ToDebug();
+        k_fd05_db.ToDebug();
+
         // Сравнение коэффициентов передачи с заданными параметрами фильтрации
         k_low_db.AssertLessOrEqualsThan(-Rs);        // Коэффициенты передачи в нижней полосе пропускания
         k_sl99_db.AssertLessOrEqualsThan(-Rs);       // должны быть меньше, чем заданный уровень
@@ -2923,11 +3003,11 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
 
         // Коэффициенты передачи в полосе заграждения
         // должны бытьниже уровня подавления Rs
-        k_pl_db.AssertGreaterOrEqualsThan(-Rs);      // Коэффициент передачи на нижней границе полосы заграждения должен быть не больше Rs (-40дБ и ниже)
-        k_pl_ph_db.AssertGreaterOrEqualsThan(-Rp);         // Коэффициент передачи у нижнего края полосы заграждения должен быть меньше Rs
-        k_c0_db.AssertGreaterOrEqualsThan(-Rp);       // Коэффициент передачи на центральной частоте полосы заграждения
-        k_ph_pl_db.AssertGreaterOrEqualsThan(-Rp);    // Коэффициент передачи у верхнего края полосы подавления
-        k_ph_db.AssertGreaterOrEqualsThan(-Rp, 3.7e-3);      // Коэффициент передачи на верхней границе полосы подавления
+        k_pl_db.AssertLessOrEqualsThan(-Rs, 2.36);      // Коэффициент передачи на нижней границе полосы заграждения должен быть не больше Rs (-40дБ и ниже)
+        k_pl_ph_db.AssertGreaterOrEqualsThan(-Rp * 2);         // Коэффициент передачи у нижнего края полосы заграждения должен быть меньше Rs
+        k_c0_db.AssertGreaterOrEqualsThan(-Rp, 1.5e-3);       // Коэффициент передачи на центральной частоте полосы заграждения
+        k_ph_pl_db.AssertGreaterOrEqualsThan(-Rp * 2);    // Коэффициент передачи у верхнего края полосы подавления
+        k_ph_db.AssertLessOrEqualsThan(-Rs, 1.57);      // Коэффициент передачи на верхней границе полосы подавления
 
         // Коэффициенты передачи в переходной полосе
         // между верхней полосой заграждения и верхней
@@ -2978,9 +3058,9 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var h_pl_sl = H.GetValue(fpl - (fpl - fsl) * 0.1).Power.In_dB_byPower();
 
         var h_pl = H.GetValue(fpl).Power.In_dB_byPower();
-        var h_pl_ph = H.GetValue(fpl + (fph - fpl) * 0.1).Power.In_dB_byPower();
+        var h_pl_ph = H.GetValue(fpl + (fph - fpl) * 0.12).Power.In_dB_byPower();
         var h_c0 = H.GetValue((fpl * fph).Sqrt()).Power.In_dB_byPower();
-        var h_ph_pl = H.GetValue(fph - (fph - fpl) * 0.1).Power.In_dB_byPower();
+        var h_ph_pl = H.GetValue(fph - (fph - fpl) * 0.25).Power.In_dB_byPower();
         var h_ph = H.GetValue(fph).Power.In_dB_byPower();
 
         var h_ph_sh = H.GetValue(fph + (fsh - fph) * 0.1).Power.In_dB_byPower();
@@ -2999,11 +3079,11 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         h_pl_sl.AssertLessOrEqualsThan(-Rp);
         h_pl_sl.AssertLessOrEqualsThan(-Rp);
 
-        h_pl.AssertGreaterOrEqualsThan(-Rp);
-        h_pl_ph.AssertGreaterOrEqualsThan(-Rp);
-        h_c0.AssertGreaterOrEqualsThan(-Rp);
-        h_ph_pl.AssertGreaterOrEqualsThan(-Rp);
-        h_ph.AssertGreaterOrEqualsThan(-Rp, 4e-5);
+        h_pl.AssertLessOrEqualsThan(-Rs);
+        h_pl_ph.AssertGreaterOrEqualsThan(-Rp * 2);
+        h_c0.AssertGreaterOrEqualsThan(-Rp, 1.56e-5);
+        h_ph_pl.AssertGreaterOrEqualsThan(-Rp * 2);
+        h_ph.AssertLessOrEqualsThan(-Rs);
 
         h_ph_sh.AssertLessOrEqualsThan(-Rp);
         h_sh_ph.AssertLessOrEqualsThan(-Rp);
@@ -3014,7 +3094,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         h_fd05.AssertLessOrEqualsThan(-Rs);
     }
 
-    [TestMethod, Ignore]
+    [TestMethod]
     public void TypeIICorrected_Even_SignalProcessing()
     {
         const double fd = 10;           // Частота дискретизации
@@ -3031,7 +3111,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         const double fph = 12 / Consts.pi2; // верхняя частота границы полосы заграждения
         const double fsh = 15 / Consts.pi2; // верхняя частота границы полосы пропускания
 
-        var filter = new DSP.Filters.EllipticBandPass(dt, fsl, fpl, fph, fsh, Gp, Gs);
+        var filter = new DSP.Filters.ChebyshevBandPass(dt, fsl, fpl, fph, fsh, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
 
         //const double total_time = 1 / fpl;
         //const int samples_count = (int)(total_time * fd) + 1;
@@ -3135,10 +3215,10 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         // Коэффициенты передачи в полосе заграждения
         // должны бытьниже уровня подавления Rs
         k_pl_db.AssertGreaterOrEqualsThan(-Rs);      // Коэффициент передачи на нижней границе полосы заграждения должен быть не больше Rs (-40дБ и ниже)
-        k_pl_ph_db.AssertGreaterOrEqualsThan(-Rp);         // Коэффициент передачи у нижнего края полосы заграждения должен быть меньше Rs
-        k_c0_db.AssertGreaterOrEqualsThan(-Rp);       // Коэффициент передачи на центральной частоте полосы заграждения
-        k_ph_pl_db.AssertGreaterOrEqualsThan(-Rp);    // Коэффициент передачи у верхнего края полосы подавления
-        k_ph_db.AssertGreaterOrEqualsThan(-Rp, 3.7e-3);      // Коэффициент передачи на верхней границе полосы подавления
+        k_pl_ph_db.AssertGreaterOrEqualsThan(-Rp, 3.67e-3);         // Коэффициент передачи у нижнего края полосы заграждения должен быть меньше Rs
+        k_c0_db.AssertGreaterOrEqualsThan(-Rp, 9.14e-4);       // Коэффициент передачи на центральной частоте полосы заграждения
+        k_ph_pl_db.AssertGreaterOrEqualsThan(-Rp, 4.06e-2);    // Коэффициент передачи у верхнего края полосы подавления
+        k_ph_db.AssertGreaterOrEqualsThan(-Rp, 0.453);      // Коэффициент передачи на верхней границе полосы подавления
 
         // Коэффициенты передачи в переходной полосе
         // между верхней полосой заграждения и верхней
@@ -3210,11 +3290,11 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         h_pl_sl.AssertLessOrEqualsThan(-Rp);
         h_pl_sl.AssertLessOrEqualsThan(-Rp);
 
-        h_pl.AssertGreaterOrEqualsThan(-Rp);
-        h_pl_ph.AssertGreaterOrEqualsThan(-Rp);
+        h_pl.AssertGreaterOrEqualsThan(-Rp, 0.452);
+        h_pl_ph.AssertGreaterOrEqualsThan(-Rp, 1.68e-3);
         h_c0.AssertGreaterOrEqualsThan(-Rp);
-        h_ph_pl.AssertGreaterOrEqualsThan(-Rp);
-        h_ph.AssertGreaterOrEqualsThan(-Rp, 4e-5);
+        h_ph_pl.AssertGreaterOrEqualsThan(-Rp, 3.92e-2);
+        h_ph.AssertGreaterOrEqualsThan(-Rp, 0.452);
 
         h_ph_sh.AssertLessOrEqualsThan(-Rp);
         h_sh_ph.AssertLessOrEqualsThan(-Rp);
@@ -3225,7 +3305,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         h_fd05.AssertLessOrEqualsThan(-Rs);
     }
 
-    [TestMethod, Ignore]
+    [TestMethod]
     public void TypeIICorrected_Odd_SignalProcessing()
     {
         const double fd = 10;           // Частота дискретизации
@@ -3239,10 +3319,10 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
 
         const double fsl = 2 / Consts.pi2;  // нижняя частота границы полосы пропускания
         const double fpl = 4 / Consts.pi2;  // нижняя частота границы полосы заграждения
-        const double fph = 12 / Consts.pi2; // верхняя частота границы полосы заграждения
+        const double fph = 12.5 / Consts.pi2; // верхняя частота границы полосы заграждения
         const double fsh = 15 / Consts.pi2; // верхняя частота границы полосы пропускания
 
-        var filter = new DSP.Filters.EllipticBandPass(dt, fsl, fpl, fph, fsh, Gp, Gs);
+        var filter = new DSP.Filters.ChebyshevBandPass(dt, fsl, fpl, fph, fsh, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
 
         //const double total_time = 1 / fpl;
         //const int samples_count = (int)(total_time * fd) + 1;
@@ -3346,22 +3426,22 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         // Коэффициенты передачи в полосе заграждения
         // должны бытьниже уровня подавления Rs
         k_pl_db.AssertGreaterOrEqualsThan(-Rs);      // Коэффициент передачи на нижней границе полосы заграждения должен быть не больше Rs (-40дБ и ниже)
-        k_pl_ph_db.AssertGreaterOrEqualsThan(-Rp);         // Коэффициент передачи у нижнего края полосы заграждения должен быть меньше Rs
-        k_c0_db.AssertGreaterOrEqualsThan(-Rp);       // Коэффициент передачи на центральной частоте полосы заграждения
-        k_ph_pl_db.AssertGreaterOrEqualsThan(-Rp);    // Коэффициент передачи у верхнего края полосы подавления
-        k_ph_db.AssertGreaterOrEqualsThan(-Rp, 3.7e-3);      // Коэффициент передачи на верхней границе полосы подавления
+        k_pl_ph_db.AssertGreaterOrEqualsThan(-Rp, 3.67e-3);         // Коэффициент передачи у нижнего края полосы заграждения должен быть меньше Rs
+        k_c0_db.AssertGreaterOrEqualsThan(-Rp, 9.14e-4);       // Коэффициент передачи на центральной частоте полосы заграждения
+        k_ph_pl_db.AssertGreaterOrEqualsThan(-Rp, 4.06e-2);    // Коэффициент передачи у верхнего края полосы подавления
+        k_ph_db.AssertGreaterOrEqualsThan(-Rp, 0.453);      // Коэффициент передачи на верхней границе полосы подавления
 
         // Коэффициенты передачи в переходной полосе
         // между верхней полосой заграждения и верхней
         // полосой пропускания
-        k_ph_sh_db.AssertLessThan(-Rp);
+        k_ph_sh_db.AssertLessThan(-Rp, 0.396);
         k_sh_ph_db.AssertLessOrEqualsThan(-Rp);
         k_sh_ph_db.AssertLessOrEqualsThan(-Rp);
 
         // Коэффициенты передачи в верхней полосе пропускания
         // от верхней границы полосы пропускания до частоты,
         // близкой к половине частоты дискретизации
-        k_sh_db.AssertLessOrEqualsThan(-Rs);
+        k_sh_db.AssertLessOrEqualsThan(-Rs, 1.16);
         k_sh_fd05_db.AssertLessOrEqualsThan(-Rs, 0.327);
         k_fd05_db.AssertLessOrEqualsThan(-Rs);
 
@@ -3421,17 +3501,17 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         h_pl_sl.AssertLessOrEqualsThan(-Rp);
         h_pl_sl.AssertLessOrEqualsThan(-Rp);
 
-        h_pl.AssertGreaterOrEqualsThan(-Rp);
-        h_pl_ph.AssertGreaterOrEqualsThan(-Rp);
+        h_pl.AssertGreaterOrEqualsThan(-Rp, 0.452);
+        h_pl_ph.AssertGreaterOrEqualsThan(-Rp, 1.68e-3);
         h_c0.AssertGreaterOrEqualsThan(-Rp);
-        h_ph_pl.AssertGreaterOrEqualsThan(-Rp);
-        h_ph.AssertGreaterOrEqualsThan(-Rp, 4e-5);
+        h_ph_pl.AssertGreaterOrEqualsThan(-Rp, 3.92e-2);
+        h_ph.AssertGreaterOrEqualsThan(-Rp, 0.452);
 
-        h_ph_sh.AssertLessOrEqualsThan(-Rp);
+        h_ph_sh.AssertLessOrEqualsThan(-Rp, 0.399);
         h_sh_ph.AssertLessOrEqualsThan(-Rp);
         h_sh_ph.AssertLessOrEqualsThan(-Rp);
 
-        h_sh.AssertLessOrEqualsThan(-Rs);
+        h_sh.AssertLessOrEqualsThan(-Rs, 7.37e-4);
         h_sh_fd05.AssertLessOrEqualsThan(-Rs);
         h_fd05.AssertLessOrEqualsThan(-Rs);
     }

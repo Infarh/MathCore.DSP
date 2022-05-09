@@ -349,7 +349,7 @@ public class EllipticBandPass : UnitTest
 
         h_pl_db.AssertGreaterOrEqualsThan(-Rp);
         h_c0_db.AssertGreaterOrEqualsThan(-Rp);
-        h_ph_db.AssertGreaterOrEqualsThan(-Rp);
+        h_ph_db.AssertGreaterOrEqualsThan(-Rp, 3.19e-14);
 
         h_sh_db.AssertLessOrEqualsThan(-Rp);
         h_fd_db.AssertLessOrEqualsThan(-Rs, 4.1e-12);
