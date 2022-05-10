@@ -20,18 +20,21 @@ public class ButterworthLowPass : ButterworthFilter
         var poles = GetNormPoles(N, Spec.EpsP);
 
         // Масштабируем полюса на требуемую частоту пропускания
-        var Wp = Spec.Wp;
-        var translated_poles = poles.ToArray(p => p * Wp);
+        var wp = Spec.Wp;
+        var translated_poles = poles.ToArray(p => p * wp);
+
         // Переходим из p-плоскости в z-плоскость
         var dt = Spec.dt;
         var z_poles = translated_poles.ToArray(p => ToZ(p, dt));
+
         // Вычисляем нормирующий множитель
         var kz = GetNormalizeCoefficient(translated_poles, dt);
-        var WpN = Wp.Pow(N);
-        var k = WpN * kz / Spec.EpsP;
+        var k = wp.Pow(N) * kz / Spec.EpsP;
+
         var B = new double[N + 1];
         for (var i = 0; i < B.Length; i++)
             B[i] = k * BinomialCoefficient(N, i);
+
         var A = GetCoefficientsInverted(z_poles).ToRe();
 
         return (A, B);

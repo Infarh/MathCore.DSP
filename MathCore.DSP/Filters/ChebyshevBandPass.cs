@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 
-using MathCore.DSP.Infrastructure;
-
 using static System.Math;
 
 namespace MathCore.DSP.Filters;
@@ -67,28 +65,17 @@ public class ChebyshevBandPass : ChebyshevFilter
     }
 
     /// <summary>Расчёт коэффициентов полиномов числителя из знаменателя передаточной функции фильтра</summary>
-    /// <param name="fsl">Нижняя частота полосы подавления</param>
     /// <param name="fpl">Нижняя частота полосы пропускания</param>
     /// <param name="fph">Верхняя частота полосы пропускания</param>
-    /// <param name="fsh">Верхняя частота полосы подавления</param>
     /// <param name="Spec">Спецификация фильтра</param>
     /// <returns>Кортеж, содержащий массивы A - коэффициенты полинома знаменателя и B - коэффициенты полинома числителя</returns>
-    private static (double[] A, double[] B) InitializeI(
-        double fsl,
-        double fpl,
-        double fph,
-        double fsh,
-        Specification Spec)
+    private static (double[] A, double[] B) InitializeI(double fpl, double fph, Specification Spec)
     {
         // Пересчитываем аналоговые частоты полосы заграждения в цифровые
         var dt = Spec.dt;
 
-        var Wsl = Consts.pi2 * ToAnalogFrequency(fsl, dt);
         var Wpl = Consts.pi2 * ToAnalogFrequency(fpl, dt);
         var Wph = Consts.pi2 * ToAnalogFrequency(fph, dt);
-        var Wsh = Consts.pi2 * ToAnalogFrequency(fsh, dt);
-
-        //(Wsl, Wpl, Wph, Wsh).ToDebug();
 
         var N = (int)Ceiling(arcch(Spec.kEps) / arcch(Spec.kW));
         Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
@@ -125,20 +112,13 @@ public class ChebyshevBandPass : ChebyshevFilter
         return (A, B);
     }
 
-    private static (double[] A, double[] B) InitializeII(
-        double fsl, 
-        double fpl, 
-        double fph,
-        double fsh, 
-        Specification Spec)
+    private static (double[] A, double[] B) InitializeII(double fpl, double fph, Specification Spec)
     {
         // Пересчитываем аналоговые частоты полосы заграждения в цифровые
         var dt = Spec.dt;
 
-        //var Wsl = Consts.pi2 * ToAnalogFrequency(fsl, dt);
         var Wpl = Consts.pi2 * ToAnalogFrequency(fpl, dt);
         var Wph = Consts.pi2 * ToAnalogFrequency(fph, dt);
-        //var Wsh = Consts.pi2 * ToAnalogFrequency(fsh, dt);
 
         var N = (int)Ceiling(arcch(Spec.kEps) / arcch(Spec.kW));
         Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
@@ -177,33 +157,13 @@ public class ChebyshevBandPass : ChebyshevFilter
         return (A, B);
     }
 
-    private static (double[] A, double[] B) InitializeIICorrected(
-        double fsl,
-        double fpl,
-        double fph,
-        double fsh,
-        Specification Spec)
+    private static (double[] A, double[] B) InitializeIICorrected(double fpl, double fph, Specification Spec)
     {
         // Пересчитываем аналоговые частоты полосы заграждения в цифровые
         var dt = Spec.dt;
 
-        var Wsl = Consts.pi2 * ToAnalogFrequency(fsl, dt);
         var Wpl = Consts.pi2 * ToAnalogFrequency(fpl, dt);
         var Wph = Consts.pi2 * ToAnalogFrequency(fph, dt);
-        var Wsh = Consts.pi2 * ToAnalogFrequency(fsh, dt);
-
-        var Wc = Wsl * Wsh;
-        var dW = Wsh - Wsl;
-
-        var sqrt_wc = Wc.Sqrt();
-        var Ws = Wc / Wsh > Wsl
-            ? Wsh
-            : Wsl;
-        const double W0 = 1;
-        const double F0 = W0 / Consts.pi2;
-        var W1 = Abs((Wc - Ws.Pow2()) / (dW * Ws));   // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
-        //const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
-        var F1 = W1 / Consts.pi2;
 
         var N = (int)Ceiling(arcch(Spec.kEps) / arcch(Spec.kW));
         Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
@@ -225,20 +185,15 @@ public class ChebyshevBandPass : ChebyshevFilter
         var z_poles = ToZArray(ppf_poles, dt);
 
         // Вычисляем коэффициент нормировки фильтра на нулевой частоте 
-        var Fp0 = (Wpl * Wph).Sqrt();
         var ffp0 = ToDigitalFrequency((Wpl * Wph).Sqrt() / Consts.pi2, dt);
         var z0 = Complex.Exp(Consts.pi2 * ffp0 * dt);
 
         var norm_0 = z_zeros.Multiply(z => z0 - z);
         var norm_p = z_poles.Multiply(z => z0 - z);
 
-        //(norm_0 / norm_p).Re.ToDebug();
-
-        double g_norm;
-        if (N.IsEven())
-            g_norm = Spec.Gp * (norm_p / norm_0).Abs;
-        else
-            g_norm = (z0 * norm_p / norm_0).Abs;
+        var g_norm = N.IsEven() 
+            ? Spec.Gp * (norm_p / norm_0).Abs
+            : (z0 * norm_p / norm_0).Abs;
 
         // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
         var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * g_norm);
@@ -265,21 +220,19 @@ public class ChebyshevBandPass : ChebyshevFilter
         double Gp = 0.89125093813374556,
         double Gs = 0.01, 
         ChebyshevType Type = ChebyshevType.I)
-        : this(fsl, fpl, fph, fsh, GetSpecification(dt, fsl, fpl, fph, fsh, Gp, Gs), Type) { }
+        : this(fpl, fph, GetSpecification(dt, fsl, fpl, fph, fsh, Gp, Gs), Type) { }
 
     /// <summary>Инициализация нового эллиптического полосозаграждающего фильтра (ПЗФ)</summary>
-    /// <param name="fsl">Нижняя граница полосы подавления</param>
     /// <param name="fpl">Нижняя граница полосы пропускания</param>
     /// <param name="fph">Верхняя граница полосы пропускания</param>
-    /// <param name="fsh">Верхняя граница полосы подавления</param>
     /// <param name="Spec">Спецификация фильтра</param>
     /// <param name="Type">Тип фильтра I или II</param>
-    private ChebyshevBandPass(double fsl, double fpl, double fph, double fsh, Specification Spec, ChebyshevType Type)
+    private ChebyshevBandPass(double fpl, double fph, Specification Spec, ChebyshevType Type)
         : this(Type switch
         {
-            ChebyshevType.I => InitializeI(fsl, fpl, fph, fsh, Spec),
-            ChebyshevType.II => InitializeII(fsl, fpl, fph, fsh, Spec),
-            ChebyshevType.IICorrected => InitializeIICorrected(fsl, fpl, fph, fsh, Spec),
+            ChebyshevType.I => InitializeI(fpl, fph, Spec),
+            ChebyshevType.II => InitializeII(fpl, fph, Spec),
+            ChebyshevType.IICorrected => InitializeIICorrected(fpl, fph, Spec),
             _ => throw new InvalidEnumArgumentException(nameof(Type), (int)Type, typeof(ChebyshevType))
         }, Spec, Type) { }
 

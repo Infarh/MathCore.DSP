@@ -145,12 +145,10 @@ public class ButterworthBandPass : ButterworthFilter
         // то есть центральная частота по границам подавления > центральной частоты по границам пропускания
         // то выбираем в качестве опорной частоты выбираем верхнюю границу пропускания
         // иначе, выбираем нижнюю границу пропускания
-        var Wp = Wc / Wsh > Wsl
+        var Ws = Wc / Wsh > Wsl
             ? Wsh
             : Wsl;
-        var W0 = Abs(dW * Wp / (Wc - Wp.Pow2())); // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
-        //const double W1 = 1;                           // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
-        var Fp = W0 / Consts.pi2;
+        var Fp = Abs(dW * Ws / (Wc - Ws.Pow2())) / Consts.pi2;
         const double Fs = 1 / Consts.pi2;
 
         // Для передачи информации о граничных частотах в спецификацию аналогвого прототипа перечситываем частоты цифрового фильтра обратно
@@ -160,31 +158,20 @@ public class ButterworthBandPass : ButterworthFilter
         return new Specification(dt, fp, fs, Gp, Gs);
     }
 
-    private static (double[] A, double[] B) Initialize(double fsl, double fpl, double fph, double fsh, Specification Spec)
+    private static (double[] A, double[] B) Initialize(double fpl, double fph, Specification Spec)
     {
         // Пересчитываем аналоговые частоты полосы заграждения в цифровые
         var dt = Spec.dt;
 
-        CheckFrequencies(dt, fsl, fpl, fph, fsh);
-
-        var Wsl = Consts.pi2 * ToAnalogFrequency(fsl, dt);
         var Wpl = Consts.pi2 * ToAnalogFrequency(fpl, dt);
         var Wph = Consts.pi2 * ToAnalogFrequency(fph, dt);
-        var Wsh = Consts.pi2 * ToAnalogFrequency(fsh, dt);
 
-        var Wc = Wpl * Wph;
         var dW = Wph - Wpl;
-        //var sqrtWc = Wc.Sqrt();
-        var Wp = Wc / Wsh > Wsl
-            ? Wsh
-            : Wsl;
-        //var W0 = Abs((Wc - Wp.Pow2()) / dW * Wp);
 
         var N = (int)Ceiling(Log(Spec.kEps) / Log(Spec.kW));
         Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
         var poles = GetNormPoles(N, Spec.EpsP);
 
-        //var ppf_zeros = Enumerable.Repeat(new Complex(), N);
         var ppf_poles = TransformToBandPassW(poles, Wpl, Wph).ToArray();
 
         var ppf_zeros_z = Enumerable
@@ -222,7 +209,7 @@ public class ButterworthBandPass : ButterworthFilter
     { }
 
     private ButterworthBandPass(double fsl, double fpl, double fph, double fsh, Specification Spec)
-        : this(Initialize(fsl, fpl, fph, fsh, Spec), Spec) { }
+        : this(Initialize(fpl, fph, Spec), Spec) { }
 
     private ButterworthBandPass((double[] A, double[] B) Polynoms, Specification Spec) : this(Polynoms.B, Polynoms.A, Spec) { }
 

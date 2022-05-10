@@ -135,9 +135,7 @@ public class EllipticBandPass : EllipticFilter
         var Ws = Wc / Wsh > Wsl
             ? Wsh
             : Wsl;
-        var W0 = Abs(dW * Ws / (Wc - Ws.Pow2())); // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
-        //const double W1 = 1;                    // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
-        var Fp = W0 / Consts.pi2;
+        var Fp = Abs(dW * Ws / (Wc - Ws.Pow2())) / Consts.pi2;
         const double Fs = 1 / Consts.pi2;
 
         // Для передачи информации о граничных частотах в спецификацию аналогвого прототипа перечситываем частоты цифрового фильтра обратно

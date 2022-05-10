@@ -10,6 +10,7 @@ namespace MathCore.DSP.Filters;
 
 /// <summary>Фильтр Чебышева</summary>
 [KnownType(typeof(ChebyshevLowPass))]
+[KnownType(typeof(ChebyshevBandPass))]
 [KnownType(typeof(ChebyshevBandStop))]
 public abstract class ChebyshevFilter : AnalogBasedFilter
 {

@@ -31,10 +31,10 @@ public class EllipticLowPass : EllipticFilter
             z_zeros[0] = -1;
         }
 
-        var G_norm = (is_odd ? 1 : 1 / (1 + opt.EpsP.Pow2()).Sqrt())
+        var g_norm = (is_odd ? 1 : 1 / (1 + opt.EpsP.Pow2()).Sqrt())
             / (z_zeros.Multiply(z => 1 - z) / z_poles.Multiply(z => 1 - z)).Abs;
 
-        var B = GetCoefficientsInverted(z_zeros).ToArray(b => b * G_norm).ToRe();
+        var B = GetCoefficientsInverted(z_zeros).ToArray(b => b * g_norm).ToRe();
         var A = GetCoefficientsInverted(z_poles).ToRe();
 
         return (A, B);
@@ -45,8 +45,8 @@ public class EllipticLowPass : EllipticFilter
     /// <param name="fp">Частота пропускания</param>
     /// <param name="fs">Частота заграждения</param>
     /// <param name="Gp">Затухание в полосе пропускания (0.891250938 = -1 дБ)</param>
-    /// <param name="Gs">Затухание в полосе заграждения (0.005623413 = -45 дБ)</param>
-    public EllipticLowPass(double dt, double fp, double fs, double Gp = 0.891250938, double Gs = 0.005623413)
+    /// <param name="Gs">Затухание в полосе заграждения (0.005623413 = -40 дБ)</param>
+    public EllipticLowPass(double dt, double fp, double fs, double Gp = 0.891250938, double Gs = 0.01)
         : this(GetSpecification(dt, fp, fs, Gp, Gs)) { }
 
     public EllipticLowPass(Specification Spec) : this(Initialize(Spec), Spec) { }

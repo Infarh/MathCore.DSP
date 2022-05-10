@@ -37,18 +37,10 @@ public abstract class EllipticFilter : AnalogBasedFilter
             for (var i = 0; i < L; i++)
             {
                 // Меняем местами действительную и мнимую часть вместо домножения на комплексную единицу
-                var (p_im, p_re) = cd_uk(u[i] - v0_complex, k_w);
+                var (p_im, p_re) = cd_uk(u[i] - v0_complex, k_w) * W0;
 
-                //var p = new Complex(-p_re * W0, p_im * W0);
-                (poles[r + 2 * i], poles[r + 2 * i + 1]) = Complex.Conjugate(-p_re * W0, p_im * W0);
-                //poles[r + 2 * i] = p;
-                //poles[r + 2 * i + 1] = p.ComplexConjugate;
-
-                var p0_im = 1 / (k_w * cd_uk(u[i], k_w));
-                var p0 = new Complex(0, p0_im * W0);
-                (zeros[2 * i], zeros[2 * i + 1]) = Complex.Conjugate(0, p0_im * W0);
-                //zeros[2 * i] = p0;
-                //zeros[2 * i + 1] = p0.ComplexConjugate;
+                (poles[2 * i + r], poles[2 * i + r + 1]) = Complex.Conjugate(-p_re, p_im);
+                (zeros[2 * i], zeros[2 * i + 1]) = Complex.Conjugate(0, W0 / (k_w * cd_uk(u[i], k_w)));
             }
 
         return (zeros, poles);

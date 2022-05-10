@@ -111,7 +111,7 @@ public class ButterworthBandStop : ButterworthFilter
         double fsh,
         double fph,
         double Gp = 0.891250938,
-        double Gs = 0.031622777)
+        double Gs = 0.01)
     {
         CheckFrequencies(dt, fpl, fsl, fsh, fph);
 
@@ -139,12 +139,10 @@ public class ButterworthBandStop : ButterworthFilter
         // то есть центральная частота по границам подавления > центральной частоты по границам пропускания
         // то выбираем в качестве опорной частоты выбираем верхнюю границу пропускания
         // иначе, выбираем нижнюю границу пропускания
-        var Wp = Wc / Wph > Wpl
+        var Ws = Wc / Wph > Wpl
             ? Wph
             : Wpl;
-        var W0 = Abs(dW * Wp / (Wc - Wp.Pow2())); // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
-        //const double W1 = 1;                           // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
-        var Fp = W0 / Consts.pi2;
+        var Fp = Abs(dW * Ws / (Wc - Ws.Pow2())) / Consts.pi2;
         const double Fs = 1 / Consts.pi2;
 
         // Для передачи информации о граничных частотах в спецификацию аналогвого прототипа перечситываем частоты цифрового фильтра обратно
@@ -193,11 +191,11 @@ public class ButterworthBandStop : ButterworthFilter
         var z_poles = ToZArray(pzf_poles, dt);
 
         // Вычисляем коэффициент нормировки фильтра на нулевой частоте 
-        var G_norm = (N.IsOdd() ? 1 : Spec.Gp)
+        var g_norm = (N.IsOdd() ? 1 : Spec.Gp)
             / (z_zeros.Multiply(z => 1 - z) / z_poles.Multiply(z => 1 - z)).Abs;
 
         // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
-        var B = GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * G_norm);
+        var B = GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * g_norm);
         var A = GetCoefficientsInverted(z_poles).ToRe();
 
         return (A, B);
@@ -218,12 +216,14 @@ public class ButterworthBandStop : ButterworthFilter
         double fsh,
         double fph,
         double Gp = 0.89125093813374556,
-        double Gs = 0.031622777) 
+        double Gs = 0.01) 
         : this(fpl, fsl, fsh, fph, GetSpecification(dt, fpl, fsl, fsh, fph, Gp, Gs)) { }
 
     /// <summary>Инициализация нового эллиптического полосозаграждающего фильтра (ПЗФ)</summary>
+    /// <param name="fpl">Нижняя граница полосы пропускания</param>
     /// <param name="fsl">Нижняя граница полосы подавления</param>
     /// <param name="fsh">Верхняя граница полосы подавления</param>
+    /// <param name="fph">Верхняя граница полосы пропускания</param>
     /// <param name="Spec">Спецификация фильтра</param>
     private ButterworthBandStop(double fpl,double fsl, double fsh, double fph, Specification Spec) 
         : this(Initialize(fpl, fsl, fsh, fph, Spec), Spec) { }

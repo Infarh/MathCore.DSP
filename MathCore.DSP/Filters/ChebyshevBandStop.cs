@@ -1,7 +1,5 @@
 ﻿using System.ComponentModel;
 
-using MathCore.DSP.Infrastructure;
-
 using static System.Math;
 using static MathCore.Polynom.Array;
 
@@ -45,7 +43,7 @@ public class ChebyshevBandStop : ChebyshevFilter
         var dW = Wsh - Wsl;
 
         // Выбор опорной частоты
-        // Если   Wc / Wph > Wpl
+        // Если   Wp / Wph > Wpl
         // то есть      Wc > Wpl*Wph
         // то есть Wsl*Wsh > Wpl*Wph
         // то есть центральная частота по границам подавления > центральной частоты по границам пропускания
@@ -54,9 +52,7 @@ public class ChebyshevBandStop : ChebyshevFilter
         var Wp = Wc / Wph > Wpl
             ? Wph
             : Wpl;
-        var W0 = Math.Abs(dW * Wp / (Wc - Wp.Pow2())); // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
-        const double W1 = 1;                           // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
-        var Fp = W0 / Consts.pi2;
+        var Fp = Abs(dW * Wp / (Wc - Wp.Pow2())) / Consts.pi2;
         const double Fs = 1 / Consts.pi2;
 
         // Для передачи информации о граничных частотах в спецификацию аналогвого прототипа перечситываем частоты цифрового фильтра обратно
@@ -103,10 +99,10 @@ public class ChebyshevBandStop : ChebyshevFilter
         var z_poles = ToZArray(pzf_poles, dt);
 
         // Вычисляем коэффициент нормировки фильтра на нулевой частоте 
-        var G_norm = (N.IsOdd() ? 1 : Spec.Gp)
+        var g_norm = (N.IsOdd() ? 1 : Spec.Gp)
             / (z_zeros.Multiply(z => 1 - z) / z_poles.Multiply(z => 1 - z)).Abs;
         // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
-        var B = GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * G_norm);
+        var B = GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * g_norm);
         var A = GetCoefficientsInverted(z_poles).ToRe();
 
         return (A, B);
@@ -145,10 +141,10 @@ public class ChebyshevBandStop : ChebyshevFilter
         var z_poles = ToZArray(pzf_poles, dt);
 
         // Вычисляем коэффициент нормировки фильтра на нулевой частоте 
-        var G_norm = 1 / (z_zeros.Multiply(z => 1 - z) / z_poles.Multiply(z => 1 - z)).Abs;
+        var g_norm = 1 / (z_zeros.Multiply(z => 1 - z) / z_poles.Multiply(z => 1 - z)).Abs;
 
         // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
-        var B = GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * G_norm);
+        var B = GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * g_norm);
         var A = GetCoefficientsInverted(z_poles).ToRe();
 
         return (A, B);
@@ -188,10 +184,10 @@ public class ChebyshevBandStop : ChebyshevFilter
 
         // Вычисляем коэффициент нормировки фильтра на нулевой частоте 
         var re_to_im = z_zeros.Multiply(z => 1 - z) / z_poles.Multiply(z => 1 - z);
-        var G_norm = 1 / re_to_im.Re;
+        var g_norm = 1 / re_to_im.Re;
 
         // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
-        var B = GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * G_norm);
+        var B = GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * g_norm);
         var A = GetCoefficientsInverted(z_poles).ToRe();
 
         return (A, B);

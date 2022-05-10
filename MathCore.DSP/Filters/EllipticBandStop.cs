@@ -51,9 +51,7 @@ public class EllipticBandStop : EllipticFilter
         var Wp = Wc / Wph > Wpl
             ? Wph
             : Wpl;
-        var W0 = Math.Abs(dW * Wp / (Wc - Wp.Pow2())); // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
-        const double W1 = 1;                           // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
-        var Fp = W0 / Consts.pi2;
+        var Fp = Math.Abs(dW * Wp / (Wc - Wp.Pow2())) / Consts.pi2;
         const double Fs = 1 / Consts.pi2;
 
         // Для передачи информации о граничных частотах в спецификацию аналогвого прототипа перечситываем частоты цифрового фильтра обратно
@@ -101,11 +99,11 @@ public class EllipticBandStop : EllipticFilter
         var z_poles = ToZArray(pzf_poles, dt);
 
         // Вычисляем коэффициент нормировки фильтра на нулевой частоте 
-        var G_norm = (N.IsOdd() ? 1 : Spec.Gp)
+        var g_norm = (N.IsOdd() ? 1 : Spec.Gp)
             / (z_zeros.Multiply(z => 1 - z) / z_poles.Multiply(z => 1 - z)).Abs;
 
         // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
-        var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * G_norm);
+        var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * g_norm);
         var A = Polynom.Array.GetCoefficientsInverted(z_poles).ToRe();
 
         return (A, B);

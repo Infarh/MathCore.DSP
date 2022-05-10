@@ -1,12 +1,13 @@
 ﻿using System.Runtime.Serialization;
 
-using static System.Math;
+//using static System.Math;
 
 namespace MathCore.DSP.Filters;
 
 /// <summary>Фильтр Баттерворта</summary>
 [KnownType(typeof(ButterworthLowPass))]
 [KnownType(typeof(ButterworthBandPass))]
+[KnownType(typeof(ButterworthBandStop))]
 [KnownType(typeof(ButterworthHighPass))]
 public abstract class ButterworthFilter : AnalogBasedFilter
 {
@@ -31,11 +32,14 @@ public abstract class ButterworthFilter : AnalogBasedFilter
         // Угловой шаг между полюсами
         for (var (i, th0) = (r, Consts.pi05 / N); i < N; i += 2)
         {
-            var w = th0 * (i - r + 1);
-            var sin = -alpha * Sin(w);
-            var cos = +alpha * Cos(w);
-            yield return new Complex(sin, +cos);
-            yield return new Complex(sin, -cos);
+            var z = Complex.Exp(alpha, th0 * (i - r + 1));
+            yield return z.ComplexConjugate;
+            yield return z;
+            //var w = th0 * (i - r + 1);
+            //var sin = -alpha * Sin(w);
+            //var cos = +alpha * Cos(w);
+            //yield return new Complex(sin, +cos);
+            //yield return new Complex(sin, -cos);
         }
     }
 
