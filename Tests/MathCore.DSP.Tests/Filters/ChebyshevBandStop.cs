@@ -199,12 +199,12 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
             (0.919712629269422322, -0.088706215574633693),
             (-0.450430385390868437, 0.390813181192564196));
 
-        var G_norm = (N.IsOdd() ? 1 : Gp)
+        var g_norm = (N.IsOdd() ? 1 : Gp)
             / (z_zeros.Multiply(z => 1 - z) / z_poles.Multiply(z => 1 - z)).Abs;
 
-        G_norm.AssertEquals(0.0342439351432325);
+        g_norm.AssertEquals(0.0342439351432325, 1e-15);
 
-        var B = GetCoefficientsInverted(z_zeros).ToArray(b => b * G_norm).ToRe();
+        var B = GetCoefficientsInverted(z_zeros).ToArray(b => b * g_norm).ToRe();
         var A = GetCoefficientsInverted(z_poles).ToRe();
 
         var h_f00 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0, dt);
@@ -426,12 +426,12 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
             /*[12]*/ (0.923420034559933933, -0.163663236631297865),
             /*[13]*/ (-0.283258983144856313, 0.659118452026115409));
 
-        var G_norm = (N.IsOdd() ? 1 : Gp)
+        var g_norm = (N.IsOdd() ? 1 : Gp)
             / (z_zeros.Multiply(z => 1 - z) / z_poles.Multiply(z => 1 - z)).Abs;
 
-        G_norm.AssertEquals(0.029318326737782795);
+        g_norm.AssertEquals(0.029318326737782795, 1e-15);
 
-        var B = GetCoefficientsInverted(z_zeros).ToArray(b => b * G_norm).ToRe();
+        var B = GetCoefficientsInverted(z_zeros).ToArray(b => b * g_norm).ToRe();
         var A = GetCoefficientsInverted(z_poles).ToRe();
 
         var h_f00 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0, dt);
@@ -673,11 +673,11 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
 
         var zeros_to_poles = z_zeros.Multiply(z => 1 - z).Re / z_poles.Multiply(z => 1 - z).Re;
 
-        var G_norm = 1 / zeros_to_poles;
+        var g_norm = 1 / zeros_to_poles;
 
-        G_norm.AssertEquals(0.10613121177849884);
+        g_norm.AssertEquals(0.10613121177849884, 1e-15);
 
-        var B = GetCoefficientsInverted(z_zeros).ToArray(b => b * G_norm).ToRe();
+        var B = GetCoefficientsInverted(z_zeros).ToArray(b => b * g_norm).ToRe();
         var A = GetCoefficientsInverted(z_poles).ToRe();
 
         //B.ToDebugEnum();

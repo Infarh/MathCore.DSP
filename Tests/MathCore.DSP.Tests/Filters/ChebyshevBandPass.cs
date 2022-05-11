@@ -300,7 +300,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         //const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
         var F1 = W1 / Consts.pi2;
 
-        W1.AssertEquals(1.4931453518033904);
+        W1.AssertEquals(1.4931453518033904, 1e-15);
         F1.AssertEquals(0.23764146349419665);
 
         var eps_p = (1 / (Gp * Gp) - 1).Sqrt();
@@ -757,7 +757,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         //const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
         var F1 = W1 / Consts.pi2;
 
-        W1.AssertEquals(1.4931453518033904, 1-14);
+        W1.AssertEquals(1.4931453518033904, 1-10);
         F1.AssertEquals(0.23764146349419665);
 
         var eps_p = (1 / (Gp * Gp) - 1).Sqrt();
@@ -1306,7 +1306,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         //const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
         var F1 = W1 / Consts.pi2;
 
-        W1.AssertEquals(1.4931453518033904);
+        W1.AssertEquals(1.4931453518033904, 1e-15);
         F1.AssertEquals(0.23764146349419665);
 
         var eps_p = (1 / (Gp * Gp) - 1).Sqrt();
