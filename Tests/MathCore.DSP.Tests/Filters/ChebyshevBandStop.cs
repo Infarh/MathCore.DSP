@@ -152,7 +152,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
             (0, 7.447990244669614235),
             (0, -7.447990244669614235));
 
-        pzf_poles.AssertEquals(AccuracyComplex.Eps(1e-15),
+        pzf_poles.AssertEquals(AccuracyComplex.Eps(1e-14),
             (-0.134740876884887117, 2.966182443413979186),
             (-0.847786715984386374, -18.663156503433079081),
             (-0.134740876884887117, -2.966182443413979186),
@@ -374,7 +374,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
             /*[13]*/ (0, -7.447990244669614235));
 
         //pzf_poles.ToDebugEnum();
-        pzf_poles.AssertEquals(AccuracyComplex.Eps(1e-15),
+        pzf_poles.AssertEquals(AccuracyComplex.Eps(1e-14),
             /*[ 0]*/ (-0.851771390245502857, 0.000000000000000000),
             /*[ 1]*/ (-65.126111677342635176, -0.000000000000000000),
             /*[ 2]*/ (-0.101685623751992776, 3.284526601999675499),
@@ -622,7 +622,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
             /*[11]*/ (-4.726274700415578E-16, -05.692732274427887873)
         );
 
-        pzf_poles.AssertEquals(AccuracyComplex.Eps(1e-15),
+        pzf_poles.AssertEquals(AccuracyComplex.Eps(1e-14),
             /*[ 0]*/ (-00.357233675636420722, +02.285240672570521880),
             /*[ 1]*/ (-03.704090692484245828, -23.695242869460138024),
             /*[ 2]*/ (-00.357233675636420722, -02.285240672570521880),
