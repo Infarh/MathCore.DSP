@@ -378,7 +378,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var z_poles = DigitalFilter.ToZArray(ppf_poles, dt);
 
         //z_poles.ToDebugEnum();
-        z_poles.AssertEquals(
+        z_poles.AssertEquals(AccuracyComplex.Eps(1e-14),
             /*[ 0]*/ (0.681463190332515234, 0.604557069710933370),
             /*[ 1]*/ (0.681463190332515234, -0.604557069710933370),
             /*[ 2]*/ (0.911545352623017502, -0.386300402599526305),
@@ -823,7 +823,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         ppf_zeros.ToRe().Average(v => v * v).AssertLessThan(1e-30);
 
         //ppf_zeros.ToIm().ToDebugEnum();
-        ppf_zeros.ToIm().AssertEquals(
+        ppf_zeros.ToIm().AssertEquals(Accuracy.Eps(1e-14),
             /*[ 0]*/ +14.638643441051567,
             /*[ 1]*/ -03.996330322305191,
             /*[ 2]*/ +03.996330322305191,
@@ -1363,7 +1363,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         );
 
         //poles.ToDebugEnum();
-        poles.AssertEquals(
+        poles.AssertEquals(AccuracyComplex.Eps(1e-14),
             /*[ 0]*/  -1.796225595841184797,
             /*[ 1]*/ (-0.168257937347595449, +1.153210745910925095),
             /*[ 2]*/ (-0.168257937347595449, -1.153210745910925095),
