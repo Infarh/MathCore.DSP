@@ -169,8 +169,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         var z_zeros = DigitalFilter.ToZArray(pzf_zeros, dt);
         var z_poles = DigitalFilter.ToZArray(pzf_poles, dt);
 
-        //z_zeros.Foreach(DWL);
-
+        //z_zeros.ToDebugEnum();
         z_zeros.AssertEquals(
             (0.756417559622531210, 0.654089042481751148),
             (0.756417559622531210, -0.654089042481751148),
@@ -185,8 +184,8 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
             (0.756417559622531210, 0.654089042481751148),
             (0.756417559622531210, -0.654089042481751148));
 
-        //z_poles.Foreach(DWL);
-        z_poles.AssertEquals(
+        //z_poles.ToDebugEnum()
+        z_poles.AssertEquals(AccuracyComplex.Eps(1e-14),
             (0.944417945958803351, 0.286445125329786832),
             (0.065097723009304609, -0.953486610678531687),
             (0.944417945958803351, -0.286445125329786832),
@@ -411,7 +410,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
             /*[13]*/ (0.756417559622531210, -0.654089042481751148));
 
         //z_poles.ToDebugEnum();
-        z_poles.AssertEquals(
+        z_poles.AssertEquals(AccuracyComplex.Eps(1e-14),
             /*[ 0]*/ 0.918302251228021560,
             /*[ 1]*/ -0.530108926487634968,
             /*[ 2]*/ (0.938138236661072322, 0.316683223278757087),
@@ -657,7 +656,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         );
 
         //z_poles.ToDebugEnum();
-        z_poles.AssertEquals(
+        z_poles.AssertEquals(AccuracyComplex.Eps(1e-14),
             /*[ 0]*/ (+0.940450693226825618, +0.217829048776244150),
             /*[ 1]*/ (-0.155948781938165276, -0.843736166288806211),
             /*[ 2]*/ (+0.940450693226825618, -0.217829048776244150),

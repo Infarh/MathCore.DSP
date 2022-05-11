@@ -283,7 +283,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var Wc = Wpl * Wph;
         var dW = Wph - Wpl;
 
-        Wc.AssertEquals(58.500854660888386);
+        Wc.AssertEquals(58.500854660888386, 1e-13);
 
         // Выбор опорной частоты
         // Если   Wc / Wsh > Wsl
@@ -694,7 +694,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var filter = new DSP.Filters.ChebyshevBandPass(dt, fsl, fpl, fph, fsh, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
 
         filter.B.AssertEquals(Accuracy.Eps(1e-14), B);
-        filter.A.AssertEquals(Accuracy.Eps(1e-14), A);
+        filter.A.AssertEquals(Accuracy.Eps(1e-10), A);
     }
 
     [TestMethod]
@@ -757,7 +757,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         //const double W1 = 1;                        // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
         var F1 = W1 / Consts.pi2;
 
-        W1.AssertEquals(1.4931453518033904);
+        W1.AssertEquals(1.4931453518033904, 1-14);
         F1.AssertEquals(0.23764146349419665);
 
         var eps_p = (1 / (Gp * Gp) - 1).Sqrt();
@@ -1288,7 +1288,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var Wc = Wpl * Wph;
         var dW = Wph - Wpl;
 
-        Wc.AssertEquals(58.500854660888386);
+        Wc.AssertEquals(58.500854660888386, 1e-13);
 
         // Выбор опорной частоты
         // Если   Wc / Wsh > Wsl
