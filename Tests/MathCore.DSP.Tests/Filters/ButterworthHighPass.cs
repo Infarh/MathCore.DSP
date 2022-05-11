@@ -69,25 +69,25 @@ public class ButterworthHighPass
         for (var i = r; i < poles.Length; i += 2) 
             (poles[i], poles[i + 1]) = Complex.Exp(alpha, Consts.pi05 * ((i - r + 1d) / N + 1)).Conjugate();
 
-        var poles1 = new Complex[N];
-        if (r != 0) poles1[0] = -alpha;
-        for (var i = r; i < poles1.Length; i += 2)
-        {
-            var w = PI * ((i - r + 0.5) / N - 3d / 2);
-            (poles1[i], poles1[i + 1]) = Complex.ConjugateAbsExp(alpha, w);
-        }
+        //var poles1 = new Complex[N];
+        //if (r != 0) poles1[0] = -alpha;
+        //for (var i = r; i < poles1.Length; i += 2)
+        //{
+        //    var w = PI * ((i - r + 0.5) / N - 3d / 2);
+        //    (poles1[i], poles1[i + 1]) = Complex.ConjugateAbsExp(alpha, w);
+        //}
 
-        //poles1.ToDebugEnum();
-        poles1.AssertEquals(
-            /*[ 0]*/ (-0.212281578508883739, +1.067211563088522608),
-            /*[ 1]*/ (-0.212281578508883739, -1.067211563088522608),
-            /*[ 2]*/ (-0.904738276905205474, +0.604526789535973275),
-            /*[ 3]*/ (-0.904738276905205474, -0.604526789535973275),
-            /*[ 4]*/ (-1.067211563088522608, -0.212281578508883656),
-            /*[ 5]*/ (-1.067211563088522608, +0.212281578508883656),
-            /*[ 6]*/ (-0.604526789535973275, -0.904738276905205363),
-            /*[ 7]*/ (-0.604526789535973275, +0.904738276905205363)
-        );
+        ////poles1.ToDebugEnum();
+        //poles1.AssertEquals(
+        //    /*[ 0]*/ (-0.212281578508883739, +1.067211563088522608),
+        //    /*[ 1]*/ (-0.212281578508883739, -1.067211563088522608),
+        //    /*[ 2]*/ (-0.904738276905205474, +0.604526789535973275),
+        //    /*[ 3]*/ (-0.904738276905205474, -0.604526789535973275),
+        //    /*[ 4]*/ (-1.067211563088522608, -0.212281578508883656),
+        //    /*[ 5]*/ (-1.067211563088522608, +0.212281578508883656),
+        //    /*[ 6]*/ (-0.604526789535973275, -0.904738276905205363),
+        //    /*[ 7]*/ (-0.604526789535973275, +0.904738276905205363)
+        //);
 
         //poles.ToDebugEnum();
         poles.AssertEquals(
@@ -166,44 +166,35 @@ public class ButterworthHighPass
 
         var filter = new DSP.Filters.ButterworthHighPass(dt, fp, fs, Gp, Gs);
 
-        try
-        {
-            filter.B.AssertEquals(B);
-            filter.A.AssertEquals(A);
-        }
-        catch (Exception)
-        {
-            Assert.Fail();
-        }
+        filter.B.AssertEquals(B);
+        filter.A.AssertEquals(A);
     }
 
-    [TestMethod, Ignore]
+    [TestMethod]
     public void TransmissionCoefficient()
     {
-        const double fp = 0.1;    // Гц // Граничная частота полосы пропускания
-        const double fs = 0.3;    // Гц // Граничная частота полосы запирания
-        const double fd = 1;      // Гц // Частота дискретизации
-        const double dt = 1 / fd; // 2с // Период дискретизации
-        const double Rp = 1;  // Неравномерность в полосе пропускания (дБ)
-        const double Rs = 30; // Неравномерность в полосе пропускания (дБ)
+        const double fd = 10;                 // Гц // Частота дискретизации
+        const double dt = 1 / fd;               // 2с // Период дискретизации
+
+        const double fs = 2 / Consts.pi2;   // Гц // Граничная частота полосы пропускания
+        const double fp = 4 / Consts.pi2;   // Гц // Граничная частота полосы запирания
+
+        const double Rp = 1;                    // Неравномерность в полосе пропускания (дБ)
+        const double Rs = 40;                   // Неравномерность в полосе пропускания (дБ)
+
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
         var filter = new DSP.Filters.ButterworthHighPass(dt, fp, fs, Gp, Gs);
 
-        var transmission_0 = filter.GetTransmissionCoefficient(0, dt);
+        var transmission__0 = filter.GetTransmissionCoefficient(0, dt);
         var transmission_fp = filter.GetTransmissionCoefficient(fp, dt);
         var transmission_fs = filter.GetTransmissionCoefficient(fs, dt);
         var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2, dt);
 
-        var transmission_0_abs = transmission_0.Abs;
-        var transmission_fp_abs = transmission_fp.Abs;
-        var transmission_fs_abs = transmission_fs.Abs;
-        var transmission_fd05_abs = transmission_fd05.Abs;
-
-        Assert.That.Value(transmission_0_abs).IsEqual(0, 1e-15);
-        Assert.That.Value(transmission_fp_abs).LessOrEqualsThan(Gs, 1e-15);
-        Assert.That.Value(transmission_fs_abs).IsEqual(Gp);
-        Assert.That.Value(transmission_fd05_abs).IsEqual(1, 1e-15);
+        transmission__0.Abs.AssertLessThan(Gs);
+        transmission_fs.Abs.AssertLessOrEqualsThan(Gs);
+        transmission_fp.Abs.AssertGreaterOrEqualsThan(Gp, 1.44e-11);
+        transmission_fd05.Abs.AssertEquals(1, 1e-15);
     }
 }

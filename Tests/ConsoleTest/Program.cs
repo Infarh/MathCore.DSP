@@ -37,7 +37,7 @@ class Program
         const double fd = 1000;
         const double dt = 1 / fd;
         const int count = 520;
-        const double T = count * dt;
+        //const double T = count * dt;
         const double f_min = 295;
         const double f_max = 305;
 

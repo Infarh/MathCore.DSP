@@ -17,7 +17,6 @@ public class ButterworthHighPass : ButterworthFilter
         var N = (int)Ceiling(Log(Spec.kEps) / -Log(Spec.kW));
         Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
         var poles = GetNormPoles(N, Spec.EpsP).ToArray();
-        poles.ToDebugEnum();
 
         // Масштабируем полюса на требуемую частоту пропускания
         var high_pass_poles = TransformToHighPassW(poles, Spec.Wp);
@@ -27,7 +26,6 @@ public class ButterworthHighPass : ButterworthFilter
 
         // Вычисляем нормирующий множитель
         var g_norm = z_poles.Multiply(z => (1 + z) / 2).Abs;
-        g_norm.ToDebug();
 
         var B = new double[N + 1];
         for (var i = 0; i < B.Length; i++)
@@ -43,7 +41,7 @@ public class ButterworthHighPass : ButterworthFilter
         double fp,
         double Gp = 0.891250938,
         double Gs = 0.031622777)
-        : this(GetSpecification(dt, fp, fs, Gp, Gs)) { }
+        : this(GetSpecification(dt, fp: fs, fs: fp, Gp, Gs)) { }
 
     public ButterworthHighPass(Specification Spec) : this(GetPolynoms(Spec), Spec) { }
 
