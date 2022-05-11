@@ -437,7 +437,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         h_fsl.Abs.AssertLessOrEqualsThan(Gs);
         h_fpl.Abs.AssertGreaterOrEqualsThan(Gp, 6e-9);
         h_fcc.Abs.AssertGreaterOrEqualsThan(Gp);
-        h_fph.Abs.AssertGreaterOrEqualsThan(Gp);
+        h_fph.Abs.AssertGreaterOrEqualsThan(Gp, 1.57e-11);
         h_fsh.Abs.AssertLessOrEqualsThan(Gs);
         h_fd5.Abs.AssertLessOrEqualsThan(Gs);
 
@@ -840,7 +840,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         );
 
         //ppf_poles.ToDebugEnum();
-        ppf_poles.AssertEquals(
+        ppf_poles.AssertEquals(AccuracyComplex.Eps(1e-14),
             /*[ 0]*/ (-6.240757903904171400, +04.421967372759097792),
             /*[ 1]*/ (-6.240757903904171400, -04.421967372759097792),
             /*[ 2]*/ (-0.312832901614768955, -04.612276119822324105),
@@ -1381,7 +1381,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
 
         ppf_zeros.ToRe().Sum(v => v * v).AssertEquals(0, 1e-25);
         //ppf_zeros.ToIm().ToDebugEnum();
-        ppf_zeros.ToIm().AssertEquals(
+        ppf_zeros.ToIm().AssertEquals(Accuracy.Eps(1e-14),
             /*[ 0]*/ +18.9737693311404280,
             /*[ 1]*/ -03.0832489654480346,
             /*[ 2]*/ +03.0832489654480346,
