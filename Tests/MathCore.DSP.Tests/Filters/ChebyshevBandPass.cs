@@ -314,7 +314,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var kW = F1 / F0;
 
         kEps.AssertEquals(196.5128464567198);
-        kW.AssertEquals(1.4931453518033904);
+        kW.AssertEquals(1.4931453518033904, 1e-14);
 
         var N = (int)Ceiling(arcch(kEps) / arcch(kW)); // Порядок фильтра
         N.AssertEquals(7);
@@ -758,7 +758,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var F1 = W1 / Consts.pi2;
 
         W1.AssertEquals(1.4931453518033904, 9e-16);
-        F1.AssertEquals(0.23764146349419665);
+        F1.AssertEquals(0.23764146349419665, 1e-14);
 
         var eps_p = (1 / (Gp * Gp) - 1).Sqrt();
         //var eps_p = Sqrt(10.Power(Rp / 10) - 1);
@@ -1320,7 +1320,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var kW = F1 / F0;
 
         kEps.AssertEquals(196.5128464567198);
-        kW.AssertEquals(1.4931453518033904);
+        kW.AssertEquals(1.4931453518033904, 1e-13);
 
         var N = (int)Ceiling(arcch(kEps) / arcch(kW)); // Порядок фильтра
         N.AssertEquals(7);
