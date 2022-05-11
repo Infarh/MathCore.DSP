@@ -351,7 +351,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var ppf_poles = AnalogBasedFilter.TransformToBandPassW(poles, Wpl, Wph).ToArray();
 
         //ppf_poles.ToDebugEnum();
-        ppf_poles.AssertEquals(
+        ppf_poles.AssertEquals(AccuracyComplex.Eps(1e-14),
             /*[ 0]*/ (-1.065636800483094282, 7.573986590319825574),
             /*[ 1]*/ (-1.065636800483095170, -7.573986590319825574),
             /*[ 2]*/ (-0.104422031157416578, -4.062862706349046782),
@@ -771,7 +771,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var kW = F1 / F0;
 
         kEps.AssertEquals(196.5128464567198);
-        kW.AssertEquals(1.4931453518033904);
+        kW.AssertEquals(1.4931453518033904, 9e-16);
 
         var N = (int)Ceiling(arcch(kEps) / arcch(kW)); // Порядок фильтра
         N.AssertEquals(7);
@@ -1353,7 +1353,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
 
         zeros.ToRe().Sum(v => v * v).AssertEquals(0);
         //zeros.ToIm().ToDebugEnum();
-        zeros.ToIm().AssertEquals(
+        zeros.ToIm().AssertEquals(Accuracy.Eps(1e-14),
             /*[ 0]*/ +1.5315443666617676,
             /*[ 1]*/ -1.5315443666617676,
             /*[ 2]*/ +1.9098045874156100,
