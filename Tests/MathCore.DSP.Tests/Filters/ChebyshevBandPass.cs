@@ -941,7 +941,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         );
 
         //A.ToDebugEnum();
-        A.AssertEquals(Accuracy.Eps(1e-14),
+        A.AssertEquals(Accuracy.Eps(1e-10),
             /*[ 0]*/ 1,
             /*[ 1]*/ -7.893539787737986,
             /*[ 2]*/ 30.602554618398255,
@@ -1500,7 +1500,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         h_fpl.Abs.AssertGreaterOrEqualsThan(Gp, 4.6e-2);
         h_fcc.Abs.AssertGreaterOrEqualsThan(Gp);
         h_fph.Abs.AssertGreaterOrEqualsThan(Gp, 4.6e-2);
-        h_fsh.Abs.AssertLessOrEqualsThan(Gs);
+        h_fsh.Abs.AssertLessOrEqualsThan(Gs, 5e-14);
         h_fd5.Abs.AssertLessOrEqualsThan(Gs);
 
         var filter = new DSP.Filters.ChebyshevBandPass(dt, fsl, fpl, fph, fsh, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
