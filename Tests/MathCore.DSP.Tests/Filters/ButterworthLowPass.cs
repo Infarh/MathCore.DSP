@@ -242,7 +242,7 @@ public class ButterworthLowPass : UnitTest
         var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2, dt);
 
         Assert.That.Value(transmission_0.Abs).IsEqual(1, 4.45e-16);
-        Assert.That.Value(transmission_fp.Abs).IsEqual(Gp, 6.67e-016);
+        Assert.That.Value(transmission_fp.Abs).IsEqual(Gp, 7.78e-16);
         Assert.That.Value(transmission_fs.Abs).LessOrEqualsThan(Gs);
         Assert.That.Value(transmission_fd05.Abs).IsEqual(0, 4.27e-34);
     }
@@ -267,7 +267,7 @@ public class ButterworthLowPass : UnitTest
         var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
 
         Assert.That.Value(transmission_0.Abs).IsEqual(1, 4.45e-16);
-        Assert.That.Value(transmission_fp.Abs).IsEqual(Gp, 6.67e-016);
+        Assert.That.Value(transmission_fp.Abs).IsEqual(Gp, 8.9e-16);
         Assert.That.Value(transmission_fs.Abs).LessOrEqualsThan(Gs);
         Assert.That.Value(transmission_fd05.Abs).IsEqual(0, 4.27e-34);
     }
@@ -308,7 +308,7 @@ public class ButterworthLowPass : UnitTest
         var impulse_response = filter.GetImpulseResponse(expected_impulse_response.Length, 1e-10).ToArray();
 
         Assert.That.Collection(impulse_response)
-           .IsEqualTo(expected_impulse_response, 1e-16);
+           .IsEqualTo(expected_impulse_response, 1.7e-16);
     }
 
     [TestMethod]

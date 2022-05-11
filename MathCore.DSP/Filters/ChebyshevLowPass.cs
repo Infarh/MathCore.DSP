@@ -1,4 +1,7 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
+
+using MathCore.DSP.Infrastructure;
 
 using static System.Math;
 
@@ -13,6 +16,7 @@ public class ChebyshevLowPass : ChebyshevFilter
     private static (double[] A, double[] B) InitializeI(Specification Spec)
     {
         var N = (int)Ceiling(arcch(Spec.kEps) / arcch(Spec.kW)); // Порядок фильтра
+        Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
 
         var poles = GetNormedPolesI(N, Spec.EpsP);
         var z_poles = ToZArray(poles, Spec.dt, Spec.Wp);
@@ -32,6 +36,7 @@ public class ChebyshevLowPass : ChebyshevFilter
     private static (double[] A, double[] B) InitializeII(Specification Spec)
     {
         var N = (int)Ceiling(arcch(Spec.kEps) / arcch(Spec.kW)); // Порядок фильтра
+        Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
         var (zeros, poles) = GetNormedPolesII(N, Spec.EpsS);
 
         var z_zeros = N.IsEven()
@@ -52,6 +57,7 @@ public class ChebyshevLowPass : ChebyshevFilter
     private static (double[] A, double[] B) InitializeIICorrected(Specification Spec)
     {
         var N = (int)Ceiling(arcch(Spec.kEps) / arcch(Spec.kW)); // Порядок фильтра
+        Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
         var (zeros, poles) = GetNormedPolesII(N, Spec.EpsS);
 
         var kw = Spec.kw;

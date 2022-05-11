@@ -119,12 +119,6 @@ public class ButterworthBandStop
             var sin = -alpha * Sin(w);
             var cos = alpha * Cos(w);
             (poles[i], poles[i + 1]) = Complex.Conjugate(sin, cos);
-
-            //var sin = -alpha * Sin(w);
-            //var cos = alpha * Cos(w);
-
-            //poles[i] = new Complex(sin, cos);
-            //poles[i + 1] = new Complex(sin, -cos);
         }
 
         poles.AssertEquals(
@@ -314,8 +308,8 @@ public class ButterworthBandStop
 
         var filter = new DSP.Filters.ButterworthBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs);
 
-        filter.A.AssertEquals(A);
-        filter.B.AssertEquals(B);
+        filter.A.AssertEquals(Accuracy.Eps(1e-12), A);
+        filter.B.AssertEquals(Accuracy.Eps(1e-12), B);
     }
 
     [TestMethod]
@@ -411,7 +405,7 @@ public class ButterworthBandStop
 
         var error2 = expected_h.Zip(actual_h, (e, a) => (e - a).Pow2() / 2).Sum();
 
-        Assert.That.Value(error2).LessThan(6e-15);
+        Assert.That.Value(error2).LessThan(1.6e-14);
     }
 
     [TestMethod]

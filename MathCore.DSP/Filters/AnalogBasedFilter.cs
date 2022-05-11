@@ -292,7 +292,7 @@ public abstract class AnalogBasedFilter : IIR
     public override Complex GetTransmissionCoefficient(double f) => base.GetTransmissionCoefficient(f / fd);
 
     public override Complex GetTransmissionCoefficient(double f, double dt) => base.GetTransmissionCoefficient(f / fd);
-
+    
     /// <summary>Метод преобразования нулей и полюсов нормированного ФНЧ в нули и полюса ППФ</summary>
     /// <param name="Normed">Нормированные нули и полюса ФНЧ</param>
     /// <param name="fmin">Нижняя частота среза</param>
@@ -347,16 +347,20 @@ public abstract class AnalogBasedFilter : IIR
         }
     }
 
-    public static IEnumerable<Complex> TransformToLowPass(IEnumerable<Complex> Normed, double fp)
+    public static IEnumerable<Complex> TransformToLowPass(IEnumerable<Complex> Normed, double fp) =>
+        TransformToLowPassW(Normed, pi2 * fp);
+
+    public static IEnumerable<Complex> TransformToLowPassW(IEnumerable<Complex> Normed, double wp)
     {
-        var wp = pi2 * fp;
         foreach (var p in Normed)
             yield return wp * p;
     }
 
-    public static IEnumerable<Complex> TransformToHighPass(IEnumerable<Complex> Normed, double fp)
+    public static IEnumerable<Complex> TransformToHighPass(IEnumerable<Complex> Normed, double fp) => 
+        TransformToHighPassW(Normed, pi2 * fp);
+
+    public static IEnumerable<Complex> TransformToHighPassW(IEnumerable<Complex> Normed, double wp)
     {
-        var wp = pi2 * fp;
         foreach (var p in Normed)
             yield return wp / p;
     }

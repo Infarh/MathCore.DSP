@@ -249,8 +249,8 @@ public class ButterworthBandPass
 
         var filter = new DSP.Filters.ButterworthBandPass(dt, fsl, fpl, fph, fsh, Gp, Gs);
 
-        filter.B.AssertEquals(B);
-        filter.A.AssertEquals(A);
+        filter.B.AssertEquals(Accuracy.Eps(1e-17), B);
+        filter.A.AssertEquals(Accuracy.Eps(1e-11), A);
 
         //filter.B.Zip(B, (fb, b) => (fb - b).Abs()).Sum().ToDebug();
         //filter.A.Zip(A, (fa, a) => (fa - a).Abs()).Sum().ToDebug();
