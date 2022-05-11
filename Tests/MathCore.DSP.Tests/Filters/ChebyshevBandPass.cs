@@ -4,6 +4,7 @@ using System.Linq;
 
 using MathCore.DSP.Filters;
 using MathCore.DSP.Signals;
+using MathCore.DSP.Tests.Infrastructure;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting.Extensions;
@@ -126,7 +127,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         }
 
         //poles.ToDebugEnum();
-        poles.AssertEquals(
+        poles.AssertEquals(AccuracyComplex.Eps(1e-15),
             /*[ 0]*/ (-0.062181023793011402, 0.993411202482325950),
             /*[ 1]*/ (-0.062181023793011402, -0.993411202482325950),
             /*[ 2]*/ (-0.169881716269156408, 0.727227473025156224),
@@ -264,7 +265,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var Fsh = DigitalFilter.ToAnalogFrequency(fsh, dt);
 
         Fsl.AssertEquals(0.31937518051807723);
-        Fpl.AssertEquals(0.64524608331077715);
+        Fpl.AssertEquals(0.64524608331077715, 1e-15);
         Fph.AssertEquals(2.296556302951906);
         Fsh.AssertEquals(2.9653636313402);
 
@@ -557,7 +558,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         );
 
         //poles.ToDebugEnum();
-        poles.AssertEquals(
+        poles.AssertEquals(AccuracyComplex.Eps(1e-15),
             /*[ 0]*/ (-0.133882765352424271, +0.705787088276199515),
             /*[ 1]*/ (-0.133882765352424271, -0.705787088276199515),
             /*[ 2]*/ (-0.471031461322897138, +0.665351902557851704),
@@ -723,7 +724,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
 
         Fsl.AssertEquals(0.31937518051807723);
         Fpl.AssertEquals(0.64524608331077715);
-        Fph.AssertEquals(2.296556302951906);
+        Fph.AssertEquals(2.296556302951906, 1e-15);
         Fsh.AssertEquals(2.9653636313402);
 
         var Wsl = Consts.pi2 * Fsl;
@@ -1110,7 +1111,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         );
 
         //poles.ToDebugEnum();
-        poles.AssertEquals(
+        poles.AssertEquals(AccuracyComplex.Eps(1e-15),
             /*[ 0]*/ (-0.217674546532166030, +1.147510540168250825),
             /*[ 1]*/ (-0.217674546532166030, -1.147510540168250825),
             /*[ 2]*/ (-0.765830907928647497, +1.081768615193693828),
@@ -1620,7 +1621,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
 
         h_pl_db.AssertGreaterOrEqualsThan(-Rp, 6e-8);
         h_c0_db.AssertGreaterOrEqualsThan(-Rp);
-        h_ph_db.AssertGreaterOrEqualsThan(-Rp);
+        h_ph_db.AssertGreaterOrEqualsThan(-Rp, 1.6e-10);
 
         h_sh_db.AssertLessOrEqualsThan(-Rp);
         h_fd_db.AssertLessOrEqualsThan(-Rs);
@@ -1684,7 +1685,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
 
         h_pl_db.AssertLessOrEqualsThan(-Rs);
 
-        h_c0_db.AssertEquals(-Rp, 2.6e-11);
+        h_c0_db.AssertEquals(-Rp, 4.9e-11);
 
         h_ph_db.AssertLessOrEqualsThan(-Rs);
 
@@ -1743,7 +1744,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         h_f0_db.AssertLessOrEqualsThan(-Rs);
         h_sl_db.AssertLessOrEqualsThan(-Rs);
 
-        h_pl_db.AssertLessOrEqualsThan(-Rs, 5.9e-10);
+        h_pl_db.AssertLessOrEqualsThan(-Rs, 6e-9);
         h_c0_db.AssertGreaterOrEqualsThan(-Rp);
         h_c0_db.AssertEquals(0, 1.3e-10);
         h_ph_db.AssertLessOrEqualsThan(-Rs);

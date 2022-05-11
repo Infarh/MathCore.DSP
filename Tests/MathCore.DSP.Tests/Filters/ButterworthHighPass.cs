@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 
 using MathCore.DSP.Filters;
+using MathCore.DSP.Tests.Infrastructure;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting.Extensions;
@@ -90,7 +91,7 @@ public class ButterworthHighPass
         //);
 
         //poles.ToDebugEnum();
-        poles.AssertEquals(
+        poles.AssertEquals(AccuracyComplex.Eps(1e-15),
             /*[ 0]*/ (-0.212281578508883212, +1.067211563088522608),
             /*[ 1]*/ (-0.212281578508883212, -1.067211563088522608),
             /*[ 2]*/ (-0.604526789535973275, +0.904738276905205363),
