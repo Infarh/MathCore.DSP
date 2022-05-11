@@ -1743,7 +1743,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         h_f0_db.AssertLessOrEqualsThan(-Rs);
         h_sl_db.AssertLessOrEqualsThan(-Rs);
 
-        h_pl_db.AssertLessOrEqualsThan(-Rs);
+        h_pl_db.AssertLessOrEqualsThan(-Rs, 5.9e-10);
         h_c0_db.AssertGreaterOrEqualsThan(-Rp);
         h_c0_db.AssertEquals(0, 1.3e-10);
         h_ph_db.AssertLessOrEqualsThan(-Rs);

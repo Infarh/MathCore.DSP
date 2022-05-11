@@ -124,7 +124,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
             (poles[i], poles[i + 1]) = Complex.Conjugate(-sh * sin, ch * cos);
         }
 
-        poles.AssertEquals(
+        poles.AssertEquals(AccuracyComplex.Eps(1e-15),
             (-0.038245020148109342, 0.611006849626110071),
             (-0.038245020148109342, -0.611006849626110071),
             (-0.104487338181130124, 0.447288057698909503),
@@ -343,7 +343,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         }
         //poles.ToDebugEnum();
 
-        poles.AssertEquals(
+        poles.AssertEquals(AccuracyComplex.Eps(1e-15),
             /*[ 0]*/ -0.145935804681651682,
             /*[ 1]*/ (-0.032473771555427411, 0.707095694170392974),
             /*[ 2]*/ (-0.032473771555427411, -0.707095694170392974),
@@ -577,7 +577,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         for (var (n, dth) = (1, PI / N); n <= L; n++)
             (zeros[2 * n - 2], zeros[2 * n - 1]) = Complex.Conjugate(0, W0 / Cos(dth * (n - 0.5)));
 
-        poles.AssertEquals(
+        poles.AssertEquals(AccuracyComplex.Eps(1e-15),
             /*[ 0]*/ (-0.082345846788124857, +0.434100948566762623),
             /*[ 1]*/ (-0.082345846788124857, -0.434100948566762623),
             /*[ 2]*/ (-0.289712304973535617, +0.409230909475116644),
@@ -1105,7 +1105,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         }
 
         //poles.ToDebugEnum();
-        poles.AssertEquals(
+        poles.AssertEquals(AccuracyComplex.Eps(1e-15),
             /*[ 0]*/ (-0.133882765352424299, 0.705787088276199515),
             /*[ 1]*/ (-0.133882765352424299, -0.705787088276199515),
             /*[ 2]*/ (-0.471031461322897249, 0.665351902557851593),
@@ -1660,7 +1660,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         var error2 = expected_h.Zip(actual_h, (e, a) => (e - a).Pow2() / 2).Sum();
         error2.ToDebug();
 
-        Assert.That.Value(error2).LessThan(9e-19);
+        Assert.That.Value(error2).LessThan(9.01e-19);
     }
 
     [TestMethod]
