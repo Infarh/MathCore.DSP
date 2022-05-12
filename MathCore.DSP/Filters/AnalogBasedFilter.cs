@@ -291,7 +291,7 @@ public abstract class AnalogBasedFilter : IIR
 
     public override Complex GetTransmissionCoefficient(double f) => base.GetTransmissionCoefficient(f / fd);
 
-    public override Complex GetTransmissionCoefficient(double f, double dt) => base.GetTransmissionCoefficient(f / fd);
+    public override Complex GetTransmissionCoefficient(double f, double dt) => base.GetTransmissionCoefficient(f * dt);
     
     /// <summary>Метод преобразования нулей и полюсов нормированного ФНЧ в нули и полюса ППФ</summary>
     /// <param name="Normed">Нормированные нули и полюса ФНЧ</param>

@@ -46,7 +46,7 @@ public class ButterworthLowPass : ButterworthFilter
     /// <param name="fs">Частота заграждения</param>
     /// <param name="Gp">Затухание в полосе пропускания (0.891250938 = -1 дБ)</param>
     /// <param name="Gs">Затухание в полосе заграждения (0.031622777 = -30 дБ)</param>
-    public ButterworthLowPass(double dt, double fp, double fs, double Gp = 0.891250938, double Gs = 0.031622777)
+    public ButterworthLowPass(double dt, double fp, double fs, double Gp = 0.891250938, double Gs = 0.01)
         : this(GetSpecification(dt, fp, fs, Gp, Gs)) { }
 
     /// <summary>Инициализация нового фильтра Баттерворта нижних частот</summary>

@@ -1,5 +1,7 @@
 ﻿using System.Numerics;
 
+using MathCore.DSP.Infrastructure;
+
 namespace MathCore.DSP;
 
 /// <summary>Методы-расширения для вещественных массивов</summary>
@@ -113,9 +115,9 @@ public static class DoubleArrayDSPExtensions
         return Sum(B, p) / Sum(A, p);
     }
 
-    public static Complex GetDigitalTransmissionCoefficientFromPoles(
-        IEnumerable<Complex> Zeros,
-        IEnumerable<Complex> Poles,
+    public static Complex GetDigitalTransmissionCoefficientFromZPoles(
+        IEnumerable<Complex> ZerosZ,
+        IEnumerable<Complex> PolesZ,
         double f,
         double dt)
     {
@@ -123,50 +125,50 @@ public static class DoubleArrayDSPExtensions
 
         var P0 = Complex.Real;
         var one = Complex.Real;
-        foreach (var z0 in Zeros)
+        foreach (var z0 in ZerosZ)
         {
             var zz = z0 * z;
-            if (one == zz)
+            if (zz == one)
                 return 0;
             P0 *= 1 - zz;
         }
 
         var Pp = Complex.Real;
-        foreach (var zp in Poles)
+        foreach (var zp in PolesZ)
         {
             var zz = zp * z;
-            if (one == zz)
+            if (zz == one)
                 return new Complex(double.PositiveInfinity, double.PositiveInfinity);
-            Pp *= 1 - zp;
+            Pp *= 1 - zz;
         }
 
         return P0 / Pp;
     }
 
     public static Complex GetAnalogTransmissionCoefficientFromPoles(
-        IEnumerable<Complex> Zeros,
-        IEnumerable<Complex> Poles,
+        IEnumerable<Complex> P0,
+        IEnumerable<Complex> Pp,
         double f)
     {
         var p = Complex.ImValue(Consts.pi2 * f);
 
-        var P0 = Complex.Real;
-        foreach (var p0 in Zeros)
+        var zeros = Complex.Real;
+        foreach (var p0 in P0)
         {
             if (p0 == p)
                 return 0;
-            P0 *= p - p0;
+            zeros *= p - p0;
         }
 
-        var Pp = Complex.Real;
-        foreach (var pp in Poles)
+        var poles = Complex.Real;
+        foreach (var pp in Pp)
         {
             if (p == pp)
                 return new Complex(double.PositiveInfinity, double.PositiveInfinity);
-            Pp *= p - pp;
+            poles *= p - pp;
         }
 
-        return P0 / Pp;
+        return zeros / poles;
     }
 
     /// <summary>Выполнение фильтрации очередного отсчёта цифрового сигнала с помощью коэффициентов рекуррентного фильтра</summary>

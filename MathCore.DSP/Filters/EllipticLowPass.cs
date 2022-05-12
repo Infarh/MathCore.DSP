@@ -45,7 +45,7 @@ public class EllipticLowPass : EllipticFilter
     /// <param name="fp">Частота пропускания</param>
     /// <param name="fs">Частота заграждения</param>
     /// <param name="Gp">Затухание в полосе пропускания (0.891250938 = -1 дБ)</param>
-    /// <param name="Gs">Затухание в полосе заграждения (0.005623413 = -40 дБ)</param>
+    /// <param name="Gs">Затухание в полосе заграждения (0.01 = -40 дБ)</param>
     public EllipticLowPass(double dt, double fp, double fs, double Gp = 0.891250938, double Gs = 0.01)
         : this(GetSpecification(dt, fp, fs, Gp, Gs)) { }
 

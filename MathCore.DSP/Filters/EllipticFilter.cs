@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
 using static System.Linq.Enumerable;
@@ -16,6 +17,8 @@ public abstract class EllipticFilter : AnalogBasedFilter
 {
     protected static (Complex[] Zeros, Complex[] Poles) GetNormedZeros(int N, double EpsP, double EpsS, double W0 = 1)
     {
+        Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
+
         var kEps = EpsP / EpsS;
 
         var (L, r) = N.GetDivMod(2);

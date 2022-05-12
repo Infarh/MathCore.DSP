@@ -103,8 +103,8 @@ public class EllipticBandPass : EllipticFilter
         double fpl,
         double fph,
         double fsh,
-        double Gp = 0.891250938,
-        double Gs = 0.01)
+        double Gp,
+        double Gs)
     {
         CheckFrequencies(dt, fsl, fpl, fph, fsh);
 

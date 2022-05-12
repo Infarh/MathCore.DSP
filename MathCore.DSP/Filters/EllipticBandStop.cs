@@ -21,8 +21,8 @@ public class EllipticBandStop : EllipticFilter
         double fsl,
         double fsh,
         double fph,
-        double Gp = 0.891250938,
-        double Gs = 0.031622777)
+        double Gp,
+        double Gs)
     {
         if (Gp <= Gs)
             throw new ArgumentOutOfRangeException(

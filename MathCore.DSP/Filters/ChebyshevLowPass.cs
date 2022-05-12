@@ -81,9 +81,15 @@ public class ChebyshevLowPass : ChebyshevFilter
     /// <param name="fp">Частота пропускания</param>
     /// <param name="fs">Частота заграждения</param>
     /// <param name="Gp">Затухание в полосе пропускания (0.891250938 = -1 дБ)</param>
-    /// <param name="Gs">Затухание в полосе заграждения (0.005623413 = -45 дБ)</param>
+    /// <param name="Gs">Затухание в полосе заграждения (0.01        = -40 дБ)</param>
     /// <param name="Type">Тип (род) фильтра чебышева</param>
-    public ChebyshevLowPass(double dt, double fp, double fs, double Gp = 0.891250938, double Gs = 0.005623413, ChebyshevType Type = ChebyshevType.I)
+    public ChebyshevLowPass(
+        double dt, 
+        double fp, 
+        double fs, 
+        double Gp = 0.891250938, 
+        double Gs = 0.01, 
+        ChebyshevType Type = ChebyshevType.I)
         : this(GetSpecification(dt, fp, fs, Gp, Gs), Type) { }
 
     public ChebyshevLowPass(Specification Spec, ChebyshevType Type = ChebyshevType.I)
