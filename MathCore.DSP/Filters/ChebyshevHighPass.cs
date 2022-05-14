@@ -1,51 +1,61 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 
-using static System.Math;
-
-using static MathCore.Polynom.Array;
-using static MathCore.SpecialFunctions;
+using MathCore.DSP.Infrastructure;
 
 namespace MathCore.DSP.Filters;
 
 /// <summary>Фильтр Чебышева нижних частот</summary>
-public class ChebyshevLowPass : ChebyshevFilter
+public class ChebyshevHighPass : ChebyshevFilter
 {
     private static (double[] A, double[] B) InitializeI(Specification Spec)
     {
-        var N = (int)Ceiling(arcch(Spec.kEps) / arcch(Spec.kW)); // Порядок фильтра
+        var N = (int)Math.Ceiling(arcch(Spec.kEps) / arcch(Spec.kW)); // Порядок фильтра
         Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
 
         var poles = GetNormedPolesI(N, Spec.EpsP);
-        var z_poles = ToZArray(poles, Spec.dt, Spec.Wp);
 
-        var A = GetCoefficientsInverted(z_poles).ToRe();
+        var high_pass_poles = TransformToHighPassW(poles, Spec.Ws);
 
-        var g_norm = (N.IsOdd() ? 1 : Spec.Gp)
-            / (2.Power(N) / z_poles.Multiply(z => 1 - z).Re);
+        var z_poles = ToZArray(high_pass_poles, Spec.dt);
 
-        var B = Enumerable
-           .Range(0, N + 1)
-           .ToArray(i => g_norm * BinomialCoefficient(N, i));
+        var k_poles = z_poles.Multiply(z => (1 + z) / 2).Re;
+
+        var g_norm = N.IsEven()
+            ? Spec.Gp * k_poles
+            : 1 * k_poles;
+
+        var B = new double[N + 1];
+        for (var i = 0; i < B.Length; i++)
+            B[i] = SpecialFunctions.BinomialCoefficient(N, i) * (i % 2 == 0 ? g_norm : -g_norm);
+        var A = Polynom.Array.GetCoefficientsInverted(z_poles).ToRe();
 
         return (A, B);
     }
 
     private static (double[] A, double[] B) InitializeII(Specification Spec)
     {
-        var N = (int)Ceiling(arcch(Spec.kEps) / arcch(Spec.kW)); // Порядок фильтра
+        var N = (int)Math.Ceiling(arcch(Spec.kEps) / arcch(Spec.kW)); // Порядок фильтра
         Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
         var (zeros, poles) = GetNormedPolesII(N, Spec.EpsS);
 
-        var z_zeros = N.IsEven()
-            ? ToZArray(zeros, Spec.dt, Spec.Wp)
-            : ToZ(zeros, Spec.dt, Spec.Wp).Prepend(-1).ToArray();
-        var z_poles = ToZArray(poles, Spec.dt, Spec.Wp);
+        var high_pass_zeros = TransformToHighPassW(zeros, Spec.Ws);
+        if (N.IsOdd())
+            high_pass_zeros = high_pass_zeros.Prepend(0);
+        var high_pass_poles = TransformToHighPassW(poles, Spec.Ws);
 
-        var B = GetCoefficientsInverted(z_zeros).ToRe();
-        var A = GetCoefficientsInverted(z_poles).ToRe();
+        var z_zeros = ToZArray(high_pass_zeros, Spec.dt);
+        var z_poles = ToZArray(high_pass_poles, Spec.dt);
 
-        var g_norm = 1 / (z_zeros.Multiply(z => 1 - z).Re / z_poles.Multiply(z => 1 - z).Re);
+        var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToRe();
+        var A = Polynom.Array.GetCoefficientsInverted(z_poles).ToRe();
+
+        var k_zeros = z_zeros.Multiply(z => 1 + z).Re;
+        var k_poles = z_poles.Multiply(z => 1 + z).Re;
+
+        var g_norm = N.IsEven()
+            ? Spec.Gp * k_poles / k_zeros
+            : 1 * k_poles / k_zeros;
 
         B.Multiply(g_norm);
 
@@ -54,7 +64,7 @@ public class ChebyshevLowPass : ChebyshevFilter
 
     private static (double[] A, double[] B) InitializeIICorrected(Specification Spec)
     {
-        var N = (int)Ceiling(arcch(Spec.kEps) / arcch(Spec.kW)); // Порядок фильтра
+        var N = (int)Math.Ceiling(arcch(Spec.kEps) / arcch(Spec.kW)); // Порядок фильтра
         Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
         var (zeros, poles) = GetNormedPolesII(N, Spec.EpsS);
 
@@ -64,8 +74,8 @@ public class ChebyshevLowPass : ChebyshevFilter
             : ToZ(zeros, Spec.dt, Spec.Wp * kw).Prepend(-1).ToArray();
         var z_poles = ToZArray(poles, Spec.dt, Spec.Wp * kw);
 
-        var B = GetCoefficientsInverted(z_zeros).ToRe();
-        var A = GetCoefficientsInverted(z_poles).ToRe();
+        var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToRe();
+        var A = Polynom.Array.GetCoefficientsInverted(z_poles).ToRe();
 
         var g_norm = 1 / (z_zeros.Multiply(z => 1 - z).Re / z_poles.Multiply(z => 1 - z).Re);
 
@@ -81,7 +91,7 @@ public class ChebyshevLowPass : ChebyshevFilter
     /// <param name="Gp">Затухание в полосе пропускания (0.891250938 = -1 дБ)</param>
     /// <param name="Gs">Затухание в полосе заграждения (0.01        = -40 дБ)</param>
     /// <param name="Type">Тип (род) фильтра чебышева</param>
-    public ChebyshevLowPass(
+    public ChebyshevHighPass(
         double dt, 
         double fp, 
         double fs, 
@@ -90,7 +100,7 @@ public class ChebyshevLowPass : ChebyshevFilter
         ChebyshevType Type = ChebyshevType.I)
         : this(GetSpecification(dt, fp, fs, Gp, Gs), Type) { }
 
-    public ChebyshevLowPass(Specification Spec, ChebyshevType Type = ChebyshevType.I)
+    public ChebyshevHighPass(Specification Spec, ChebyshevType Type = ChebyshevType.I)
         : this(Type switch
         {
             ChebyshevType.I => InitializeI(Spec),
@@ -99,5 +109,5 @@ public class ChebyshevLowPass : ChebyshevFilter
             _ => throw new InvalidEnumArgumentException(nameof(Type), (int)Type, typeof(ChebyshevType))
         }, Spec, Type) { }
 
-    private ChebyshevLowPass((double[] A, double[] B) config, Specification Spec, ChebyshevType Type) : base(config.B, config.A, Spec, Type) { }
+    private ChebyshevHighPass((double[] A, double[] B) config, Specification Spec, ChebyshevType Type) : base(config.B, config.A, Spec, Type) { }
 }
