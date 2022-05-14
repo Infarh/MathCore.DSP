@@ -94,19 +94,18 @@ public class ChebyshevHighPass : ChebyshevFilter
 
     /// <summary>Инициализация нового фильтра Чебышева нижних частот</summary>
     /// <param name="dt">Период дискретизации</param>
-    /// <param name="fp">Частота пропускания</param>
     /// <param name="fs">Частота заграждения</param>
+    /// <param name="fp">Частота пропускания</param>
     /// <param name="Gp">Затухание в полосе пропускания (0.891250938 = -1 дБ)</param>
     /// <param name="Gs">Затухание в полосе заграждения (0.01        = -40 дБ)</param>
     /// <param name="Type">Тип (род) фильтра чебышева</param>
-    public ChebyshevHighPass(
-        double dt, 
-        double fp, 
-        double fs, 
-        double Gp = 0.891250938, 
-        double Gs = 0.01, 
+    public ChebyshevHighPass(double dt,
+        double fs,
+        double fp,
+        double Gp = 0.891250938,
+        double Gs = 0.01,
         ChebyshevType Type = ChebyshevType.I)
-        : this(GetSpecification(dt, fp, fs, Gp, Gs), Type) { }
+        : this(GetSpecification(dt, fs, fp, Gp, Gs), Type) { }
 
     public ChebyshevHighPass(Specification Spec, ChebyshevType Type = ChebyshevType.I)
         : this(Type switch
