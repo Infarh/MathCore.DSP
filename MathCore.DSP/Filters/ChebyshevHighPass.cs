@@ -66,18 +66,25 @@ public class ChebyshevHighPass : ChebyshevFilter
     {
         var N = (int)Math.Ceiling(arcch(Spec.kEps) / arcch(Spec.kW)); // Порядок фильтра
         Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
-        var (zeros, poles) = GetNormedPolesII(N, Spec.EpsS);
+        var (zeros, poles) = GetNormedPolesII(N, Spec.EpsS, Spec.wp);
 
-        var kw = Spec.kw;
-        var z_zeros = N.IsEven()
-            ? ToZArray(zeros, Spec.dt, Spec.Wp * kw)
-            : ToZ(zeros, Spec.dt, Spec.Wp * kw).Prepend(-1).ToArray();
-        var z_poles = ToZArray(poles, Spec.dt, Spec.Wp * kw);
+        var high_pass_zeros = TransformToHighPassW(zeros, Spec.Ws);
+        if (N.IsOdd())
+            high_pass_zeros = high_pass_zeros.Prepend(0);
+        var high_pass_poles = TransformToHighPassW(poles, Spec.Ws);
+
+        var z_zeros = ToZArray(high_pass_zeros, Spec.dt);
+        var z_poles = ToZArray(high_pass_poles, Spec.dt);
 
         var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToRe();
         var A = Polynom.Array.GetCoefficientsInverted(z_poles).ToRe();
 
-        var g_norm = 1 / (z_zeros.Multiply(z => 1 - z).Re / z_poles.Multiply(z => 1 - z).Re);
+        var k_zeros = z_zeros.Multiply(z => 1 + z).Re;
+        var k_poles = z_poles.Multiply(z => 1 + z).Re;
+
+        var g_norm = N.IsEven()
+            ? Spec.Gp * k_poles / k_zeros
+            : 1 * k_poles / k_zeros;
 
         B.Multiply(g_norm);
 

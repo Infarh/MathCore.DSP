@@ -52,21 +52,20 @@ public abstract class ChebyshevFilter : AnalogBasedFilter
         var sh = Sinh(beta);
         var ch = Cosh(beta);
 
+        var r = N % 2;                              // Нечётность порядка фильтра
+        var zeros = new Complex[N - r];
         var poles = new Complex[N];                 // Массив полюсов фильтра
         if (N.IsOdd())
             poles[0] = -W0 / sh;                    // Если порядок фильтра нечётный, то первым добавляем центральный полюс
-        var r = N % 2;                              // Нечётность порядка фильтра
         for (var (i, dth) = (r, Consts.pi05 / N); i < poles.Length; i += 2)   // Расчёт полюсов
         {
-            var (sin, cos) = Complex.SinCos(dth * (i - r + 1));
+            var th = dth * (i - r + 1);
+            var (sin, cos) = Complex.SinCos(th);
             var z = new Complex(-sh * sin, ch * cos);
             var norm = W0 / z.Power;
             (poles[i], poles[i + 1]) = Complex.Conjugate(z.Re * norm, z.Im * norm);
+            (zeros[i - r], zeros[i - r + 1]) = Complex.Conjugate(0, W0 / Cos(th));
         }
-
-        var zeros = new Complex[N - r];
-        for (var (n, dth, L) = (1, PI / N, N / 2); n <= L; n++)
-            (zeros[2 * n - 2], zeros[2 * n - 1]) = Complex.Conjugate(0, W0 / Cos(dth * (n - 0.5)));
 
         return (zeros, poles);
     }

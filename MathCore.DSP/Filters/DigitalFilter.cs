@@ -16,11 +16,15 @@ public abstract class DigitalFilter : Filter
     /// <returns>Значение на оси частот аналогового прототипа</returns>
     public static double ToAnalogFrequency(double DigitalFrequency, double dt) => Tan(PI * DigitalFrequency * dt) / (PI * dt);
 
+    public static double ToAnalogFrequencyW(double DigitalFrequencyW, double dt) => Tan(DigitalFrequencyW * dt / 2) / (dt / 2);
+
     /// <summary>Преобразование частоты аналогового  прототипа в частоту цифрового фильтра</summary>
     /// <param name="AnalogFrequency">Значение на оси частот аналогового фильтра</param>
     /// <param name="dt">Период дискретизации</param>
     /// <returns>Значение на оси частот цифрового фильтра</returns>
     public static double ToDigitalFrequency(double AnalogFrequency, double dt) => Atan(PI * AnalogFrequency * dt) / (PI * dt);
+
+    public static double ToDigitalFrequencyW(double AnalogFrequencyW, double dt) => Atan(AnalogFrequencyW * dt / 2) / (dt / 2);
 
     /// <summary>Преобразование полюса из p-плоскости в z-плоскость</summary>
     /// <param name="p">Полюс p-плоскости</param>
