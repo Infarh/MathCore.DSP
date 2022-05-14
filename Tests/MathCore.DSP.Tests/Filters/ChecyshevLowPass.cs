@@ -584,7 +584,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
 
     /// <summary>Тестирование коэффициента передачи фильтра Чебышева первого рода чётного порядка</summary>
     [TestMethod]
-    public void TypeI_EvenOrder_TransmissionCoefficient()
+    public void TypeI_Even_TransmissionCoefficient()
     {
         const double pi2 = 2 * PI;
 
@@ -621,7 +621,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
 
     /// <summary>Тестирование коэффициента передачи фильтра Чебышева первого рода нечётного порядка</summary>
     [TestMethod]
-    public void TypeI_OddOrder_TransmissionCoefficient()
+    public void TypeI_Odd_TransmissionCoefficient()
     {
         const double pi2 = 2 * PI;
 
@@ -657,7 +657,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
     }
 
     [TestMethod]
-    public void TypeII_EvenOrder_TransmissionCoefficient()
+    public void TypeII_Even_TransmissionCoefficient()
     {
         const double pi2 = 2 * PI;
 
@@ -695,7 +695,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
     }
 
     [TestMethod]
-    public void TypeII_OddOrder_TransmissionCoefficient()
+    public void TypeII_Odd_TransmissionCoefficient()
     {
         const double pi2 = 2 * PI;
 
@@ -733,7 +733,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
     }
 
     [TestMethod]
-    public void TypeIICorrected_EvenOrder_TransmissionCoefficient()
+    public void TypeIICorrected_Even_TransmissionCoefficient()
     {
         const double pi2 = 2 * PI;
 
@@ -769,7 +769,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
     }
 
     [TestMethod]
-    public void TypeIICorrected_OddOrder_TransmissionCoefficient()
+    public void TypeIICorrected_Odd_TransmissionCoefficient()
     {
         const double pi2 = 2 * PI;
 
@@ -806,7 +806,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
 
     /// <summary>Тестирование импульсной характеристики фильтра Чебышева первого рода чётного порядка</summary>
     [TestMethod]
-    public void TypeI_EvenOrder_ImpulseResponse()
+    public void TypeI_Even_ImpulseResponse()
     {
         const double pi2 = 2 * PI;
 
@@ -853,7 +853,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
 
     /// <summary>Тестирование импульсной характеристики фильтра Чебышева первого рода нечётного порядка</summary>
     [TestMethod]
-    public void TypeI_OddOrder_ImpulseResponse()
+    public void TypeI_Odd_ImpulseResponse()
     {
         const double pi2 = 2 * PI;
 
@@ -900,7 +900,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
 
     /// <summary>Тестирование импульсной характеристики фильтра Чебышева второго рода чётного порядка</summary>
     [TestMethod]
-    public void TypeII_EvenOrder_ImpulseResponse()
+    public void TypeII_Even_ImpulseResponse()
     {
         const double pi2 = 2 * PI;
 
@@ -947,7 +947,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
 
     /// <summary>Тестирование импульсной характеристики фильтра Чебышева второго рода нечётного порядка</summary>
     [TestMethod]
-    public void TypeII_OddOrder_ImpulseResponse()
+    public void TypeII_Odd_ImpulseResponse()
     {
         const double pi2 = 2 * PI;
 
@@ -994,7 +994,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
 
     /// <summary>Тестирование импульсной характеристики фильтра Чебышева второго рода чётного порядка</summary>
     [TestMethod]
-    public void TypeIICorrected_EvenOrder_ImpulseResponse()
+    public void TypeIICorrected_Even_ImpulseResponse()
     {
         const double pi2 = 2 * PI;
 
@@ -1041,7 +1041,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
 
     /// <summary>Тестирование импульсной характеристики фильтра Чебышева второго рода нечётного порядка</summary>
     [TestMethod]
-    public void TypeIICorrected_OddOrder_ImpulseResponse()
+    public void TypeIICorrected_Odd_ImpulseResponse()
     {
         const double pi2 = 2 * PI;
 
@@ -1087,7 +1087,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
     }
 
     [TestMethod]
-    public void TypeI_EvenOrder_SignalProcessing()
+    public void TypeI_Even_SignalProcessing()
     {
         const double pi2 = 2 * PI;
 
@@ -1134,7 +1134,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
     }
 
     [TestMethod]
-    public void TypeI_OddOrder_SignalProcessing()
+    public void TypeI_Odd_SignalProcessing()
     {
         const double pi2 = 2 * PI;
 
@@ -1181,7 +1181,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
     }
 
     [TestMethod]
-    public void TypeII_EvenOrder_SignalProcessing()
+    public void TypeII_Even_SignalProcessing()
     {
         const double pi2 = 2 * PI;
 
@@ -1228,7 +1228,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
     }
 
     [TestMethod]
-    public void TypeII_OddOrder_SignalProcessing()
+    public void TypeII_Odd_SignalProcessing()
     {
         const double pi2 = 2 * PI;
 
@@ -1275,7 +1275,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
     }
 
     [TestMethod]
-    public void TypeIICorrected_EvenOrder_SignalProcessing()
+    public void TypeIICorrected_Even_SignalProcessing()
     {
         const double pi2 = 2 * PI;
 
@@ -1322,7 +1322,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
     }
 
     [TestMethod]
-    public void TypeIICorrected_OddOrder_SignalProcessing()
+    public void TypeIICorrected_Odd_SignalProcessing()
     {
         const double pi2 = 2 * PI;
 

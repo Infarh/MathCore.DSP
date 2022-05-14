@@ -984,7 +984,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
     }
 
     [TestMethod]
-    public void TypeIICorrected_Even_Creation()
+    public void TypeII_Corrected_Even_Creation()
     {
         const double fd = 10;           // Частота дискретизации
         const double dt = 1 / fd;       // Период дискретизации
@@ -1235,7 +1235,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
     }
 
     [TestMethod]
-    public void TypeIICorrected_Odd_Creation()
+    public void TypeII_Corrected_Odd_Creation()
     {
         const double fd = 10;           // Частота дискретизации
         const double dt = 1 / fd;       // Период дискретизации
@@ -1714,7 +1714,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
     }
 
     [TestMethod]
-    public void TypeIICorrected_Even_ImpulseResponse()
+    public void TypeII_Corrected_Even_ImpulseResponse()
     {
         double[] expected_h =
         {
@@ -1765,7 +1765,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
     }
 
     [TestMethod]
-    public void TypeIICorrected_Odd_ImpulseResponse()
+    public void TypeII_Corrected_Odd_ImpulseResponse()
     {
         double[] expected_h =
         {
@@ -2652,7 +2652,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
     }
 
     [TestMethod]
-    public void TypeIICorrected_Even_SignalProcessing()
+    public void TypeII_Corrected_Even_SignalProcessing()
     {
         const double fd = 10;         // Частота дискретизации
         const double dt = 1 / fd;       // Период дискретизации
@@ -2861,7 +2861,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
     }
 
     [TestMethod]
-    public void TypeIICorrected_Odd_SignalProcessing()
+    public void TypeII_Corrected_Odd_SignalProcessing()
     {
         const double fd = 10;         // Частота дискретизации
         const double dt = 1 / fd;       // Период дискретизации
