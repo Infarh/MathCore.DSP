@@ -66,7 +66,8 @@ public class ChebyshevHighPass : ChebyshevFilter
     {
         var N = (int)Math.Ceiling(arcch(Spec.kEps) / arcch(Spec.kW)); // Порядок фильтра
         Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
-        var (zeros, poles) = GetNormedPolesII(N, Spec.EpsS, Spec.wp);
+
+        var (zeros, poles) = GetNormedPolesII(N, Spec.EpsS, Spec.kw);
 
         var high_pass_zeros = TransformToHighPassW(zeros, Spec.Ws);
         if (N.IsOdd())

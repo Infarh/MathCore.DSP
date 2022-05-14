@@ -243,7 +243,7 @@ public abstract class AnalogBasedFilter : IIR
             Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового пропита
 
             wp = pi2 * fp;
-            ws = pi2 * fp;
+            ws = pi2 * fs;
 
             Wp = pi2 * Fp;
             Ws = pi2 * Fs;
