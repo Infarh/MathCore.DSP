@@ -53,9 +53,7 @@ public class ChebyshevHighPass : ChebyshevFilter
         var k_zeros = z_zeros.Multiply(z => 1 + z).Re;
         var k_poles = z_poles.Multiply(z => 1 + z).Re;
 
-        var g_norm = N.IsEven()
-            ? Spec.Gp * k_poles / k_zeros
-            : 1 * k_poles / k_zeros;
+        var g_norm = k_poles / k_zeros;
 
         B.Multiply(g_norm);
 
@@ -83,9 +81,7 @@ public class ChebyshevHighPass : ChebyshevFilter
         var k_zeros = z_zeros.Multiply(z => 1 + z).Re;
         var k_poles = z_poles.Multiply(z => 1 + z).Re;
 
-        var g_norm = N.IsEven()
-            ? Spec.Gp * k_poles / k_zeros
-            : 1 * k_poles / k_zeros;
+        var g_norm = k_poles / k_zeros;
 
         B.Multiply(g_norm);
 

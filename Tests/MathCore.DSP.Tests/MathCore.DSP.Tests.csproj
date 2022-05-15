@@ -23,4 +23,40 @@
     <Folder Include="Signals\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Filters\Mathcad\Butterwort.BandPass.Impulse.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Filters\Mathcad\Butterwort.HighPass.Impulse.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Filters\Mathcad\ChebyshevI.BandPass.Impulse.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Filters\Mathcad\ChebyshevI.HighPass.Impulse.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Filters\Mathcad\ChebyshevII.BandPass.Impulse.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Filters\Mathcad\ChebyshevII.Corrected.Even.HighPassImpulse.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Filters\Mathcad\ChebyshevII.Corrected.Odd.HighPassImpulse.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Filters\Mathcad\ChebyshevII.Even.HighPass.Impulse.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Filters\Mathcad\ChebyshevII.Odd.HighPass.Impulse.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Filters\Mathcad\ChebyshevIICorrected.BandPass.Impulse.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Filters\Mathcad\Elliptic.BandPass.Impulse.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
