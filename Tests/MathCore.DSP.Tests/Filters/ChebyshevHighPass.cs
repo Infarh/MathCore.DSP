@@ -1175,43 +1175,8 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         //h_d.Abs.ToDebug();
     }
 
-    [TestMethod, Ignore]
-    public void TransmissionCoefficient_Even()
-    {
-        const double fd = 10;                 // Гц // Частота дискретизации
-        const double dt = 1 / fd;               // 2с // Период дискретизации
-
-        const double fs = 2 / Consts.pi2;   // Гц // Граничная частота полосы пропускания
-        const double fp = 4 / Consts.pi2;   // Гц // Граничная частота полосы запирания
-
-        //(fs, fp).ToDebug();
-
-        const double Rp = 1;                    // Неравномерность в полосе пропускания (дБ)
-        const double Rs = 40;                   // Неравномерность в полосе пропускания (дБ)
-
-        var Gp = (-Rp).From_dB();
-        var Gs = (-Rs).From_dB();
-
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs);
-
-        var transmission__0 = filter.GetTransmissionCoefficient(0);
-        var transmission_fs = filter.GetTransmissionCoefficient(fs);
-        var transmission_fp = filter.GetTransmissionCoefficient(fp);
-        var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
-
-        //transmission__0.Abs.In_dB().ToDebug();
-        //transmission_fs.Abs.ToDebug();
-        //transmission_fp.Abs.ToDebug();
-        //transmission_fd05.Abs.ToDebug();
-
-        transmission__0.Power.In_dB_byPower().AssertLessThan(-Rs, 4e-13);
-        transmission_fs.Power.In_dB_byPower().AssertEquals(-Rs, 5e-3);
-        transmission_fp.Power.In_dB_byPower().AssertEquals(-Rp, 6e-13);
-        transmission_fd05.Power.In_dB_byPower().AssertEquals(-Rp, 1.3e-15);
-    }
-
-    [TestMethod, Ignore]
-    public void TransmissionCoefficient_Odd()
+    [TestMethod]
+    public void TypeI_Odd_Even_TransmissionCoefficient()
     {
         const double fd = 10;                 // Гц // Частота дискретизации
         const double dt = 1 / fd;               // 2с // Период дискретизации
@@ -1227,7 +1192,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs);
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
 
         var transmission__0 = filter.GetTransmissionCoefficient(0);
         var transmission_fs = filter.GetTransmissionCoefficient(fs);
@@ -1240,9 +1205,208 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         //transmission_fd05.Abs.ToDebug();
 
         transmission__0.Power.In_dB_byPower().AssertLessThan(-Rs);
-        transmission_fs.Power.In_dB_byPower().AssertEquals(-Rs, 6.81e-1);
-        transmission_fp.Power.In_dB_byPower().AssertEquals(-Rp, 8.9e-12);
-        transmission_fd05.Power.In_dB_byPower().AssertEquals(0, 2e-15);
+        transmission_fs.Power.In_dB_byPower().AssertLessThan(-Rs);
+        transmission_fp.Power.In_dB_byPower().AssertEquals(-Rp, 3.6e-10);
+        transmission_fd05.Power.In_dB_byPower().AssertEquals(-Rp, 1.8e-15);
+    }
+
+    [TestMethod]
+    public void TypeI_Odd_Odd_TransmissionCoefficient()
+    {
+        const double fd = 10;                 // Гц // Частота дискретизации
+        const double dt = 1 / fd;               // 2с // Период дискретизации
+
+        const double fs = 2 / Consts.pi2;   // Гц // Граничная частота полосы пропускания
+        const double fp = 4 / Consts.pi2;   // Гц // Граничная частота полосы запирания
+
+        //(fs, fp).ToDebug();
+
+        const double Rp = 1;                    // Неравномерность в полосе пропускания (дБ)
+        const double Rs = 40;                   // Неравномерность в полосе пропускания (дБ)
+
+        var Gp = (-Rp).From_dB();
+        var Gs = (-Rs).From_dB();
+
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+
+        var transmission__0 = filter.GetTransmissionCoefficient(0);
+        var transmission_fs = filter.GetTransmissionCoefficient(fs);
+        var transmission_fp = filter.GetTransmissionCoefficient(fp);
+        var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
+
+        //transmission__0.Abs.In_dB().ToDebug();
+        //transmission_fs.Abs.ToDebug();
+        //transmission_fp.Abs.ToDebug();
+        //transmission_fd05.Abs.ToDebug();
+
+        transmission__0.Power.In_dB_byPower().AssertLessThan(-Rs);
+        transmission_fs.Power.In_dB_byPower().AssertLessThan(-Rs);
+        transmission_fp.Power.In_dB_byPower().AssertEquals(-Rp, 3.6e-10);
+        transmission_fd05.Power.In_dB_byPower().AssertEquals(0, 9.7e-16);
+    }
+
+    [TestMethod]
+    public void TypeII_Odd_Even_TransmissionCoefficient()
+    {
+        const double fd = 10;                 // Гц // Частота дискретизации
+        const double dt = 1 / fd;               // 2с // Период дискретизации
+
+        const double fs = 3 / Consts.pi2;   // Гц // Граничная частота полосы пропускания
+        const double fp = 4 / Consts.pi2;   // Гц // Граничная частота полосы запирания
+
+        const double ws = Consts.pi2 * fs;
+        const double wp = Consts.pi2 * fp;
+
+        var Fp = ToAnalogFrequency(fp, dt);
+        var Wp = Consts.pi2 * Fp;
+
+        var wh = Wp / (ws / wp);
+        var fh = wh / Consts.pi2;
+
+        //(fs, fp).ToDebug();
+
+        const double Rp = 1;                    // Неравномерность в полосе пропускания (дБ)
+        const double Rs = 40;                   // Неравномерность в полосе пропускания (дБ)
+
+        var Gp = (-Rp).From_dB();
+        var Gs = (-Rs).From_dB();
+
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+
+        var transmission__0 = filter.GetTransmissionCoefficient(0);
+        var transmission_fs = filter.GetTransmissionCoefficient(fs);
+        var transmission_fp = filter.GetTransmissionCoefficient(fp);
+        var transmission_fh = filter.GetTransmissionCoefficient(fh);
+        var transmission_fd = filter.GetTransmissionCoefficient(fd / 2);
+
+        //transmission__0.Abs.In_dB().ToDebug();
+        //transmission_fs.Abs.ToDebug();
+        //transmission_fp.Abs.ToDebug();
+        //transmission_fh.Abs.ToDebug();
+        //transmission_fd05.Abs.ToDebug();
+
+        transmission__0.Power.In_dB_byPower().AssertLessThan(-Rs);
+        transmission_fs.Power.In_dB_byPower().AssertLessThan(-Rs);
+        transmission_fp.Power.In_dB_byPower().AssertEquals(-Rs, 1.89e-8);
+        transmission_fh.Power.In_dB_byPower().AssertGreaterOrEqualsThan(-Rp);
+        transmission_fd.Power.In_dB_byPower().AssertEquals(0, 5.8e-15);
+    }
+
+    [TestMethod]
+    public void TypeII_Odd_Odd_TransmissionCoefficient()
+    {
+        const double fd = 10;                 // Гц // Частота дискретизации
+        const double dt = 1 / fd;               // 2с // Период дискретизации
+
+        const double fs = 2 / Consts.pi2;   // Гц // Граничная частота полосы пропускания
+        const double fp = 4 / Consts.pi2;   // Гц // Граничная частота полосы запирания
+
+        const double ws = Consts.pi2 * fs;
+        const double wp = Consts.pi2 * fp;
+
+        var Fp = ToAnalogFrequency(fp, dt);
+        var Wp = Consts.pi2 * Fp;
+
+        var wh = Wp / (ws / wp);
+        var fh = wh / Consts.pi2;
+
+        //(fs, fp).ToDebug();
+
+        const double Rp = 1;                    // Неравномерность в полосе пропускания (дБ)
+        const double Rs = 40;                   // Неравномерность в полосе пропускания (дБ)
+
+        var Gp = (-Rp).From_dB();
+        var Gs = (-Rs).From_dB();
+
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+
+        var transmission__0 = filter.GetTransmissionCoefficient(0);
+        var transmission_fs = filter.GetTransmissionCoefficient(fs);
+        var transmission_fp = filter.GetTransmissionCoefficient(fp);
+        var transmission_fh = filter.GetTransmissionCoefficient(fh);
+        var transmission_fd = filter.GetTransmissionCoefficient(fd / 2);
+
+        //transmission__0.Abs.In_dB().ToDebug();
+        //transmission_fs.Abs.ToDebug();
+        //transmission_fp.Abs.ToDebug();
+        //transmission_fh.Abs.ToDebug();
+        //transmission_fd05.Abs.ToDebug();
+
+        transmission__0.Power.In_dB_byPower().AssertLessThan(-Rs);
+        transmission_fs.Power.In_dB_byPower().AssertLessThan(-Rs);
+        transmission_fp.Power.In_dB_byPower().AssertEquals(-Rs, 1.89e-8);
+        transmission_fh.Power.In_dB_byPower().AssertGreaterOrEqualsThan(-Rp);
+        transmission_fd.Power.In_dB_byPower().AssertEquals(0, 5.8e-15);
+    }
+
+    [TestMethod]
+    public void TypeII_Corrected_Even_Odd_TransmissionCoefficient()
+    {
+        const double fd = 10;                 // Гц // Частота дискретизации
+        const double dt = 1 / fd;               // 2с // Период дискретизации
+
+        const double fs = 3 / Consts.pi2;   // Гц // Граничная частота полосы пропускания
+        const double fp = 4 / Consts.pi2;   // Гц // Граничная частота полосы запирания
+
+        //(fs, fp).ToDebug();
+
+        const double Rp = 1;                    // Неравномерность в полосе пропускания (дБ)
+        const double Rs = 40;                   // Неравномерность в полосе пропускания (дБ)
+
+        var Gp = (-Rp).From_dB();
+        var Gs = (-Rs).From_dB();
+
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+
+        var transmission__0 = filter.GetTransmissionCoefficient(0);
+        var transmission_fs = filter.GetTransmissionCoefficient(fs);
+        var transmission_fp = filter.GetTransmissionCoefficient(fp);
+        var transmission_fd = filter.GetTransmissionCoefficient(fd / 2);
+
+        //transmission__0.Abs.In_dB().ToDebug();
+        //transmission_fs.Abs.ToDebug();
+        //transmission_fp.Abs.ToDebug();
+        //transmission_fd05.Abs.ToDebug();
+
+        transmission__0.Power.In_dB_byPower().AssertLessThan(-Rs, 2.1e-7);
+        transmission_fs.Power.In_dB_byPower().AssertLessThan(-Rs);
+        transmission_fp.Power.In_dB_byPower().AssertGreaterOrEqualsThan(-Rp);
+        transmission_fd.Power.In_dB_byPower().AssertEquals(0, 2e-15);
+    }
+
+    [TestMethod]
+    public void TypeII_Corrected_Odd_Odd_TransmissionCoefficient()
+    {
+        const double fd = 10;                 // Гц // Частота дискретизации
+        const double dt = 1 / fd;               // 2с // Период дискретизации
+
+        const double fs = 2 / Consts.pi2;   // Гц // Граничная частота полосы пропускания
+        const double fp = 4 / Consts.pi2;   // Гц // Граничная частота полосы запирания
+
+        //(fs, fp).ToDebug();
+
+        const double Rp = 1;                    // Неравномерность в полосе пропускания (дБ)
+        const double Rs = 40;                   // Неравномерность в полосе пропускания (дБ)
+
+        var Gp = (-Rp).From_dB();
+        var Gs = (-Rs).From_dB();
+
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+
+        var transmission__0 = filter.GetTransmissionCoefficient(0);
+        var transmission_fs = filter.GetTransmissionCoefficient(fs);
+        var transmission_fp = filter.GetTransmissionCoefficient(fp);
+        var transmission_fd = filter.GetTransmissionCoefficient(fd / 2);
+
+        //transmission__0.Abs.In_dB().ToDebug();
+        //transmission_fs.Abs.ToDebug();
+        //transmission_fp.Abs.ToDebug();
+        //transmission_fd05.Abs.ToDebug();
+
+        transmission__0.Power.In_dB_byPower().AssertLessThan(-Rs, 2.1e-7);
+        transmission_fs.Power.In_dB_byPower().AssertLessThan(-Rs);
+        transmission_fp.Power.In_dB_byPower().AssertGreaterOrEqualsThan(-Rp);
+        transmission_fd.Power.In_dB_byPower().AssertEquals(0, 2e-15);
     }
 
     [TestMethod]
@@ -1598,158 +1762,8 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         error2.ToDebug().AssertLessThan(3e-11);
     }
 
-    [TestMethod, Ignore]
-    public void SignalProcessing_Even()
-    {
-        const double fd = 10;                 // Гц // Частота дискретизации
-        const double dt = 1 / fd;               // 2с // Период дискретизации
-
-        const double fs = 2 / Consts.pi2;   // Гц // Граничная частота полосы пропускания
-        const double fp = 4 / Consts.pi2;   // Гц // Граничная частота полосы запирания
-
-        //(fs, fp).ToDebug();
-
-        const double Rp = 1;                    // Неравномерность в полосе пропускания (дБ)
-        const double Rs = 40;                   // Неравномерность в полосе пропускания (дБ)
-
-        var Gp = (-Rp).From_dB();
-        var Gs = (-Rs).From_dB();
-
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs);
-
-        static EnumerableSignal GetSinSignal(double f0) => MathEnumerableSignal.Sin(dt, f0, (int)(100 * fd / (fs * 0.1)));
-
-        var x_low = GetSinSignal(fs * 0.1);
-        var x_s99 = GetSinSignal(fs * 0.99);
-        var x_s = GetSinSignal(fs);
-
-        var x_sp = GetSinSignal(fs + (fp - fs) * 0.1);
-        var x_ps = GetSinSignal(fp - (fp - fs) * 0.1);
-
-        var x_p = GetSinSignal(fp);
-
-        var x_pd = GetSinSignal(fp + (fd / 2 - fp) * 0.1);
-        var x_dp = GetSinSignal(fp + (fd / 2 - fp) * 0.9);
-
-        var x_fd05 = GetSinSignal(0.9 * (fd / 2));
-
-        /* ----------------------------------------------- */
-
-        var y_low = filter.ProcessIndividual(x_low);
-        var y_s99 = filter.ProcessIndividual(x_s99);
-        var y_s = filter.ProcessIndividual(x_s);
-
-        var y_sp = filter.ProcessIndividual(x_sp);
-        var y_ps = filter.ProcessIndividual(x_ps);
-
-        var y_p = filter.ProcessIndividual(x_p);
-
-        var y_pd = filter.ProcessIndividual(x_pd);
-        var y_dp = filter.ProcessIndividual(x_dp);
-
-        var y_fd05 = filter.ProcessIndividual(x_fd05);
-
-        /* ----------------------------------------------- */
-
-        var k_low = y_low.Power / x_low.Power;
-        var k_s99 = y_s99.Power / x_s99.Power;
-        var k_s = y_s.Power / x_s.Power;
-
-        var k_sp = y_sp.Power / x_sp.Power;
-        var k_ps = y_ps.Power / x_ps.Power;
-
-        var k_p = y_p.Power / x_p.Power;
-
-        var k_pd = y_pd.Power / x_pd.Power;
-        var k_dp = y_dp.Power / x_dp.Power;
-
-        var k_fd05 = y_fd05.Power / x_fd05.Power;
-
-        /* ----------------------------------------------- */
-
-        var k_low_db = k_low.In_dB_byPower();
-        var k_s99_db = k_s99.In_dB_byPower();
-
-        var k_s_db = k_s.In_dB_byPower();
-
-        var k_sp_db = k_sp.In_dB_byPower();
-        var k_ps_db = k_ps.In_dB_byPower();
-
-        var k_p_db = k_p.In_dB_byPower();
-
-        var k_pd_db = k_pd.In_dB_byPower();
-        var k_dp_db = k_dp.In_dB_byPower();
-
-        var k_fd05_db = k_fd05.In_dB_byPower();
-
-        /* --------------------------------------*/ //   -Rs  -Rp
-        // ---+----+->
-        k_low_db.AssertLessThan(-Rs);               // \  |    |
-        k_s99_db.AssertLessThan(-Rs, 2.7e-1);       //  \ |    |
-        k_s_db.AssertLessOrEqualsThan(-Rs, 3e-1);   //   \+    | fs
-        //    \    |
-        k_sp_db.AssertGreaterThan(-Rs, 0.5);        //     \   |
-        k_sp_db.AssertLessThan(-Rp);                //      \  |
-        k_ps_db.AssertGreaterThan(-Rs);             //       \ |
-        k_ps_db.AssertLessThan(-Rp);                //        \+ fp
-        //         \0дБ
-        k_p_db.AssertEquals(-Rp, 5.2e-3);           //          |
-        k_pd_db.AssertGreaterOrEqualsThan(-Rp);     //          |
-        k_dp_db.AssertGreaterOrEqualsThan(-Rp);     //          |
-        k_fd05_db.AssertGreaterOrEqualsThan(-Rp);   //          |fd
-
-        /* ----------------------------------------------- */
-
-        var x =
-            x_low +
-            x_s99 +
-            x_s +
-            x_sp +
-            x_ps +
-            x_p +
-            x_pd +
-            x_dp +
-            x_fd05;
-
-        var y = filter.ProcessIndividual(x);
-
-        var X = x.GetSpectrum();
-        var Y = y.GetSpectrum();
-
-        var H = Y / X;
-
-        var h_low = H.GetValue(fs * 0.1).Power.In_dB_byPower();
-        var h_s99 = H.GetValue(fs * 0.99).Power.In_dB_byPower();
-        var h_s = H.GetValue(fs).Power.In_dB_byPower();
-
-        var h_sp = H.GetValue(fs + (fp - fs) * 0.1).Power.In_dB_byPower();
-        var h_ps = H.GetValue(fp - (fp - fs) * 0.1).Power.In_dB_byPower();
-
-        var h_p = H.GetValue(fp).Power.In_dB_byPower();
-        var h_pd = H.GetValue(fp + (fd / 2 - fp) * 0.1).Power.In_dB_byPower();
-        var h_dp = H.GetValue(fp + (fd / 2 - fp) * 0.9).Power.In_dB_byPower();
-
-        var h_fd05 = H.GetValue(0.9 * (fd / 2)).Power.In_dB_byPower();
-
-        /* --------------------------------------*/ //   -Rs  -Rp
-        // ---+----+->
-        h_low.AssertLessThan(-Rs);                  // \  |    |
-        h_s99.AssertLessThan(-Rs);                  //  \ |    |
-        h_s.AssertLessOrEqualsThan(-Rs);            //   \+    | fs
-        //    \    |
-        h_sp.AssertGreaterThan(-Rs, 1);             //     \   |
-        h_sp.AssertLessThan(-Rp);                   //      \  |
-        h_ps.AssertGreaterThan(-Rs);                //       \ |
-        h_ps.AssertLessThan(-Rp);                   //        \+ fp
-        //         \0дБ
-        h_p.AssertEquals(-Rp, 8.1e-5);              //          |
-        h_pd.AssertGreaterOrEqualsThan(-Rp);        //          |
-        h_dp.AssertGreaterOrEqualsThan(-Rp);        //          |
-        h_fd05.AssertGreaterOrEqualsThan(-Rp);      //          |fd
-    }
-
-    [TestMethod, Ignore]
-    public void SignalProcessing_Odd()
+    [TestMethod]
+    public void TypeI_Even_SignalProcessing()
     {
         const double fd = 10;                 // Гц // Частота дискретизации
         const double dt = 1 / fd;               // 2с // Период дискретизации
@@ -1765,7 +1779,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs);
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
 
         static EnumerableSignal GetSinSignal(double f0) => MathEnumerableSignal.Sin(dt, f0, (int)(100 * fd / (fs * 0.1)));
 
@@ -1833,17 +1847,17 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var k_fd05_db = k_fd05.In_dB_byPower();
 
         /* --------------------------------------*/ //   -Rs  -Rp
-        // ---+----+->
+        //                                          // ---+----+->
         k_low_db.AssertLessThan(-Rs);               // \  |    |
-        k_s99_db.AssertLessThan(-Rs, 1.24);         //  \ |    |
-        k_s_db.AssertLessOrEqualsThan(-Rs, 1.05);   //   \+    | fs
-        //    \    |
+        k_s99_db.AssertLessThan(-Rs, 2.7e-1);       //  \ |    |
+        k_s_db.AssertLessOrEqualsThan(-Rs, 3e-1);   //   \+    | fs
+        //                                          //    \    |
         k_sp_db.AssertGreaterThan(-Rs, 0.5);        //     \   |
         k_sp_db.AssertLessThan(-Rp);                //      \  |
         k_ps_db.AssertGreaterThan(-Rs);             //       \ |
         k_ps_db.AssertLessThan(-Rp);                //        \+ fp
-        //         \0дБ
-        k_p_db.AssertEquals(-Rp, 1.6e-2);           //          |
+        //                                          //         \0дБ
+        k_p_db.AssertEquals(-Rp, 2.19e-2);          //          |
         k_pd_db.AssertGreaterOrEqualsThan(-Rp);     //          |
         k_dp_db.AssertGreaterOrEqualsThan(-Rp);     //          |
         k_fd05_db.AssertGreaterOrEqualsThan(-Rp);   //          |fd
@@ -1882,17 +1896,767 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var h_fd05 = H.GetValue(0.9 * (fd / 2)).Power.In_dB_byPower();
 
         /* --------------------------------------*/ //   -Rs  -Rp
-        // ---+----+->
+        //                                          // ---+----+->
         h_low.AssertLessThan(-Rs);                  // \  |    |
         h_s99.AssertLessThan(-Rs);                  //  \ |    |
         h_s.AssertLessOrEqualsThan(-Rs);            //   \+    | fs
-        //    \    |
-        h_sp.AssertLessOrEqualsThan(-Rs);           //     \   |
+        //                                          //    \    |
+        h_sp.AssertGreaterThan(-Rs, 1);             //     \   |
         h_sp.AssertLessThan(-Rp);                   //      \  |
         h_ps.AssertGreaterThan(-Rs);                //       \ |
         h_ps.AssertLessThan(-Rp);                   //        \+ fp
-        //         \0дБ
+        //                                          //         \0дБ
         h_p.AssertEquals(-Rp, 8.1e-5);              //          |
+        h_pd.AssertGreaterOrEqualsThan(-Rp);        //          |
+        h_dp.AssertGreaterOrEqualsThan(-Rp);        //          |
+        h_fd05.AssertGreaterOrEqualsThan(-Rp);      //          |fd
+    }
+
+    [TestMethod]
+    public void TypeI_Odd_SignalProcessing()
+    {
+        const double fd = 10;                 // Гц // Частота дискретизации
+        const double dt = 1 / fd;               // 2с // Период дискретизации
+
+        const double fs = 2 / Consts.pi2;   // Гц // Граничная частота полосы пропускания
+        const double fp = 4 / Consts.pi2;   // Гц // Граничная частота полосы запирания
+
+        //(fs, fp).ToDebug();
+
+        const double Rp = 1;                    // Неравномерность в полосе пропускания (дБ)
+        const double Rs = 40;                   // Неравномерность в полосе пропускания (дБ)
+
+        var Gp = (-Rp).From_dB();
+        var Gs = (-Rs).From_dB();
+
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+
+        static EnumerableSignal GetSinSignal(double f0) => MathEnumerableSignal.Sin(dt, f0, (int)(100 * fd / (fs * 0.1)));
+
+        var x_low = GetSinSignal(fs * 0.1);
+        var x_s99 = GetSinSignal(fs * 0.99);
+        var x_s = GetSinSignal(fs);
+
+        var x_sp = GetSinSignal(fs + (fp - fs) * 0.1);
+        var x_ps = GetSinSignal(fp - (fp - fs) * 0.1);
+
+        var x_p = GetSinSignal(fp);
+
+        var x_pd = GetSinSignal(fp + (fd / 2 - fp) * 0.1);
+        var x_dp = GetSinSignal(fp + (fd / 2 - fp) * 0.9);
+
+        var x_fd05 = GetSinSignal(0.9 * (fd / 2));
+
+        /* ----------------------------------------------- */
+
+        var y_low = filter.ProcessIndividual(x_low);
+        var y_s99 = filter.ProcessIndividual(x_s99);
+        var y_s = filter.ProcessIndividual(x_s);
+
+        var y_sp = filter.ProcessIndividual(x_sp);
+        var y_ps = filter.ProcessIndividual(x_ps);
+
+        var y_p = filter.ProcessIndividual(x_p);
+
+        var y_pd = filter.ProcessIndividual(x_pd);
+        var y_dp = filter.ProcessIndividual(x_dp);
+
+        var y_fd05 = filter.ProcessIndividual(x_fd05);
+
+        /* ----------------------------------------------- */
+
+        var k_low = y_low.Power / x_low.Power;
+        var k_s99 = y_s99.Power / x_s99.Power;
+        var k_s = y_s.Power / x_s.Power;
+
+        var k_sp = y_sp.Power / x_sp.Power;
+        var k_ps = y_ps.Power / x_ps.Power;
+
+        var k_p = y_p.Power / x_p.Power;
+
+        var k_pd = y_pd.Power / x_pd.Power;
+        var k_dp = y_dp.Power / x_dp.Power;
+
+        var k_fd05 = y_fd05.Power / x_fd05.Power;
+
+        /* ----------------------------------------------- */
+
+        var k_low_db = k_low.In_dB_byPower();
+        var k_s99_db = k_s99.In_dB_byPower();
+
+        var k_s_db = k_s.In_dB_byPower();
+
+        var k_sp_db = k_sp.In_dB_byPower();
+        var k_ps_db = k_ps.In_dB_byPower();
+
+        var k_p_db = k_p.In_dB_byPower();
+
+        var k_pd_db = k_pd.In_dB_byPower();
+        var k_dp_db = k_dp.In_dB_byPower();
+
+        var k_fd05_db = k_fd05.In_dB_byPower();
+
+        /* --------------------------------------*/ //   -Rs  -Rp
+        //                                          // ---+----+->
+        k_low_db.AssertLessThan(-Rs);               // \  |    |
+        k_s99_db.AssertLessThan(-Rs, 2.7e-1);       //  \ |    |
+        k_s_db.AssertLessOrEqualsThan(-Rs, 3e-1);   //   \+    | fs
+        //                                          //    \    |
+        k_sp_db.AssertGreaterThan(-Rs, 0.5);        //     \   |
+        k_sp_db.AssertLessThan(-Rp);                //      \  |
+        k_ps_db.AssertGreaterThan(-Rs);             //       \ |
+        k_ps_db.AssertLessThan(-Rp);                //        \+ fp
+        //                                          //         \0дБ
+        k_p_db.AssertEquals(-Rp, 2.19e-2);          //          |
+        k_pd_db.AssertGreaterOrEqualsThan(-Rp);     //          |
+        k_dp_db.AssertGreaterOrEqualsThan(-Rp);     //          |
+        k_fd05_db.AssertGreaterOrEqualsThan(-Rp);   //          |fd
+
+        /* ----------------------------------------------- */
+
+        var x =
+            x_low +
+            x_s99 +
+            x_s +
+            x_sp +
+            x_ps +
+            x_p +
+            x_pd +
+            x_dp +
+            x_fd05;
+
+        var y = filter.ProcessIndividual(x);
+
+        var X = x.GetSpectrum();
+        var Y = y.GetSpectrum();
+
+        var H = Y / X;
+
+        var h_low = H.GetValue(fs * 0.1).Power.In_dB_byPower();
+        var h_s99 = H.GetValue(fs * 0.99).Power.In_dB_byPower();
+        var h_s = H.GetValue(fs).Power.In_dB_byPower();
+
+        var h_sp = H.GetValue(fs + (fp - fs) * 0.1).Power.In_dB_byPower();
+        var h_ps = H.GetValue(fp - (fp - fs) * 0.1).Power.In_dB_byPower();
+
+        var h_p = H.GetValue(fp).Power.In_dB_byPower();
+        var h_pd = H.GetValue(fp + (fd / 2 - fp) * 0.1).Power.In_dB_byPower();
+        var h_dp = H.GetValue(fp + (fd / 2 - fp) * 0.9).Power.In_dB_byPower();
+
+        var h_fd05 = H.GetValue(0.9 * (fd / 2)).Power.In_dB_byPower();
+
+        /* --------------------------------------*/ //   -Rs  -Rp
+        //                                          // ---+----+->
+        h_low.AssertLessThan(-Rs);                  // \  |    |
+        h_s99.AssertLessThan(-Rs);                  //  \ |    |
+        h_s.AssertLessOrEqualsThan(-Rs);            //   \+    | fs
+        //                                          //    \    |
+        h_sp.AssertGreaterThan(-Rs, 1);             //     \   |
+        h_sp.AssertLessThan(-Rp);                   //      \  |
+        h_ps.AssertGreaterThan(-Rs);                //       \ |
+        h_ps.AssertLessThan(-Rp);                   //        \+ fp
+        //                                          //         \0дБ
+        h_p.AssertEquals(-Rp, 8.1e-5);              //          |
+        h_pd.AssertGreaterOrEqualsThan(-Rp);        //          |
+        h_dp.AssertGreaterOrEqualsThan(-Rp);        //          |
+        h_fd05.AssertGreaterOrEqualsThan(-Rp);      //          |fd
+    }
+
+    [TestMethod]
+    public void TypeII_Even_SignalProcessing()
+    {
+        const double fd = 10;                 // Гц // Частота дискретизации
+        const double dt = 1 / fd;               // 2с // Период дискретизации
+
+        const double fs = 3 / Consts.pi2;   // Гц // Граничная частота полосы пропускания
+        const double fp = 4 / Consts.pi2;   // Гц // Граничная частота полосы запирания
+
+        //(fs, fp).ToDebug();
+
+        const double Rp = 1;                    // Неравномерность в полосе пропускания (дБ)
+        const double Rs = 40;                   // Неравномерность в полосе пропускания (дБ)
+
+        var Gp = (-Rp).From_dB();
+        var Gs = (-Rs).From_dB();
+
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+
+        static EnumerableSignal GetSinSignal(double f0) => MathEnumerableSignal.Sin(dt, f0, (int)(100 * fd / (fs * 0.1)));
+
+        var x_low = GetSinSignal(fs * 0.1);
+        var x_s99 = GetSinSignal(fs * 0.99);
+        var x_s = GetSinSignal(fs);
+
+        var x_sp = GetSinSignal(fs + (fp - fs) * 0.1);
+        var x_ps = GetSinSignal(fp - (fp - fs) * 0.1);
+
+        var x_p = GetSinSignal(fp);
+
+        var x_pd = GetSinSignal(fp + (fd / 2 - fp) * 0.1);
+        var x_dp = GetSinSignal(fp + (fd / 2 - fp) * 0.9);
+
+        var x_fd05 = GetSinSignal(0.9 * (fd / 2));
+
+        /* ----------------------------------------------- */
+
+        var y_low = filter.ProcessIndividual(x_low);
+        var y_s99 = filter.ProcessIndividual(x_s99);
+        var y_s = filter.ProcessIndividual(x_s);
+
+        var y_sp = filter.ProcessIndividual(x_sp);
+        var y_ps = filter.ProcessIndividual(x_ps);
+
+        var y_p = filter.ProcessIndividual(x_p);
+
+        var y_pd = filter.ProcessIndividual(x_pd);
+        var y_dp = filter.ProcessIndividual(x_dp);
+
+        var y_fd05 = filter.ProcessIndividual(x_fd05);
+
+        /* ----------------------------------------------- */
+
+        var k_low = y_low.Power / x_low.Power;
+        var k_s99 = y_s99.Power / x_s99.Power;
+        var k_s = y_s.Power / x_s.Power;
+
+        var k_sp = y_sp.Power / x_sp.Power;
+        var k_ps = y_ps.Power / x_ps.Power;
+
+        var k_p = y_p.Power / x_p.Power;
+
+        var k_pd = y_pd.Power / x_pd.Power;
+        var k_dp = y_dp.Power / x_dp.Power;
+
+        var k_fd05 = y_fd05.Power / x_fd05.Power;
+
+        /* ----------------------------------------------- */
+
+        var k_low_db = k_low.In_dB_byPower();
+        var k_s99_db = k_s99.In_dB_byPower();
+
+        var k_s_db = k_s.In_dB_byPower();
+
+        var k_sp_db = k_sp.In_dB_byPower();
+        var k_ps_db = k_ps.In_dB_byPower();
+
+        var k_p_db = k_p.In_dB_byPower();
+
+        var k_pd_db = k_pd.In_dB_byPower();
+        var k_dp_db = k_dp.In_dB_byPower();
+
+        var k_fd05_db = k_fd05.In_dB_byPower();
+
+        /* --------------------------------------*/ //   -Rs  -Rp
+        //                                          // ---+----+->
+        k_low_db.AssertLessThan(-Rs);               // \  |    |
+        k_s99_db.AssertLessThan(-Rs, 2.7e-1);       //  \ |    |
+        k_s_db.AssertLessOrEqualsThan(-Rs, 3e-1);   //   \+    | fs
+        //                                          //    \    |
+        k_sp_db.AssertLessThan(-Rs);                //     \   |
+        k_sp_db.AssertLessThan(-Rp);                //      \  |
+        k_ps_db.AssertLessThan(-Rs);                //       \ |
+        k_ps_db.AssertLessThan(-Rp);                //        \+ fp
+        //                                          //         \0дБ
+        k_p_db.AssertEquals(-Rs, 2.13);             //          |
+        k_pd_db.AssertGreaterOrEqualsThan(-Rp);     //          |
+        k_dp_db.AssertGreaterOrEqualsThan(-Rp);     //          |
+        k_fd05_db.AssertGreaterOrEqualsThan(-Rp);   //          |fd
+
+        /* ----------------------------------------------- */
+
+        var x =
+            x_low +
+            x_s99 +
+            x_s +
+            x_sp +
+            x_ps +
+            x_p +
+            x_pd +
+            x_dp +
+            x_fd05;
+
+        var y = filter.ProcessIndividual(x);
+
+        var X = x.GetSpectrum();
+        var Y = y.GetSpectrum();
+
+        var H = Y / X;
+
+        var h_low = H.GetValue(fs * 0.1).Power.In_dB_byPower();
+        var h_s99 = H.GetValue(fs * 0.99).Power.In_dB_byPower();
+        var h_s = H.GetValue(fs).Power.In_dB_byPower();
+
+        var h_sp = H.GetValue(fs + (fp - fs) * 0.1).Power.In_dB_byPower();
+        var h_ps = H.GetValue(fp - (fp - fs) * 0.1).Power.In_dB_byPower();
+
+        var h_p = H.GetValue(fp).Power.In_dB_byPower();
+        var h_pd = H.GetValue(fp + (fd / 2 - fp) * 0.1).Power.In_dB_byPower();
+        var h_dp = H.GetValue(fp + (fd / 2 - fp) * 0.9).Power.In_dB_byPower();
+
+        var h_fd05 = H.GetValue(0.9 * (fd / 2)).Power.In_dB_byPower();
+
+        /* --------------------------------------*/ //   -Rs  -Rp
+        //                                          // ---+----+->
+        h_low.AssertLessThan(-Rs);                  // \  |    |
+        h_s99.AssertLessThan(-Rs);                  //  \ |    |
+        h_s.AssertLessOrEqualsThan(-Rs);            //   \+    | fs
+        //                                          //    \    |
+        h_sp.AssertLessThan(-Rs);                   //     \   |
+        h_sp.AssertLessThan(-Rp);                   //      \  |
+        h_ps.AssertLessThan(-Rs);                   //       \ |
+        h_ps.AssertLessThan(-Rp);                   //        \+ fp
+        //                                          //         \0дБ
+        h_p.AssertEquals(-Rs, 1.25e-3);             //          |
+        h_pd.AssertGreaterOrEqualsThan(-Rp);        //          |
+        h_dp.AssertGreaterOrEqualsThan(-Rp);        //          |
+        h_fd05.AssertGreaterOrEqualsThan(-Rp);      //          |fd
+    }
+
+    [TestMethod]
+    public void TypeII_Odd_SignalProcessing()
+    {
+        const double fd = 10;                 // Гц // Частота дискретизации
+        const double dt = 1 / fd;               // 2с // Период дискретизации
+
+        const double fs = 2 / Consts.pi2;   // Гц // Граничная частота полосы пропускания
+        const double fp = 4 / Consts.pi2;   // Гц // Граничная частота полосы запирания
+
+        //(fs, fp).ToDebug();
+
+        const double Rp = 1;                    // Неравномерность в полосе пропускания (дБ)
+        const double Rs = 40;                   // Неравномерность в полосе пропускания (дБ)
+
+        var Gp = (-Rp).From_dB();
+        var Gs = (-Rs).From_dB();
+
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+
+        static EnumerableSignal GetSinSignal(double f0) => MathEnumerableSignal.Sin(dt, f0, (int)(100 * fd / (fs * 0.1)));
+
+        var x_low = GetSinSignal(fs * 0.1);
+        var x_s99 = GetSinSignal(fs * 0.99);
+        var x_s = GetSinSignal(fs);
+
+        var x_sp = GetSinSignal(fs + (fp - fs) * 0.1);
+        var x_ps = GetSinSignal(fp - (fp - fs) * 0.1);
+
+        var x_p = GetSinSignal(fp);
+
+        var x_pd = GetSinSignal(fp + (fd / 2 - fp) * 0.1);
+        var x_dp = GetSinSignal(fp + (fd / 2 - fp) * 0.9);
+
+        var x_fd05 = GetSinSignal(0.9 * (fd / 2));
+
+        /* ----------------------------------------------- */
+
+        var y_low = filter.ProcessIndividual(x_low);
+        var y_s99 = filter.ProcessIndividual(x_s99);
+        var y_s = filter.ProcessIndividual(x_s);
+
+        var y_sp = filter.ProcessIndividual(x_sp);
+        var y_ps = filter.ProcessIndividual(x_ps);
+
+        var y_p = filter.ProcessIndividual(x_p);
+
+        var y_pd = filter.ProcessIndividual(x_pd);
+        var y_dp = filter.ProcessIndividual(x_dp);
+
+        var y_fd05 = filter.ProcessIndividual(x_fd05);
+
+        /* ----------------------------------------------- */
+
+        var k_low = y_low.Power / x_low.Power;
+        var k_s99 = y_s99.Power / x_s99.Power;
+        var k_s = y_s.Power / x_s.Power;
+
+        var k_sp = y_sp.Power / x_sp.Power;
+        var k_ps = y_ps.Power / x_ps.Power;
+
+        var k_p = y_p.Power / x_p.Power;
+
+        var k_pd = y_pd.Power / x_pd.Power;
+        var k_dp = y_dp.Power / x_dp.Power;
+
+        var k_fd05 = y_fd05.Power / x_fd05.Power;
+
+        /* ----------------------------------------------- */
+
+        var k_low_db = k_low.In_dB_byPower();
+        var k_s99_db = k_s99.In_dB_byPower();
+
+        var k_s_db = k_s.In_dB_byPower();
+
+        var k_sp_db = k_sp.In_dB_byPower();
+        var k_ps_db = k_ps.In_dB_byPower();
+
+        var k_p_db = k_p.In_dB_byPower();
+
+        var k_pd_db = k_pd.In_dB_byPower();
+        var k_dp_db = k_dp.In_dB_byPower();
+
+        var k_fd05_db = k_fd05.In_dB_byPower();
+
+        /* --------------------------------------*/  //   -Rs  -Rp
+        //                                           // ---+----+->
+        k_low_db.AssertLessThan(-Rs);                // \  |    |
+        k_s99_db.AssertLessThan(-Rs, 2.7e-1);        //  \ |    |
+        k_s_db.AssertLessOrEqualsThan(-Rs, 3e-1);    //   \+    | fs
+        //                                           //    \    |
+        k_sp_db.AssertLessThan(-Rs);                 //     \   |
+        k_sp_db.AssertLessThan(-Rp);                 //      \  |
+        k_ps_db.AssertLessThan(-Rs);                 //       \ |
+        k_ps_db.AssertLessThan(-Rp);                 //        \+ fp
+        //                                           //         \0дБ
+        k_p_db.AssertEquals(-Rs, 2.13);              //          |
+        k_pd_db.AssertGreaterOrEqualsThan(-Rp, 0.56);//          |
+        k_dp_db.AssertGreaterOrEqualsThan(-Rp);      //          |
+        k_fd05_db.AssertGreaterOrEqualsThan(-Rp);    //          |fd
+
+        /* ----------------------------------------------- */
+
+        var x =
+            x_low +
+            x_s99 +
+            x_s +
+            x_sp +
+            x_ps +
+            x_p +
+            x_pd +
+            x_dp +
+            x_fd05;
+
+        var y = filter.ProcessIndividual(x);
+
+        var X = x.GetSpectrum();
+        var Y = y.GetSpectrum();
+
+        var H = Y / X;
+
+        var h_low = H.GetValue(fs * 0.1).Power.In_dB_byPower();
+        var h_s99 = H.GetValue(fs * 0.99).Power.In_dB_byPower();
+        var h_s = H.GetValue(fs).Power.In_dB_byPower();
+
+        var h_sp = H.GetValue(fs + (fp - fs) * 0.1).Power.In_dB_byPower();
+        var h_ps = H.GetValue(fp - (fp - fs) * 0.1).Power.In_dB_byPower();
+
+        var h_p = H.GetValue(fp).Power.In_dB_byPower();
+        var h_pd = H.GetValue(fp + (fd / 2 - fp) * 0.1).Power.In_dB_byPower();
+        var h_dp = H.GetValue(fp + (fd / 2 - fp) * 0.9).Power.In_dB_byPower();
+
+        var h_fd05 = H.GetValue(0.9 * (fd / 2)).Power.In_dB_byPower();
+
+        /* --------------------------------------*/ //   -Rs  -Rp
+        //                                          // ---+----+->
+        h_low.AssertLessThan(-Rs);                  // \  |    |
+        h_s99.AssertLessThan(-Rs);                  //  \ |    |
+        h_s.AssertLessOrEqualsThan(-Rs);            //   \+    | fs
+        //                                          //    \    |
+        h_sp.AssertLessThan(-Rs);                   //     \   |
+        h_sp.AssertLessThan(-Rp);                   //      \  |
+        h_ps.AssertLessThan(-Rs);                   //       \ |
+        h_ps.AssertLessThan(-Rp);                   //        \+ fp
+        //                                          //         \0дБ
+        h_p.AssertEquals(-Rs, 1.25e-3);             //          |
+        h_pd.AssertGreaterOrEqualsThan(-Rp, 0.56);  //          |
+        h_dp.AssertGreaterOrEqualsThan(-Rp);        //          |
+        h_fd05.AssertGreaterOrEqualsThan(-Rp);      //          |fd
+    }
+
+    [TestMethod]
+    public void TypeII_Corrected_Even_SignalProcessing()
+    {
+        const double fd = 10;                 // Гц // Частота дискретизации
+        const double dt = 1 / fd;               // 2с // Период дискретизации
+
+        const double fs = 3 / Consts.pi2;   // Гц // Граничная частота полосы пропускания
+        const double fp = 4 / Consts.pi2;   // Гц // Граничная частота полосы запирания
+
+        //(fs, fp).ToDebug();
+
+        const double Rp = 1;                    // Неравномерность в полосе пропускания (дБ)
+        const double Rs = 40;                   // Неравномерность в полосе пропускания (дБ)
+
+        var Gp = (-Rp).From_dB();
+        var Gs = (-Rs).From_dB();
+
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+
+        static EnumerableSignal GetSinSignal(double f0) => MathEnumerableSignal.Sin(dt, f0, (int)(100 * fd / (fs * 0.1)));
+
+        var x_low = GetSinSignal(fs * 0.1);
+        var x_s99 = GetSinSignal(fs * 0.99);
+        var x_s = GetSinSignal(fs);
+
+        var x_sp = GetSinSignal(fs + (fp - fs) * 0.1);
+        var x_ps = GetSinSignal(fp - (fp - fs) * 0.1);
+
+        var x_p = GetSinSignal(fp);
+
+        var x_pd = GetSinSignal(fp + (fd / 2 - fp) * 0.1);
+        var x_dp = GetSinSignal(fp + (fd / 2 - fp) * 0.9);
+
+        var x_fd05 = GetSinSignal(0.9 * (fd / 2));
+
+        /* ----------------------------------------------- */
+
+        var y_low = filter.ProcessIndividual(x_low);
+        var y_s99 = filter.ProcessIndividual(x_s99);
+        var y_s = filter.ProcessIndividual(x_s);
+
+        var y_sp = filter.ProcessIndividual(x_sp);
+        var y_ps = filter.ProcessIndividual(x_ps);
+
+        var y_p = filter.ProcessIndividual(x_p);
+
+        var y_pd = filter.ProcessIndividual(x_pd);
+        var y_dp = filter.ProcessIndividual(x_dp);
+
+        var y_fd05 = filter.ProcessIndividual(x_fd05);
+
+        /* ----------------------------------------------- */
+
+        var k_low = y_low.Power / x_low.Power;
+        var k_s99 = y_s99.Power / x_s99.Power;
+        var k_s = y_s.Power / x_s.Power;
+
+        var k_sp = y_sp.Power / x_sp.Power;
+        var k_ps = y_ps.Power / x_ps.Power;
+
+        var k_p = y_p.Power / x_p.Power;
+
+        var k_pd = y_pd.Power / x_pd.Power;
+        var k_dp = y_dp.Power / x_dp.Power;
+
+        var k_fd05 = y_fd05.Power / x_fd05.Power;
+
+        /* ----------------------------------------------- */
+
+        var k_low_db = k_low.In_dB_byPower();
+        var k_s99_db = k_s99.In_dB_byPower();
+
+        var k_s_db = k_s.In_dB_byPower();
+
+        var k_sp_db = k_sp.In_dB_byPower();
+        var k_ps_db = k_ps.In_dB_byPower();
+
+        var k_p_db = k_p.In_dB_byPower();
+
+        var k_pd_db = k_pd.In_dB_byPower();
+        var k_dp_db = k_dp.In_dB_byPower();
+
+        var k_fd05_db = k_fd05.In_dB_byPower();
+
+        /* --------------------------------------*/ //   -Rs  -Rp
+        //                                          // ---+----+->
+        k_low_db.AssertLessThan(-Rs);               // \  |    |
+        k_s99_db.AssertLessThan(-Rs, 2.7e-1);       //  \ |    |
+        k_s_db.AssertLessOrEqualsThan(-Rs, 0.75);   //   \+    | fs
+        //                                          //    \    |
+        k_sp_db.AssertGreaterThan(-Rs, 0.5);        //     \   |
+        k_sp_db.AssertLessThan(-Rp);                //      \  |
+        k_ps_db.AssertGreaterThan(-Rs);             //       \ |
+        k_ps_db.AssertLessThan(-Rp, 0.11);          //        \+ fp
+        //                                          //         \0дБ
+        k_p_db.AssertEquals(-Rp, 0.51);             //          |
+        k_pd_db.AssertGreaterOrEqualsThan(-Rp);     //          |
+        k_dp_db.AssertGreaterOrEqualsThan(-Rp);     //          |
+        k_fd05_db.AssertGreaterOrEqualsThan(-Rp);   //          |fd
+
+        /* ----------------------------------------------- */
+
+        var x =
+            x_low +
+            x_s99 +
+            x_s +
+            x_sp +
+            x_ps +
+            x_p +
+            x_pd +
+            x_dp +
+            x_fd05;
+
+        var y = filter.ProcessIndividual(x);
+
+        var X = x.GetSpectrum();
+        var Y = y.GetSpectrum();
+
+        var H = Y / X;
+
+        var h_low = H.GetValue(fs * 0.1).Power.In_dB_byPower();
+        var h_s99 = H.GetValue(fs * 0.99).Power.In_dB_byPower();
+        var h_s = H.GetValue(fs).Power.In_dB_byPower();
+
+        var h_sp = H.GetValue(fs + (fp - fs) * 0.1).Power.In_dB_byPower();
+        var h_ps = H.GetValue(fp - (fp - fs) * 0.1).Power.In_dB_byPower();
+
+        var h_p = H.GetValue(fp).Power.In_dB_byPower();
+        var h_pd = H.GetValue(fp + (fd / 2 - fp) * 0.1).Power.In_dB_byPower();
+        var h_dp = H.GetValue(fp + (fd / 2 - fp) * 0.9).Power.In_dB_byPower();
+
+        var h_fd05 = H.GetValue(0.9 * (fd / 2)).Power.In_dB_byPower();
+
+        /* --------------------------------------*/ //   -Rs  -Rp
+        //                                          // ---+----+->
+        h_low.AssertLessThan(-Rs);                  // \  |    |
+        h_s99.AssertLessThan(-Rs);                  //  \ |    |
+        h_s.AssertLessOrEqualsThan(-Rs);            //   \+    | fs
+        //                                          //    \    |
+        h_sp.AssertGreaterThan(-Rs, 1);             //     \   |
+        h_sp.AssertLessThan(-Rp);                   //      \  |
+        h_ps.AssertGreaterThan(-Rs);                //       \ |
+        h_ps.AssertLessThan(-Rp, 0.12);             //        \+ fp
+        //                                          //         \0дБ
+        h_p.AssertEquals(-Rp, 0.52);                //          |
+        h_pd.AssertGreaterOrEqualsThan(-Rp);        //          |
+        h_dp.AssertGreaterOrEqualsThan(-Rp);        //          |
+        h_fd05.AssertGreaterOrEqualsThan(-Rp);      //          |fd
+    }
+
+    [TestMethod]
+    public void TypeII_Corrected_Odd_SignalProcessing()
+    {
+        const double fd = 10;                 // Гц // Частота дискретизации
+        const double dt = 1 / fd;               // 2с // Период дискретизации
+
+        const double fs = 2 / Consts.pi2;   // Гц // Граничная частота полосы пропускания
+        const double fp = 4 / Consts.pi2;   // Гц // Граничная частота полосы запирания
+
+        //(fs, fp).ToDebug();
+
+        const double Rp = 1;                    // Неравномерность в полосе пропускания (дБ)
+        const double Rs = 40;                   // Неравномерность в полосе пропускания (дБ)
+
+        var Gp = (-Rp).From_dB();
+        var Gs = (-Rs).From_dB();
+
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+
+        static EnumerableSignal GetSinSignal(double f0) => MathEnumerableSignal.Sin(dt, f0, (int)(100 * fd / (fs * 0.1)));
+
+        var x_low = GetSinSignal(fs * 0.1);
+        var x_s99 = GetSinSignal(fs * 0.99);
+        var x_s = GetSinSignal(fs);
+
+        var x_sp = GetSinSignal(fs + (fp - fs) * 0.1);
+        var x_ps = GetSinSignal(fp - (fp - fs) * 0.1);
+
+        var x_p = GetSinSignal(fp);
+
+        var x_pd = GetSinSignal(fp + (fd / 2 - fp) * 0.1);
+        var x_dp = GetSinSignal(fp + (fd / 2 - fp) * 0.9);
+
+        var x_fd05 = GetSinSignal(0.9 * (fd / 2));
+
+        /* ----------------------------------------------- */
+
+        var y_low = filter.ProcessIndividual(x_low);
+        var y_s99 = filter.ProcessIndividual(x_s99);
+        var y_s = filter.ProcessIndividual(x_s);
+
+        var y_sp = filter.ProcessIndividual(x_sp);
+        var y_ps = filter.ProcessIndividual(x_ps);
+
+        var y_p = filter.ProcessIndividual(x_p);
+
+        var y_pd = filter.ProcessIndividual(x_pd);
+        var y_dp = filter.ProcessIndividual(x_dp);
+
+        var y_fd05 = filter.ProcessIndividual(x_fd05);
+
+        /* ----------------------------------------------- */
+
+        var k_low = y_low.Power / x_low.Power;
+        var k_s99 = y_s99.Power / x_s99.Power;
+        var k_s = y_s.Power / x_s.Power;
+
+        var k_sp = y_sp.Power / x_sp.Power;
+        var k_ps = y_ps.Power / x_ps.Power;
+
+        var k_p = y_p.Power / x_p.Power;
+
+        var k_pd = y_pd.Power / x_pd.Power;
+        var k_dp = y_dp.Power / x_dp.Power;
+
+        var k_fd05 = y_fd05.Power / x_fd05.Power;
+
+        /* ----------------------------------------------- */
+
+        var k_low_db = k_low.In_dB_byPower();
+        var k_s99_db = k_s99.In_dB_byPower();
+
+        var k_s_db = k_s.In_dB_byPower();
+
+        var k_sp_db = k_sp.In_dB_byPower();
+        var k_ps_db = k_ps.In_dB_byPower();
+
+        var k_p_db = k_p.In_dB_byPower();
+
+        var k_pd_db = k_pd.In_dB_byPower();
+        var k_dp_db = k_dp.In_dB_byPower();
+
+        var k_fd05_db = k_fd05.In_dB_byPower();
+
+        /* --------------------------------------*/ //   -Rs  -Rp
+        //                                          // ---+----+->
+        k_low_db.AssertLessThan(-Rs);               // \  |    |
+        k_s99_db.AssertLessThan(-Rs, 2.7e-1);       //  \ |    |
+        k_s_db.AssertLessOrEqualsThan(-Rs, 0.75);   //   \+    | fs
+        //                                          //    \    |
+        k_sp_db.AssertGreaterThan(-Rs, 0.5);        //     \   |
+        k_sp_db.AssertLessThan(-Rp);                //      \  |
+        k_ps_db.AssertGreaterThan(-Rs);             //       \ |
+        k_ps_db.AssertLessThan(-Rp, 0.43);          //        \+ fp
+        //                                          //         \0дБ
+        k_p_db.AssertEquals(-Rp, 0.68);             //          |
+        k_pd_db.AssertGreaterOrEqualsThan(-Rp);     //          |
+        k_dp_db.AssertGreaterOrEqualsThan(-Rp);     //          |
+        k_fd05_db.AssertGreaterOrEqualsThan(-Rp);   //          |fd
+
+        /* ----------------------------------------------- */
+
+        var x =
+            x_low +
+            x_s99 +
+            x_s +
+            x_sp +
+            x_ps +
+            x_p +
+            x_pd +
+            x_dp +
+            x_fd05;
+
+        var y = filter.ProcessIndividual(x);
+
+        var X = x.GetSpectrum();
+        var Y = y.GetSpectrum();
+
+        var H = Y / X;
+
+        var h_low = H.GetValue(fs * 0.1).Power.In_dB_byPower();
+        var h_s99 = H.GetValue(fs * 0.99).Power.In_dB_byPower();
+        var h_s = H.GetValue(fs).Power.In_dB_byPower();
+
+        var h_sp = H.GetValue(fs + (fp - fs) * 0.1).Power.In_dB_byPower();
+        var h_ps = H.GetValue(fp - (fp - fs) * 0.1).Power.In_dB_byPower();
+
+        var h_p = H.GetValue(fp).Power.In_dB_byPower();
+        var h_pd = H.GetValue(fp + (fd / 2 - fp) * 0.1).Power.In_dB_byPower();
+        var h_dp = H.GetValue(fp + (fd / 2 - fp) * 0.9).Power.In_dB_byPower();
+
+        var h_fd05 = H.GetValue(0.9 * (fd / 2)).Power.In_dB_byPower();
+
+        /* --------------------------------------*/ //   -Rs  -Rp
+        //                                          // ---+----+->
+        h_low.AssertLessThan(-Rs);                  // \  |    |
+        h_s99.AssertLessThan(-Rs);                  //  \ |    |
+        h_s.AssertLessOrEqualsThan(-Rs);            //   \+    | fs
+        //                                          //    \    |
+        h_sp.AssertGreaterThan(-Rs, 1);             //     \   |
+        h_sp.AssertLessThan(-Rp);                   //      \  |
+        h_ps.AssertGreaterThan(-Rs);                //       \ |
+        h_ps.AssertLessThan(-Rp, 0.43);             //        \+ fp
+        //                                          //         \0дБ
+        h_p.AssertEquals(-Rp, 0.69);                //          |
         h_pd.AssertGreaterOrEqualsThan(-Rp);        //          |
         h_dp.AssertGreaterOrEqualsThan(-Rp);        //          |
         h_fd05.AssertGreaterOrEqualsThan(-Rp);      //          |fd
