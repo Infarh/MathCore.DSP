@@ -74,7 +74,7 @@ public class EllipticBandStop : EllipticFilter
         var N = (int)Math.Ceiling(T(kEps) * K(kW) / (K(kEps) * T(kW))); // Порядок фильтра
 
         // Нули и полюса аналогового прототипа - эллиптического ФНЧ
-        var (zeros, poles) = GetNormedZeros(N, Spec.EpsP, Spec.EpsS, Spec.Wp);
+        var (zeros, poles) = GetNormedZerosPoles(N, Spec.EpsP, Spec.EpsS, Spec.Wp);
 
         // Пересчитываем аналоговые частоты полосы заграждения в цифровые
         var dt = Spec.dt;

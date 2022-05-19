@@ -166,7 +166,7 @@ public class EllipticBandPass : EllipticFilter
         var N = (int)Ceiling(T_eps * Kw / (K_eps * Tw));
         Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
 
-        var (zeros, poles) = GetNormedZeros(N, Spec.EpsP, Spec.EpsS);
+        var (zeros, poles) = GetNormedZerosPoles(N, Spec.EpsP, Spec.EpsS);
 
         var Fpl = ToAnalogFrequency(fpl, Spec.dt);
         var Fph = ToAnalogFrequency(fph, Spec.dt);

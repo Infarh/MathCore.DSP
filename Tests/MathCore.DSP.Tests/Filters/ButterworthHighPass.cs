@@ -68,28 +68,8 @@ public class ButterworthHighPass
         var poles = new Complex[N];
         var r = N % 2;
         if (r != 0) poles[0] = -alpha;
-        for (var i = r; i < poles.Length; i += 2)
-            (poles[i], poles[i + 1]) = Complex.Exp(alpha, Consts.pi05 * ((i - r + 1d) / N + 1)).Conjugate();
-
-        //var poles1 = new Complex[N];
-        //if (r != 0) poles1[0] = -alpha;
-        //for (var i = r; i < poles1.Length; i += 2)
-        //{
-        //    var w = PI * ((i - r + 0.5) / N - 3d / 2);
-        //    (poles1[i], poles1[i + 1]) = Complex.ConjugateAbsExp(alpha, w);
-        //}
-
-        ////poles1.ToDebugEnum();
-        //poles1.AssertEquals(
-        //    /*[ 0]*/ (-0.212281578508883739, +1.067211563088522608),
-        //    /*[ 1]*/ (-0.212281578508883739, -1.067211563088522608),
-        //    /*[ 2]*/ (-0.904738276905205474, +0.604526789535973275),
-        //    /*[ 3]*/ (-0.904738276905205474, -0.604526789535973275),
-        //    /*[ 4]*/ (-1.067211563088522608, -0.212281578508883656),
-        //    /*[ 5]*/ (-1.067211563088522608, +0.212281578508883656),
-        //    /*[ 6]*/ (-0.604526789535973275, -0.904738276905205363),
-        //    /*[ 7]*/ (-0.604526789535973275, +0.904738276905205363)
-        //);
+        for (var (i, th0) = (r, Consts.pi05 / N); i < poles.Length; i += 2)
+            (poles[i], poles[i + 1]) = Complex.ConjugateAbsExp(alpha, th0 * (i - r + 1 + N));
 
         //poles.ToDebugEnum();
         poles.AssertEquals(AccuracyComplex.Eps(1e-15),
@@ -166,7 +146,7 @@ public class ButterworthHighPass
             /*[ 8]*/ +00.14924445948815254
         );
 
-        var filter = new DSP.Filters.ButterworthHighPass(dt, fp, fs, Gp, Gs);
+        var filter = new DSP.Filters.ButterworthHighPass(dt, fs, fp, Gp, Gs);
 
         filter.B.AssertEquals(B);
         filter.A.AssertEquals(A);
@@ -187,7 +167,7 @@ public class ButterworthHighPass
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new DSP.Filters.ButterworthHighPass(dt, fp, fs, Gp, Gs);
+        var filter = new DSP.Filters.ButterworthHighPass(dt, fs, fp, Gp, Gs);
 
         var transmission__0 = filter.GetTransmissionCoefficient(0, dt);
         var transmission_fp = filter.GetTransmissionCoefficient(fp, dt);
@@ -215,7 +195,7 @@ public class ButterworthHighPass
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new DSP.Filters.ButterworthHighPass(dt, fp, fs, Gp, Gs);
+        var filter = new DSP.Filters.ButterworthHighPass(dt, fs, fp, Gp, Gs);
 
         static EnumerableSignal GetSinSignal(double f0) => MathEnumerableSignal.Sin(dt, f0, (int)(100 * fd / (fs * 0.1)));
 

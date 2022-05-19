@@ -9,7 +9,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MathCore.TestsExtensions" Version="0.1.38.3" />
+    <Using Include="System" />
+    <Using Include="System.Linq" />
+    <Using Include="System.Collections.Generic" />
+    <Using Include="System.Threading.Tasks" />
+    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MathCore.TestsExtensions" Version="0.1.38.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
     <PackageReference Include="MSTest.TestFramework" Version="2.2.10" />

@@ -19,7 +19,7 @@ public class EllipticHighPass : EllipticFilter
         var N = (int)Ceiling(double_N); // Порядок фильтра
         Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
 
-        var (zeros, poles) = GetNormedZeros(N, Spec.EpsP, Spec.EpsS);
+        var (zeros, poles) = GetNormedZerosPoles(N, Spec.EpsP, Spec.EpsS);
 
         // Масштабируем полюса на требуемую частоту пропускания
         var Ws = Spec.Ws;

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 
 using MathCore.DSP.Filters;
 using MathCore.DSP.Signals;
@@ -22,11 +24,11 @@ public class ButterworthLowPass : UnitTest
     [TestMethod]
     public void Creation()
     {
-        const double fd = 0.5;    // Гц // Частота дискретизации
+        const double fd = 10;    // Гц // Частота дискретизации
         const double dt = 1 / fd; // 2с // Период дискретизации
 
-        const double fp = 0.05;    // Гц // Граничная частота полосы пропускания
-        const double fs = 0.15;    // Гц // Граничная частота полосы заграждения
+        const double fp = 2 / Consts.pi2;   // Гц // Граничная частота полосы запирания
+        const double fs = 4 / Consts.pi2;   // Гц // Граничная частота полосы пропускания
 
         Assert.IsTrue(fp < fs);
         Assert.IsTrue(fp < fd / 2);
@@ -35,130 +37,132 @@ public class ButterworthLowPass : UnitTest
         //const double ws = Consts.pi2 * fs * dt; // 1.884955592153876 рад/с
 
         const double Rp = 1;  // Неравномерность в полосе пропускания (дБ)
-        const double Rs = 30; // Неравномерность в полосе пропускания (дБ)
-
-        var eps_p = (10d.Pow(Rp / 10) - 1).Sqrt();
-        var eps_s = (10d.Pow(Rs / 10) - 1).Sqrt();
-
-        Assert.That.Value(eps_p).IsEqual(0.50884713990958752);
-        Assert.That.Value(eps_s).IsEqual(31.606961258558215);
+        const double Rs = 40; // Неравномерность в полосе пропускания (дБ)
 
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        Assert.That.Value(Gp).IsEqual(0.89125093813374556);
-        Assert.That.Value(Gs).IsEqual(0.031622776601683791);
+        var eps_p = (10d.Pow(Rp / 10) - 1).Sqrt();
+        var eps_s = (10d.Pow(Rs / 10) - 1).Sqrt();
 
-        Assert.That.Value(Gp.In_dB()).IsEqual(-1, 4.67e-15);
-        Assert.That.Value(Gs.In_dB()).IsEqual(-30);
+        eps_p.AssertEquals(0.5088471399095875);
+        eps_s.AssertEquals(99.99499987499375);
 
         var Fp = DigitalFilter.ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
         var Fs = DigitalFilter.ToAnalogFrequency(fs, dt);  // Частота подавления аналогового прототипа
 
-        Assert.That.Value(Fp).IsEqual(0.051712575763384123);
-        Assert.That.Value(Fs).IsEqual(0.2190579862253032);
+        Fp.AssertEquals(0.319375180518077229);
+        Fs.AssertEquals(0.645246083310777152);
 
         var Wp = Consts.pi2 * Fp;
         var Ws = Consts.pi2 * Fs;
 
-        var k_eps = eps_s / eps_p;
-        var k_W = Ws / Wp;
+        var kEps = eps_s / eps_p;
+        var kW = Fs / Fp;
 
-        Assert.That.Value(k_eps).GreaterThan(0);
-        Assert.That.Value(k_W).GreaterThan(0);
+        kEps.AssertEquals(196.51284645671973);
+        kW.AssertEquals(2.020338844941193202);
 
-        var double_n = Log(k_eps) / Log(k_W);
-        // Порядок фильтра
-        var N = (int)double_n;
-        if (double_n - N > 0) N += 1;
+        var N = (int)Math.Ceiling(Log(kEps) / Log(kW));
+        N.AssertEquals(8);
 
-        Assert.That.Value(N).IsEqual(3);
-
-        var L = N / 2;
-        var r = N % 2;
-
-        Assert.That.Value(L).IsEqual(1);
-        Assert.That.Value(r).IsEqual(1);
-        Assert.That.Value(2 * L + r).IsEqual(N);
+        var (L, r) = N.GetDivMod(2);
 
         var alpha = eps_p.Pow(-1d / N);
-        Assert.That.Value(alpha).IsEqual(1.2525763881810263);
 
-        var th0 = PI / N;
+        alpha.AssertEquals(1.088119473662736647);
 
         var poles = new Complex[N];
         if (r != 0) poles[0] = -alpha;
-        for (var i = r; i < poles.Length; i += 2)
-        {
-            var w = th0 * (i + 1 - r - 0.5);
-            poles[i] = (-alpha * Sin(w), alpha * Cos(w));
-            poles[i + 1] = poles[i].ComplexConjugate;
-        }
+        for (var (i, th0) = (r, Consts.pi05 / N); i < poles.Length; i += 2) 
+            (poles[i], poles[i + 1]) = Complex.ConjugateAbsExp(alpha, th0 * (i - r + 1 + N));
 
-        Assert.That.Collection(poles).IsEqualTo(
-            -1.2525763881810263,
-            (-0.62628819409051306, 1.0847629723453271),
-            (-0.62628819409051306, -1.0847629723453271)
+        //poles.ToDebugEnum();
+        poles.AssertEquals(
+            /*[ 0]*/ (-0.212281578508883212, +1.067211563088522608),
+            /*[ 1]*/ (-0.212281578508883212, -1.067211563088522608),
+            /*[ 2]*/ (-0.604526789535973275, +0.904738276905205363),
+            /*[ 3]*/ (-0.604526789535973275, -0.904738276905205363),
+            /*[ 4]*/ (-0.904738276905205363, +0.604526789535973497),
+            /*[ 5]*/ (-0.904738276905205363, -0.604526789535973497),
+            /*[ 6]*/ (-1.067211563088522608, +0.212281578508883656),
+            /*[ 7]*/ (-1.067211563088522608, -0.212281578508883656)
         );
 
-        var translated_poles = poles.ToArray(p => p * Wp)
-           .AssertThatCollection()
-           .IsEqualTo(
-                -0.40698673955629,
-                (-0.20349336977814494, 0.35246085545914824),
-                (-0.20349336977814494, -0.35246085545914824))
-           .ActualValue;
+        var lowpass_poles = AnalogBasedFilter.TransformToLowPassW(poles, Wp);
 
-        var z_poles = translated_poles.ToArray(p => DigitalFilter.ToZ(p, dt))
-           .AssertThatCollection()
-           .IsEqualTo(
-                0.42147750491999925,
-                (0.53055357928176117, 0.44824528113449957),
-                (0.53055357928176117, -0.44824528113449957))
-           .AllItems(z_pole => z_pole.Where(z => z.Abs < 1))
-           .ActualValue;
+        //lowpass_poles.ToDebugEnum();
+        lowpass_poles.AssertEquals(
+            /*[ 0]*/ (-0.425984051389412477, +2.141566444565760730),
+            /*[ 1]*/ (-0.425984051389412477, -2.141566444565760730),
+            /*[ 2]*/ (-1.213099943899241140, +1.815532366728786817),
+            /*[ 3]*/ (-1.213099943899241140, -1.815532366728786817),
+            /*[ 4]*/ (-1.815532366728786817, +1.213099943899241584),
+            /*[ 5]*/ (-1.815532366728786817, -1.213099943899241584),
+            /*[ 6]*/ (-2.141566444565760730, +0.425984051389413365),
+            /*[ 7]*/ (-2.141566444565760730, -0.425984051389413365)
+        );
 
-        var kz = DigitalFilter.GetNormalizeCoefficient(translated_poles, dt)
-           .AssertThatValue()
-           .IsEqual(0.45194421873401691)
-           .ActualValue;
 
-        var WpN = Wp.Pow(N)
-           .AssertThatValue()
-           .IsEqual(0.034302685030761955)
-           .ActualValue;
+        var z_poles = DigitalFilter.ToZArray(lowpass_poles, dt);
 
-        var k = WpN * kz / eps_p;
-        Assert.That.Value(k).IsEqual(0.030466713814017582);
+        //z_poles.ToDebugEnum();
+        z_poles.AssertEquals(
+            /*[ 0]*/ (0.936997507674962593, +0.203084896923829750),
+            /*[ 1]*/ (0.936997507674962593, -0.203084896923829750),
+            /*[ 2]*/ (0.871915749459332590, +0.160208721965230144),
+            /*[ 3]*/ (0.871915749459332590, -0.160208721965230144),
+            /*[ 4]*/ (0.827903822320540717, +0.101644552469968369),
+            /*[ 5]*/ (0.827903822320540717, -0.101644552469968369),
+            /*[ 6]*/ (0.805888478706402567, +0.034743688638417147),
+            /*[ 7]*/ (0.805888478706402567, -0.034743688638417147)
+        );
 
-        var b = Range(0, N + 1).ToArray(i => k * BinomialCoefficient(N, i));
+        var (g_norm, g_norm_im) = z_poles.Multiply(z => (1 - z) / 2);
 
-        Assert.That.Collection(b).IsEqualTo(new[]
-        {
-            1 * k,
-            3 * k,
-            3 * k,
-            1 * k
-        });
+        //g_norm.ToDebug();
+        g_norm.AssertEquals(1.154301582524271E-08);
+        g_norm_im.AssertEquals(0, 4.14e-25);
 
-        var a_complex = Polynom.Array.GetCoefficientsInverted((Complex[])z_poles);
-        Assert.That.Collection(a_complex)
-           .CountEquals(4)
-           .AllItems(a_value => a_value.Where(z => z.Im).IsEqual(0, 1e-16));
+        var B = Range(0, N + 1).ToArray(i => g_norm * BinomialCoefficient(N, i));
 
-        var a = a_complex.ToRe() ?? throw new AssertFailedException("Отсутствует ссылка на массив вещественных значений");
+        //B.ToDebugEnum();
+        B.AssertEquals(
+            /*[ 0]*/ 1.154301582524271E-08,
+            /*[ 1]*/ 9.234412660194168E-08,
+            /*[ 2]*/ 3.232044431067959E-07,
+            /*[ 3]*/ 6.464088862135918E-07,
+            /*[ 4]*/ 8.080111077669897E-07,
+            /*[ 5]*/ 6.464088862135918E-07,
+            /*[ 6]*/ 3.232044431067959E-07,
+            /*[ 7]*/ 9.234412660194168E-08,
+            /*[ 8]*/ 1.154301582524271E-08
+        );
 
-        Assert.That.Collection(a).ValuesAreEqual(
-            1,
-            -1.4825846634835216,
-            0.92964373019213786,
-            -0.20332535619647568
+        var (A, A_im) = Polynom.Array.GetCoefficientsInverted(z_poles);
+
+        //A_im.Average(z => z * z).ToDebug();
+        A_im.Average(z => z * z).AssertEquals(0, 1e-30);
+
+        //A.ToDebugEnum();
+        A.AssertEquals(
+            /*[ 0]*/ +01,
+            /*[ 1]*/ -06.8854111163224770,
+            /*[ 2]*/ +20.8098097866188850,
+            /*[ 3]*/ -36.0506821245047750,
+            /*[ 4]*/ +39.1479188730887200,
+            /*[ 5]*/ -27.2826323765932770,
+            /*[ 6]*/ +11.9147694781671660,
+            /*[ 7]*/ -02.9808064127161464,
+            /*[ 8]*/ +00.3270368472739568
         );
 
         var filter = new DSP.Filters.ButterworthLowPass(dt, fp, fs, Gp, Gs);
 
-        Assert.That.Collection(filter.A).IsEqualTo(a, 1e-15);
-        Assert.That.Collection(filter.B).IsEqualTo(b, 1e-16);
+        //filter.B.Zip(B, (fa, a) => fa - a).Max().ToDebug();
+
+        filter.A.AssertEquals(A);
+        filter.B.AssertEquals(Accuracy.Eps(1e-20), B);
     }
 
     [TestMethod]
@@ -225,12 +229,15 @@ public class ButterworthLowPass : UnitTest
     [TestMethod]
     public void TransmissionCoefficient()
     {
-        const double fp = 0.1;    // Гц // Граничная частота полосы пропускания
-        const double fs = 0.3;    // Гц // Граничная частота полосы запирания
-        const double fd = 1;      // Гц // Частота дискретизации
+        const double fd = 10;    // Гц // Частота дискретизации
         const double dt = 1 / fd; // 2с // Период дискретизации
+
+        const double fp = 2 / Consts.pi2;   // Гц // Граничная частота полосы запирания
+        const double fs = 4 / Consts.pi2;   // Гц // Граничная частота полосы пропускания
+
         const double Rp = 1;  // Неравномерность в полосе пропускания (дБ)
-        const double Rs = 30; // Неравномерность в полосе пропускания (дБ)
+        const double Rs = 40; // Неравномерность в полосе пропускания (дБ)
+
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
@@ -241,10 +248,10 @@ public class ButterworthLowPass : UnitTest
         var transmission_fs = filter.GetTransmissionCoefficient(fs, dt);
         var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2, dt);
 
-        Assert.That.Value(transmission_0.Abs).IsEqual(1, 4.45e-16);
-        Assert.That.Value(transmission_fp.Abs).IsEqual(Gp, 7.78e-16);
-        Assert.That.Value(transmission_fs.Abs).LessOrEqualsThan(Gs);
-        Assert.That.Value(transmission_fd05.Abs).IsEqual(0, 4.27e-34);
+        Assert.That.Value(transmission_0.Abs).IsEqual(1, 5.4e-10);
+        Assert.That.Value(transmission_fp.Abs).IsEqual(Gp, 2.2e-10);
+        Assert.That.Value(transmission_fs.Abs).LessOrEqualsThan(Gs, 2.3e-26);
+        Assert.That.Value(transmission_fd05.Abs).IsEqual(0, 2.3e-26);
     }
 
     [TestMethod]
@@ -266,10 +273,10 @@ public class ButterworthLowPass : UnitTest
         var transmission_fs = filter.GetTransmissionCoefficient(fs);
         var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
 
-        Assert.That.Value(transmission_0.Abs).IsEqual(1, 4.45e-16);
+        Assert.That.Value(transmission_0.Abs).IsEqual(1, 5.56e-16);
         Assert.That.Value(transmission_fp.Abs).IsEqual(Gp, 8.9e-16);
         Assert.That.Value(transmission_fs.Abs).LessOrEqualsThan(Gs);
-        Assert.That.Value(transmission_fd05.Abs).IsEqual(0, 4.27e-34);
+        Assert.That.Value(transmission_fd05.Abs).IsEqual(0, 9.61e-19);
     }
 
     [TestMethod]

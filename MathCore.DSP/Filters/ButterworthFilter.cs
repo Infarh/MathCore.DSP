@@ -1,9 +1,5 @@
 ﻿using System.Runtime.Serialization;
 
-using MathCore.DSP.Infrastructure;
-
-using static System.Math;
-
 namespace MathCore.DSP.Filters;
 
 /// <summary>Фильтр Баттерворта</summary>
@@ -37,13 +33,27 @@ public abstract class ButterworthFilter : AnalogBasedFilter
             var z = Complex.Exp(alpha, th0 * (i - r + N + 1));
             yield return z;
             yield return z.ComplexConjugate;
+        }
+    }
 
-            //var w = th0 * (i - r + 1);
-            //var sin = -alpha * Sin(w);
-            //var cos = +alpha * Cos(w);
+    protected static IEnumerable<Complex> GetNormPolesGp(int N, double Gp, double W0 = 1)
+    {
+        if (N <= 0) throw new ArgumentOutOfRangeException(nameof(N), N, "Число полюсов должно быть больше 0");
 
-            //yield return new Complex(sin, +cos);
-            //yield return new Complex(sin, -cos);
+        var r = N % 2; // Нечётность порядка фильтра
+
+        // Радиус окружности размещения полюсов фильтра
+        var alpha = W0 * (1 / (Gp * Gp) - 1).Pow(-0.5 / N);
+
+        // Если порядок фильтра нечётный, то первым добавляем центральный полюс
+        if (r != 0) yield return -alpha;
+        // Расчёт полюсов
+        // Угловой шаг между полюсами
+        for (var (i, th0) = (r, Consts.pi05 / N); i < N; i += 2)
+        {
+            var z = Complex.Exp(alpha, th0 * (i - r + N + 1));
+            yield return z;
+            yield return z.ComplexConjugate;
         }
     }
 

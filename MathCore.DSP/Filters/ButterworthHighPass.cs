@@ -41,7 +41,7 @@ public class ButterworthHighPass : ButterworthFilter
         double fp,
         double Gp = 0.891250938,
         double Gs = 0.01)
-        : this(GetSpecification(dt, fp: fs, fs: fp, Gp, Gs)) { }
+        : this(GetSpecification(dt, fp, fs, Gp, Gs)) { }
 
     public ButterworthHighPass(Specification Spec) : this(GetPolynoms(Spec), Spec) { }
 

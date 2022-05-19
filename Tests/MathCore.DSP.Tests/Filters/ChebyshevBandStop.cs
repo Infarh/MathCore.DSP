@@ -231,7 +231,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         h_fph.Abs.AssertGreaterOrEqualsThan(Gp, 1.5e-14);
         h_fd5.Abs.AssertGreaterOrEqualsThan(Gp, 7.5e-15);
 
-        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevType.I);
 
         Assert.That.Collection(filter.A).IsEqualTo(A, 7.2e-15);
         Assert.That.Collection(filter.B).IsEqualTo(B, 5.6e-14);
@@ -458,7 +458,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         h_fph.Abs.AssertGreaterOrEqualsThan(Gp, 1.5e-14);
         h_fd5.Abs.AssertGreaterOrEqualsThan(Gp, 7.5e-15);
 
-        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevType.I);
 
         Assert.That.Collection(filter.A).IsEqualTo(A, 2.2e-14);
         Assert.That.Collection(filter.B).IsEqualTo(B, 6.4e-14);
@@ -709,7 +709,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         h_fph.Abs.AssertLessOrEqualsThan(Gp);
         h_fd5.Abs.AssertGreaterOrEqualsThan(Gp, 8.89e-16);
 
-        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevType.II);
 
         //B.ToDebugEnum();
         //A.ToDebugEnum();
@@ -977,7 +977,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         h_fph.Abs.AssertLessOrEqualsThan(Gp);
         h_fd5.Abs.AssertGreaterOrEqualsThan(Gp, 1.9e-15);
 
-        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevType.II);
 
         filter.B.AssertEquals(B);
         filter.A.AssertEquals(A);
@@ -1228,7 +1228,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         h_fph.Abs.AssertGreaterOrEqualsThan(Gp, 1.5e-14);
         h_fd5.Abs.AssertGreaterOrEqualsThan(Gp, 7.5e-15);
 
-        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevType.IICorrected);
 
         filter.A.AssertEquals(A);
         filter.B.AssertEquals(B);
@@ -1503,7 +1503,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         h_fph.Abs.AssertGreaterOrEqualsThan(Gp, 1.5e-14);
         h_fd5.Abs.AssertGreaterOrEqualsThan(Gp, 7.5e-15);
 
-        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevType.IICorrected);
 
         filter.B.AssertEquals(B);
         filter.A.AssertEquals(A);
@@ -1550,7 +1550,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         const double fsh = 12 / Consts.pi2; // верхняя частота границы полосы заграждения
         const double fph = 15 / Consts.pi2; // верхняя частота границы полосы пропускания
 
-        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevType.I);
 
         var actual_h = filter.GetImpulseResponse(expected_h.Length);
 
@@ -1601,7 +1601,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         const double fsh = 12 / Consts.pi2; // верхняя частота границы полосы заграждения
         const double fph = 14 / Consts.pi2; // верхняя частота границы полосы пропускания
 
-        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevType.I);
 
         var actual_h = filter.GetImpulseResponse(expected_h.Length);
 
@@ -1652,7 +1652,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         const double fsh = 12 / Consts.pi2; // верхняя частота границы полосы заграждения
         const double fph = 15 / Consts.pi2; // верхняя частота границы полосы пропускания
 
-        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevType.II);
 
         var actual_h = filter.GetImpulseResponse(expected_h.Length);
 
@@ -1703,7 +1703,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         const double fsh = 12 / Consts.pi2; // верхняя частота границы полосы заграждения
         const double fph = 14 / Consts.pi2; // верхняя частота границы полосы пропускания
 
-        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevType.II);
 
         var actual_h = filter.GetImpulseResponse(expected_h.Length);
 
@@ -1754,7 +1754,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         const double fsh = 12 / Consts.pi2; // верхняя частота границы полосы заграждения
         const double fph = 15 / Consts.pi2; // верхняя частота границы полосы пропускания
 
-        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevType.IICorrected);
 
         var actual_h = filter.GetImpulseResponse(expected_h.Length);
 
@@ -1805,7 +1805,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         const double fsh = 12 / Consts.pi2; // верхняя частота границы полосы заграждения
         const double fph = 14 / Consts.pi2; // верхняя частота границы полосы пропускания
 
-        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevType.IICorrected);
 
         var actual_h = filter.GetImpulseResponse(expected_h.Length);
 
@@ -2250,7 +2250,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         const double fsh = 12 / Consts.pi2; // верхняя частота границы полосы заграждения
         const double fph = 15 / Consts.pi2; // верхняя частота границы полосы пропускания
 
-        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevType.II);
 
         //const double total_time = 1 / fpl;
         //const int samples_count = (int)(total_time * fd) + 1;
@@ -2459,7 +2459,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         const double fsh = 12 / Consts.pi2; // верхняя частота границы полосы заграждения
         const double fph = 14 / Consts.pi2; // верхняя частота границы полосы пропускания
 
-        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevType.II);
 
         //const double total_time = 1 / fpl;
         //const int samples_count = (int)(total_time * fd) + 1;
@@ -2668,7 +2668,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         const double fsh = 12 / Consts.pi2; // верхняя частота границы полосы заграждения
         const double fph = 15 / Consts.pi2; // верхняя частота границы полосы пропускания
 
-        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevType.IICorrected);
 
         //const double total_time = 1 / fpl;
         //const int samples_count = (int)(total_time * fd) + 1;
@@ -2877,7 +2877,7 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         const double fsh = 12 / Consts.pi2; // верхняя частота границы полосы заграждения
         const double fph = 14 / Consts.pi2; // верхняя частота границы полосы пропускания
 
-        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new DSP.Filters.ChebyshevBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs, ChebyshevType.IICorrected);
 
         //const double total_time = 1 / fpl;
         //const int samples_count = (int)(total_time * fd) + 1;

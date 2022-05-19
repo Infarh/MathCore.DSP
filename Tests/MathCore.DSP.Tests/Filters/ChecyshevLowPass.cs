@@ -154,7 +154,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
 
         #endregion
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.I);
 
         Assert.That.Collection(filter.A).IsEqualTo(A);
         Assert.That.Collection(filter.B).IsEqualTo(B);
@@ -234,7 +234,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
 
         #endregion
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.I);
 
         Assert.That.Collection(filter.A).IsEqualTo(A);
         Assert.That.Collection(filter.B).IsEqualTo(B);
@@ -402,7 +402,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
 
         #endregion
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.II);
 
         Assert.That.Collection(filter.A).IsEqualTo(A);
         Assert.That.Collection(filter.B).IsEqualTo(B);
@@ -574,7 +574,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
 
         #endregion
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.IICorrected);
 
         Assert.That.Collection(filter.A).IsEqualTo(A, 4.442e-16);
         Assert.That.Collection(filter.B).IsEqualTo(B, 6.94e-17);
@@ -598,7 +598,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.I);
 
         Assert.That.Value(filter.Order).IsEven();
 
@@ -635,7 +635,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.I);
 
         Assert.That.Value(filter.Order).IsOdd();
 
@@ -671,7 +671,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.II);
 
         Assert.That.Value(filter.Order).IsEven();
 
@@ -709,7 +709,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.II);
 
         Assert.That.Value(filter.Order).IsOdd();
 
@@ -747,7 +747,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.IICorrected);
 
         Assert.That.Value(filter.Order).IsEven();
 
@@ -783,7 +783,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.IICorrected);
 
         Assert.That.Value(filter.Order).IsOdd();
 
@@ -820,7 +820,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.I);
 
         Assert.That.Value(filter.Order).IsEven();
 
@@ -867,7 +867,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.I);
 
         Assert.That.Value(filter.Order).IsOdd();
 
@@ -914,7 +914,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.II);
 
         Assert.That.Value(filter.Order).IsEven();
 
@@ -961,7 +961,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.II);
 
         Assert.That.Value(filter.Order).IsOdd();
 
@@ -1008,7 +1008,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.IICorrected);
 
         Assert.That.Value(filter.Order).IsEven();
 
@@ -1055,7 +1055,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.IICorrected);
 
         Assert.That.Value(filter.Order).IsOdd();
 
@@ -1101,7 +1101,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.I);
 
         Assert.That.Value(filter.Order).IsEven();
 
@@ -1148,7 +1148,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.I);
 
         Assert.That.Value(filter.Order).IsOdd();
 
@@ -1195,7 +1195,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.II);
 
         Assert.That.Value(filter.Order).IsEven();
 
@@ -1242,7 +1242,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.II);
 
         Assert.That.Value(filter.Order).IsOdd();
 
@@ -1289,7 +1289,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.IICorrected);
 
         Assert.That.Value(filter.Order).IsEven();
 
@@ -1336,7 +1336,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.IICorrected);
 
         Assert.That.Value(filter.Order).IsOdd();
 

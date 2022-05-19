@@ -47,7 +47,7 @@ public class LowPass_fp500_fs1500_df5000 : ComplexTest
     public void ChebyshevI()
     {
         var specification = Information.GetSpecification();
-        var filter = new ChebyshevLowPass(specification, ChebyshevFilter.ChebyshevType.I);
+        var filter = new ChebyshevLowPass(specification, ChebyshevType.I);
         CheckFilter(filter);
     }
 
@@ -55,7 +55,7 @@ public class LowPass_fp500_fs1500_df5000 : ComplexTest
     public void ChebyshevII()
     {
         var specification = Information.GetSpecification();
-        var filter = new ChebyshevLowPass(specification, ChebyshevFilter.ChebyshevType.II);
+        var filter = new ChebyshevLowPass(specification, ChebyshevType.II);
 
         CheckChebyshevII(filter);
     }

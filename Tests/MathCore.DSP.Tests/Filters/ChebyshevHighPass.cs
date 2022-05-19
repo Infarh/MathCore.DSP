@@ -174,7 +174,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
 
         //Debug.WriteLine("---------------------------------------------");
 
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.I);
 
         filter.B.AssertEquals(Accuracy.Eps(1e-14), B);
         filter.A.AssertEquals(Accuracy.Eps(1e-14), A);
@@ -336,7 +336,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
 
         //Debug.WriteLine("---------------------------------------------");
 
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.I);
 
         filter.B.AssertEquals(Accuracy.Eps(1e-14), B);
         filter.A.AssertEquals(Accuracy.Eps(1e-14), A);
@@ -551,7 +551,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
 
         //Debug.WriteLine("---------------------------------------------");
 
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.II);
 
         filter.B.AssertEquals(Accuracy.Eps(1e-12), B);
         filter.A.AssertEquals(Accuracy.Eps(1e-12), A);
@@ -745,7 +745,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
 
         //Debug.WriteLine("---------------------------------------------");
 
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.II);
 
         filter.B.AssertEquals(Accuracy.Eps(1e-14), B);
         filter.A.AssertEquals(Accuracy.Eps(1e-14), A);
@@ -958,7 +958,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
 
         //Debug.WriteLine("---------------------------------------------");
 
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.IICorrected);
 
         filter.B.AssertEquals(Accuracy.Eps(1e-13), B);
         filter.A.AssertEquals(Accuracy.Eps(1e-13), A);
@@ -1149,7 +1149,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
 
         //Debug.WriteLine("---------------------------------------------");
 
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.IICorrected);
 
         filter.B.AssertEquals(Accuracy.Eps(1e-14), B);
         filter.A.AssertEquals(Accuracy.Eps(1e-14), A);
@@ -1192,7 +1192,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.I);
 
         var transmission__0 = filter.GetTransmissionCoefficient(0);
         var transmission_fs = filter.GetTransmissionCoefficient(fs);
@@ -1227,7 +1227,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.I);
 
         var transmission__0 = filter.GetTransmissionCoefficient(0);
         var transmission_fs = filter.GetTransmissionCoefficient(fs);
@@ -1271,7 +1271,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.II);
 
         var transmission__0 = filter.GetTransmissionCoefficient(0);
         var transmission_fs = filter.GetTransmissionCoefficient(fs);
@@ -1318,7 +1318,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.II);
 
         var transmission__0 = filter.GetTransmissionCoefficient(0);
         var transmission_fs = filter.GetTransmissionCoefficient(fs);
@@ -1356,7 +1356,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.IICorrected);
 
         var transmission__0 = filter.GetTransmissionCoefficient(0);
         var transmission_fs = filter.GetTransmissionCoefficient(fs);
@@ -1371,7 +1371,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         transmission__0.Power.In_dB_byPower().AssertLessThan(-Rs, 2.1e-7);
         transmission_fs.Power.In_dB_byPower().AssertLessThan(-Rs);
         transmission_fp.Power.In_dB_byPower().AssertGreaterOrEqualsThan(-Rp);
-        transmission_fd.Power.In_dB_byPower().AssertEquals(0, 2e-15);
+        transmission_fd.Power.In_dB_byPower().AssertEquals(0, 1e-14);
     }
 
     [TestMethod]
@@ -1391,7 +1391,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.IICorrected);
 
         var transmission__0 = filter.GetTransmissionCoefficient(0);
         var transmission_fs = filter.GetTransmissionCoefficient(fs);
@@ -1450,7 +1450,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.I);
 
         var actual_h = filter.GetImpulseResponse(expected_h.Length);
 
@@ -1500,7 +1500,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.I);
 
         var actual_h = filter.GetImpulseResponse(expected_h.Length);
 
@@ -1582,7 +1582,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.II);
 
         var actual_h = filter.GetImpulseResponse(expected_h.Length);
 
@@ -1639,7 +1639,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.II);
 
         var actual_h = filter.GetImpulseResponse(expected_h.Length);
 
@@ -1696,7 +1696,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.IICorrected);
 
         var actual_h = filter.GetImpulseResponse(expected_h.Length);
 
@@ -1753,7 +1753,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.IICorrected);
 
         var actual_h = filter.GetImpulseResponse(expected_h.Length);
 
@@ -1779,7 +1779,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.I);
 
         static EnumerableSignal GetSinSignal(double f0) => MathEnumerableSignal.Sin(dt, f0, (int)(100 * fd / (fs * 0.1)));
 
@@ -1929,7 +1929,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.I);
 
         static EnumerableSignal GetSinSignal(double f0) => MathEnumerableSignal.Sin(dt, f0, (int)(100 * fd / (fs * 0.1)));
 
@@ -2079,7 +2079,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.II);
 
         static EnumerableSignal GetSinSignal(double f0) => MathEnumerableSignal.Sin(dt, f0, (int)(100 * fd / (fs * 0.1)));
 
@@ -2229,7 +2229,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.II);
 
         static EnumerableSignal GetSinSignal(double f0) => MathEnumerableSignal.Sin(dt, f0, (int)(100 * fd / (fs * 0.1)));
 
@@ -2379,7 +2379,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.IICorrected);
 
         static EnumerableSignal GetSinSignal(double f0) => MathEnumerableSignal.Sin(dt, f0, (int)(100 * fd / (fs * 0.1)));
 
@@ -2529,7 +2529,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.IICorrected);
 
         static EnumerableSignal GetSinSignal(double f0) => MathEnumerableSignal.Sin(dt, f0, (int)(100 * fd / (fs * 0.1)));
 

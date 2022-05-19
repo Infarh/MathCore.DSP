@@ -16,7 +16,7 @@ public abstract class ComplexTest
     protected static void CheckChebyshevII(ChebyshevLowPass filter, int N = 100)
     {
         // Фильтр должен быть фильтром Чебышева второго рода
-        Assert.That.Value(filter.FilterType).IsEqual(ChebyshevFilter.ChebyshevType.II);
+        Assert.That.Value(filter.FilterType).IsEqual(ChebyshevType.II);
 
         var specification = filter.Spec;
 

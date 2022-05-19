@@ -10,6 +10,7 @@ namespace MathCore.DSP.Filters;
 
 /// <summary>Фильтр Чебышева</summary>
 [KnownType(typeof(ChebyshevLowPass))]
+[KnownType(typeof(ChebyshevHighPass))]
 [KnownType(typeof(ChebyshevBandPass))]
 [KnownType(typeof(ChebyshevBandStop))]
 public abstract class ChebyshevFilter : AnalogBasedFilter
@@ -17,24 +18,13 @@ public abstract class ChebyshevFilter : AnalogBasedFilter
     protected static double arcsh(double x) => Log(x + Sqrt(x * x + 1));
     protected static double arcch(double x) => Log(x + Sqrt(x * x - 1));
 
-    /// <summary>Типы фильтров Чебышева</summary>
-    public enum ChebyshevType : byte
-    {
-        /// <summary>Фильтр Чебышева первого рода - основной фильтр, пропускающий нижнюю полосу частот</summary>
-        I,
-        /// <summary>Фильтр Чебышева второго рода, подавляющий верхнюю область частот (выше fp)</summary>
-        II,
-        /// <summary>Фильтр Чебышева второго рода c коррекцией частотного диапазона, подавляющий верхнюю область частот (выше fs)</summary>
-        IICorrected
-    }
-
     protected static IEnumerable<Complex> GetNormedPolesI(int N, double EpsP, double W0 = 1)
     {
         var beta = arcsh(1 / EpsP) / N;
         var sh = Sinh(beta) * W0;
         var ch = Cosh(beta) * W0;
         if (N.IsOdd()) yield return -sh;    // Если порядок фильтра нечётный, то первым добавляем центральный полюс
-        var r = N % 2;                   // Нечётность порядка фильтра
+        var r = N % 2;                      // Нечётность порядка фильтра
         for (var (i, dth) = (r, Consts.pi05 / N); i < N; i += 2)   // Расчёт полюсов
         {
             var th = dth * (i - r + 1);
