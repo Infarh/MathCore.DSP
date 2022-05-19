@@ -1516,7 +1516,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         file.ThrowIfNotFound();
 
         var lines = file.ReadLines()
-           .Select(s => s.StartsWith('-') ? s : $"+{s}");
+           .Select(s => s!.StartsWith('-') ? s : $"+{s}");
 
         var max_str_len = lines.Max(s => s.Length);
 

@@ -79,7 +79,7 @@ public class ButterworthLowPass : UnitTest
             (poles[i], poles[i + 1]) = Complex.ConjugateAbsExp(alpha, th0 * (i - r + 1 + N));
 
         //poles.ToDebugEnum();
-        poles.AssertEquals(AccuracyComplex.Eps(-14),
+        poles.AssertEquals(AccuracyComplex.Eps(14),
             /*[ 0]*/ (-0.212281578508883212, +1.067211563088522608),
             /*[ 1]*/ (-0.212281578508883212, -1.067211563088522608),
             /*[ 2]*/ (-0.604526789535973275, +0.904738276905205363),
@@ -93,7 +93,7 @@ public class ButterworthLowPass : UnitTest
         var lowpass_poles = AnalogBasedFilter.TransformToLowPassW(poles, Wp);
 
         //lowpass_poles.ToDebugEnum();
-        lowpass_poles.AssertEquals(AccuracyComplex.Eps(-14),
+        lowpass_poles.AssertEquals(AccuracyComplex.Eps(14),
             /*[ 0]*/ (-0.425984051389412477, +2.141566444565760730),
             /*[ 1]*/ (-0.425984051389412477, -2.141566444565760730),
             /*[ 2]*/ (-1.213099943899241140, +1.815532366728786817),
@@ -108,7 +108,7 @@ public class ButterworthLowPass : UnitTest
         var z_poles = DigitalFilter.ToZArray(lowpass_poles, dt);
 
         //z_poles.ToDebugEnum();
-        z_poles.AssertEquals(AccuracyComplex.Eps(-14),
+        z_poles.AssertEquals(AccuracyComplex.Eps(14),
             /*[ 0]*/ (0.936997507674962593, +0.203084896923829750),
             /*[ 1]*/ (0.936997507674962593, -0.203084896923829750),
             /*[ 2]*/ (0.871915749459332590, +0.160208721965230144),
