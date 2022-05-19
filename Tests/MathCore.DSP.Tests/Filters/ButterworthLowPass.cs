@@ -252,7 +252,7 @@ public class ButterworthLowPass : UnitTest
         Assert.That.Value(transmission_0.Abs).IsEqual(1, 5.4e-10);
         Assert.That.Value(transmission_fp.Abs).IsEqual(Gp, 2.2e-10);
         Assert.That.Value(transmission_fs.Abs).LessOrEqualsThan(Gs, 1e-25);
-        Assert.That.Value(transmission_fd05.Abs).IsEqual(0, 2.3e-26);
+        Assert.That.Value(transmission_fd05.Abs).IsEqual(0, 7e-26);
     }
 
     [TestMethod]

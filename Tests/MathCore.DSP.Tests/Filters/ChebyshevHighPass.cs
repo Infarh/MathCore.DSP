@@ -1285,7 +1285,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         //transmission_fh.Abs.ToDebug();
         //transmission_fd05.Abs.ToDebug();
 
-        transmission__0.Power.In_dB_byPower().AssertLessThan(-Rs, 2.5e-10);
+        transmission__0.Power.In_dB_byPower().AssertLessThan(-Rs, 1e-8);
         transmission_fs.Power.In_dB_byPower().AssertLessThan(-Rs);
         transmission_fp.Power.In_dB_byPower().AssertEquals(-Rs, 1.89e-8);
         transmission_fh.Power.In_dB_byPower().AssertGreaterOrEqualsThan(-Rp);
