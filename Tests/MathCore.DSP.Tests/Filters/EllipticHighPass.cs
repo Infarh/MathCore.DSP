@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Diagnostics;
 using System.Linq;
 
@@ -16,9 +17,40 @@ using static MathCore.SpecialFunctions.EllipticJacobi;
 
 namespace MathCore.DSP.Tests.Filters;
 
-[TestClass]
+[TestClassHandler("FailResultHandler")]
 public class EllipticHighPass
 {
+    // ReSharper disable once UnusedMember.Local
+    private static void FailResultHandler(TestResult result)
+    {
+        if (result.TestFailureException?.InnerException is not AssertFailedException exception) return;
+        switch (exception.Data["Actual"])
+        {
+            case IEnumerable<Complex> actual:
+                result.ToDebugEnum(actual);
+                break;
+            case IEnumerable actual:
+                result.ToDebugEnum(actual);
+                break;
+            case { } actual:
+                result.ToDebug(actual);
+                break;
+        }
+
+        //switch (exception.Data["Expected"])
+        //{
+        //    case IEnumerable<Complex> expected:
+        //        result.ToDebugEnum(expected);
+        //        break;
+        //    case IEnumerable expected:
+        //        result.ToDebugEnum(expected);
+        //        break;
+        //    case { } expected:
+        //        result.ToDebug(expected);
+        //        break;
+        //}
+    }
+
     [TestMethod]
     public void Creation_Even()
     {
@@ -101,10 +133,10 @@ public class EllipticHighPass
 
         //poles.ToDebugEnum();
         poles.AssertEquals(
-            /*[ 0]*/ (-0.105281264621164231, +0.993710811208774358),
-            /*[ 1]*/ (-0.105281264621164231, -0.993710811208774358),
-            /*[ 2]*/ (-0.364290595873426937, +0.478602767640667226),
-            /*[ 3]*/ (-0.364290595873426937, -0.478602767640667226)
+            /*[ 0]*/ (-0.105281264621164300, 0.993710811208774358),
+            /*[ 1]*/ (-0.105281264621164300, -0.993710811208774358),
+            /*[ 2]*/ (-0.364290595873426937, 0.478602767640667170),
+            /*[ 3]*/ (-0.364290595873426937, -0.478602767640667170)
             );
 
         var high_pass_zeros_enum = AnalogBasedFilter.TransformToHighPassW(zeros, Wp);
@@ -124,10 +156,10 @@ public class EllipticHighPass
 
         //high_pass_poles.ToDebugEnum();
         high_pass_poles.AssertEquals(
-            /*[ 0]*/ (-0.427453184969548872, -4.034572083820467725),
-            /*[ 1]*/ (-0.427453184969548872, +4.034572083820467725),
+            /*[ 0]*/ (-0.427453184969549038, -4.034572083820466837),
+            /*[ 1]*/ (-0.427453184969549038, 4.034572083820466837),
             /*[ 2]*/ (-4.082467720621100860, -5.363521243825417173),
-            /*[ 3]*/ (-4.082467720621100860, +5.363521243825417173)
+            /*[ 3]*/ (-4.082467720621100860, 5.363521243825417173)
         );
 
         var z_zeros = DigitalFilter.ToZArray(high_pass_zeros, dt);
@@ -143,10 +175,10 @@ public class EllipticHighPass
 
         //z_poles.ToDebugEnum();
         z_poles.AssertEquals(
-            /*[ 0]*/ (0.884631277392249560, -0.372228523605499684),
-            /*[ 1]*/ (0.884631277392249560, +0.372228523605499684),
+            /*[ 0]*/ (0.884631277392249560, -0.372228523605499628),
+            /*[ 1]*/ (0.884631277392249560, 0.372228523605499628),
             /*[ 2]*/ (0.582466078525638697, -0.352438567686221504),
-            /*[ 3]*/ (0.582466078525638697, +0.352438567686221504)
+            /*[ 3]*/ (0.582466078525638697, 0.352438567686221504)
         );
 
         var k_zeros = z_zeros.Multiply(z => 1 + z).Re;
@@ -300,11 +332,11 @@ public class EllipticHighPass
 
         //poles.ToDebugEnum();
         poles.AssertEquals(
-            /*[ 0]*/  -0.385344340275627584,
-            /*[ 1]*/ (-0.049920708887154476, 0.998198050578146590),
-            /*[ 2]*/ (-0.049920708887154476, -0.998198050578146590),
-            /*[ 3]*/ (-0.219106729346206286, 0.741033961150657450),
-            /*[ 4]*/ (-0.219106729346206286, -0.741033961150657450)
+            /*[ 0]*/  -0.385344340275627639,
+            /*[ 1]*/ (-0.049920708887154532, 0.998198050578146590),
+            /*[ 2]*/ (-0.049920708887154532, -0.998198050578146590),
+            /*[ 3]*/ (-0.219106729346206675, 0.741033961150657894),
+            /*[ 4]*/ (-0.219106729346206675, -0.741033961150657894)
             );
 
         var high_pass_zeros_enum = AnalogBasedFilter.TransformToHighPassW(zeros, Wp);
@@ -325,11 +357,11 @@ public class EllipticHighPass
 
         //high_pass_poles.ToDebugEnum();
         high_pass_poles.AssertEquals(
-            /*[ 0]*/  -10.520981590837894970,
-            /*[ 1]*/ (-0.202613185262830314, -4.051386509914491008),
-            /*[ 2]*/ (-0.202613185262830314, +4.051386509914491008),
-            /*[ 3]*/ (-1.487597566404979865, -5.031156827179609436),
-            /*[ 4]*/ (-1.487597566404979865, +5.031156827179609436)
+            /*[ 0]*/  -10.520981590837891417,
+            /*[ 1]*/ (-0.202613185262830536, -4.051386509914491008),
+            /*[ 2]*/ (-0.202613185262830536, 4.051386509914491008),
+            /*[ 3]*/ (-1.487597566404980531, -5.031156827179604996),
+            /*[ 4]*/ (-1.487597566404980531, 5.031156827179604996)
         );
 
         var z_zeros = DigitalFilter.ToZArray(high_pass_zeros, dt);
@@ -346,11 +378,11 @@ public class EllipticHighPass
 
         //z_poles.ToDebugEnum();
         z_poles.AssertEquals(
-            /*[ 0]*/  0.310573838555953108,
+            /*[ 0]*/  0.310573838555953274,
             /*[ 1]*/ (0.903396072712712384, -0.381702758019330013),
-            /*[ 2]*/ (0.903396072712712384, +0.381702758019330013),
-            /*[ 3]*/ (0.764788580501989501, -0.413211764967297002),
-            /*[ 4]*/ (0.764788580501989501, +0.413211764967297002)
+            /*[ 2]*/ (0.903396072712712384, 0.381702758019330013),
+            /*[ 3]*/ (0.764788580501989834, -0.413211764967296669),
+            /*[ 4]*/ (0.764788580501989834, 0.413211764967296669)
         );
 
         var k_zeros = z_zeros.Multiply(z => 1 + z).Re;
@@ -362,7 +394,7 @@ public class EllipticHighPass
         else
             g_norm = k_poles / k_zeros;
 
-        g_norm.AssertEquals(0.527181059154778864);
+        g_norm.AssertEquals(0.5271810591547792);
 
         var zz0 = Complex.Exp(-Consts.pi2 * 0 / fd);
         //var zz0 = Complex.Exp(-Consts.pi2 * fs / fd);
@@ -378,22 +410,22 @@ public class EllipticHighPass
 
         //B.ToDebugEnum();
         B.AssertEquals(
-            /*[ 0]*/ +0.5271810591547789,
-            /*[ 1]*/ -2.554714604145422,
-            /*[ 2]*/ +5.031038000546879,
-            /*[ 3]*/ -5.031038000546879,
-            /*[ 4]*/ +2.554714604145421,
-            /*[ 5]*/ -0.5271810591547785
+            /*[ 0]*/ 0.5271810591547792,
+            /*[ 1]*/ -2.554714604145423,
+            /*[ 2]*/ 5.031038000546882,
+            /*[ 3]*/ -5.031038000546882,
+            /*[ 4]*/ 2.5547146041454223,
+            /*[ 5]*/ -0.5271810591547789
         );
 
-        //A.ToDebugEnum();
+        A.ToDebugEnum();
         A.AssertEquals(
-            /*[ 0]*/ +1,
-            /*[ 1]*/ -3.6469431449853564,
-            /*[ 2]*/ +5.517284017908104,
-            /*[ 3]*/ -4.228185429786585,
-            /*[ 4]*/ +1.6077308828679027,
-            /*[ 5]*/ -0.22572385214621152
+            /*[ 0]*/ 1,
+            /*[ 1]*/ -3.6469431449853578,
+            /*[ 2]*/ 5.517284017908107,
+            /*[ 3]*/ -4.228185429786587,
+            /*[ 4]*/ 1.6077308828679036,
+            /*[ 5]*/ -0.2257238521462117
         );
 
         var filter = new DSP.Filters.EllipticHighPass(dt, fs, fp, Gp, Gs);
@@ -431,10 +463,10 @@ public class EllipticHighPass
         //transmission_fp.Abs.ToDebug();
         //transmission_fd05.Abs.ToDebug();
 
-        transmission__0.Power.In_dB_byPower().AssertLessThan(-Rs, 4e-13);
+        transmission__0.Power.In_dB_byPower().AssertLessThan(-Rs, 1e-11);
         transmission_fs.Power.In_dB_byPower().AssertEquals(-Rs, 5e-3);
         transmission_fp.Power.In_dB_byPower().AssertEquals(-Rp, 6e-13);
-        transmission_fd05.Power.In_dB_byPower().AssertEquals(-Rp, 1.3e-15);
+        transmission_fd05.Power.In_dB_byPower().AssertEquals(-Rp, 1e-14);
     }
 
    [TestMethod]

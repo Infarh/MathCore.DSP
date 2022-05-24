@@ -1,9 +1,14 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
+using System.Xml.Linq;
 
 using MathCore.DSP.Extensions;
 using MathCore.DSP.Filters;
 using MathCore.DSP.Signals;
+
+using NASA;
 
 using OxyPlot;
 
@@ -13,6 +18,39 @@ class Program
 {
     static async Task Main()
     {
+        var log10_e = Math.Log10(Math.E);
+
+
+        var xml_data = await new CBR.Daily.DailyInfoSoapClient(
+                new BasicHttpsBinding(),
+                new("https://cbr.ru/DailyInfoWebServ/DailyInfo.asmx"))
+           .DisposeAfterAsync(async c => await c.BiCurBaseXMLAsync(DateTime.Now.AddMonths(-1), DateTime.Now));
+
+        var xml = XDocument.Load(xml_data.CreateNavigator().ReadSubtree());
+
+        var rub2dollar = xml.Descendants("BCB")
+           .Select(node => new DXmlNode(node))
+           .Select((dynamic value) => (Date: (string)value.D0, Value: (string)value.VAL));
+           //.Select(value => (Date: (DateTime)value.Element("D0"), Value: (double)value.Element("VAL")));
+        
+        //using (var daily_info_client = new CBR.Daily.DailyInfoSoapClient(
+        //           new BasicHttpsBinding(), 
+        //           new("https://cbr.ru/DailyInfoWebServ/DailyInfo.asmx")))
+        //{
+        //    await daily_info_client.OpenAsync();
+        //    var data = await daily_info_client.BiCurBaseXMLAsync(DateTime.Now.AddDays(-5), DateTime.Now);
+        //    xml = XDocument.Parse(data.OuterXml);
+        //}
+
+
+        // https://data.nasa.gov/Space-Science/Heliocentric-Trajectories-Web-Services-API/79p5-emwr
+        getAllObjectsResponse trajectory_objects = null;
+        using (var nasa_client = new NASA.HeliocentricTrajectoriesInterfaceClient())
+        {
+            await nasa_client.OpenAsync();
+            trajectory_objects = await nasa_client.getAllObjectsAsync();
+        }
+
         //var eq = new Equalizer(1, 0.2)
         //{ 
         //    Alpha = 1.2

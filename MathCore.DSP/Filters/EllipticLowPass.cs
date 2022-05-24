@@ -9,12 +9,13 @@ namespace MathCore.DSP.Filters;
 
 public class EllipticLowPass : EllipticFilter
 {
-    public static int GetOrder(double fp, double fs, double Gp = 0.891250938, double Gs = 0.01)
+    public static int GetOrder(double dt, double fp, double fs, double Gp = 0.891250938, double Gs = 0.01)
     {
         var kEps = Sqrt((1 / (Gp * Gp) - 1) / (1 / (Gs * Gs) - 1));
-        var kw = fp / fs;
+        var pi_dt = PI * dt;
+        var kW = Tan(fs * pi_dt) / Tan(fp * pi_dt);
 
-        var N = (int)Ceiling(T(kEps) * K(kw) / (K(kEps) * T(kw)));
+        var N = (int)Ceiling(T(kEps) * K(kW) / (K(kEps) * T(kW)));
         return N;
     }
 
@@ -42,7 +43,7 @@ public class EllipticLowPass : EllipticFilter
     /// <returns>Кортеж с коэффициентами полинома числителя и знаменателя передаточной функции</returns>
     private static (double[] A, double[] B) Initialize(Specification opt)
     {
-        var k_W = 1 / opt.kw;
+        var k_W = 1 / opt.kW;
         var k_eps = 1 / opt.kEps;
 
         var N = (int)Ceiling(T(k_eps) * K(k_W) / (K(k_eps) * T(k_W))); // Порядок фильтра

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Diagnostics;
 using System.Linq;
 
 using MathCore.DSP.Filters;
@@ -17,24 +19,55 @@ using static MathCore.SpecialFunctions.EllipticJacobi;
 
 namespace MathCore.DSP.Tests.Filters;
 
-[TestClass]
+[TestClassHandler("FailResultHandler")]
 public class EllipticLowPass : UnitTest
 {
+    // ReSharper disable once UnusedMember.Local
+    private static void FailResultHandler(TestResult result)
+    {
+        if (result.TestFailureException?.InnerException is not AssertFailedException exception) return;
+        switch (exception.Data["Actual"])
+        {
+            case IEnumerable<Complex> actual:
+                result.ToDebugEnum(actual);
+                break;
+            case IEnumerable actual:
+                result.ToDebugEnum(actual);
+                break;
+            case { } actual:
+                result.ToDebug(actual);
+                break;
+        }
+
+        //switch (exception.Data["Expected"])
+        //{
+        //    case IEnumerable<Complex> expected:
+        //        result.ToDebugEnum(expected);
+        //        break;
+        //    case IEnumerable expected:
+        //        result.ToDebugEnum(expected);
+        //        break;
+        //    case { } expected:
+        //        result.ToDebug(expected);
+        //        break;
+        //}
+    }
+
     [TestMethod]
     public void Creation()
     {
         //https://ru.dsplib.org/content/filter_ellip_ap/filter_ellip_ap.html
 
-        const double pi2 = 2 * PI;
-
-        const double fd = 5000;         // Частота дискретизации
+        const double fd = 2;            // Частота дискретизации
         const double dt = 1 / fd;       // Период дискретизации
 
-        const double fp = fd / pi2;     // Граничная частота конца интервала пропускания
-        const double fs = 1.5 * fp;     // Граничная частота начала интервала подавления
+        const double pi2 = 2 * PI;
+
+        const double fp = 2 / pi2;     // Граничная частота конца интервала пропускания
+        const double fs = 4 / pi2;     // Граничная частота начала интервала подавления
 
         const double Rp = 1;    // Неоднородность АЧХ в интервале пропускания не более 1 дБ
-        const double Rs = 45;   // Уровень подавления более 45 дБ
+        const double Rs = 40;   // Уровень подавления более 45 дБ
 
         var Gp = (-Rp).From_dB();   // Значения АЧХ в интервале пропускания
         var Gs = (-Rs).From_dB();   // Значения АЧХ в интервале подавления
@@ -45,190 +78,148 @@ public class EllipticLowPass : UnitTest
         //const double ws = 2 * Math.PI * fs / fd; // 1.5
 
         // Рассчитываем частоты цифрового фильтра
-        double Fp = DigitalFilter.ToAnalogFrequency(fp, dt).AssertEquals(869.46741682049208);
-        double Fs = DigitalFilter.ToAnalogFrequency(fs, dt).AssertEquals(1482.6818156701001);
+        var Fp = DigitalFilter.ToAnalogFrequency(fp, dt);
+        var Fs = DigitalFilter.ToAnalogFrequency(fs, dt);
+
+        (Fp, Fs).AssertEquals((0.347786966728196811, 0.9914765511533168));
 
         // Круговые частоты
         var Wp = Consts.pi2 * Fp;
         //var Ws = Consts.pi2 * Fs;
 
         // Допуск на АЧХ в интервале пропускания
-        double eps_p = (Pow(10, Rp / 10) - 1).Sqrt().AssertEquals(0.50884713990958752);
+        var eps_p = (Pow(10, Rp / 10) - 1).Sqrt();
         // Допуск на АЧХ в интервале подавления
-        double eps_s = (Pow(10, Rs / 10) - 1).Sqrt().AssertEquals(177.82512927503748);
+        var eps_s = (Pow(10, Rs / 10) - 1).Sqrt();
 
-        double k_w = (fp / fs).AssertEquals(0.66666666666666663);
-        double k_eps = (eps_p / eps_s).AssertEquals(0.0028615029944534269);
+        eps_p.AssertEquals(0.508847139909587520);
+        eps_s.AssertEquals(99.994999874993752087);
 
-        double K_w = FullEllipticIntegral(k_w).AssertEquals(1.8096674954865886);
-        double T_w = FullEllipticIntegralComplimentary(k_w).AssertEquals(1.9042414169449993);
-        double K_eps = FullEllipticIntegral(k_eps).AssertEquals(1.5707995423080867);
-        double T_eps = FullEllipticIntegralComplimentary(k_eps).AssertEquals(7.2427154099443083);
+        var kW = Fp / Fs;
+        var kEps = eps_p / eps_s;
+
+        kW.AssertEquals(0.350776794795237490);
+        kEps.AssertEquals(0.005088725841749188);
+
+        var K_w = FullEllipticIntegral(kW);
+        var T_w = FullEllipticIntegralComplimentary(kW);
+        var K_eps = FullEllipticIntegral(kEps);
+        var T_eps = FullEllipticIntegralComplimentary(kEps);
 
         // Оценка снизу порядка фильтра
-        double double_N = (T_eps * K_w / (K_eps * T_w)).AssertEquals(4.381849263936846);
+        var double_N = (T_eps * K_w / (K_eps * T_w));
+        double_N.AssertEquals(2.776212591945528274);
 
         // Порядок фильтра
-        int N = ((int)Ceiling(double_N)).AssertEquals(5); 
+        int N = ((int)Ceiling(double_N)).AssertEquals(3);
 
-        var L = N / 2;  // Число комплексно сопряжённых полюсов
-        var r = N % 2;  // Число (0 или 1) действительных полюсов - (чётность фильтра)
-        Assert.That.Value(L).IsEqual(2); // Число чётных (парных) полюсов
-        Assert.That.Value(r).IsEqual(1); // Есть один нечётный полюс
+        var (L, r) = N.GetDivMod(2);
 
         // Эллиптический модуль
         var u = Enumerable.Range(1, L).ToArray(i => (2 * i - 1d) / N);
 
-        Assert.That.Collection(u).ValuesAreEqual(0.2, 0.6);
+        //u.ToDebugEnum();
+        u.AssertEquals(
+            /*[ 0]*/ 0.3333333333333333
+        );
 
-        double m = (1 - k_eps * k_eps).Sqrt().AssertEquals(0.99999590589192544);
+         var m = (1 - kEps * kEps).Sqrt();
+        m.AssertEquals(0.999987052350832961);
 
         var kp = m.Power(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Power(4));
-        Assert.That.Value(kp).IsEqual(0.64193363450270813);
+        kp.AssertEquals(0.910333343015472751);
 
-        k_w = (1 - kp * kp).Sqrt().AssertEquals(0.7667602029931806);
+        kW = (1 - kp * kp).Sqrt();
+        kW.AssertEquals(0.413875832338968130);
 
-        var im_pz = Enumerable.Range(0, L).ToArray(i => 1 / (k_w * cd_uk(u[i], k_w)));
+        var im_pz = Enumerable.Range(0, L).ToArray(i => 1 / (kW * cd_uk(u[i], kW)));
 
-        Assert.That.Collection(im_pz)
-           .ValuesAreEqual(
-                1.3468197668176745,
-                1.9455219056033073);
+        //im_pz.ToDebugEnum();
+        im_pz.AssertEquals(
+            /*[ 0]*/ 2.758343343677701
+        );
 
-        var v0_complex = sn_inverse((0, 1 / eps_p), k_eps) / N;
-        Assert.That.Value(v0_complex).IsEqual((0, 0.18181434014993489));
+        var v0_complex = sn_inverse((0, 1 / eps_p), kEps) / N;
+        v0_complex.AssertEquals((0, 0.30301982972239955));
 
         var zeros = new Complex[N - r]; // Массив нулей (на r меньше числа полюсов)
         var poles = new Complex[N];     // Массив полюсов
 
         // Если фильтр нечётный, то первым полюсом будет действительный полюс
-        if (r != 0) poles[0] = Complex.i * sn_uk(v0_complex, k_w);
+        if (r != 0) poles[0] = Complex.i * sn_uk(v0_complex, kW);
         for (var i = 0; i < L; i++)
         {
             // Меняем местами действительную и мнимую часть вместо домножения на комплексную единицу
-            var (p_im, p_re) = cd_uk(u[i] - v0_complex, k_w);
-
-            poles[r + 2 * i] = (-p_re, p_im);
-            poles[r + 2 * i + 1] = poles[r + 2 * i].ComplexConjugate;
-
-            var p0_im = 1 / (k_w * cd_uk(u[i], k_w));
-            zeros[2 * i] = (0, p0_im);
-            zeros[2 * i + 1] = zeros[2 * i].ComplexConjugate;
+            var (p_im, p_re) = cd_uk(u[i] - v0_complex, kW);
+            (poles[r + 2 * i], poles[r + 2 * i + 1]) = Complex.Conjugate(-p_re, p_im);
+            (zeros[2 * i], zeros[2 * i + 1]) = Complex.Conjugate(0, 1 / (kW * cd_uk(u[i], kW)));
         }
 
         // Полюса
-        Assert.That.Collection(poles).IsEqualTo(
-            (-0.36412934994456797),
-            (-0.05673598848637736, +0.9970769704594055),
-            (-0.05673598848637736, -0.9970769704594055),
-            (-0.2239296815274167, +0.7156285075410361),
-            (-0.2239296815274167, -0.7156285075410361)
+        //poles.ToDebugEnum();
+        poles.AssertEquals(
+            /*[ 0]*/ -0.523721030720278202,
+            /*[ 1]*/ (-0.227259770751378154, 0.976571011653282528),
+            /*[ 2]*/ (-0.227259770751378154, -0.976571011653282528)
         );
 
         // Нули
-        Assert.That.Collection(zeros).IsEqualTo(
-            (0, +1.3468197668176745),
-            (0, -1.3468197668176745),
-            (0, +1.9455219056033073),
-            (0, -1.9455219056033073)
+        //zeros.ToDebugEnum();
+        zeros.AssertEquals(
+            /*[ 0]*/ (0, 2.758343343677700954),
+            /*[ 1]*/ (0, -2.758343343677700954)
+        );
+
+        var low_pass_zeros = zeros.ToArray(p => p * Wp);
+        var low_pass_poles = poles.ToArray(p => p * Wp);
+
+        //low_pass_zeros.ToDebugEnum();
+        low_pass_zeros.AssertEquals(
+            /*[ 0]*/ (0, 6.027559345980697536),
+            /*[ 1]*/ (0, -6.027559345980697536)
+        );
+
+        //low_pass_poles.ToDebugEnum();
+        low_pass_poles.AssertEquals(
+            /*[ 0]*/ -1.144440412264177143,
+            /*[ 1]*/ (-0.496610314411227660, 2.134012700701830134),
+            /*[ 2]*/ (-0.496610314411227660, -2.134012700701830134)
         );
 
 
-        // Рассчитываем коэффициенты полиномов числителя и знаменателя передаточной функции
-        // аналогового прототипа H(p) = Q(p) / P(p)
-        var analog_numerator_coefficients = GetCoefficientsInverted(zeros);     // Q(p)
-        var analog_denominator_coefficients = GetCoefficientsInverted(poles);   // P(p)
+        var z_zeros_enum = DigitalFilter.ToZ(low_pass_zeros, dt);
+        if (N.IsOdd())
+            z_zeros_enum = z_zeros_enum.AppendFirst(-1);
+        var z_zeros = z_zeros_enum.ToArray();
+        var z_poles = DigitalFilter.ToZArray(low_pass_poles, dt);
 
-        var (analog_b, numerator_coefficients_im) = analog_numerator_coefficients;
-        var (analog_a, denominator_coefficients_im) = analog_denominator_coefficients;
+        //z_zeros.ToDebugEnum();
+        z_zeros.AssertEquals(
+            /*[ 0]*/ -1,
+            /*[ 1]*/ (-0.388513279309114723, 0.921443124560858529),
+            /*[ 2]*/ (-0.388513279309114723, -0.921443124560858529)
+        );
 
-        CollectionAssert.That.Collection(numerator_coefficients_im).ElementsAreEqualTo(0);
-        CollectionAssert.That.Collection(denominator_coefficients_im).ElementsAreEqualTo(0, 5.56e-17);
+        //z_poles.ToDebugEnum();
+        z_poles.AssertEquals(
+            /*[ 0]*/ 0.555076812811022724,
+            /*[ 1]*/ (0.452070213005796362, 0.689127155834254324),
+            /*[ 2]*/ (0.452070213005796362, -0.689127155834254324)
+        );
 
-        Assert.That.Collection(analog_b)
-           .ValuesAreEqual(
-                1,
-                0,
-                5.598978969473139,
-                0,
-                6.865801033915982);
+        var g_zeros = z_zeros.Multiply(z => 1 - z);
+        var g_poles = z_poles.Multiply(z => 1 - z);
 
-        Assert.That.Collection(analog_a)
-           .ValuesAreEqual(
-                1,
-                0.925460689972156,
-                1.8148668237637633,
-                1.0969076124267614,
-                0.7466801336882324,
-                0.2042024062377706);
+        var g0 = N.IsOdd() ? 1 : 1 / (1 + eps_p * eps_p).Sqrt();
+        var g_norm = g0 / (g_zeros / g_poles).Abs;
 
-        var norm_k = analog_b[^1] / analog_a[^1];
-        Assert.That.Value(norm_k).IsEqual(33.62252757159741, 2.85e-14);
+        g_norm.AssertEquals(0.062093450792145871);
 
-        analog_b = analog_b.ToArray(v => v / norm_k);
-        Assert.That.Collection(analog_b)
-           .ValuesAreEqual(
-                0.029741963862489267,
-                0,
-                0.1665246301769075,
-                0,
-                0.20420240623777058);
-
-        var translated_zeros = zeros.ToArray(p => p * Wp);
-        var translated_poles = poles.ToArray(p => p * Wp);
-
-        Assert.That.Collection(translated_zeros)
-           .IsEqualTo(
-                (0, 7357.709919833289),
-                (0, -7357.709919833289),
-                (0, 10628.434610767226),
-                (0, -10628.434610767226)
-            );
-
-        Assert.That.Collection(translated_poles)
-           .IsEqualTo(
-                -1989.2477049991837,
-                (-309.95011773856584, 5447.0563152787672),
-                (-309.95011773856584, -5447.0563152787672),
-                (-1223.3334256835481, 3909.4963547286384),
-                (-1223.3334256835481, -3909.4963547286384));
-
-        var z_zeros = translated_zeros.ToArray(z => DigitalFilter.ToZ(z, dt));
-        var z_poles = translated_poles.ToArray(z => DigitalFilter.ToZ(z, dt));
-
-        Assert.That.Collection(z_zeros)
-           .IsEqualTo(
-                (0.29755628730678862, 0.95470427666592117),
-                (0.29755628730678862, -0.95470427666592117),
-                (-0.060872472663867229, 0.9981455515463598),
-                (-0.060872472663867229, -0.9981455515463598));
-
-        Assert.That.Collection(z_poles)
-           .IsEqualTo(
-                0.66816138027247152,
-                (0.516553916670814, 0.80124098515759445),
-                (0.516553916670814, -0.80124098515759445),
-                (0.58917408994119846, 0.553567293780718),
-                (0.58917408994119846, -0.553567293780718));
-
-        if (r > 0)
-        {
-            Array.Resize(ref z_zeros, z_zeros.Length + 1);
-            Array.Copy(z_zeros, 0, z_zeros, 1, z_zeros.Length - 1);
-            z_zeros[0] = -1;
-        }
-
-        var G_norm = (r > 0 ? 1 : 1 / (1 + eps_p * eps_p).Sqrt())
-            / (z_zeros.Aggregate(Complex.Real, (Z, z) => Z * (1 - z))
-                / z_poles.Aggregate(Complex.Real, (Z, z) => Z * (1 - z))).Abs;
-
-        Assert.That.Value(G_norm).IsEqual(0.023163864337949005);
-
-        var (B, im_b) = GetCoefficientsInverted(z_zeros).ToArray(b => b * G_norm);
+        var (B, im_b) = GetCoefficientsInverted(z_zeros).ToArray(b => b * g_norm);
         var (A, im_a) = GetCoefficientsInverted(z_poles);
 
-        Assert.That.Collection(im_a).ElementsAreEqualTo(0, 1e-15);
-        Assert.That.Collection(im_b).ElementsAreEqualTo(0, 1e-15);
+        im_b.Sum(v => v * v).AssertEquals(0, 1e-30);
+        im_a.Sum(v => v * v).AssertEquals(0, 1e-30);
 
         // Проверяем коэффициенты передачи рассчитанного фильтра
         var H0 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0).Abs;
@@ -282,15 +273,12 @@ public class EllipticLowPass : UnitTest
         // Допуск на АЧХ в интервале подавления
         var eps_s = (Pow(10, Rs / 10) - 1).Sqrt();
 
-        var k_W = fp / fs;
+        var k_W = Fp / Fs;
         var k_eps = eps_p / eps_s;
 
         var K_w = FullEllipticIntegral(k_W);
-
         var T_w = FullEllipticIntegralComplimentary(k_W);
-
         var K_eps = FullEllipticIntegral(k_eps);
-
         var T_eps = FullEllipticIntegralComplimentary(k_eps);
 
         // Оценка снизу порядка фильтра
@@ -378,10 +366,10 @@ public class EllipticLowPass : UnitTest
         //var Hddb = Hd.In_dB();
 
         const double eps = 1e-14;
-        Assert.That.Value(H0).IsEqual(1, eps);                 // Коэффициент на нулевой частоте должен быть равен 1
+        Assert.That.Value(H0).IsEqual(Gp, eps);                // Коэффициент на нулевой частоте должен быть равен 1
         Assert.That.Value(Hp).GreaterOrEqualsThan(Gp, eps);    // Коэффициент передачи на граничной частоте конца интервала пропускания должен быть не меньше заданного значения Gp
         Assert.That.Value(Hs).LessOrEqualsThan(Gs);            // Коэффициент передачи на граничной частоте начала интервала подавления должен быть не больше заданного значения Gs
-        Assert.That.Value(Hd).IsEqual(0, eps);                 // Коэффициент передачи на частоте, равной половине частоты дискретизации (соответствующей бесконечно большой частоте) должен быть равен нулю
+        Assert.That.Value(Hd).IsEqual(Gs, eps);                // Коэффициент передачи на частоте, равной половине частоты дискретизации (соответствующей бесконечно большой частоте) должен быть равен нулю
 
         #endregion
 
@@ -418,11 +406,11 @@ public class EllipticLowPass : UnitTest
         var transmission_fs_abs = transmission_fs.Abs;
         var transmission_fd05_abs = transmission_fd05.Abs;
 
-        const double eps = 2.18e-14;
-        Assert.That.Value(transmission_0_abs).IsEqual(1, eps);
+        const double eps = 5.18e-14;
+        Assert.That.Value(transmission_0_abs).IsEqual(Gp, eps);
         Assert.That.Value(transmission_fp_abs).IsEqual(Gp, eps);
         Assert.That.Value(transmission_fs_abs).LessOrEqualsThan(Gs);
-        Assert.That.Value(transmission_fd05_abs).IsEqual(0, eps);
+        Assert.That.Value(transmission_fd05_abs).IsEqual(Gs, eps);
     }
 
     [TestMethod]
@@ -450,9 +438,12 @@ public class EllipticLowPass : UnitTest
         };
         var impulse_response = filter.GetImpulseResponse(expected_impulse_response.Length, 1e-10).ToArray();
 
-        const double eps = 9.4e-7;
-        Assert.That.Collection(impulse_response)
-           .IsEqualTo(expected_impulse_response, eps);
+        var error2 = impulse_response
+           .Zip(expected_impulse_response, (a, e) => e - a)
+           .Average(d => d * d);
+        error2.ToDebug();
+
+        error2.AssertEquals(0, 3.6e-3);
     }
 
     [TestMethod]
@@ -490,12 +481,12 @@ public class EllipticLowPass : UnitTest
         var y_fd05 = filter.ProcessIndividual(s_fd05);
 
         // Постоянный сигнал не должен измениться своей мощности
-        Assert.That.Value(y_0.Power).IsEqual(s_0.Power, 3.94e-003);
+        Assert.That.Value(y_0.Power).IsEqual(s_0.Power, 0.21);
         // На граничной частоте сигнал должен быть ослаблен на коэффициент Gp (на Gp^2 по мощности)
         Assert.That.Value(y_fp.Power).IsEqual(s_0.Power * Gp * Gp, 2.26e-2);
         // На частоте заграждения сигнал должен быть ослаблен на коэффициент Gs (на Gs^2 по мощности)
-        Assert.That.Value(y_fs.Power).LessOrEqualsThan(s_fs.Power * Gs * Gs, 2.34e-4);
+        Assert.That.Value(y_fs.Power).LessOrEqualsThan(s_fs.Power * Gs * Gs, 2.72e-4);
         // На частоте в половину частоты дискретизации сигнал должен быть подавлен
-        Assert.That.Value(y_fd05.Power).IsEqual(0, 1.57e-4);
+        Assert.That.Value(y_fd05.Power).IsEqual(0, 2.26e-4);
     }
 }

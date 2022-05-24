@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Diagnostics;
 using System.Linq;
 
 using MathCore.DSP.Filters;
@@ -14,9 +16,40 @@ using static MathCore.SpecialFunctions.EllipticJacobi;
 
 namespace MathCore.DSP.Tests.Filters;
 
-[TestClass]
+[TestClassHandler("FailResultHandler")]
 public class EllipticBandStop : UnitTest
 {
+    // ReSharper disable once UnusedMember.Local
+    private static void FailResultHandler(TestResult result)
+    {
+        if (result.TestFailureException?.InnerException is not AssertFailedException exception) return;
+        switch (exception.Data["Actual"])
+        {
+            case IEnumerable<Complex> actual:
+                result.ToDebugEnum(actual);
+                break;
+            case IEnumerable actual:
+                result.ToDebugEnum(actual);
+                break;
+            case { } actual:
+                result.ToDebug(actual);
+                break;
+        }
+
+        switch (exception.Data["Expected"])
+        {
+            case IEnumerable<Complex> expected:
+                result.ToDebugEnum(expected);
+                break;
+            case IEnumerable expected:
+                result.ToDebugEnum(expected);
+                break;
+            case { } expected:
+                result.ToDebug(expected);
+                break;
+        }
+    }
+
     [TestMethod]
     public void Creation()
     {
@@ -152,11 +185,12 @@ public class EllipticBandStop : UnitTest
             (0, -2.1682610011632977)
             );
 
+        //poles.ToDebugEnum();
         poles.AssertEquals(
-            (-0.064754226306376769, +0.61119112677499909),
-            (-0.064754226306376769, -0.61119112677499909),
-            (-0.22406033752875973, +0.29436910772471786),
-            (-0.22406033752875973, -0.29436910772471786)
+            /*[ 0]*/ (-0.064754226306376811, 0.611191126774999094),
+            /*[ 1]*/ (-0.064754226306376811, -0.611191126774999094),
+            /*[ 2]*/ (-0.224060337528759729, 0.294369107724717805),
+            /*[ 3]*/ (-0.224060337528759729, -0.294369107724717805)
             );
 
         var pzf_zeros = AnalogBasedFilter.TransformToBandStop(zeros, Fsl, Fsh);
@@ -180,16 +214,16 @@ public class EllipticBandStop : UnitTest
             (-4.758917038943161E-16, -5.551565428550191)
             );
 
+        //pzf_poles.ToDebugEnum();
         pzf_poles.AssertEquals(
-            (-0.22795541315219781, +2.9727034750401131),
-            (-1.4225863599870872, -18.551555137033667),
-            (-0.22795541315219781, -2.9727034750401131),
-            (-1.4225863599870872, +18.551555137033667),
-
-            (-1.1307190536141292, +1.7343356882717966),
-            (-14.633073912059702, -22.444710941843681),
-            (-1.1307190536141292, -1.7343356882717966),
-            (-14.633073912059702, +22.444710941843681)
+            /*[ 0]*/ (-0.227955413152198361, 2.972703475040113119),
+            /*[ 1]*/ (-1.422586359987087601, -18.551555137033666654),
+            /*[ 2]*/ (-0.227955413152198361, -2.972703475040113119),
+            /*[ 3]*/ (-1.422586359987087601, 18.551555137033666654),
+            /*[ 4]*/ (-1.130719053614130054, 1.734335688271796627),
+            /*[ 5]*/ (-14.633073912059700206, -22.444710941843673879),
+            /*[ 6]*/ (-1.130719053614130054, -1.734335688271796627),
+            /*[ 7]*/ (-14.633073912059700206, 22.444710941843673879)
         );
 
         var h_F00 = DoubleArrayDSPExtensions.GetAnalogTransmissionCoefficientFromPoles(
@@ -247,18 +281,18 @@ public class EllipticBandStop : UnitTest
             (0.85692452818129894, +0.51544190070390872),
             (0.60049677950867342, -0.79962717425042007),
             (0.60049677950867342, +0.79962717425042007),
-            (0.85692452818129894, -0.51544190070390872));
+            (0.85692452818129894, -0.51544190070390872)
+        );
 
         z_poles.AssertEquals(
-            (0.93565642115019709, +0.28446436884548237),
-            (0.067011448261103043, -0.92401175944069935),
-            (0.93565642115019709, -0.28446436884548237),
-            (0.067011448261103043, +0.92401175944069935),
-
-            (+0.88031182726988344, +0.15432943378971034),
-            (-0.18664227822550081, -0.52711402412329078),
-            (+0.88031182726988344, -0.15432943378971034),
-            (-0.18664227822550081, +0.52711402412329078)
+            /*[ 0]*/ (0.935656421150197093, 0.284464368845482374),
+            /*[ 1]*/ (0.067011448261103043, -0.924011759440699354),
+            /*[ 2]*/ (0.935656421150197093, -0.284464368845482374),
+            /*[ 3]*/ (0.067011448261103043, 0.924011759440699354),
+            /*[ 4]*/ (0.880311827269883440, 0.154329433789710341),
+            /*[ 5]*/ (-0.186642278225500613, -0.527114024123290781),
+            /*[ 6]*/ (0.880311827269883440, -0.154329433789710341),
+            /*[ 7]*/ (-0.186642278225500613, 0.527114024123290781)
             );
 
         var G_norm = (N.IsOdd() ? 1 : Gp)
@@ -346,7 +380,7 @@ public class EllipticBandStop : UnitTest
         h_c0_db.AssertLessOrEqualsThan(-Rs);
         h_sh_db.AssertLessOrEqualsThan(-Rs);
 
-        h_ph_db.AssertGreaterOrEqualsThan(-Rp);
+        h_ph_db.AssertGreaterOrEqualsThan(-Rp, 1e-14);
         h_fd_db.AssertGreaterOrEqualsThan(-Rp, 1e-14);
     }
 
