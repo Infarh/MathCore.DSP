@@ -69,7 +69,7 @@ public class ButterworthHighPass
         var r = N % 2;
         if (r != 0) poles[0] = -alpha;
         for (var (i, th0) = (r, Consts.pi05 / N); i < poles.Length; i += 2)
-            (poles[i], poles[i + 1]) = Complex.ConjugateAbsExp(alpha, th0 * (i - r + 1 + N));
+            (poles[i], poles[i + 1]) = Complex.ConjugateExp(alpha, th0 * (i - r + 1 + N));
 
         //poles.ToDebugEnum();
         poles.AssertEquals(AccuracyComplex.Eps(1e-15),

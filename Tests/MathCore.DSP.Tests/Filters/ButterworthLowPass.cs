@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 
@@ -70,13 +71,12 @@ public class ButterworthLowPass : UnitTest
         var (L, r) = N.GetDivMod(2);
 
         var alpha = eps_p.Pow(-1d / N);
-
         alpha.AssertEquals(1.088119473662736647);
 
         var poles = new Complex[N];
         if (r != 0) poles[0] = -alpha;
         for (var (i, th0) = (r, Consts.pi05 / N); i < poles.Length; i += 2) 
-            (poles[i], poles[i + 1]) = Complex.ConjugateAbsExp(alpha, th0 * (i - r + 1 + N));
+            (poles[i], poles[i + 1]) = Complex.ConjugateExp(alpha, th0 * (i - r + 1 + N));
 
         //poles.ToDebugEnum();
         poles.AssertEquals(AccuracyComplex.Eps(1e-14),
@@ -94,13 +94,13 @@ public class ButterworthLowPass : UnitTest
 
         lowpass_poles.ToDebugEnum();
         lowpass_poles.AssertEquals(AccuracyComplex.Eps(1e-14),
-            /*[ 0]*/ (-0.425984051389412477, 2.141566444565760730),
+            /*[ 0]*/ (-0.425984051389412477, +2.141566444565760730),
             /*[ 1]*/ (-0.425984051389412477, -2.141566444565760730),
-            /*[ 2]*/ (-1.213099943899241140, 1.815532366728786817),
+            /*[ 2]*/ (-1.213099943899241140, +1.815532366728786817),
             /*[ 3]*/ (-1.213099943899241140, -1.815532366728786817),
-            /*[ 4]*/ (-1.815532366728786817, 1.213099943899241584),
+            /*[ 4]*/ (-1.815532366728786817, +1.213099943899241584),
             /*[ 5]*/ (-1.815532366728786817, -1.213099943899241584),
-            /*[ 6]*/ (-2.141566444565760730, 0.425984051389413365),
+            /*[ 6]*/ (-2.141566444565760730, +0.425984051389413365),
             /*[ 7]*/ (-2.141566444565760730, -0.425984051389413365)
         );
 
