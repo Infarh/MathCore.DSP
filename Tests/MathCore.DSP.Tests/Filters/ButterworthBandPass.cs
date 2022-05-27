@@ -54,10 +54,10 @@ public class ButterworthBandPass
         w0.AssertEquals(0.67796610169491522);
 
         // Преобразуем частоты аналогового фильтра в частоты цифрового фильтра с учётом заданной частоты дискретизации
-        var Fsl = DigitalFilter.ToAnalogFrequency(fsl, dt);
-        var Fpl = DigitalFilter.ToAnalogFrequency(fpl, dt);
-        var Fph = DigitalFilter.ToAnalogFrequency(fph, dt);
-        var Fsh = DigitalFilter.ToAnalogFrequency(fsh, dt);
+        var Fsl = DigitalFilter.ToDigitalFrequency(fsl, dt);
+        var Fpl = DigitalFilter.ToDigitalFrequency(fpl, dt);
+        var Fph = DigitalFilter.ToDigitalFrequency(fph, dt);
+        var Fsh = DigitalFilter.ToDigitalFrequency(fsh, dt);
 
         Fsl.AssertEquals(0.31937518051807723);
         Fpl.AssertEquals(0.64524608331077715);
@@ -275,13 +275,13 @@ public class ButterworthBandPass
 
         var filter = new DSP.Filters.ButterworthBandPass(dt, fsl, fpl, fph, fsh, Gp, Gs);
 
-        var h_f0 = filter.GetTransmissionCoefficient(0);
-        var h_sl = filter.GetTransmissionCoefficient(fsl);
-        var h_pl = filter.GetTransmissionCoefficient(fpl);
-        var h_c0 = filter.GetTransmissionCoefficient((fpl * fph).Sqrt());
-        var h_ph = filter.GetTransmissionCoefficient(fph);
-        var h_sh = filter.GetTransmissionCoefficient(fsh);
-        var h_fd = filter.GetTransmissionCoefficient(fd / 2);
+        var h_f0 = filter.FrequencyResponse(0);
+        var h_sl = filter.FrequencyResponse(fsl);
+        var h_pl = filter.FrequencyResponse(fpl);
+        var h_c0 = filter.FrequencyResponse((fpl * fph).Sqrt());
+        var h_ph = filter.FrequencyResponse(fph);
+        var h_sh = filter.FrequencyResponse(fsh);
+        var h_fd = filter.FrequencyResponse(fd / 2);
 
         //h_f0.Abs.ToDebug();
         //h_sl.Abs.ToDebug();

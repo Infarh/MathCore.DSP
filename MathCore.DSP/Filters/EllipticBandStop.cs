@@ -28,10 +28,10 @@ public class EllipticBandStop : EllipticFilter
             throw new ArgumentOutOfRangeException(
                 nameof(Gp), Gp, $"Уровень АЧХ в полосе пропускания Gp={Gp} был меньше, либо равен уровню АЧХ в полосе заграждения Gs={Gs}");
 
-        var Fpl = ToAnalogFrequency(fpl, dt);
-        var Fsl = ToAnalogFrequency(fsl, dt);
-        var Fsh = ToAnalogFrequency(fsh, dt);
-        var Fph = ToAnalogFrequency(fph, dt);
+        var Fpl = ToDigitalFrequency(fpl, dt);
+        var Fsl = ToDigitalFrequency(fsl, dt);
+        var Fsh = ToDigitalFrequency(fsh, dt);
+        var Fph = ToDigitalFrequency(fph, dt);
 
         var Wpl = Consts.pi2 * Fpl;
         var Wsl = Consts.pi2 * Fsl;
@@ -55,8 +55,8 @@ public class EllipticBandStop : EllipticFilter
         const double Fs = 1 / Consts.pi2;
 
         // Для передачи информации о граничных частотах в спецификацию аналогвого прототипа перечситываем частоты цифрового фильтра обратно
-        var fp = ToDigitalFrequency(Fp, dt);
-        var fs = ToDigitalFrequency(Fs, dt);
+        var fp = ToAnalogFrequency(Fp, dt);
+        var fs = ToAnalogFrequency(Fs, dt);
 
         return new Specification(dt, fp, fs, Gp, Gs);
     }
@@ -78,8 +78,8 @@ public class EllipticBandStop : EllipticFilter
 
         // Пересчитываем аналоговые частоты полосы заграждения в цифровые
         var dt = Spec.dt;
-        var Fsl = ToAnalogFrequency(fsl, dt);
-        var Fsh = ToAnalogFrequency(fsh, dt);
+        var Fsl = ToDigitalFrequency(fsl, dt);
+        var Fsh = ToDigitalFrequency(fsh, dt);
 
         // Переносим нули и полюса аналогового нормированного ФНЧ в полосы ПЗФ
         var pzf_zeros = TransformToBandStop(zeros, Fsl, Fsh);

@@ -57,10 +57,10 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         w0.AssertEquals(0.67796610169491522);
 
         // Преобразуем частоты аналогового фильтра в частоты цифрового фильтра с учётом заданной частоты дискретизации
-        var Fpl = DigitalFilter.ToAnalogFrequency(fpl, dt);
-        var Fsl = DigitalFilter.ToAnalogFrequency(fsl, dt);
-        var Fsh = DigitalFilter.ToAnalogFrequency(fsh, dt);
-        var Fph = DigitalFilter.ToAnalogFrequency(fph, dt);
+        var Fpl = DigitalFilter.ToDigitalFrequency(fpl, dt);
+        var Fsl = DigitalFilter.ToDigitalFrequency(fsl, dt);
+        var Fsh = DigitalFilter.ToDigitalFrequency(fsh, dt);
+        var Fph = DigitalFilter.ToDigitalFrequency(fph, dt);
 
         Fpl.AssertEquals(0.31937518051807723);
         Fsl.AssertEquals(0.64524608331077715);
@@ -274,10 +274,10 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         w0.AssertEquals(0.7567567567567566);
 
         // Преобразуем частоты аналогового фильтра в частоты цифрового фильтра с учётом заданной частоты дискретизации
-        var Fpl = DigitalFilter.ToAnalogFrequency(fpl, dt);
-        var Fsl = DigitalFilter.ToAnalogFrequency(fsl, dt);
-        var Fsh = DigitalFilter.ToAnalogFrequency(fsh, dt);
-        var Fph = DigitalFilter.ToAnalogFrequency(fph, dt);
+        var Fpl = DigitalFilter.ToDigitalFrequency(fpl, dt);
+        var Fsl = DigitalFilter.ToDigitalFrequency(fsl, dt);
+        var Fsh = DigitalFilter.ToDigitalFrequency(fsh, dt);
+        var Fph = DigitalFilter.ToDigitalFrequency(fph, dt);
 
         Fpl.AssertEquals(0.31937518051807723);
         Fsl.AssertEquals(0.64524608331077715);
@@ -501,10 +501,10 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         w0.AssertEquals(0.67796610169491522);
 
         // Преобразуем частоты аналогового фильтра в частоты цифрового фильтра с учётом заданной частоты дискретизации
-        var Fpl = DigitalFilter.ToAnalogFrequency(fpl, dt);
-        var Fsl = DigitalFilter.ToAnalogFrequency(fsl, dt);
-        var Fsh = DigitalFilter.ToAnalogFrequency(fsh, dt);
-        var Fph = DigitalFilter.ToAnalogFrequency(fph, dt);
+        var Fpl = DigitalFilter.ToDigitalFrequency(fpl, dt);
+        var Fsl = DigitalFilter.ToDigitalFrequency(fsl, dt);
+        var Fsh = DigitalFilter.ToDigitalFrequency(fsh, dt);
+        var Fph = DigitalFilter.ToDigitalFrequency(fph, dt);
 
         Fpl.AssertEquals(0.31937518051807723);
         Fsl.AssertEquals(0.64524608331077715);
@@ -755,10 +755,10 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         w0.AssertEquals(0.7567567567567566);
 
         // Преобразуем частоты аналогового фильтра в частоты цифрового фильтра с учётом заданной частоты дискретизации
-        var Fpl = DigitalFilter.ToAnalogFrequency(fpl, dt);
-        var Fsl = DigitalFilter.ToAnalogFrequency(fsl, dt);
-        var Fsh = DigitalFilter.ToAnalogFrequency(fsh, dt);
-        var Fph = DigitalFilter.ToAnalogFrequency(fph, dt);
+        var Fpl = DigitalFilter.ToDigitalFrequency(fpl, dt);
+        var Fsl = DigitalFilter.ToDigitalFrequency(fsl, dt);
+        var Fsh = DigitalFilter.ToDigitalFrequency(fsh, dt);
+        var Fph = DigitalFilter.ToDigitalFrequency(fph, dt);
 
         Fpl.AssertEquals(0.31937518051807723);
         Fsl.AssertEquals(0.64524608331077715);
@@ -1020,10 +1020,10 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         w0.AssertEquals(0.67796610169491522);
 
         // Преобразуем частоты аналогового фильтра в частоты цифрового фильтра с учётом заданной частоты дискретизации
-        var Fpl = DigitalFilter.ToAnalogFrequency(fpl, dt);
-        var Fsl = DigitalFilter.ToAnalogFrequency(fsl, dt);
-        var Fsh = DigitalFilter.ToAnalogFrequency(fsh, dt);
-        var Fph = DigitalFilter.ToAnalogFrequency(fph, dt);
+        var Fpl = DigitalFilter.ToDigitalFrequency(fpl, dt);
+        var Fsl = DigitalFilter.ToDigitalFrequency(fsl, dt);
+        var Fsh = DigitalFilter.ToDigitalFrequency(fsh, dt);
+        var Fph = DigitalFilter.ToDigitalFrequency(fph, dt);
 
         Fpl.AssertEquals(0.31937518051807723);
         Fsl.AssertEquals(0.64524608331077715);
@@ -1271,10 +1271,10 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         w0.AssertEquals(0.7567567567567566);
 
         // Преобразуем частоты аналогового фильтра в частоты цифрового фильтра с учётом заданной частоты дискретизации
-        var Fpl = DigitalFilter.ToAnalogFrequency(fpl, dt);
-        var Fsl = DigitalFilter.ToAnalogFrequency(fsl, dt);
-        var Fsh = DigitalFilter.ToAnalogFrequency(fsh, dt);
-        var Fph = DigitalFilter.ToAnalogFrequency(fph, dt);
+        var Fpl = DigitalFilter.ToDigitalFrequency(fpl, dt);
+        var Fsl = DigitalFilter.ToDigitalFrequency(fsl, dt);
+        var Fsh = DigitalFilter.ToDigitalFrequency(fsh, dt);
+        var Fph = DigitalFilter.ToDigitalFrequency(fph, dt);
 
         Fpl.AssertEquals(0.31937518051807723);
         Fsl.AssertEquals(0.64524608331077715);

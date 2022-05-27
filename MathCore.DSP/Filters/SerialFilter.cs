@@ -16,5 +16,5 @@ public class SerialFilter : CombinationFilter
         Filter2.Reset();
     }
 
-    public override Complex GetTransmissionCoefficient(double f) => Filter1.GetTransmissionCoefficient(f) * Filter2.GetTransmissionCoefficient(f);
+    public override Complex FrequencyResponse(double f) => Filter1.FrequencyResponse(f) * Filter2.FrequencyResponse(f);
 }

@@ -50,8 +50,8 @@ public class ButterworthLowPass : UnitTest
         eps_p.AssertEquals(0.5088471399095875);
         eps_s.AssertEquals(99.99499987499375);
 
-        var Fp = DigitalFilter.ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
-        var Fs = DigitalFilter.ToAnalogFrequency(fs, dt);  // Частота подавления аналогового прототипа
+        var Fp = DigitalFilter.ToDigitalFrequency(fp, dt);  // Частота пропускания аналогового прототипа
+        var Fs = DigitalFilter.ToDigitalFrequency(fs, dt);  // Частота подавления аналогового прототипа
 
         Fp.AssertEquals(0.319375180518077229);
         Fs.AssertEquals(0.645246083310777152);
@@ -180,8 +180,8 @@ public class ButterworthLowPass : UnitTest
         var eps_p = (10d.Pow(Rp / 10) - 1).Sqrt();
         var eps_s = (10d.Pow(Rs / 10) - 1).Sqrt();
 
-        var Fp = DigitalFilter.ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
-        var Fs = DigitalFilter.ToAnalogFrequency(fs, dt);  // Частота подавления аналогового прототипа
+        var Fp = DigitalFilter.ToDigitalFrequency(fp, dt);  // Частота пропускания аналогового прототипа
+        var Fs = DigitalFilter.ToDigitalFrequency(fs, dt);  // Частота подавления аналогового прототипа
 
         var k_eps = eps_s / eps_p;
         var k_W = Fs / Fp;
@@ -220,7 +220,7 @@ public class ButterworthLowPass : UnitTest
 
         Assert.That.Value(filter.Order).IsEqual(N);
 
-        var tr_k = filter.GetTransmissionCoefficient(fs, dt).Abs.In_dB();
+        var tr_k = filter.FrequencyResponse(fs, dt).Abs.In_dB();
 
         Assert.That.Collection(filter.A).IsEqualTo(a, 3e-12);
         Assert.That.Collection(filter.B).IsEqualTo(b, 1e-16);
@@ -243,10 +243,10 @@ public class ButterworthLowPass : UnitTest
 
         var filter = new DSP.Filters.ButterworthLowPass(dt, fp, fs, Gp, Gs);
 
-        var transmission_0 = filter.GetTransmissionCoefficient(0, dt);
-        var transmission_fp = filter.GetTransmissionCoefficient(fp, dt);
-        var transmission_fs = filter.GetTransmissionCoefficient(fs, dt);
-        var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2, dt);
+        var transmission_0 = filter.FrequencyResponse(0, dt);
+        var transmission_fp = filter.FrequencyResponse(fp, dt);
+        var transmission_fs = filter.FrequencyResponse(fs, dt);
+        var transmission_fd05 = filter.FrequencyResponse(fd / 2, dt);
 
         Assert.That.Value(transmission_0.Abs).IsEqual(1, 5.4e-10);
         Assert.That.Value(transmission_fp.Abs).IsEqual(Gp, 2.2e-10);
@@ -268,10 +268,10 @@ public class ButterworthLowPass : UnitTest
 
         var filter = new DSP.Filters.ButterworthLowPass(dt, fp, fs, Gp, Gs);
 
-        var transmission_0 = filter.GetTransmissionCoefficient(0);
-        var transmission_fp = filter.GetTransmissionCoefficient(fp);
-        var transmission_fs = filter.GetTransmissionCoefficient(fs);
-        var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
+        var transmission_0 = filter.FrequencyResponse(0);
+        var transmission_fp = filter.FrequencyResponse(fp);
+        var transmission_fs = filter.FrequencyResponse(fs);
+        var transmission_fd05 = filter.FrequencyResponse(fd / 2);
 
         Assert.That.Value(transmission_0.Abs).IsEqual(1, 5.56e-16);
         Assert.That.Value(transmission_fp.Abs).IsEqual(Gp, 8.9e-16);

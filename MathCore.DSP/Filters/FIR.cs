@@ -23,5 +23,5 @@ public class FIR : DigitalFilter
 
     public override double Process(double Sample) => Process(Sample, State);
 
-    public override Complex GetTransmissionCoefficient(double f) => _ImpulseResponse.FrequencyResponse(f);
+    public override Complex FrequencyResponse(double f) => _ImpulseResponse.FrequencyResponse(f);
 }

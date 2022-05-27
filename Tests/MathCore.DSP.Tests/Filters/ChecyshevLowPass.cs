@@ -56,8 +56,8 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         Assert.That.Value(Gp.In_dB()).IsEqual(-1.5, 4.67e-15);
         Assert.That.Value(Gs.In_dB()).IsEqual(-35);
 
-        var Fp = ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
-        var Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового прототипа
+        var Fp = ToDigitalFrequency(fp, dt);  // Частота пропускания аналогового прототипа
+        var Fs = ToDigitalFrequency(fs, dt);  // Частота подавления аналогового прототипа
 
         Assert.That.Value(Fp).IsEqual(869.46741682049208);
         Assert.That.Value(Fs).IsEqual(1638.7206595257194);
@@ -180,8 +180,8 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var Fp = ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
-        var Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового прототипа
+        var Fp = ToDigitalFrequency(fp, dt);  // Частота пропускания аналогового прототипа
+        var Fs = ToDigitalFrequency(fs, dt);  // Частота подавления аналогового прототипа
 
         var Wp = Consts.pi2 * Fp;
         var Ws = Consts.pi2 * Fs;
@@ -274,8 +274,8 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         Assert.That.Value(Gp.In_dB()).IsEqual(-1.5, 4.67e-15);
         Assert.That.Value(Gs.In_dB()).IsEqual(-35);
 
-        var Fp = ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
-        var Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового прототипа
+        var Fp = ToDigitalFrequency(fp, dt);  // Частота пропускания аналогового прототипа
+        var Fs = ToDigitalFrequency(fs, dt);  // Частота подавления аналогового прототипа
 
         Assert.That.Value(Fp).IsEqual(869.46741682049208);
         Assert.That.Value(Fs).IsEqual(1638.7206595257194);
@@ -442,8 +442,8 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         Assert.That.Value(Gp.In_dB()).IsEqual(-1.5, 4.67e-15);
         Assert.That.Value(Gs.In_dB()).IsEqual(-35);
 
-        var Fp = ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
-        var Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового прототипа
+        var Fp = ToDigitalFrequency(fp, dt);  // Частота пропускания аналогового прототипа
+        var Fs = ToDigitalFrequency(fs, dt);  // Частота подавления аналогового прототипа
 
         Assert.That.Value(Fp).IsEqual(869.46741682049208);
         Assert.That.Value(Fs).IsEqual(1638.7206595257194);
@@ -602,10 +602,10 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
 
         Assert.That.Value(filter.Order).IsEven();
 
-        var transmission_0 = filter.GetTransmissionCoefficient(0);
-        var transmission_fp = filter.GetTransmissionCoefficient(fp);
-        var transmission_fs = filter.GetTransmissionCoefficient(fs);
-        var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
+        var transmission_0 = filter.FrequencyResponse(0);
+        var transmission_fp = filter.FrequencyResponse(fp);
+        var transmission_fs = filter.FrequencyResponse(fs);
+        var transmission_fd05 = filter.FrequencyResponse(fd / 2);
 
         var transmission_0_abs = transmission_0.Abs;
         var transmission_fp_abs = transmission_fp.Abs;
@@ -639,10 +639,10 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
 
         Assert.That.Value(filter.Order).IsOdd();
 
-        var transmission_0 = filter.GetTransmissionCoefficient(0);
-        var transmission_fp = filter.GetTransmissionCoefficient(fp);
-        var transmission_fs = filter.GetTransmissionCoefficient(fs);
-        var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
+        var transmission_0 = filter.FrequencyResponse(0);
+        var transmission_fp = filter.FrequencyResponse(fp);
+        var transmission_fs = filter.FrequencyResponse(fs);
+        var transmission_fd05 = filter.FrequencyResponse(fd / 2);
 
         var transmission_0_abs = transmission_0.Abs;
         var transmission_fp_abs = transmission_fp.Abs;
@@ -675,10 +675,10 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
 
         Assert.That.Value(filter.Order).IsEven();
 
-        var transmission_0 = filter.GetTransmissionCoefficient(0);
-        var transmission_fp = filter.GetTransmissionCoefficient(fp);
-        var transmission_fs = filter.GetTransmissionCoefficient(fs);
-        var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
+        var transmission_0 = filter.FrequencyResponse(0);
+        var transmission_fp = filter.FrequencyResponse(fp);
+        var transmission_fs = filter.FrequencyResponse(fs);
+        var transmission_fd05 = filter.FrequencyResponse(fd / 2);
 
         var transmission_0_abs = transmission_0.Abs;
         var transmission_fp_abs = transmission_fp.Abs;
@@ -713,10 +713,10 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
 
         Assert.That.Value(filter.Order).IsOdd();
 
-        var transmission_0 = filter.GetTransmissionCoefficient(0);
-        var transmission_fp = filter.GetTransmissionCoefficient(fp);
-        var transmission_fs = filter.GetTransmissionCoefficient(fs);
-        var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
+        var transmission_0 = filter.FrequencyResponse(0);
+        var transmission_fp = filter.FrequencyResponse(fp);
+        var transmission_fs = filter.FrequencyResponse(fs);
+        var transmission_fd05 = filter.FrequencyResponse(fd / 2);
 
         var transmission_0_abs = transmission_0.Abs;
         var transmission_fp_abs = transmission_fp.Abs;
@@ -751,10 +751,10 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
 
         Assert.That.Value(filter.Order).IsEven();
 
-        var transmission_0 = filter.GetTransmissionCoefficient(0);
-        var transmission_fp = filter.GetTransmissionCoefficient(fp);
-        var transmission_fs = filter.GetTransmissionCoefficient(fs);
-        var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
+        var transmission_0 = filter.FrequencyResponse(0);
+        var transmission_fp = filter.FrequencyResponse(fp);
+        var transmission_fs = filter.FrequencyResponse(fs);
+        var transmission_fd05 = filter.FrequencyResponse(fd / 2);
 
         var transmission_0_abs = transmission_0.Abs;
         var transmission_fp_abs = transmission_fp.Abs;
@@ -787,10 +787,10 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
 
         Assert.That.Value(filter.Order).IsOdd();
 
-        var transmission_0 = filter.GetTransmissionCoefficient(0);
-        var transmission_fp = filter.GetTransmissionCoefficient(fp);
-        var transmission_fs = filter.GetTransmissionCoefficient(fs);
-        var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
+        var transmission_0 = filter.FrequencyResponse(0);
+        var transmission_fp = filter.FrequencyResponse(fp);
+        var transmission_fs = filter.FrequencyResponse(fs);
+        var transmission_fd05 = filter.FrequencyResponse(fd / 2);
 
         var transmission_0_abs = transmission_0.Abs;
         var transmission_fp_abs = transmission_fp.Abs;

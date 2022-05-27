@@ -78,8 +78,8 @@ public class EllipticLowPass : UnitTest
         //const double ws = 2 * Math.PI * fs / fd; // 1.5
 
         // Рассчитываем частоты цифрового фильтра
-        var Fp = DigitalFilter.ToAnalogFrequency(fp, dt);
-        var Fs = DigitalFilter.ToAnalogFrequency(fs, dt);
+        var Fp = DigitalFilter.ToDigitalFrequency(fp, dt);
+        var Fs = DigitalFilter.ToDigitalFrequency(fs, dt);
 
         (Fp, Fs).AssertEquals((0.347786966728196811, 0.9914765511533168));
 
@@ -123,7 +123,7 @@ public class EllipticLowPass : UnitTest
             /*[ 0]*/ 0.3333333333333333
         );
 
-         var m = (1 - kEps * kEps).Sqrt();
+        var m = (1 - kEps * kEps).Sqrt();
         m.AssertEquals(0.999987052350832961);
 
         var kp = m.Power(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Power(4));
@@ -261,8 +261,8 @@ public class EllipticLowPass : UnitTest
         #region Аналитический расчёт фильтра
 
         // Рассчитываем частоты цифрового фильтра
-        var Fp = DigitalFilter.ToAnalogFrequency(fp, dt);
-        var Fs = DigitalFilter.ToAnalogFrequency(fs, dt);
+        var Fp = DigitalFilter.ToDigitalFrequency(fp, dt);
+        var Fs = DigitalFilter.ToDigitalFrequency(fs, dt);
 
         // Круговые частоты
         var Wp = Consts.pi2 * Fp;
@@ -357,11 +357,11 @@ public class EllipticLowPass : UnitTest
         Aim.Sum(v => v * v).AssertEquals(0);
 
         // Проверяем коэффициенты передачи рассчитанного фильтра
-        var H0 = DoubleArrayDSPExtensions.FrequencyResponse(A, B, 0).Abs;
-        var Hp = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fp / fd).Abs;
-        var Hps = DoubleArrayDSPExtensions.FrequencyResponse(A, B, 0.5 * (fp + fs) / fd).Abs;
-        var Hs = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fs / fd).Abs;
-        var Hd = DoubleArrayDSPExtensions.FrequencyResponse(A, B, 0.5).Abs;
+        var H0 = (A, B).FrequencyResponse(0).Abs;
+        var Hp = (A, B).FrequencyResponse(fp, dt).Abs;
+        var Hps = (A, B).FrequencyResponse(0.5 * (fp + fs), dt).Abs;
+        var Hs = (A, B).FrequencyResponse(fs, dt).Abs;
+        var Hd = (A, B).FrequencyResponse(0.5).Abs;
 
         //var H = Enumerable.Range(0, 101).Select(i => fd / 2 / 100 * i)
         //   .Select(f => ($"{f,5} {DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, f / fd).Abs.In_dB().Round(2)}"))
@@ -404,10 +404,10 @@ public class EllipticLowPass : UnitTest
 
         var filter = new DSP.Filters.EllipticLowPass(dt, fp, fs, Gp, Gs);
 
-        var transmission_0 = filter.GetTransmissionCoefficient(0);
-        var transmission_fp = filter.GetTransmissionCoefficient(fp);
-        var transmission_fs = filter.GetTransmissionCoefficient(fs);
-        var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
+        var transmission_0 = filter.FrequencyResponse(0);
+        var transmission_fp = filter.FrequencyResponse(fp);
+        var transmission_fs = filter.FrequencyResponse(fs);
+        var transmission_fd05 = filter.FrequencyResponse(fd / 2);
 
         var transmission_0_abs = transmission_0.Abs;
         var transmission_fp_abs = transmission_fp.Abs;

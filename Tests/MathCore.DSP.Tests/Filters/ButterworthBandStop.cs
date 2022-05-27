@@ -54,10 +54,10 @@ public class ButterworthBandStop
         w0.AssertEquals(0.67796610169491522);
 
         // Преобразуем частоты аналогового фильтра в частоты цифрового фильтра с учётом заданной частоты дискретизации
-        var Fpl = DigitalFilter.ToAnalogFrequency(fpl, dt);
-        var Fsl = DigitalFilter.ToAnalogFrequency(fsl, dt);
-        var Fsh = DigitalFilter.ToAnalogFrequency(fsh, dt);
-        var Fph = DigitalFilter.ToAnalogFrequency(fph, dt);
+        var Fpl = DigitalFilter.ToDigitalFrequency(fpl, dt);
+        var Fsl = DigitalFilter.ToDigitalFrequency(fsl, dt);
+        var Fsh = DigitalFilter.ToDigitalFrequency(fsh, dt);
+        var Fph = DigitalFilter.ToDigitalFrequency(fph, dt);
 
         Fpl.AssertEquals(0.31937518051807723);
         Fsl.AssertEquals(0.64524608331077715);
@@ -135,7 +135,7 @@ public class ButterworthBandStop
             (-0.6275274137446106, -0.1842586737205135)
         );
 
-        var Hf = DoubleArrayDSPExtensions.GetAnalogTransmissionCoefficientFromPoles(Enumerable.Empty<Complex>(), poles, F0);
+        var Hf = DoubleArrayDSPExtensions.AnalogFrequencyResponseFromPoles(Enumerable.Empty<Complex>(), poles, F0);
 
         //var HHf = (W0.Power(N) / eps_p * Hf);
         //var HHf_abs = HHf.Abs;
@@ -170,21 +170,21 @@ public class ButterworthBandStop
             (-10.3055145368981247, 6.5909274969024576)
         );
 
-        var h_F00 = DoubleArrayDSPExtensions.GetAnalogTransmissionCoefficientFromPoles(
+        var h_F00 = DoubleArrayDSPExtensions.AnalogFrequencyResponseFromPoles(
             pzf_zeros,
             pzf_poles,
             0)
            .Power
            .In_dB_byPower();
 
-        var h_Fpl = DoubleArrayDSPExtensions.GetAnalogTransmissionCoefficientFromPoles(
+        var h_Fpl = DoubleArrayDSPExtensions.AnalogFrequencyResponseFromPoles(
             pzf_zeros,
             pzf_poles,
             Fpl)
            .Power
            .In_dB_byPower();
 
-        var h_Fsl = DoubleArrayDSPExtensions.GetAnalogTransmissionCoefficientFromPoles(
+        var h_Fsl = DoubleArrayDSPExtensions.AnalogFrequencyResponseFromPoles(
             pzf_zeros,
             pzf_poles,
             Fsl)
@@ -192,21 +192,21 @@ public class ButterworthBandStop
            .In_dB_byPower();
 
         var Fc = (Fsl * Fsh).Sqrt();
-        var h_Fc = DoubleArrayDSPExtensions.GetAnalogTransmissionCoefficientFromPoles(
+        var h_Fc = DoubleArrayDSPExtensions.AnalogFrequencyResponseFromPoles(
             pzf_zeros,
             pzf_poles,
             Fc)
            .Power
            .In_dB_byPower();
 
-        var h_Fsh = DoubleArrayDSPExtensions.GetAnalogTransmissionCoefficientFromPoles(
+        var h_Fsh = DoubleArrayDSPExtensions.AnalogFrequencyResponseFromPoles(
             pzf_zeros,
             pzf_poles,
             Fsh)
            .Power
            .In_dB_byPower();
 
-        var h_Fph = DoubleArrayDSPExtensions.GetAnalogTransmissionCoefficientFromPoles(
+        var h_Fph = DoubleArrayDSPExtensions.AnalogFrequencyResponseFromPoles(
             pzf_zeros,
             pzf_poles,
             Fph)
@@ -331,13 +331,13 @@ public class ButterworthBandStop
 
         var filter = new DSP.Filters.ButterworthBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs);
 
-        var h_f0 = filter.GetTransmissionCoefficient(0);
-        var h_pl = filter.GetTransmissionCoefficient(fpl);
-        var h_sl = filter.GetTransmissionCoefficient(fsl);
-        var h_c0 = filter.GetTransmissionCoefficient((fpl * fph).Sqrt());
-        var h_sh = filter.GetTransmissionCoefficient(fsh);
-        var h_ph = filter.GetTransmissionCoefficient(fph);
-        var h_fd = filter.GetTransmissionCoefficient(fd / 2);
+        var h_f0 = filter.FrequencyResponse(0);
+        var h_pl = filter.FrequencyResponse(fpl);
+        var h_sl = filter.FrequencyResponse(fsl);
+        var h_c0 = filter.FrequencyResponse((fpl * fph).Sqrt());
+        var h_sh = filter.FrequencyResponse(fsh);
+        var h_ph = filter.FrequencyResponse(fph);
+        var h_fd = filter.FrequencyResponse(fd / 2);
 
         var h_f0_db = h_f0.Power.In_dB_byPower();
         var h_pl_db = h_pl.Power.In_dB_byPower();

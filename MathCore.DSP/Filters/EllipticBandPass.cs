@@ -112,10 +112,10 @@ public class EllipticBandPass : EllipticFilter
             throw new ArgumentOutOfRangeException(
                 nameof(Gp), Gp, $"Уровень АЧХ в полосе пропускания Gp={Gp} был меньше, либо равен уровню АЧХ в полосе заграждения Gs={Gs}");
 
-        var Fsl = ToAnalogFrequency(fsl, dt);
-        var Fpl = ToAnalogFrequency(fpl, dt);
-        var Fph = ToAnalogFrequency(fph, dt);
-        var Fsh = ToAnalogFrequency(fsh, dt);
+        var Fsl = ToDigitalFrequency(fsl, dt);
+        var Fpl = ToDigitalFrequency(fpl, dt);
+        var Fph = ToDigitalFrequency(fph, dt);
+        var Fsh = ToDigitalFrequency(fsh, dt);
 
         var Wsl = Consts.pi2 * Fsl;
         var Wpl = Consts.pi2 * Fpl;
@@ -139,8 +139,8 @@ public class EllipticBandPass : EllipticFilter
         const double Fs = 1 / Consts.pi2;
 
         // Для передачи информации о граничных частотах в спецификацию аналогвого прототипа перечситываем частоты цифрового фильтра обратно
-        var fp = ToDigitalFrequency(Fp, dt);
-        var fs = ToDigitalFrequency(Fs, dt);
+        var fp = ToAnalogFrequency(Fp, dt);
+        var fs = ToAnalogFrequency(Fs, dt);
 
         return new Specification(dt, fp, fs, Gp, Gs);
     }
@@ -152,8 +152,8 @@ public class EllipticBandPass : EllipticFilter
 
         CheckFrequencies(dt, fsl, fpl, fph, fsh);
 
-        var Wpl = Consts.pi2 * ToAnalogFrequency(fpl, dt);
-        var Wph = Consts.pi2 * ToAnalogFrequency(fph, dt);
+        var Wpl = Consts.pi2 * ToDigitalFrequency(fpl, dt);
+        var Wph = Consts.pi2 * ToDigitalFrequency(fph, dt);
 
         var kEps = 1 / Spec.kEps;
         var kW = 1 / Spec.kW;
@@ -168,8 +168,8 @@ public class EllipticBandPass : EllipticFilter
 
         var (zeros, poles) = GetNormedZerosPoles(N, Spec.EpsP, Spec.EpsS);
 
-        var Fpl = ToAnalogFrequency(fpl, Spec.dt);
-        var Fph = ToAnalogFrequency(fph, Spec.dt);
+        var Fpl = ToDigitalFrequency(fpl, Spec.dt);
+        var Fph = ToDigitalFrequency(fph, Spec.dt);
 
         var ppf_zeros = TransformToBandPassW(zeros, Wpl, Wph);
         var ppf_poles = TransformToBandPassW(poles, Wpl, Wph);
@@ -181,7 +181,7 @@ public class EllipticBandPass : EllipticFilter
         var z_poles = ToZArray(ppf_poles, dt);
 
         var Fp0 = (Fpl * Fph).Sqrt();
-        var ffp0 = ToDigitalFrequency(Fp0, dt);
+        var ffp0 = ToAnalogFrequency(Fp0, dt);
         var z0 = Complex.Exp(Consts.pi2 * ffp0 * dt);
 
         var norm_0 = z_zeros.Multiply(z => z0 - z);

@@ -16,5 +16,5 @@ public class ParallelFilter : CombinationFilter
         Filter2.Reset();
     }
 
-    public override Complex GetTransmissionCoefficient(double f) => (Filter1.GetTransmissionCoefficient(f) + Filter2.GetTransmissionCoefficient(f)) / 2;
+    public override Complex FrequencyResponse(double f) => (Filter1.FrequencyResponse(f) + Filter2.FrequencyResponse(f)) / 2;
 }

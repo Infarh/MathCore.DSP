@@ -29,10 +29,10 @@ public class ChebyshevBandStop : ChebyshevFilter
             throw new ArgumentOutOfRangeException(
                 nameof(Gp), Gp, $"Уровень АЧХ в полосе пропускания Gp={Gp} был меньше, либо равен уровню АЧХ в полосе заграждения Gs={Gs}");
 
-        var Fpl = ToAnalogFrequency(fpl, dt);
-        var Fsl = ToAnalogFrequency(fsl, dt);
-        var Fsh = ToAnalogFrequency(fsh, dt);
-        var Fph = ToAnalogFrequency(fph, dt);
+        var Fpl = ToDigitalFrequency(fpl, dt);
+        var Fsl = ToDigitalFrequency(fsl, dt);
+        var Fsh = ToDigitalFrequency(fsh, dt);
+        var Fph = ToDigitalFrequency(fph, dt);
 
         var Wpl = Consts.pi2 * Fpl;
         var Wsl = Consts.pi2 * Fsl;
@@ -56,8 +56,8 @@ public class ChebyshevBandStop : ChebyshevFilter
         const double Fs = 1 / Consts.pi2;
 
         // Для передачи информации о граничных частотах в спецификацию аналогвого прототипа перечситываем частоты цифрового фильтра обратно
-        var fp = ToDigitalFrequency(Fp, dt);
-        var fs = ToDigitalFrequency(Fs, dt);
+        var fp = ToAnalogFrequency(Fp, dt);
+        var fs = ToAnalogFrequency(Fs, dt);
 
         return new Specification(dt, fp, fs, Gp, Gs);
     }
@@ -74,10 +74,10 @@ public class ChebyshevBandStop : ChebyshevFilter
         // Пересчитываем аналоговые частоты полосы заграждения в цифровые
         var dt = Spec.dt;
 
-        var Wpl = Consts.pi2 * ToAnalogFrequency(fpl, dt);
-        var Wsl = Consts.pi2 * ToAnalogFrequency(fsl, dt);
-        var Wsh = Consts.pi2 * ToAnalogFrequency(fsh, dt);
-        var Wph = Consts.pi2 * ToAnalogFrequency(fph, dt);
+        var Wpl = Consts.pi2 * ToDigitalFrequency(fpl, dt);
+        var Wsl = Consts.pi2 * ToDigitalFrequency(fsl, dt);
+        var Wsh = Consts.pi2 * ToDigitalFrequency(fsh, dt);
+        var Wph = Consts.pi2 * ToDigitalFrequency(fph, dt);
 
         var Wc = Wsl * Wsh;
         var dW = Wsh - Wsl;
@@ -113,10 +113,10 @@ public class ChebyshevBandStop : ChebyshevFilter
         // Пересчитываем аналоговые частоты полосы заграждения в цифровые
         var dt = Spec.dt;
 
-        var Wpl = Consts.pi2 * ToAnalogFrequency(fpl, dt);
-        var Wsl = Consts.pi2 * ToAnalogFrequency(fsl, dt);
-        var Wsh = Consts.pi2 * ToAnalogFrequency(fsh, dt);
-        var Wph = Consts.pi2 * ToAnalogFrequency(fph, dt);
+        var Wpl = Consts.pi2 * ToDigitalFrequency(fpl, dt);
+        var Wsl = Consts.pi2 * ToDigitalFrequency(fsl, dt);
+        var Wsh = Consts.pi2 * ToDigitalFrequency(fsh, dt);
+        var Wph = Consts.pi2 * ToDigitalFrequency(fph, dt);
 
         var Wc = Wsl * Wsh;
         var dW = Wsh - Wsl;
@@ -155,10 +155,10 @@ public class ChebyshevBandStop : ChebyshevFilter
         // Пересчитываем аналоговые частоты полосы заграждения в цифровые
         var dt = Spec.dt;
 
-        var Wpl = Consts.pi2 * ToAnalogFrequency(fpl, dt);
-        var Wsl = Consts.pi2 * ToAnalogFrequency(fsl, dt);
-        var Wsh = Consts.pi2 * ToAnalogFrequency(fsh, dt);
-        var Wph = Consts.pi2 * ToAnalogFrequency(fph, dt);
+        var Wpl = Consts.pi2 * ToDigitalFrequency(fpl, dt);
+        var Wsl = Consts.pi2 * ToDigitalFrequency(fsl, dt);
+        var Wsh = Consts.pi2 * ToDigitalFrequency(fsh, dt);
+        var Wph = Consts.pi2 * ToDigitalFrequency(fph, dt);
 
         var Wc = Wsl * Wsh;
         var dW = Wsh - Wsl;

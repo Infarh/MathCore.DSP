@@ -29,10 +29,10 @@ public class ChebyshevBandPass : ChebyshevFilter
             throw new ArgumentOutOfRangeException(
                 nameof(Gp), Gp, $"Уровень АЧХ в полосе пропускания Gp={Gp} был меньше, либо равен уровню АЧХ в полосе заграждения Gs={Gs}");
 
-        var Fsl = ToAnalogFrequency(fsl, dt);
-        var Fpl = ToAnalogFrequency(fpl, dt);
-        var Fph = ToAnalogFrequency(fph, dt);
-        var Fsh = ToAnalogFrequency(fsh, dt);
+        var Fsl = ToDigitalFrequency(fsl, dt);
+        var Fpl = ToDigitalFrequency(fpl, dt);
+        var Fph = ToDigitalFrequency(fph, dt);
+        var Fsh = ToDigitalFrequency(fsh, dt);
 
         var Wsl = Consts.pi2 * Fsl;
         var Wpl = Consts.pi2 * Fpl;
@@ -58,8 +58,8 @@ public class ChebyshevBandPass : ChebyshevFilter
         var Fs = W1 / Consts.pi2;
 
         // Для передачи информации о граничных частотах в спецификацию аналогвого прототипа перечситываем частоты цифрового фильтра обратно
-        var fp = ToDigitalFrequency(Fp, dt);
-        var fs = ToDigitalFrequency(Fs, dt);
+        var fp = ToAnalogFrequency(Fp, dt);
+        var fs = ToAnalogFrequency(Fs, dt);
 
         return new Specification(dt, fp, fs, Gp, Gs);
     }
@@ -74,8 +74,8 @@ public class ChebyshevBandPass : ChebyshevFilter
         // Пересчитываем аналоговые частоты полосы заграждения в цифровые
         var dt = Spec.dt;
 
-        var Wpl = Consts.pi2 * ToAnalogFrequency(fpl, dt);
-        var Wph = Consts.pi2 * ToAnalogFrequency(fph, dt);
+        var Wpl = Consts.pi2 * ToDigitalFrequency(fpl, dt);
+        var Wph = Consts.pi2 * ToDigitalFrequency(fph, dt);
 
         var N = (int)Ceiling(arcch(Spec.kEps) / arcch(Spec.kW));
         Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
@@ -94,7 +94,7 @@ public class ChebyshevBandPass : ChebyshevFilter
 
         var Fpl = Wpl / Consts.pi2;
         var Fph = Wph / Consts.pi2;
-        var ffp0 = ToDigitalFrequency((Fpl * Fph).Sqrt(), dt);
+        var ffp0 = ToAnalogFrequency((Fpl * Fph).Sqrt(), dt);
         var z0 = Complex.Exp(Consts.pi2 * ffp0 * dt);
 
         // Вычисляем коэффициент нормировки фильтра на нулевой частоте 
@@ -117,8 +117,8 @@ public class ChebyshevBandPass : ChebyshevFilter
         // Пересчитываем аналоговые частоты полосы заграждения в цифровые
         var dt = Spec.dt;
 
-        var Wpl = Consts.pi2 * ToAnalogFrequency(fpl, dt);
-        var Wph = Consts.pi2 * ToAnalogFrequency(fph, dt);
+        var Wpl = Consts.pi2 * ToDigitalFrequency(fpl, dt);
+        var Wph = Consts.pi2 * ToDigitalFrequency(fph, dt);
 
         var N = (int)Ceiling(arcch(Spec.kEps) / arcch(Spec.kW));
         Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
@@ -140,7 +140,7 @@ public class ChebyshevBandPass : ChebyshevFilter
         var z_poles = ToZArray(ppf_poles, dt);
 
         // Вычисляем коэффициент нормировки фильтра на нулевой частоте 
-        var ffp0 = ToDigitalFrequency((Wpl * Wph).Sqrt() / Consts.pi2, dt);
+        var ffp0 = ToAnalogFrequency((Wpl * Wph).Sqrt() / Consts.pi2, dt);
         var z0 = Complex.Exp(Consts.pi2 * ffp0 * dt);
 
         var norm_0 = z_zeros.Multiply(z => z0 - z);
@@ -162,8 +162,8 @@ public class ChebyshevBandPass : ChebyshevFilter
         // Пересчитываем аналоговые частоты полосы заграждения в цифровые
         var dt = Spec.dt;
 
-        var Wpl = Consts.pi2 * ToAnalogFrequency(fpl, dt);
-        var Wph = Consts.pi2 * ToAnalogFrequency(fph, dt);
+        var Wpl = Consts.pi2 * ToDigitalFrequency(fpl, dt);
+        var Wph = Consts.pi2 * ToDigitalFrequency(fph, dt);
 
         var N = (int)Ceiling(arcch(Spec.kEps) / arcch(Spec.kW));
         Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
@@ -185,7 +185,7 @@ public class ChebyshevBandPass : ChebyshevFilter
         var z_poles = ToZArray(ppf_poles, dt);
 
         // Вычисляем коэффициент нормировки фильтра на нулевой частоте 
-        var ffp0 = ToDigitalFrequency((Wpl * Wph).Sqrt() / Consts.pi2, dt);
+        var ffp0 = ToAnalogFrequency((Wpl * Wph).Sqrt() / Consts.pi2, dt);
         var z0 = Complex.Exp(Consts.pi2 * ffp0 * dt);
 
         var norm_0 = z_zeros.Multiply(z => z0 - z);

@@ -14,7 +14,7 @@ public static class DigitalFilterEx
         var f = Fmin;
         while (f <= Fmax)
         {
-            var H = filter.GetTransmissionCoefficient(f);
+            var H = filter.FrequencyResponse(f);
             yield return (f, H);
             f += dF;
         }

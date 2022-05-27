@@ -39,8 +39,8 @@ public class ButterworthHighPass
         //const double ws = 2 * PI * fs / fd;
         //const double wp = 2 * PI * fp / fd;
 
-        var Fs = DigitalFilter.ToAnalogFrequency(fs, dt);
-        var Fp = DigitalFilter.ToAnalogFrequency(fp, dt);
+        var Fs = DigitalFilter.ToDigitalFrequency(fs, dt);
+        var Fp = DigitalFilter.ToDigitalFrequency(fp, dt);
 
         //(Fp, Fs).ToDebug();
 
@@ -169,10 +169,10 @@ public class ButterworthHighPass
 
         var filter = new DSP.Filters.ButterworthHighPass(dt, fs, fp, Gp, Gs);
 
-        var transmission__0 = filter.GetTransmissionCoefficient(0, dt);
-        var transmission_fp = filter.GetTransmissionCoefficient(fp, dt);
-        var transmission_fs = filter.GetTransmissionCoefficient(fs, dt);
-        var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2, dt);
+        var transmission__0 = filter.FrequencyResponse(0, dt);
+        var transmission_fp = filter.FrequencyResponse(fp, dt);
+        var transmission_fs = filter.FrequencyResponse(fs, dt);
+        var transmission_fd05 = filter.FrequencyResponse(fd / 2, dt);
 
         transmission__0.Abs.AssertLessThan(Gs);
         transmission_fs.Abs.AssertLessOrEqualsThan(Gs);

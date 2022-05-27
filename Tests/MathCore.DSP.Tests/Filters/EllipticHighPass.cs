@@ -72,7 +72,7 @@ public class EllipticHighPass
         const double wp = Consts.pi2 * fp;
 
         //var Fs = DigitalFilter.ToAnalogFrequency(fs, dt);
-        var Fp = DigitalFilter.ToAnalogFrequency(fp, dt);
+        var Fp = DigitalFilter.ToDigitalFrequency(fp, dt);
 
         //(Fp, Fs).ToDebug();
 
@@ -271,7 +271,7 @@ public class EllipticHighPass
         const double wp = Consts.pi2 * fp;
 
         //var Fs = DigitalFilter.ToAnalogFrequency(fs, dt);
-        var Fp = DigitalFilter.ToAnalogFrequency(fp, dt);
+        var Fp = DigitalFilter.ToDigitalFrequency(fp, dt);
 
         //(Fp, Fs).ToDebug();
 
@@ -453,10 +453,10 @@ public class EllipticHighPass
 
         var filter = new DSP.Filters.EllipticHighPass(dt, fs, fp, Gp, Gs);
 
-        var transmission__0 = filter.GetTransmissionCoefficient(0);
-        var transmission_fs = filter.GetTransmissionCoefficient(fs);
-        var transmission_fp = filter.GetTransmissionCoefficient(fp);
-        var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
+        var transmission__0 = filter.FrequencyResponse(0);
+        var transmission_fs = filter.FrequencyResponse(fs);
+        var transmission_fp = filter.FrequencyResponse(fp);
+        var transmission_fd05 = filter.FrequencyResponse(fd / 2);
 
         //transmission__0.Abs.In_dB().ToDebug();
         //transmission_fs.Abs.ToDebug();
@@ -488,10 +488,10 @@ public class EllipticHighPass
 
         var filter = new DSP.Filters.EllipticHighPass(dt, fs, fp, Gp, Gs);
 
-        var transmission__0 = filter.GetTransmissionCoefficient(0);
-        var transmission_fs = filter.GetTransmissionCoefficient(fs);
-        var transmission_fp = filter.GetTransmissionCoefficient(fp);
-        var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
+        var transmission__0 = filter.FrequencyResponse(0);
+        var transmission_fs = filter.FrequencyResponse(fs);
+        var transmission_fp = filter.FrequencyResponse(fp);
+        var transmission_fd05 = filter.FrequencyResponse(fd / 2);
 
         //transmission__0.Abs.In_dB().ToDebug();
         //transmission_fs.Abs.ToDebug();

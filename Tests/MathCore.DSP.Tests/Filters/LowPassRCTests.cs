@@ -113,7 +113,7 @@ public class LowPassRCTests : UnitTest
 
         var rc = new LowPassRC(f0, dt);
 
-        var c = rc.GetTransmissionCoefficient(f, dt);
+        var c = rc.FrequencyResponse(f, dt);
 
         Assert.That.Value(c.Abs).IsEqual(1);
     }
@@ -129,7 +129,7 @@ public class LowPassRCTests : UnitTest
 
         var rc = new LowPassRC(f0, dt);
 
-        var c = rc.GetTransmissionCoefficient(f, dt);
+        var c = rc.FrequencyResponse(f, dt);
 
         Assert.That.Value(c.Abs).IsEqual(sqrt_2_inv, eps);
         Assert.That.Value(c.Arg * ToDeg).IsEqual(-45, eps);

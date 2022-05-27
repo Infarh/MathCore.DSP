@@ -10,21 +10,29 @@ namespace MathCore.DSP.Filters;
 /// <summary>Цифровой фильтр</summary>
 public abstract class DigitalFilter : Filter
 {
-    /// <summary>Преобразование частоты цифрового фильтра в частоту аналогового прототипа</summary>
-    /// <param name="DigitalFrequency">Значение на оси частот цифрового фильтра</param>
+    /// <summary>Преобразование частоты аналогового  прототипа в частоту цифрового фильтра</summary>
+    /// <param name="AnalogFrequency">Значение на оси частот цифрового фильтра</param>
     /// <param name="dt">Период дискретизации</param>
     /// <returns>Значение на оси частот аналогового прототипа</returns>
-    public static double ToAnalogFrequency(double DigitalFrequency, double dt) => Tan(PI * DigitalFrequency * dt) / (PI * dt);
-
-    public static double ToAnalogFrequencyW(double DigitalFrequencyW, double dt) => Tan(DigitalFrequencyW * dt / 2) / (dt / 2);
+    public static double ToDigitalFrequency(double AnalogFrequency, double dt) => Tan(PI * AnalogFrequency * dt) / (PI * dt);
 
     /// <summary>Преобразование частоты аналогового  прототипа в частоту цифрового фильтра</summary>
-    /// <param name="AnalogFrequency">Значение на оси частот аналогового фильтра</param>
+    /// <param name="AnalogFrequencyW">Значение на оси частот цифрового фильтра</param>
+    /// <param name="dt">Период дискретизации</param>
+    /// <returns>Значение на оси частот аналогового прототипа</returns>
+    public static double ToDigitalFrequencyW(double AnalogFrequencyW, double dt) => Tan(AnalogFrequencyW * dt / 2) / (dt / 2);
+
+    /// <summary>Преобразование частоты цифрового фильтра в частоту аналогового прототипа</summary>
+    /// <param name="DigitalFrequency">Значение на оси частот аналогового фильтра</param>
     /// <param name="dt">Период дискретизации</param>
     /// <returns>Значение на оси частот цифрового фильтра</returns>
-    public static double ToDigitalFrequency(double AnalogFrequency, double dt) => Atan(PI * AnalogFrequency * dt) / (PI * dt);
+    public static double ToAnalogFrequency(double DigitalFrequency, double dt) => Atan(PI * DigitalFrequency * dt) / (PI * dt);
 
-    public static double ToDigitalFrequencyW(double AnalogFrequencyW, double dt) => Atan(AnalogFrequencyW * dt / 2) / (dt / 2);
+    /// <summary>Преобразование частоты цифрового фильтра в частоту аналогового прототипа</summary>
+    /// <param name="DigitalFrequencyW">Значение на оси частот аналогового фильтра</param>
+    /// <param name="dt">Период дискретизации</param>
+    /// <returns>Значение на оси частот цифрового фильтра</returns>
+    public static double ToAnalogFrequencyW(double DigitalFrequencyW, double dt) => Atan(DigitalFrequencyW * dt / 2) / (dt / 2);
 
     /// <summary>Преобразование полюса из p-плоскости в z-плоскость</summary>
     /// <param name="p">Полюс p-плоскости</param>
@@ -149,5 +157,5 @@ public abstract class DigitalFilter : Filter
     /// <param name="f">Частота расчёта коэффициента передачи</param>
     /// <param name="dt">Период дискретизации</param>
     /// <returns>Комплексный коэффициент передачи фильтра</returns>
-    public virtual Complex GetTransmissionCoefficient(double f, double dt) => GetTransmissionCoefficient(f * dt);
+    public virtual Complex FrequencyResponse(double f, double dt) => FrequencyResponse(f * dt);
 }

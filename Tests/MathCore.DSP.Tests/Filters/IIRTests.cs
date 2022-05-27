@@ -63,9 +63,9 @@ public class IIRTests : UnitTest
 
         void CheckTransmissionCoefficient(double f)
         {
-            var H = filter.GetTransmissionCoefficient(f, dt);
-            var HRC = RC.GetTransmissionCoefficient(f, dt);
-            var HCR = CR.GetTransmissionCoefficient(f, dt);
+            var H = filter.FrequencyResponse(f, dt);
+            var HRC = RC.FrequencyResponse(f, dt);
+            var HCR = CR.FrequencyResponse(f, dt);
             var delta = HRC * HCR - H;
             const double eps = 1.25e-15;
             Assert.That.Value(delta.Abs).IsEqual(0, eps);
@@ -76,10 +76,10 @@ public class IIRTests : UnitTest
         CheckTransmissionCoefficient(f0CR);
         CheckTransmissionCoefficient(fd / 2);
 
-        var H0 = filter.GetTransmissionCoefficient(0, dt);
-        var Hf0RC = filter.GetTransmissionCoefficient(f0RC, dt);
-        var Hf0CR = filter.GetTransmissionCoefficient(f0CR, dt);
-        var Hfd05 = filter.GetTransmissionCoefficient(fd / 2, dt);
+        var H0 = filter.FrequencyResponse(0, dt);
+        var Hf0RC = filter.FrequencyResponse(f0RC, dt);
+        var Hf0CR = filter.FrequencyResponse(f0CR, dt);
+        var Hfd05 = filter.FrequencyResponse(fd / 2, dt);
 
         Assert.AreEqual(0, H0.Abs);
         Assert.AreEqual(0, Hfd05.Abs, 1.89e-16);
@@ -123,9 +123,9 @@ public class IIRTests : UnitTest
 
         void CheckTransmissionCoefficient(double f)
         {
-            var H = filter.GetTransmissionCoefficient(f, dt);
-            var HRC = RC.GetTransmissionCoefficient(f, dt);
-            var HCR = CR.GetTransmissionCoefficient(f, dt);
+            var H = filter.FrequencyResponse(f, dt);
+            var HRC = RC.FrequencyResponse(f, dt);
+            var HCR = CR.FrequencyResponse(f, dt);
             var delta = (HRC + HCR) / 2 - H;
             const double eps = 1.25e-15;
             Assert.That.Value(delta.Abs).IsEqual(0, eps);

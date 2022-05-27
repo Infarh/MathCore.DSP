@@ -8,16 +8,16 @@ public class Equalizer : AllPassFilter2
     {
     }
 
-    public override Complex GetTransmissionCoefficient(double f)
+    public override Complex FrequencyResponse(double f)
     {
-        var H = base.GetTransmissionCoefficient(f);
+        var H = base.FrequencyResponse(f);
         var alpha = Alpha;
         return (1 + alpha + (1 - alpha) * H) / 2;
     }
 
-    public override Complex GetTransmissionCoefficient(double f, double dt)
+    public override Complex FrequencyResponse(double f, double dt)
     {
-        var H = base.GetTransmissionCoefficient(f, dt);
+        var H = base.FrequencyResponse(f, dt);
         var alpha = Alpha;
         return (1 + alpha + (1 - alpha) * H) / 2;
     }

@@ -16,7 +16,7 @@ public class ChebyshevLowPass : ChebyshevFilter
     {
         var g2 = (1 / (Gs * Gs) - 1) / (1 / (Gp * Gp) - 1);
         //var pi_dt = PI * dt;
-        var Fp = ToAnalogFrequency(fp, dt);
+        var Fp = ToDigitalFrequency(fp, dt);
         //var kW = Tan(fs * pi_dt) / Tan(fp * pi_dt);
         var log_g = Math.Log(Sqrt(g2) + Sqrt(g2 - 1));
         return Fp * Cosh(log_g / Order);
@@ -25,7 +25,7 @@ public class ChebyshevLowPass : ChebyshevFilter
     {
         var g2 = (1 / (Gs * Gs) - 1) / (1 / (Gp * Gp) - 1);
         //var pi_dt = PI * dt;
-        var Fs = ToAnalogFrequency(fs, dt);
+        var Fs = ToDigitalFrequency(fs, dt);
         //var kW = Tan(fs * pi_dt) / Tan(fp * pi_dt);
         var log_g = Math.Log(Sqrt(g2) + Sqrt(g2 - 1));
         return Fs / Cosh(log_g / Order);

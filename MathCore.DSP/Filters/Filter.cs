@@ -43,7 +43,7 @@ public abstract class Filter
     /// <summary>Получить комплексный коэффициент передачи</summary>
     /// <param name="f">Частота расчёта комплексного коэффициента передачи</param>
     /// <returns>Значение комплексного коэффициента передачи фильтра на заданной частоте</returns>
-    public abstract Complex GetTransmissionCoefficient(double f);
+    public abstract Complex FrequencyResponse(double f);
 
     /// <summary>Оператор структурного умножения фильтра и цифрового сигнала</summary>
     /// <param name="filter">Фильтр</param>

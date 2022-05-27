@@ -48,7 +48,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         const double ws = Consts.pi2 * fs;
         const double wp = Consts.pi2 * fp;
 
-        var Fp = ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
+        var Fp = ToDigitalFrequency(fp, dt);  // Частота пропускания аналогового прототипа
         //var Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового прототипа
 
         //(Fp, Fs).ToDebug();
@@ -220,7 +220,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         const double ws = Consts.pi2 * fs;
         const double wp = Consts.pi2 * fp;
 
-        var Fp = ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
+        var Fp = ToDigitalFrequency(fp, dt);  // Частота пропускания аналогового прототипа
         //var Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового прототипа
 
         //(Fp, Fs).ToDebug();
@@ -382,7 +382,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         const double ws = Consts.pi2 * fs;
         const double wp = Consts.pi2 * fp;
 
-        var Fp = ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
+        var Fp = ToDigitalFrequency(fp, dt);  // Частота пропускания аналогового прототипа
         //var Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового прототипа
 
         //(Fp, Fs).ToDebug();
@@ -601,7 +601,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         const double ws = Consts.pi2 * fs;
         const double wp = Consts.pi2 * fp;
 
-        var Fp = ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
+        var Fp = ToDigitalFrequency(fp, dt);  // Частота пропускания аналогового прототипа
         //var Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового прототипа
 
         //(Fp, Fs).ToDebug();
@@ -791,7 +791,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         const double ws = Consts.pi2 * fs;
         const double wp = Consts.pi2 * fp;
 
-        var Fp = ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
+        var Fp = ToDigitalFrequency(fp, dt);  // Частота пропускания аналогового прототипа
         //var Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового прототипа
 
         //(Fp, Fs).ToDebug();
@@ -1004,7 +1004,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         const double ws = Consts.pi2 * fs;
         const double wp = Consts.pi2 * fp;
 
-        var Fp = ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
+        var Fp = ToDigitalFrequency(fp, dt);  // Частота пропускания аналогового прототипа
         //var Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового прототипа
 
         //(Fp, Fs).ToDebug();
@@ -1194,10 +1194,10 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
 
         var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.I);
 
-        var transmission__0 = filter.GetTransmissionCoefficient(0);
-        var transmission_fs = filter.GetTransmissionCoefficient(fs);
-        var transmission_fp = filter.GetTransmissionCoefficient(fp);
-        var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
+        var transmission__0 = filter.FrequencyResponse(0);
+        var transmission_fs = filter.FrequencyResponse(fs);
+        var transmission_fp = filter.FrequencyResponse(fp);
+        var transmission_fd05 = filter.FrequencyResponse(fd / 2);
 
         //transmission__0.Abs.In_dB().ToDebug();
         //transmission_fs.Abs.ToDebug();
@@ -1229,10 +1229,10 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
 
         var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.I);
 
-        var transmission__0 = filter.GetTransmissionCoefficient(0);
-        var transmission_fs = filter.GetTransmissionCoefficient(fs);
-        var transmission_fp = filter.GetTransmissionCoefficient(fp);
-        var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
+        var transmission__0 = filter.FrequencyResponse(0);
+        var transmission_fs = filter.FrequencyResponse(fs);
+        var transmission_fp = filter.FrequencyResponse(fp);
+        var transmission_fd05 = filter.FrequencyResponse(fd / 2);
 
         //transmission__0.Abs.In_dB().ToDebug();
         //transmission_fs.Abs.ToDebug();
@@ -1257,7 +1257,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         const double ws = Consts.pi2 * fs;
         const double wp = Consts.pi2 * fp;
 
-        var Fp = ToAnalogFrequency(fp, dt);
+        var Fp = ToDigitalFrequency(fp, dt);
         var Wp = Consts.pi2 * Fp;
 
         var wh = Wp / (ws / wp);
@@ -1273,11 +1273,11 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
 
         var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.II);
 
-        var transmission__0 = filter.GetTransmissionCoefficient(0);
-        var transmission_fs = filter.GetTransmissionCoefficient(fs);
-        var transmission_fp = filter.GetTransmissionCoefficient(fp);
-        var transmission_fh = filter.GetTransmissionCoefficient(fh);
-        var transmission_fd = filter.GetTransmissionCoefficient(fd / 2);
+        var transmission__0 = filter.FrequencyResponse(0);
+        var transmission_fs = filter.FrequencyResponse(fs);
+        var transmission_fp = filter.FrequencyResponse(fp);
+        var transmission_fh = filter.FrequencyResponse(fh);
+        var transmission_fd = filter.FrequencyResponse(fd / 2);
 
         //transmission__0.Abs.In_dB().ToDebug();
         //transmission_fs.Abs.ToDebug();
@@ -1304,7 +1304,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         const double ws = Consts.pi2 * fs;
         const double wp = Consts.pi2 * fp;
 
-        var Fp = ToAnalogFrequency(fp, dt);
+        var Fp = ToDigitalFrequency(fp, dt);
         var Wp = Consts.pi2 * Fp;
 
         var wh = Wp / (ws / wp);
@@ -1320,11 +1320,11 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
 
         var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.II);
 
-        var transmission__0 = filter.GetTransmissionCoefficient(0);
-        var transmission_fs = filter.GetTransmissionCoefficient(fs);
-        var transmission_fp = filter.GetTransmissionCoefficient(fp);
-        var transmission_fh = filter.GetTransmissionCoefficient(fh);
-        var transmission_fd = filter.GetTransmissionCoefficient(fd / 2);
+        var transmission__0 = filter.FrequencyResponse(0);
+        var transmission_fs = filter.FrequencyResponse(fs);
+        var transmission_fp = filter.FrequencyResponse(fp);
+        var transmission_fh = filter.FrequencyResponse(fh);
+        var transmission_fd = filter.FrequencyResponse(fd / 2);
 
         //transmission__0.Abs.In_dB().ToDebug();
         //transmission_fs.Abs.ToDebug();
@@ -1358,10 +1358,10 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
 
         var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.IICorrected);
 
-        var transmission__0 = filter.GetTransmissionCoefficient(0);
-        var transmission_fs = filter.GetTransmissionCoefficient(fs);
-        var transmission_fp = filter.GetTransmissionCoefficient(fp);
-        var transmission_fd = filter.GetTransmissionCoefficient(fd / 2);
+        var transmission__0 = filter.FrequencyResponse(0);
+        var transmission_fs = filter.FrequencyResponse(fs);
+        var transmission_fp = filter.FrequencyResponse(fp);
+        var transmission_fd = filter.FrequencyResponse(fd / 2);
 
         //transmission__0.Abs.In_dB().ToDebug();
         //transmission_fs.Abs.ToDebug();
@@ -1393,10 +1393,10 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
 
         var filter = new DSP.Filters.ChebyshevHighPass(dt, fs, fp, Gp, Gs, ChebyshevType.IICorrected);
 
-        var transmission__0 = filter.GetTransmissionCoefficient(0);
-        var transmission_fs = filter.GetTransmissionCoefficient(fs);
-        var transmission_fp = filter.GetTransmissionCoefficient(fp);
-        var transmission_fd = filter.GetTransmissionCoefficient(fd / 2);
+        var transmission__0 = filter.FrequencyResponse(0);
+        var transmission_fs = filter.FrequencyResponse(fs);
+        var transmission_fp = filter.FrequencyResponse(fp);
+        var transmission_fd = filter.FrequencyResponse(fd / 2);
 
         //transmission__0.Abs.In_dB().ToDebug();
         //transmission_fs.Abs.ToDebug();

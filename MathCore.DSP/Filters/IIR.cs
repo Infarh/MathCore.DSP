@@ -44,7 +44,7 @@ public class IIR : DigitalFilter
 
     public override double Process(double Sample) => Process(Sample, State);
 
-    public override Complex GetTransmissionCoefficient(double f) => DoubleArrayDSPExtensions.FrequencyResponse(_A, _B, f);
+    public override Complex FrequencyResponse(double f) => DoubleArrayDSPExtensions.FrequencyResponse(_A, _B, f);
 
     /// <summary>Последовательное соединение фильтра с другим <see cref="IIR"/></summary>
     /// <param name="filter">Соединяемый фильтр</param>

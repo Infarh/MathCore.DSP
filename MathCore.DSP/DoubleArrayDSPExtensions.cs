@@ -84,6 +84,12 @@ public static class DoubleArrayDSPExtensions
     public static Complex FrequencyResponse(double[] A, double[] B, double f, double dt)
         => FrequencyResponse(A, B, f * dt);
 
+    public static Complex FrequencyResponse(this (IReadOnlyList<double> A, IReadOnlyList<double> B) Filter, double f, double dt) =>
+        FrequencyResponse(Filter.A, Filter.B, f * dt);
+
+    public static Complex FrequencyResponse(this (IReadOnlyList<double> A, IReadOnlyList<double> B) Filter, double f) =>
+        FrequencyResponse(Filter.A, Filter.B, f);
+
     /// <summary>Расчёт коэффициента передачи рекуррентного фильтра, заданного массивами своих коэффициентов для указанной частоты</summary>
     /// <param name="A">Массив коэффициентов обратных связей</param>
     /// <param name="B">Массив коэффициентов прямых связей</param>
@@ -115,7 +121,7 @@ public static class DoubleArrayDSPExtensions
         return Sum(B, p) / Sum(A, p);
     }
 
-    public static Complex GetDigitalTransmissionCoefficientFromZPoles(
+    public static Complex DigitalFrequencyResponseFromZPoles(
         IEnumerable<Complex> ZerosZ,
         IEnumerable<Complex> PolesZ,
         double f,
@@ -145,7 +151,7 @@ public static class DoubleArrayDSPExtensions
         return P0 / Pp;
     }
 
-    public static Complex GetAnalogTransmissionCoefficientFromPoles(
+    public static Complex AnalogFrequencyResponseFromPoles(
         IEnumerable<Complex> P0,
         IEnumerable<Complex> Pp,
         double f)

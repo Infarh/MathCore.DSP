@@ -1,7 +1,5 @@
 ﻿using System.Runtime.Serialization;
 
-using MathCore.DSP.Infrastructure;
-
 using static MathCore.Consts;
 // ReSharper disable InconsistentNaming
 // ReSharper disable ParameterHidesMember
@@ -239,8 +237,8 @@ public abstract class AnalogBasedFilter : IIR
             //var tEpsP = (1 - Gp*Gp).Sqrt() / (Gp*Gp);
             //var tEpsS = (1 - Gs*Gs).Sqrt() / (Gs*Gs);
 
-            Fp = ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
-            Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового пропита
+            Fp = ToDigitalFrequency(fp, dt);  // Частота пропускания аналогового прототипа
+            Fs = ToDigitalFrequency(fs, dt);  // Частота подавления аналогового пропита
 
             wp = pi2 * fp;
             ws = pi2 * fs;
@@ -289,9 +287,9 @@ public abstract class AnalogBasedFilter : IIR
     /// <param name="Spec">Спецификация фильтра</param>
     protected AnalogBasedFilter(double[] B, double[] A, Specification Spec) : base(B, A) => (dt, fp, fs, Gp, Gs) = Spec;
 
-    public override Complex GetTransmissionCoefficient(double f) => base.GetTransmissionCoefficient(f / fd);
+    public override Complex FrequencyResponse(double f) => base.FrequencyResponse(f / fd);
 
-    public override Complex GetTransmissionCoefficient(double f, double dt) => base.GetTransmissionCoefficient(f * dt);
+    public override Complex FrequencyResponse(double f, double dt) => base.FrequencyResponse(f * dt);
     
     /// <summary>Метод преобразования нулей и полюсов нормированного ФНЧ в нули и полюса ППФ</summary>
     /// <param name="Normed">Нормированные нули и полюса ФНЧ</param>
