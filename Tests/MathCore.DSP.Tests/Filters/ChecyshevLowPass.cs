@@ -142,10 +142,10 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
             0.0022682232923298762);
 
         // Проверяем коэффициенты передачи рассчитанного фильтра
-        var H0 = GetTransmissionCoefficient(A, B, 0).Abs;          // == (r == 1 ? 1 : Gp)
-        var Hp = GetTransmissionCoefficient(A, B, fp / fd).Abs;    // == Gp
-        var Hs = GetTransmissionCoefficient(A, B, fs / fd).Abs;    // <= Gs
-        var Hd = GetTransmissionCoefficient(A, B, 0.5).Abs;        // == 0
+        var H0 = FrequencyResponse(A, B, 0).Abs;          // == (r == 1 ? 1 : Gp)
+        var Hp = FrequencyResponse(A, B, fp / fd).Abs;    // == Gp
+        var Hs = FrequencyResponse(A, B, fs / fd).Abs;    // <= Gs
+        var Hd = FrequencyResponse(A, B, 0.5).Abs;        // == 0
 
         Assert.That.Value(H0).IsEqual(r == 1 ? 1 : Gp, 1.59e-14);
         Assert.That.Value(Hp).IsEqual(Gp, 9.78e-15);
@@ -222,10 +222,10 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         var B = Range(0, N + 1).ToArray(i => G_norm * SpecialFunctions.BinomialCoefficient(N, i));
 
         // Проверяем коэффициенты передачи рассчитанного фильтра
-        var H0 = GetTransmissionCoefficient(A, B, 0).Abs;          // == (r == 1 ? 1 : Gp)
-        var Hp = GetTransmissionCoefficient(A, B, fp / fd).Abs;    // == Gp
-        var Hs = GetTransmissionCoefficient(A, B, fs / fd).Abs;    // <= Gs
-        var Hd = GetTransmissionCoefficient(A, B, 0.5).Abs;        // == 0
+        var H0 = FrequencyResponse(A, B, 0).Abs;          // == (r == 1 ? 1 : Gp)
+        var Hp = FrequencyResponse(A, B, fp / fd).Abs;    // == Gp
+        var Hs = FrequencyResponse(A, B, fs / fd).Abs;    // <= Gs
+        var Hd = FrequencyResponse(A, B, 0.5).Abs;        // == 0
 
         Assert.That.Value(H0).IsEqual(r == 1 ? 1 : Gp, 1.59e-14);
         Assert.That.Value(Hp).IsEqual(Gp, 9.78e-15);
@@ -390,10 +390,10 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
             -0.075860624472381427);
 
         // Проверяем коэффициенты передачи рассчитанного фильтра
-        var H0 = GetTransmissionCoefficient(A, B, 0).Abs;          // == (r == 1 ? 1 : Gp)
-        var Hp = GetTransmissionCoefficient(A, B, fp / fd).Abs;    // <= Gs  !!!
-        var Hs = GetTransmissionCoefficient(A, B, fs / fd).Abs;    // <= Gs
-        var Hd = GetTransmissionCoefficient(A, B, 0.5).Abs;        // == 0
+        var H0 = FrequencyResponse(A, B, 0).Abs;          // == (r == 1 ? 1 : Gp)
+        var Hp = FrequencyResponse(A, B, fp / fd).Abs;    // <= Gs  !!!
+        var Hs = FrequencyResponse(A, B, fs / fd).Abs;    // <= Gs
+        var Hd = FrequencyResponse(A, B, 0.5).Abs;        // == 0
 
         Assert.That.Value(H0).IsEqual(1, 1.79e-15);
         Assert.That.Value(Hp).IsEqual(Gs, 1.29e-16);
@@ -562,10 +562,10 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
             -0.014328552997592952);
 
         // Проверяем коэффициенты передачи рассчитанного фильтра
-        var H0 = GetTransmissionCoefficient(A, B, 0).Abs;          // == (r == 1 ? 1 : Gp)
-        var Hp = GetTransmissionCoefficient(A, B, fp / fd).Abs;    // >= Gp  !!!
-        var Hs = GetTransmissionCoefficient(A, B, fs / fd).Abs;    // <= Gs
-        var Hd = GetTransmissionCoefficient(A, B, 0.5).Abs;        // == 0
+        var H0 = FrequencyResponse(A, B, 0).Abs;          // == (r == 1 ? 1 : Gp)
+        var Hp = FrequencyResponse(A, B, fp / fd).Abs;    // >= Gp  !!!
+        var Hs = FrequencyResponse(A, B, fs / fd).Abs;    // <= Gs
+        var Hd = FrequencyResponse(A, B, 0.5).Abs;        // == 0
 
         Assert.That.Value(H0).IsEqual(1, 2.23e-16);
         Assert.That.Value(Hp).GreaterOrEqualsThan(Gp);

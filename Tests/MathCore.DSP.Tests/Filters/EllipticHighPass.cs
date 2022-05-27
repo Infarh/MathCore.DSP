@@ -418,7 +418,7 @@ public class EllipticHighPass
             /*[ 5]*/ -0.5271810591547789
         );
 
-        A.ToDebugEnum();
+        //A.ToDebugEnum();
         A.AssertEquals(
             /*[ 0]*/ 1,
             /*[ 1]*/ -3.6469431449853578,

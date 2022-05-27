@@ -14,14 +14,14 @@ public static class DoubleArrayDSPExtensions
     /// <param name="f">Частота вычисления коэффициента передачи</param>
     /// <param name="dt">Период дискретизации импульсной характеристики</param>
     /// <returns>Комплексное значение коэффициента передачи фильтра с указанной импульсной характеристикой</returns>
-    public static Complex GetTransmissionCoefficient(this double[] ImpulseResponse, double f, double dt)
-        => ImpulseResponse.GetTransmissionCoefficient(f * dt);
+    public static Complex FrequencyResponse(this double[] ImpulseResponse, double f, double dt)
+        => ImpulseResponse.FrequencyResponse(f * dt);
 
     /// <summary>Вычислить значение коэффициента передачи фильтра, заданного импульсной характеристикой</summary>
     /// <param name="ImpulseResponse">Массив отсчётов импульсной характеристики</param>
     /// <param name="f">Нормированная частота вычисления коэффициента передачи</param>
     /// <returns>Комплексное значение коэффициента передачи фильтра с указанной импульсной характеристикой</returns>
-    public static Complex GetTransmissionCoefficient(this double[] ImpulseResponse, double f)
+    public static Complex FrequencyResponse(this double[] ImpulseResponse, double f)
     {
         var e = Complex.Exp(-2 * Math.PI * f);
         Complex result = ImpulseResponse[^1];
@@ -81,15 +81,15 @@ public static class DoubleArrayDSPExtensions
         => samples.FilterFIR(ImpulseResponse, new double[ImpulseResponse.Length]);
 
 
-    public static Complex GetTransmissionCoefficient(double[] A, double[] B, double f, double dt)
-        => GetTransmissionCoefficient(A, B, f * dt);
+    public static Complex FrequencyResponse(double[] A, double[] B, double f, double dt)
+        => FrequencyResponse(A, B, f * dt);
 
     /// <summary>Расчёт коэффициента передачи рекуррентного фильтра, заданного массивами своих коэффициентов для указанной частоты</summary>
     /// <param name="A">Массив коэффициентов обратных связей</param>
     /// <param name="B">Массив коэффициентов прямых связей</param>
     /// <param name="f">Частота, на которой требуется рассчитать коэффициент передачи фильтра</param>
     /// <returns>Значение комплексного коэффициента передачи рекуррентного фильтра на заданной частоте</returns>
-    public static Complex GetTransmissionCoefficient(IReadOnlyList<double> A, IReadOnlyList<double> B, double f)
+    public static Complex FrequencyResponse(IReadOnlyList<double> A, IReadOnlyList<double> B, double f)
     {
         //var p = new Complex(0, Consts.pi2 * f);
         var p = Complex.Exp(-Consts.pi2 * f);

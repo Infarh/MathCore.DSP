@@ -301,13 +301,13 @@ public class EllipticBandStop : UnitTest
         var B = GetCoefficientsInverted(z_zeros).ToArray(b => b * G_norm).ToRe();
         var A = GetCoefficientsInverted(z_poles).ToRe();
 
-        var h_f00 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0, dt).Abs.AssertGreaterOrEqualsThan(Gp);
-        var h_fpl = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fpl, dt).Abs.AssertGreaterOrEqualsThan(Gp);
-        var h_fsl = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fsl, dt).Abs.AssertLessOrEqualsThan(Gs);
-        var h_fc = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, (fsl * fsh).Sqrt(), dt).Abs.AssertLessOrEqualsThan(Gs);
-        var h_fsh = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fsh, dt).Abs.AssertLessOrEqualsThan(Gs);
-        var h_fph = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fph, dt).Abs.AssertGreaterOrEqualsThan(Gp);
-        var h_fd5 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fd / 2, dt).Abs.AssertGreaterOrEqualsThan(Gp);
+        var h_f00 = DoubleArrayDSPExtensions.FrequencyResponse(A, B, 0, dt).Abs.AssertGreaterOrEqualsThan(Gp);
+        var h_fpl = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fpl, dt).Abs.AssertGreaterOrEqualsThan(Gp);
+        var h_fsl = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fsl, dt).Abs.AssertLessOrEqualsThan(Gs);
+        var h_fc = DoubleArrayDSPExtensions.FrequencyResponse(A, B, (fsl * fsh).Sqrt(), dt).Abs.AssertLessOrEqualsThan(Gs);
+        var h_fsh = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fsh, dt).Abs.AssertLessOrEqualsThan(Gs);
+        var h_fph = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fph, dt).Abs.AssertGreaterOrEqualsThan(Gp);
+        var h_fd5 = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fd / 2, dt).Abs.AssertGreaterOrEqualsThan(Gp);
 
 
         var filter = new DSP.Filters.EllipticBandStop(dt, fpl, fsl, fsh, fph, Gp, Gs);

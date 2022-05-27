@@ -222,10 +222,10 @@ public class EllipticLowPass : UnitTest
         im_a.Sum(v => v * v).AssertEquals(0, 1e-30);
 
         // Проверяем коэффициенты передачи рассчитанного фильтра
-        var H0 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0).Abs;
-        var Hp = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fp / fd).Abs;
-        var Hs = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fs / fd).Abs;
-        var Hd = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0.5).Abs;
+        var H0 = DoubleArrayDSPExtensions.FrequencyResponse(A, B, 0).Abs;
+        var Hp = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fp / fd).Abs;
+        var Hs = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fs / fd).Abs;
+        var Hd = DoubleArrayDSPExtensions.FrequencyResponse(A, B, 0.5).Abs;
 
         const double eps = 1e-14;
         Assert.That.Value(H0).IsEqual(1, eps);                 // Коэффициент на нулевой частоте должен быть равен 1
@@ -341,19 +341,27 @@ public class EllipticLowPass : UnitTest
             z_zeros[0] = -1;
         }
 
-        var G_norm = (r > 0 ? 1 : 1 / (1 + eps_p * eps_p).Sqrt())
-            / (z_zeros.Aggregate(Complex.Real, (Z, z) => Z * (1 - z))
-                / z_poles.Aggregate(Complex.Real, (Z, z) => Z * (1 - z))).Abs;
+        var k0 = (r > 0 ? 1 : 1 / (1 + eps_p * eps_p).Sqrt());
 
-        var (B, _) = GetCoefficientsInverted(z_zeros).ToArray(b => b * G_norm);
-        var (A, _) = GetCoefficientsInverted(z_poles);
+        var k_zeros = z_zeros.Multiply(z => 1 - z);
+        var k_poles = z_poles.Multiply(z => 1 - z);
+        //var k_zeros = z_zeros.Aggregate(Complex.Real, (Z, z) => Z * (1 - z));
+        //var k_poles = z_poles.Aggregate(Complex.Real, (Z, z) => Z * (1 - z));
+
+        var g_norm = k0 * (k_poles / k_zeros).Abs;
+
+        var (B, Bim) = GetCoefficientsInverted(z_zeros).ToArray(b => b * g_norm);
+        var (A, Aim) = GetCoefficientsInverted(z_poles);
+
+        Bim.Sum(v => v * v).AssertEquals(0);
+        Aim.Sum(v => v * v).AssertEquals(0);
 
         // Проверяем коэффициенты передачи рассчитанного фильтра
-        var H0 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0).Abs;
-        var Hp = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fp / fd).Abs;
-        var Hps = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0.5 * (fp + fs) / fd).Abs;
-        var Hs = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fs / fd).Abs;
-        var Hd = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0.5).Abs;
+        var H0 = DoubleArrayDSPExtensions.FrequencyResponse(A, B, 0).Abs;
+        var Hp = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fp / fd).Abs;
+        var Hps = DoubleArrayDSPExtensions.FrequencyResponse(A, B, 0.5 * (fp + fs) / fd).Abs;
+        var Hs = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fs / fd).Abs;
+        var Hd = DoubleArrayDSPExtensions.FrequencyResponse(A, B, 0.5).Abs;
 
         //var H = Enumerable.Range(0, 101).Select(i => fd / 2 / 100 * i)
         //   .Select(f => ($"{f,5} {DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, f / fd).Abs.In_dB().Round(2)}"))
@@ -375,8 +383,8 @@ public class EllipticLowPass : UnitTest
 
         var filter = new DSP.Filters.EllipticLowPass(dt, fp, fs, Gp, Gs);
 
-        Assert.That.Collection(filter.A).IsEqualTo(A, 1e-15);
-        Assert.That.Collection(filter.B).IsEqualTo(B, 1e-16);
+        filter.A.AssertEquals(Accuracy.Eps(1e-15), A);
+        filter.B.AssertEquals(Accuracy.Eps(1e-16), B);
     }
 
     [TestMethod]

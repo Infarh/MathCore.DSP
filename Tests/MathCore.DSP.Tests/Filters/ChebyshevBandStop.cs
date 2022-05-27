@@ -207,13 +207,13 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         var B = GetCoefficientsInverted(z_zeros).ToArray(b => b * g_norm).ToRe();
         var A = GetCoefficientsInverted(z_poles).ToRe();
 
-        var h_f00 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0, dt);
-        var h_fpl = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fpl, dt);
-        var h_fsl = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fsl, dt);
-        var h_fcc = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, (fsl * fsh).Sqrt(), dt);
-        var h_fsh = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fsh, dt);
-        var h_fph = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fph, dt);
-        var h_fd5 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fd / 2, dt);
+        var h_f00 = DoubleArrayDSPExtensions.FrequencyResponse(A, B, 0, dt);
+        var h_fpl = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fpl, dt);
+        var h_fsl = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fsl, dt);
+        var h_fcc = DoubleArrayDSPExtensions.FrequencyResponse(A, B, (fsl * fsh).Sqrt(), dt);
+        var h_fsh = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fsh, dt);
+        var h_fph = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fph, dt);
+        var h_fd5 = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fd / 2, dt);
 
         //var h_f00_db = h_f00.Power.In_dB_byPower().ToDebug();
         //var h_fpl_db = h_fpl.Power.In_dB_byPower().ToDebug();
@@ -434,13 +434,13 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         var B = GetCoefficientsInverted(z_zeros).ToArray(b => b * g_norm).ToRe();
         var A = GetCoefficientsInverted(z_poles).ToRe();
 
-        var h_f00 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0, dt);
-        var h_fpl = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fpl, dt);
-        var h_fsl = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fsl, dt);
-        var h_fcc = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, (fsl * fsh).Sqrt(), dt);
-        var h_fsh = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fsh, dt);
-        var h_fph = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fph, dt);
-        var h_fd5 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fd / 2, dt);
+        var h_f00 = DoubleArrayDSPExtensions.FrequencyResponse(A, B, 0, dt);
+        var h_fpl = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fpl, dt);
+        var h_fsl = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fsl, dt);
+        var h_fcc = DoubleArrayDSPExtensions.FrequencyResponse(A, B, (fsl * fsh).Sqrt(), dt);
+        var h_fsh = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fsh, dt);
+        var h_fph = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fph, dt);
+        var h_fd5 = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fd / 2, dt);
 
         //var h_f00_db = h_f00.Power.In_dB_byPower().ToDebug();
         //var h_fpl_db = h_fpl.Power.In_dB_byPower().ToDebug();
@@ -683,13 +683,13 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         //B.ToDebugEnum();
         //A.ToDebugEnum();
 
-        var h_f00 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0, dt);
-        var h_fpl = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fpl, dt);
-        var h_fsl = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fsl, dt);
-        var h_fcc = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, (fsl * fsh).Sqrt(), dt);
-        var h_fsh = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fsh, dt);
-        var h_fph = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fph, dt);
-        var h_fd5 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fd / 2, dt);
+        var h_f00 = DoubleArrayDSPExtensions.FrequencyResponse(A, B, 0, dt);
+        var h_fpl = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fpl, dt);
+        var h_fsl = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fsl, dt);
+        var h_fcc = DoubleArrayDSPExtensions.FrequencyResponse(A, B, (fsl * fsh).Sqrt(), dt);
+        var h_fsh = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fsh, dt);
+        var h_fph = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fph, dt);
+        var h_fd5 = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fd / 2, dt);
 
         //var h_f00_db = h_f00.Power.In_dB_byPower().ToDebug();
         //var h_fpl_db = h_fpl.Power.In_dB_byPower().ToDebug();
@@ -951,13 +951,13 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         //B.ToDebugEnum();
         //A.ToDebugEnum();
 
-        var h_f00 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0, dt);
-        var h_fpl = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fpl, dt);
-        var h_fsl = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fsl, dt);
-        var h_fcc = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, (fsl * fsh).Sqrt(), dt);
-        var h_fsh = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fsh, dt);
-        var h_fph = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fph, dt);
-        var h_fd5 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fd / 2, dt);
+        var h_f00 = DoubleArrayDSPExtensions.FrequencyResponse(A, B, 0, dt);
+        var h_fpl = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fpl, dt);
+        var h_fsl = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fsl, dt);
+        var h_fcc = DoubleArrayDSPExtensions.FrequencyResponse(A, B, (fsl * fsh).Sqrt(), dt);
+        var h_fsh = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fsh, dt);
+        var h_fph = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fph, dt);
+        var h_fd5 = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fd / 2, dt);
 
         //var h_f00_db = h_f00.Power.In_dB_byPower().ToDebug();
         //var h_fpl_db = h_fpl.Power.In_dB_byPower().ToDebug();
@@ -1202,13 +1202,13 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         var B = GetCoefficientsInverted(z_zeros).ToArray(b => b * G_norm).ToRe();
         var A = GetCoefficientsInverted(z_poles).ToRe();
 
-        var h_f00 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0, dt);
-        var h_fpl = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fpl, dt);
-        var h_fsl = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fsl, dt);
-        var h_fcc = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, (fsl * fsh).Sqrt(), dt);
-        var h_fsh = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fsh, dt);
-        var h_fph = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fph, dt);
-        var h_fd5 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fd / 2, dt);
+        var h_f00 = DoubleArrayDSPExtensions.FrequencyResponse(A, B, 0, dt);
+        var h_fpl = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fpl, dt);
+        var h_fsl = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fsl, dt);
+        var h_fcc = DoubleArrayDSPExtensions.FrequencyResponse(A, B, (fsl * fsh).Sqrt(), dt);
+        var h_fsh = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fsh, dt);
+        var h_fph = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fph, dt);
+        var h_fd5 = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fd / 2, dt);
 
         //var h_f00_db = h_f00.Power.In_dB_byPower().ToDebug();
         //var h_fpl_db = h_fpl.Power.In_dB_byPower().ToDebug();
@@ -1477,13 +1477,13 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         var B = GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * G_norm);
         var A = GetCoefficientsInverted(z_poles).ToRe();
 
-        var h_f00 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, 0, dt);
-        var h_fpl = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fpl, dt);
-        var h_fsl = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fsl, dt);
-        var h_fcc = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, (fsl * fsh).Sqrt(), dt);
-        var h_fsh = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fsh, dt);
-        var h_fph = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fph, dt);
-        var h_fd5 = DoubleArrayDSPExtensions.GetTransmissionCoefficient(A, B, fd / 2, dt);
+        var h_f00 = DoubleArrayDSPExtensions.FrequencyResponse(A, B, 0, dt);
+        var h_fpl = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fpl, dt);
+        var h_fsl = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fsl, dt);
+        var h_fcc = DoubleArrayDSPExtensions.FrequencyResponse(A, B, (fsl * fsh).Sqrt(), dt);
+        var h_fsh = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fsh, dt);
+        var h_fph = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fph, dt);
+        var h_fd5 = DoubleArrayDSPExtensions.FrequencyResponse(A, B, fd / 2, dt);
 
         //var h_f00_db = h_f00.Power.In_dB_byPower().ToDebug();
         //var h_fpl_db = h_fpl.Power.In_dB_byPower().ToDebug();
