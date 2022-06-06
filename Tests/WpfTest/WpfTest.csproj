@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FontAwesome5" Version="2.1.6" />
+    <PackageReference Include="FontAwesome5" Version="2.1.11" />
     <PackageReference Include="MathCore.Hosting.WPF" Version="0.0.7.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <PackageReference Include="NAudio" Version="2.1.0" />
