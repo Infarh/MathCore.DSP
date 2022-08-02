@@ -127,7 +127,7 @@ public class ButterworthLowPass : UnitTest
         var B = Range(0, N + 1).ToArray(i => g_norm * BinomialCoefficient(N, i));
 
         //B.ToDebugEnum();
-        B.AssertEquals(
+        B.AssertEquals(Accuracy.Eps(1e-14),
             /*[ 0]*/ 1.154301582524271E-08,
             /*[ 1]*/ 9.234412660194168E-08,
             /*[ 2]*/ 3.232044431067959E-07,

@@ -277,7 +277,7 @@ public class EllipticBandPass : UnitTest
         else
             g_norm = (z0 * norm_p / norm_0).Abs;
 
-        g_norm.AssertEquals(0.027089200894329743);
+        g_norm.AssertEquals(0.027089200894329743, 1e-16);
 
         // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
         var B = GetCoefficientsInverted(z_zeros).ToArray(b => b * g_norm).ToRe();
