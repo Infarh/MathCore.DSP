@@ -384,7 +384,7 @@ public class EllipticLowPass : UnitTest
         var filter = new DSP.Filters.EllipticLowPass(dt, fp, fs, Gp, Gs);
 
         filter.A.AssertEquals(Accuracy.Eps(1e-15), A);
-        filter.B.AssertEquals(Accuracy.Eps(1e-16), B);
+        filter.B.AssertEquals(Accuracy.Eps(1e-15), B);
     }
 
     [TestMethod]

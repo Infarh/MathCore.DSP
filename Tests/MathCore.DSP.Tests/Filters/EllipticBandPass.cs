@@ -15,6 +15,7 @@ using static MathCore.SpecialFunctions.EllipticJacobi;
 
 using static MathCore.Polynom.Array;
 using MathCore.DSP.Signals;
+using MathCore.DSP.Tests.Infrastructure;
 
 // ReSharper disable InconsistentNaming
 
@@ -221,7 +222,7 @@ public class EllipticBandPass : UnitTest
         );
 
         //ppf_poles.ToDebugEnum();
-        ppf_poles.AssertEquals(
+        ppf_poles.AssertEquals(AccuracyComplex.Eps(1e-13),
             /*[ 0]*/ (-0.232612131820381429, -4.057810063607998785),
             /*[ 1]*/ (-0.781092257506545651, 13.625789842998447199),
             /*[ 2]*/ (-0.232612131820381429, 4.057810063607998785),
@@ -239,7 +240,7 @@ public class EllipticBandPass : UnitTest
         var z_poles = DigitalFilter.ToZArray(ppf_poles, dt);
 
         //z_zeros.ToDebugEnum();
-        z_zeros.AssertEquals(
+        z_zeros.AssertEquals(AccuracyComplex.Eps(1e-13),
             /*[ 1]*/ (+0.077982915792994864, +0.996954695482409003),
             /*[ 2]*/ (+0.956017287213403399, -0.293310324654836141),
             /*[ 3]*/ (+0.956017287213403399, +0.293310324654836141),
@@ -251,7 +252,7 @@ public class EllipticBandPass : UnitTest
         );
 
         //z_poles.ToDebugEnum();
-        z_poles.AssertEquals(
+        z_poles.AssertEquals(AccuracyComplex.Eps(1e-13),
             /*[ 0]*/ (0.900559137768189188, -0.381172136621393376),
             /*[ 1]*/ (0.346108870590590256, 0.882619467214864506),
             /*[ 2]*/ (0.900559137768189188, 0.381172136621393376),
@@ -376,7 +377,7 @@ public class EllipticBandPass : UnitTest
         var h_ph_db = h_ph.Power.In_dB_byPower();
         var h_fd_db = h_fd.Power.In_dB_byPower();
 
-        h_f0_db.AssertLessOrEqualsThan(-Rs, 2.1e-12);
+        h_f0_db.AssertLessOrEqualsThan(-Rs, 2.8e-12);
         h_sl_db.AssertLessOrEqualsThan(-Rp);
 
         h_pl_db.AssertGreaterOrEqualsThan(-Rp, 2e-11);

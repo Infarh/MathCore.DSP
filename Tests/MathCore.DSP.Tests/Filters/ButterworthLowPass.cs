@@ -121,7 +121,7 @@ public class ButterworthLowPass : UnitTest
         var (g_norm, g_norm_im) = z_poles.Multiply(z => (1 - z) / 2);
 
         //g_norm.ToDebug();
-        g_norm.AssertEquals(1.154301582524271E-08);
+        g_norm.AssertEquals(1.154301582524271E-08, 1.7e-024);
         g_norm_im.AssertEquals(0, 4.14e-25);
 
         var B = Range(0, N + 1).ToArray(i => g_norm * BinomialCoefficient(N, i));
