@@ -98,7 +98,7 @@ public class ChebyshevLowPass : ChebyshevFilter
 
         var g_norm = 1 / (z_zeros.Multiply(z => 1 - z).Re / z_poles.Multiply(z => 1 - z).Re);
 
-        B.Multiply(g_norm);
+        B.MultiplyItself(g_norm);
 
         return (A, B);
     }
@@ -120,7 +120,7 @@ public class ChebyshevLowPass : ChebyshevFilter
 
         var g_norm = 1 / (z_zeros.Multiply(z => 1 - z).Re / z_poles.Multiply(z => 1 - z).Re);
 
-        B.Multiply(g_norm);
+        B.MultiplyItself(g_norm);
 
         return (A, B);
     }

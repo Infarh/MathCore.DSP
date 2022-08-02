@@ -55,7 +55,8 @@ public class ChebyshevHighPass : ChebyshevFilter
 
         var g_norm = k_poles / k_zeros;
 
-        B.Multiply(g_norm);
+        
+        B.MultiplyItself(g_norm);
 
         return (A, B);
     }
@@ -83,7 +84,7 @@ public class ChebyshevHighPass : ChebyshevFilter
 
         var g_norm = k_poles / k_zeros;
 
-        B.Multiply(g_norm);
+        B.MultiplyItself(g_norm);
 
         return (A, B);
     }

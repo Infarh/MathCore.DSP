@@ -72,14 +72,22 @@ public abstract class DigitalFilter : Filter
     /// <param name="p">Перечисление нулей/полюсов p-плоскости</param>
     /// <param name="dt">Период дискретизации</param>
     /// <returns>Нули/полюса z-плоскости</returns>
-    public static IEnumerable<Complex> ToZ(IEnumerable<Complex> p, double dt) => p.Select(z => ToZ(z, dt));
+    public static IEnumerable<Complex> ToZ(IEnumerable<Complex> p, double dt)
+    {
+        foreach (var z in p) 
+            yield return ToZ(z, dt);
+    }
 
     /// <summary>Преобразование нулей/полюсов из p-плоскости в z-плоскость с масштабированием</summary>
     /// <param name="p">Перечисление нулей/полюсов p-плоскости</param>
     /// <param name="W0">Коэффициент масштабирования</param>
     /// <param name="dt">Период дискретизации</param>
     /// <returns>Нули/полюса z-плоскости с масштабированием</returns>
-    public static IEnumerable<Complex> ToZ(IEnumerable<Complex> p, double W0, double dt) => p.Select(z => ToZ(z * W0, dt));
+    public static IEnumerable<Complex> ToZ(IEnumerable<Complex> p, double W0, double dt)
+    {
+        foreach (var z in p) 
+            yield return ToZ(z * W0, dt);
+    }
 
     /// <summary>Преобразоване нулей/полюсов в массив в z-плоскости</summary>
     /// <param name="p">Нули/полюса p-плоскости</param>
@@ -103,7 +111,7 @@ public abstract class DigitalFilter : Filter
         if (poles is null) throw new ArgumentNullException(nameof(poles));
 
         var k = 2 / dt;
-        var (re, im) = poles.Aggregate(Real, (current, p0) => current * (k - p0));
+        var (re, im) = poles.Multiply(p => k - p);
         return (im / re).Abs() <= 1e-15
             ? 1 / re
             : throw new InvalidOperationException($"Вычисления привели к комплексному результату {new Complex(re, im)}");
