@@ -302,7 +302,7 @@ public class EllipticBandPass : UnitTest
         h_f00.Abs.AssertLessOrEqualsThan(Gs, 7e-4);
         h_fsl.Abs.AssertLessOrEqualsThan(Gs);
         h_fpl.Abs.AssertGreaterOrEqualsThan(Gp, 2.1e-12);
-        h_fcc.Abs.AssertGreaterOrEqualsThan(Gp, 3.1e-14);
+        h_fcc.Abs.AssertGreaterOrEqualsThan(Gp, 4.8e-14);
         h_fph.Abs.AssertGreaterOrEqualsThan(Gp, 0.107);
         h_fsh.Abs.AssertLessOrEqualsThan(Gs);
         h_fd5.Abs.AssertLessOrEqualsThan(Gs, 4.7e-15);
