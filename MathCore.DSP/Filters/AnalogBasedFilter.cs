@@ -210,6 +210,13 @@ public abstract class AnalogBasedFilter : IIR
         public Specification(double dt, double fp, double fs, double Gp, double Gs)
         {
             if (!(fp < 1 / (2 * dt))) throw new InvalidOperationException("Частота пропускания должен быть меньше половины полосы дискретизации");
+            if (fp < 0) throw new ArgumentOutOfRangeException(nameof(fp), fp, "Частота среза не может быть меньше 0");
+            if (fs < 0) throw new ArgumentOutOfRangeException(nameof(fs), fs, "Частота полосы подавления не может быть меньше 0");
+            if (Gp < 0) throw new ArgumentOutOfRangeException(nameof(Gp), Gp, "Значение уровня АЧХ в полосе пропускания не может быть отрицательной величиной");
+            if (Gs < 0) throw new ArgumentOutOfRangeException(nameof(Gs), Gs, "Значение уровня АЧХ в полосе заграждения не может быть отрицательной величиной");
+            if (Gp > 1) throw new ArgumentOutOfRangeException(nameof(Gp), Gp, "Значение уровня АЧХ в полосе пропускания не может быть больше 1");
+            if (Gs > 1) throw new ArgumentOutOfRangeException(nameof(Gs), Gs, "Значение уровня АЧХ в полосе заграждения не может быть больше 1");
+            if (Gp <= Gs) throw new InvalidOperationException($"Уровень АЧХ в полосе пропускания Gp должен быть больше уровня в полосе заграждения Gs\r\n  Gp={Gp}\r\n  Gs={Gs}");
 
             this.dt = dt;
             this.fp = fp;
@@ -220,7 +227,8 @@ public abstract class AnalogBasedFilter : IIR
             Rp = -Gp.In_dB();
             Rs = -Gs.In_dB();
 
-            EpsP = (10d.Pow(Rp / 10) - 1).Sqrt();
+            EpsP = (1 / (Gp * Gp) - 1).Sqrt();
+            //EpsP = (10d.Pow(Rp / 10) - 1).Sqrt();
             EpsS = (10d.Pow(Rs / 10) - 1).Sqrt();
 
             //var tEpsP = (1 / Gp.Pow2() - 1).Sqrt();
@@ -229,11 +237,11 @@ public abstract class AnalogBasedFilter : IIR
             //var tEpsP = (1 - Gp*Gp).Sqrt() / (Gp*Gp);
             //var tEpsS = (1 - Gs*Gs).Sqrt() / (Gs*Gs);
 
-            Fp = ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
-            Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового пропита
+            Fp = ToDigitalFrequency(fp, dt);  // Частота пропускания аналогового прототипа
+            Fs = ToDigitalFrequency(fs, dt);  // Частота подавления аналогового пропита
 
             wp = pi2 * fp;
-            ws = pi2 * fp;
+            ws = pi2 * fs;
 
             Wp = pi2 * Fp;
             Ws = pi2 * Fs;
@@ -279,19 +287,25 @@ public abstract class AnalogBasedFilter : IIR
     /// <param name="Spec">Спецификация фильтра</param>
     protected AnalogBasedFilter(double[] B, double[] A, Specification Spec) : base(B, A) => (dt, fp, fs, Gp, Gs) = Spec;
 
-    public override Complex GetTransmissionCoefficient(double f) => base.GetTransmissionCoefficient(f / fd);
+    public override Complex FrequencyResponse(double f) => base.FrequencyResponse(f / fd);
 
-    public override Complex GetTransmissionCoefficient(double f, double dt) => base.GetTransmissionCoefficient(f / fd);
-
+    public override Complex FrequencyResponse(double f, double dt) => base.FrequencyResponse(f * dt);
+    
     /// <summary>Метод преобразования нулей и полюсов нормированного ФНЧ в нули и полюса ППФ</summary>
     /// <param name="Normed">Нормированные нули и полюса ФНЧ</param>
     /// <param name="fmin">Нижняя частота среза</param>
     /// <param name="fmax">Верхняя частота среза</param>
     /// <returns>Нули и полюса ППФ</returns>
-    public static IEnumerable<Complex> TransformToBandPass(IEnumerable<Complex> Normed, double fmin, double fmax)
+    public static IEnumerable<Complex> TransformToBandPass(IEnumerable<Complex> Normed, double fmin, double fmax) =>
+        TransformToBandPassW(Normed, pi2 * fmin, pi2 * fmax);
+
+    /// <summary>Метод преобразования нулей и полюсов нормированного ФНЧ в нули и полюса ППФ</summary>
+    /// <param name="Normed">Нормированные нули и полюса ФНЧ</param>
+    /// <param name="w_min">Нижняя частота среза</param>
+    /// <param name="w_max">Верхняя частота среза</param>
+    /// <returns>Нули и полюса ППФ</returns>
+    public static IEnumerable<Complex> TransformToBandPassW(IEnumerable<Complex> Normed, double w_min, double w_max)
     {
-        var w_min = pi2 * fmin;
-        var w_max = pi2 * fmax;
         var dw05 = (w_max - w_min) / 2;
         var wc2 = w_min * w_max;
 
@@ -309,10 +323,16 @@ public abstract class AnalogBasedFilter : IIR
     /// <param name="fmin">Нижняя частота среза</param>
     /// <param name="fmax">Верхняя частота среза</param>
     /// <returns>Нули и полюса ПЗФ</returns>
-    public static IEnumerable<Complex> TransformToBandStop(IEnumerable<Complex> Normed, double fmin, double fmax)
+    public static IEnumerable<Complex> TransformToBandStop(IEnumerable<Complex> Normed, double fmin, double fmax) =>
+        TransformToBandStopW(Normed, pi2 * fmin, pi2 * fmax);
+
+    /// <summary>Метод преобразования нулей и полюсов нормированного ФНЧ в нули и полюса ПЗФ</summary>
+    /// <param name="Normed">Нормированные нули и полюса ФНЧ</param>
+    /// <param name="w_min">Нижняя частота среза</param>
+    /// <param name="w_max">Верхняя частота среза</param>
+    /// <returns>Нули и полюса ПЗФ</returns>
+    public static IEnumerable<Complex> TransformToBandStopW(IEnumerable<Complex> Normed, double w_min, double w_max)
     {
-        var w_min = pi2 * fmin;
-        var w_max = pi2 * fmax;
         var dw05 = (w_max - w_min) / 2;
         var wc2 = w_min * w_max;
 
@@ -325,16 +345,20 @@ public abstract class AnalogBasedFilter : IIR
         }
     }
 
-    public static IEnumerable<Complex> TransformToLowPass(IEnumerable<Complex> Normed, double fp)
+    public static IEnumerable<Complex> TransformToLowPass(IEnumerable<Complex> Normed, double fp) =>
+        TransformToLowPassW(Normed, pi2 * fp);
+
+    public static IEnumerable<Complex> TransformToLowPassW(IEnumerable<Complex> Normed, double wp)
     {
-        var wp = pi2 * fp;
         foreach (var p in Normed)
             yield return wp * p;
     }
 
-    public static IEnumerable<Complex> TransformToHighPass(IEnumerable<Complex> Normed, double fp)
+    public static IEnumerable<Complex> TransformToHighPass(IEnumerable<Complex> Normed, double fp) => 
+        TransformToHighPassW(Normed, pi2 * fp);
+
+    public static IEnumerable<Complex> TransformToHighPassW(IEnumerable<Complex> Normed, double wp)
     {
-        var wp = pi2 * fp;
         foreach (var p in Normed)
             yield return wp / p;
     }

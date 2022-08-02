@@ -1,4 +1,8 @@
-﻿using static System.Math;
+﻿using System.Diagnostics;
+
+using MathCore.DSP.Infrastructure;
+
+using static System.Math;
 
 using static MathCore.Polynom.Array;
 using static MathCore.SpecialFunctions;
@@ -10,38 +14,33 @@ public class ButterworthHighPass : ButterworthFilter
     public static (double[] A, double[] B) GetPolynoms(Specification Spec)
     {
         // Порядок фильтра
-        var N = (int)Ceiling(Log(Spec.kEps) / Log(Spec.kW));
+        var N = (int)Ceiling(Log(Spec.kEps) / -Log(Spec.kW));
+        Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
         var poles = GetNormPoles(N, Spec.EpsP).ToArray();
 
         // Масштабируем полюса на требуемую частоту пропускания
-        var Wp = Spec.Wp;
-        var translated_poles = TransformToHighPass(poles, Wp);
-        var zeros = Enumerable.Repeat(Complex.ReValue(-1), N);
+        var high_pass_poles = TransformToHighPassW(poles, Spec.Wp);
 
         // Переходим из p-плоскости в z-плоскость
-        var dt = Spec.dt;
-        var z_poles = ToZArray(translated_poles, dt);   
-        var z_zeros = ToZArray(zeros, dt);
-        //var z_poles = translated_poles.ToArray(p => ToZ(p, dt));
+        var z_poles = ToZArray(high_pass_poles, Spec.dt);
+
         // Вычисляем нормирующий множитель
-        //var kz = GetNormalizeCoefficient(translated_poles, dt);
-        var kz = poles.Multiply();
+        var g_norm = z_poles.Multiply(z => (1 + z) / 2).Abs;
 
-        var WpN = Wp.Pow(N);
-        var k = WpN * kz / Spec.EpsP;
-
-        var B = GetCoefficientsInverted(z_zeros).ToArray(v => (v * k).Re);
-        var A = GetCoefficientsInverted(z_poles).ToRe()!;
+        var B = new double[N + 1];
+        for (var i = 0; i < B.Length; i++)
+            B[i] = BinomialCoefficient(N, i) * (i % 2 == 0 ? g_norm : -g_norm);
+        var A = GetCoefficientsInverted(z_poles).ToRe();
 
         return (A, B);
     }
 
     public ButterworthHighPass(
         double dt,
-        double fp,
         double fs,
+        double fp,
         double Gp = 0.891250938,
-        double Gs = 0.031622777) 
+        double Gs = 0.01)
         : this(GetSpecification(dt, fp, fs, Gp, Gs)) { }
 
     public ButterworthHighPass(Specification Spec) : this(GetPolynoms(Spec), Spec) { }

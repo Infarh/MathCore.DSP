@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathCore.DSP.Tests", "Tests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfTest", "Tests\WpfTest\WpfTest.csproj", "{C129E8A4-1A28-4B06-BFC4-D7840A8BD77D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks", "Tests\Benchmarks\Benchmarks.csproj", "{6E552E38-1B68-4DBD-9DAB-03FF2A0A4F06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmarks", "Tests\Benchmarks\Benchmarks.csproj", "{6E552E38-1B68-4DBD-9DAB-03FF2A0A4F06}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

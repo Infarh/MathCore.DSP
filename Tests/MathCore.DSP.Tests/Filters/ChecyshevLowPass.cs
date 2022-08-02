@@ -20,11 +20,8 @@ using static MathCore.Polynom.Array;
 namespace MathCore.DSP.Tests.Filters;
 
 [TestClass]
-public class ChecyshevLowPass : UnitTest
+public class ChecyshevLowPass : ChebyshevFiltersTests
 {
-    private static double arcsh(double x) => Log(x + Sqrt(x * x + 1));
-    private static double arcch(double x) => Log(x + Sqrt(x * x - 1));
-
     [TestMethod]
     public void TypeI_Creation()
     {
@@ -59,8 +56,8 @@ public class ChecyshevLowPass : UnitTest
         Assert.That.Value(Gp.In_dB()).IsEqual(-1.5, 4.67e-15);
         Assert.That.Value(Gs.In_dB()).IsEqual(-35);
 
-        var Fp = ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
-        var Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового прототипа
+        var Fp = ToDigitalFrequency(fp, dt);  // Частота пропускания аналогового прототипа
+        var Fs = ToDigitalFrequency(fs, dt);  // Частота подавления аналогового прототипа
 
         Assert.That.Value(Fp).IsEqual(869.46741682049208);
         Assert.That.Value(Fs).IsEqual(1638.7206595257194);
@@ -74,17 +71,17 @@ public class ChecyshevLowPass : UnitTest
         Assert.That.Value(k_eps).IsEqual(87.5385969314623);
         Assert.That.Value(k_W).IsEqual(1.8847407364824178);
 
-        var order = (int)Ceiling(arcch(k_eps) / arcch(k_W)); // Порядок фильтра
-        Assert.That.Value(order).IsEqual(5);
+        var N = (int)Ceiling(arcch(k_eps) / arcch(k_W)); // Порядок фильтра
+        Assert.That.Value(N).IsEqual(5);
 
-        var r = order % 2;                              // Нечётность порядка фильтра
-        var dth = PI / order;                      // Угловой шаг между полюсами
-        var beta = arcsh(1 / eps_p) / order;
+        var r = N % 2;                              // Нечётность порядка фильтра
+        var dth = PI / N;                      // Угловой шаг между полюсами
+        var beta = arcsh(1 / eps_p) / N;
         Assert.That.Value(beta).IsEqual(0.24518628509618212);
 
         var sh = Sinh(beta);
         var ch = Cosh(beta);
-        var poles = new Complex[order];                 // Массив полюсов фильтра
+        var poles = new Complex[N];                 // Массив полюсов фильтра
         if (r != 0) poles[0] = -sh;                 // Если порядок фильтра нечётный, то первым добавляем центральный полюс
         for (var i = r; i < poles.Length; i += 2)   // Расчёт полюсов
         {
@@ -130,11 +127,11 @@ public class ChecyshevLowPass : UnitTest
             -0.4503476466802788);
 
         var G_norm = (r > 0 ? 1 : Gp)
-            / (2.Power(order) / z_poles.Aggregate(Complex.Real, (Z, z) => Z * (1 - z), z => z.Re));
+            / (2.Power(N) / z_poles.Aggregate(Complex.Real, (Z, z) => Z * (1 - z), z => z.Re));
 
         Assert.That.Value(G_norm).IsEqual(0.0022682232923298762);
 
-        var B = Range(0, order + 1).ToArray(i => G_norm * SpecialFunctions.BinomialCoefficient(order, i));
+        var B = Range(0, N + 1).ToArray(i => G_norm * SpecialFunctions.BinomialCoefficient(N, i));
 
         Assert.That.Collection(B).ValuesAreEqual(
             0.0022682232923298762,
@@ -145,10 +142,10 @@ public class ChecyshevLowPass : UnitTest
             0.0022682232923298762);
 
         // Проверяем коэффициенты передачи рассчитанного фильтра
-        var H0 = GetTransmissionCoefficient(A, B, 0).Abs;          // == (r == 1 ? 1 : Gp)
-        var Hp = GetTransmissionCoefficient(A, B, fp / fd).Abs;    // == Gp
-        var Hs = GetTransmissionCoefficient(A, B, fs / fd).Abs;    // <= Gs
-        var Hd = GetTransmissionCoefficient(A, B, 0.5).Abs;        // == 0
+        var H0 = FrequencyResponse(A, B, 0).Abs;          // == (r == 1 ? 1 : Gp)
+        var Hp = FrequencyResponse(A, B, fp / fd).Abs;    // == Gp
+        var Hs = FrequencyResponse(A, B, fs / fd).Abs;    // <= Gs
+        var Hd = FrequencyResponse(A, B, 0.5).Abs;        // == 0
 
         Assert.That.Value(H0).IsEqual(r == 1 ? 1 : Gp, 1.59e-14);
         Assert.That.Value(Hp).IsEqual(Gp, 9.78e-15);
@@ -157,7 +154,7 @@ public class ChecyshevLowPass : UnitTest
 
         #endregion
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.I);
 
         Assert.That.Collection(filter.A).IsEqualTo(A);
         Assert.That.Collection(filter.B).IsEqualTo(B);
@@ -183,8 +180,8 @@ public class ChecyshevLowPass : UnitTest
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var Fp = ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
-        var Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового прототипа
+        var Fp = ToDigitalFrequency(fp, dt);  // Частота пропускания аналогового прототипа
+        var Fs = ToDigitalFrequency(fs, dt);  // Частота подавления аналогового прототипа
 
         var Wp = Consts.pi2 * Fp;
         var Ws = Consts.pi2 * Fs;
@@ -225,10 +222,10 @@ public class ChecyshevLowPass : UnitTest
         var B = Range(0, N + 1).ToArray(i => G_norm * SpecialFunctions.BinomialCoefficient(N, i));
 
         // Проверяем коэффициенты передачи рассчитанного фильтра
-        var H0 = GetTransmissionCoefficient(A, B, 0).Abs;          // == (r == 1 ? 1 : Gp)
-        var Hp = GetTransmissionCoefficient(A, B, fp / fd).Abs;    // == Gp
-        var Hs = GetTransmissionCoefficient(A, B, fs / fd).Abs;    // <= Gs
-        var Hd = GetTransmissionCoefficient(A, B, 0.5).Abs;        // == 0
+        var H0 = FrequencyResponse(A, B, 0).Abs;          // == (r == 1 ? 1 : Gp)
+        var Hp = FrequencyResponse(A, B, fp / fd).Abs;    // == Gp
+        var Hs = FrequencyResponse(A, B, fs / fd).Abs;    // <= Gs
+        var Hd = FrequencyResponse(A, B, 0.5).Abs;        // == 0
 
         Assert.That.Value(H0).IsEqual(r == 1 ? 1 : Gp, 1.59e-14);
         Assert.That.Value(Hp).IsEqual(Gp, 9.78e-15);
@@ -237,7 +234,7 @@ public class ChecyshevLowPass : UnitTest
 
         #endregion
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.I);
 
         Assert.That.Collection(filter.A).IsEqualTo(A);
         Assert.That.Collection(filter.B).IsEqualTo(B);
@@ -277,8 +274,8 @@ public class ChecyshevLowPass : UnitTest
         Assert.That.Value(Gp.In_dB()).IsEqual(-1.5, 4.67e-15);
         Assert.That.Value(Gs.In_dB()).IsEqual(-35);
 
-        var Fp = ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
-        var Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового прототипа
+        var Fp = ToDigitalFrequency(fp, dt);  // Частота пропускания аналогового прототипа
+        var Fs = ToDigitalFrequency(fs, dt);  // Частота подавления аналогового прототипа
 
         Assert.That.Value(Fp).IsEqual(869.46741682049208);
         Assert.That.Value(Fs).IsEqual(1638.7206595257194);
@@ -393,10 +390,10 @@ public class ChecyshevLowPass : UnitTest
             -0.075860624472381427);
 
         // Проверяем коэффициенты передачи рассчитанного фильтра
-        var H0 = GetTransmissionCoefficient(A, B, 0).Abs;          // == (r == 1 ? 1 : Gp)
-        var Hp = GetTransmissionCoefficient(A, B, fp / fd).Abs;    // <= Gs  !!!
-        var Hs = GetTransmissionCoefficient(A, B, fs / fd).Abs;    // <= Gs
-        var Hd = GetTransmissionCoefficient(A, B, 0.5).Abs;        // == 0
+        var H0 = FrequencyResponse(A, B, 0).Abs;          // == (r == 1 ? 1 : Gp)
+        var Hp = FrequencyResponse(A, B, fp / fd).Abs;    // <= Gs  !!!
+        var Hs = FrequencyResponse(A, B, fs / fd).Abs;    // <= Gs
+        var Hd = FrequencyResponse(A, B, 0.5).Abs;        // == 0
 
         Assert.That.Value(H0).IsEqual(1, 1.79e-15);
         Assert.That.Value(Hp).IsEqual(Gs, 1.29e-16);
@@ -405,7 +402,7 @@ public class ChecyshevLowPass : UnitTest
 
         #endregion
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.II);
 
         Assert.That.Collection(filter.A).IsEqualTo(A);
         Assert.That.Collection(filter.B).IsEqualTo(B);
@@ -445,8 +442,8 @@ public class ChecyshevLowPass : UnitTest
         Assert.That.Value(Gp.In_dB()).IsEqual(-1.5, 4.67e-15);
         Assert.That.Value(Gs.In_dB()).IsEqual(-35);
 
-        var Fp = ToAnalogFrequency(fp, dt);  // Частота пропускания аналогового прототипа
-        var Fs = ToAnalogFrequency(fs, dt);  // Частота подавления аналогового прототипа
+        var Fp = ToDigitalFrequency(fp, dt);  // Частота пропускания аналогового прототипа
+        var Fs = ToDigitalFrequency(fs, dt);  // Частота подавления аналогового прототипа
 
         Assert.That.Value(Fp).IsEqual(869.46741682049208);
         Assert.That.Value(Fs).IsEqual(1638.7206595257194);
@@ -565,10 +562,10 @@ public class ChecyshevLowPass : UnitTest
             -0.014328552997592952);
 
         // Проверяем коэффициенты передачи рассчитанного фильтра
-        var H0 = GetTransmissionCoefficient(A, B, 0).Abs;          // == (r == 1 ? 1 : Gp)
-        var Hp = GetTransmissionCoefficient(A, B, fp / fd).Abs;    // >= Gp  !!!
-        var Hs = GetTransmissionCoefficient(A, B, fs / fd).Abs;    // <= Gs
-        var Hd = GetTransmissionCoefficient(A, B, 0.5).Abs;        // == 0
+        var H0 = FrequencyResponse(A, B, 0).Abs;          // == (r == 1 ? 1 : Gp)
+        var Hp = FrequencyResponse(A, B, fp / fd).Abs;    // >= Gp  !!!
+        var Hs = FrequencyResponse(A, B, fs / fd).Abs;    // <= Gs
+        var Hd = FrequencyResponse(A, B, 0.5).Abs;        // == 0
 
         Assert.That.Value(H0).IsEqual(1, 2.23e-16);
         Assert.That.Value(Hp).GreaterOrEqualsThan(Gp);
@@ -577,7 +574,7 @@ public class ChecyshevLowPass : UnitTest
 
         #endregion
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.IICorrected);
 
         Assert.That.Collection(filter.A).IsEqualTo(A, 4.442e-16);
         Assert.That.Collection(filter.B).IsEqualTo(B, 6.94e-17);
@@ -587,7 +584,7 @@ public class ChecyshevLowPass : UnitTest
 
     /// <summary>Тестирование коэффициента передачи фильтра Чебышева первого рода чётного порядка</summary>
     [TestMethod]
-    public void TypeI_EvenOrder_TransmissionCoefficient()
+    public void TypeI_Even_TransmissionCoefficient()
     {
         const double pi2 = 2 * PI;
 
@@ -601,14 +598,14 @@ public class ChecyshevLowPass : UnitTest
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.I);
 
         Assert.That.Value(filter.Order).IsEven();
 
-        var transmission_0 = filter.GetTransmissionCoefficient(0);
-        var transmission_fp = filter.GetTransmissionCoefficient(fp);
-        var transmission_fs = filter.GetTransmissionCoefficient(fs);
-        var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
+        var transmission_0 = filter.FrequencyResponse(0);
+        var transmission_fp = filter.FrequencyResponse(fp);
+        var transmission_fs = filter.FrequencyResponse(fs);
+        var transmission_fd05 = filter.FrequencyResponse(fd / 2);
 
         var transmission_0_abs = transmission_0.Abs;
         var transmission_fp_abs = transmission_fp.Abs;
@@ -624,7 +621,7 @@ public class ChecyshevLowPass : UnitTest
 
     /// <summary>Тестирование коэффициента передачи фильтра Чебышева первого рода нечётного порядка</summary>
     [TestMethod]
-    public void TypeI_OddOrder_TransmissionCoefficient()
+    public void TypeI_Odd_TransmissionCoefficient()
     {
         const double pi2 = 2 * PI;
 
@@ -638,14 +635,14 @@ public class ChecyshevLowPass : UnitTest
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.I);
 
         Assert.That.Value(filter.Order).IsOdd();
 
-        var transmission_0 = filter.GetTransmissionCoefficient(0);
-        var transmission_fp = filter.GetTransmissionCoefficient(fp);
-        var transmission_fs = filter.GetTransmissionCoefficient(fs);
-        var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
+        var transmission_0 = filter.FrequencyResponse(0);
+        var transmission_fp = filter.FrequencyResponse(fp);
+        var transmission_fs = filter.FrequencyResponse(fs);
+        var transmission_fd05 = filter.FrequencyResponse(fd / 2);
 
         var transmission_0_abs = transmission_0.Abs;
         var transmission_fp_abs = transmission_fp.Abs;
@@ -660,7 +657,7 @@ public class ChecyshevLowPass : UnitTest
     }
 
     [TestMethod]
-    public void TypeII_EvenOrder_TransmissionCoefficient()
+    public void TypeII_Even_TransmissionCoefficient()
     {
         const double pi2 = 2 * PI;
 
@@ -674,14 +671,14 @@ public class ChecyshevLowPass : UnitTest
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.II);
 
         Assert.That.Value(filter.Order).IsEven();
 
-        var transmission_0 = filter.GetTransmissionCoefficient(0);
-        var transmission_fp = filter.GetTransmissionCoefficient(fp);
-        var transmission_fs = filter.GetTransmissionCoefficient(fs);
-        var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
+        var transmission_0 = filter.FrequencyResponse(0);
+        var transmission_fp = filter.FrequencyResponse(fp);
+        var transmission_fs = filter.FrequencyResponse(fs);
+        var transmission_fd05 = filter.FrequencyResponse(fd / 2);
 
         var transmission_0_abs = transmission_0.Abs;
         var transmission_fp_abs = transmission_fp.Abs;
@@ -698,7 +695,7 @@ public class ChecyshevLowPass : UnitTest
     }
 
     [TestMethod]
-    public void TypeII_OddOrder_TransmissionCoefficient()
+    public void TypeII_Odd_TransmissionCoefficient()
     {
         const double pi2 = 2 * PI;
 
@@ -712,14 +709,14 @@ public class ChecyshevLowPass : UnitTest
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.II);
 
         Assert.That.Value(filter.Order).IsOdd();
 
-        var transmission_0 = filter.GetTransmissionCoefficient(0);
-        var transmission_fp = filter.GetTransmissionCoefficient(fp);
-        var transmission_fs = filter.GetTransmissionCoefficient(fs);
-        var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
+        var transmission_0 = filter.FrequencyResponse(0);
+        var transmission_fp = filter.FrequencyResponse(fp);
+        var transmission_fs = filter.FrequencyResponse(fs);
+        var transmission_fd05 = filter.FrequencyResponse(fd / 2);
 
         var transmission_0_abs = transmission_0.Abs;
         var transmission_fp_abs = transmission_fp.Abs;
@@ -736,7 +733,7 @@ public class ChecyshevLowPass : UnitTest
     }
 
     [TestMethod]
-    public void TypeIICorrected_EvenOrder_TransmissionCoefficient()
+    public void TypeIICorrected_Even_TransmissionCoefficient()
     {
         const double pi2 = 2 * PI;
 
@@ -750,14 +747,14 @@ public class ChecyshevLowPass : UnitTest
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.IICorrected);
 
         Assert.That.Value(filter.Order).IsEven();
 
-        var transmission_0 = filter.GetTransmissionCoefficient(0);
-        var transmission_fp = filter.GetTransmissionCoefficient(fp);
-        var transmission_fs = filter.GetTransmissionCoefficient(fs);
-        var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
+        var transmission_0 = filter.FrequencyResponse(0);
+        var transmission_fp = filter.FrequencyResponse(fp);
+        var transmission_fs = filter.FrequencyResponse(fs);
+        var transmission_fd05 = filter.FrequencyResponse(fd / 2);
 
         var transmission_0_abs = transmission_0.Abs;
         var transmission_fp_abs = transmission_fp.Abs;
@@ -772,7 +769,7 @@ public class ChecyshevLowPass : UnitTest
     }
 
     [TestMethod]
-    public void TypeIICorrected_OddOrder_TransmissionCoefficient()
+    public void TypeIICorrected_Odd_TransmissionCoefficient()
     {
         const double pi2 = 2 * PI;
 
@@ -786,14 +783,14 @@ public class ChecyshevLowPass : UnitTest
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.IICorrected);
 
         Assert.That.Value(filter.Order).IsOdd();
 
-        var transmission_0 = filter.GetTransmissionCoefficient(0);
-        var transmission_fp = filter.GetTransmissionCoefficient(fp);
-        var transmission_fs = filter.GetTransmissionCoefficient(fs);
-        var transmission_fd05 = filter.GetTransmissionCoefficient(fd / 2);
+        var transmission_0 = filter.FrequencyResponse(0);
+        var transmission_fp = filter.FrequencyResponse(fp);
+        var transmission_fs = filter.FrequencyResponse(fs);
+        var transmission_fd05 = filter.FrequencyResponse(fd / 2);
 
         var transmission_0_abs = transmission_0.Abs;
         var transmission_fp_abs = transmission_fp.Abs;
@@ -809,7 +806,7 @@ public class ChecyshevLowPass : UnitTest
 
     /// <summary>Тестирование импульсной характеристики фильтра Чебышева первого рода чётного порядка</summary>
     [TestMethod]
-    public void TypeI_EvenOrder_ImpulseResponse()
+    public void TypeI_Even_ImpulseResponse()
     {
         const double pi2 = 2 * PI;
 
@@ -823,7 +820,7 @@ public class ChecyshevLowPass : UnitTest
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.I);
 
         Assert.That.Value(filter.Order).IsEven();
 
@@ -856,7 +853,7 @@ public class ChecyshevLowPass : UnitTest
 
     /// <summary>Тестирование импульсной характеристики фильтра Чебышева первого рода нечётного порядка</summary>
     [TestMethod]
-    public void TypeI_OddOrder_ImpulseResponse()
+    public void TypeI_Odd_ImpulseResponse()
     {
         const double pi2 = 2 * PI;
 
@@ -870,7 +867,7 @@ public class ChecyshevLowPass : UnitTest
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.I);
 
         Assert.That.Value(filter.Order).IsOdd();
 
@@ -903,7 +900,7 @@ public class ChecyshevLowPass : UnitTest
 
     /// <summary>Тестирование импульсной характеристики фильтра Чебышева второго рода чётного порядка</summary>
     [TestMethod]
-    public void TypeII_EvenOrder_ImpulseResponse()
+    public void TypeII_Even_ImpulseResponse()
     {
         const double pi2 = 2 * PI;
 
@@ -917,7 +914,7 @@ public class ChecyshevLowPass : UnitTest
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.II);
 
         Assert.That.Value(filter.Order).IsEven();
 
@@ -950,7 +947,7 @@ public class ChecyshevLowPass : UnitTest
 
     /// <summary>Тестирование импульсной характеристики фильтра Чебышева второго рода нечётного порядка</summary>
     [TestMethod]
-    public void TypeII_OddOrder_ImpulseResponse()
+    public void TypeII_Odd_ImpulseResponse()
     {
         const double pi2 = 2 * PI;
 
@@ -964,7 +961,7 @@ public class ChecyshevLowPass : UnitTest
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.II);
 
         Assert.That.Value(filter.Order).IsOdd();
 
@@ -997,7 +994,7 @@ public class ChecyshevLowPass : UnitTest
 
     /// <summary>Тестирование импульсной характеристики фильтра Чебышева второго рода чётного порядка</summary>
     [TestMethod]
-    public void TypeIICorrected_EvenOrder_ImpulseResponse()
+    public void TypeIICorrected_Even_ImpulseResponse()
     {
         const double pi2 = 2 * PI;
 
@@ -1011,7 +1008,7 @@ public class ChecyshevLowPass : UnitTest
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.IICorrected);
 
         Assert.That.Value(filter.Order).IsEven();
 
@@ -1044,7 +1041,7 @@ public class ChecyshevLowPass : UnitTest
 
     /// <summary>Тестирование импульсной характеристики фильтра Чебышева второго рода нечётного порядка</summary>
     [TestMethod]
-    public void TypeIICorrected_OddOrder_ImpulseResponse()
+    public void TypeIICorrected_Odd_ImpulseResponse()
     {
         const double pi2 = 2 * PI;
 
@@ -1058,7 +1055,7 @@ public class ChecyshevLowPass : UnitTest
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.IICorrected);
 
         Assert.That.Value(filter.Order).IsOdd();
 
@@ -1090,7 +1087,7 @@ public class ChecyshevLowPass : UnitTest
     }
 
     [TestMethod]
-    public void TypeI_EvenOrder_SignalProcessing()
+    public void TypeI_Even_SignalProcessing()
     {
         const double pi2 = 2 * PI;
 
@@ -1104,7 +1101,7 @@ public class ChecyshevLowPass : UnitTest
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.I);
 
         Assert.That.Value(filter.Order).IsEven();
 
@@ -1137,7 +1134,7 @@ public class ChecyshevLowPass : UnitTest
     }
 
     [TestMethod]
-    public void TypeI_OddOrder_SignalProcessing()
+    public void TypeI_Odd_SignalProcessing()
     {
         const double pi2 = 2 * PI;
 
@@ -1151,7 +1148,7 @@ public class ChecyshevLowPass : UnitTest
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.I);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.I);
 
         Assert.That.Value(filter.Order).IsOdd();
 
@@ -1184,7 +1181,7 @@ public class ChecyshevLowPass : UnitTest
     }
 
     [TestMethod]
-    public void TypeII_EvenOrder_SignalProcessing()
+    public void TypeII_Even_SignalProcessing()
     {
         const double pi2 = 2 * PI;
 
@@ -1198,7 +1195,7 @@ public class ChecyshevLowPass : UnitTest
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.II);
 
         Assert.That.Value(filter.Order).IsEven();
 
@@ -1231,7 +1228,7 @@ public class ChecyshevLowPass : UnitTest
     }
 
     [TestMethod]
-    public void TypeII_OddOrder_SignalProcessing()
+    public void TypeII_Odd_SignalProcessing()
     {
         const double pi2 = 2 * PI;
 
@@ -1245,7 +1242,7 @@ public class ChecyshevLowPass : UnitTest
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.II);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.II);
 
         Assert.That.Value(filter.Order).IsOdd();
 
@@ -1278,7 +1275,7 @@ public class ChecyshevLowPass : UnitTest
     }
 
     [TestMethod]
-    public void TypeIICorrected_EvenOrder_SignalProcessing()
+    public void TypeIICorrected_Even_SignalProcessing()
     {
         const double pi2 = 2 * PI;
 
@@ -1292,7 +1289,7 @@ public class ChecyshevLowPass : UnitTest
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.IICorrected);
 
         Assert.That.Value(filter.Order).IsEven();
 
@@ -1325,7 +1322,7 @@ public class ChecyshevLowPass : UnitTest
     }
 
     [TestMethod]
-    public void TypeIICorrected_OddOrder_SignalProcessing()
+    public void TypeIICorrected_Odd_SignalProcessing()
     {
         const double pi2 = 2 * PI;
 
@@ -1339,7 +1336,7 @@ public class ChecyshevLowPass : UnitTest
         var Gp = (-Rp).From_dB();
         var Gs = (-Rs).From_dB();
 
-        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevFilter.ChebyshevType.IICorrected);
+        var filter = new ChebyshevLowPass(dt, fp, fs, Gp, Gs, ChebyshevType.IICorrected);
 
         Assert.That.Value(filter.Order).IsOdd();
 

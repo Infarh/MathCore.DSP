@@ -69,14 +69,24 @@ public static class OxyPlotExt
         return model;
     }
 
-    public static FileInfo ToPNG(this PlotModel model, string FilePath, int Width = 800, int Height = 600, double Resolution = 96)
-    {
-        var file = new FileInfo(FilePath);
 
+    public static PlotModel SetMinY(this PlotModel model, double Min)
+    {
+        model.Axes.First(axe => axe.Position == AxisPosition.Left).Minimum = Min;
+        return model;
+    }
+
+    public static FileInfo ToPNG(this PlotModel model, string FilePath, int Width = 800, int Height = 600, double Resolution = 96) =>
+        model.ToPNG(new FileInfo(FilePath), Width, Height, Resolution);
+
+    public static FileInfo ToPNG(this PlotModel model, FileInfo File, int Width = 800, int Height = 600, double Resolution = 96)
+    {
         var png_exporter = new PngExporter(Width, Height, Resolution);
-        using var png = file.Create();
+        File.Delete();
+        using var png = File.Create();
         png_exporter.Export(model, png);
 
-        return file;
+        return File;
     }
+
 }

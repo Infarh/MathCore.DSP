@@ -1,6 +1,4 @@
-﻿using MathCore.Annotations;
-
-namespace MathCore.DSP.Filters;
+﻿namespace MathCore.DSP.Filters;
 
 /// <summary>Методы-расширения цифровых фильтров</summary>
 public static class DigitalFilterExtension

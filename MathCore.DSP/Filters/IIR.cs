@@ -30,8 +30,8 @@ public class IIR : DigitalFilter
     public IIR(double[] B, double[] A)
         : base(
             Math.Max(
-                (A ?? throw new ArgumentNullException(nameof(B))).Length,
-                (B ?? throw new ArgumentNullException(nameof(A))).Length))
+                (A ?? throw new ArgumentNullException(nameof(A))).Length,
+                (B ?? throw new ArgumentNullException(nameof(B))).Length))
     {
         if (B.Length == 0) throw new ArgumentException("Размер массива коэффициентов числителя должен быть больше 0", nameof(B));
         if (A.Length < 2) throw new ArgumentException("Размер массива коэффициентов знаменателя должен быть больше 1", nameof(A));
@@ -44,7 +44,7 @@ public class IIR : DigitalFilter
 
     public override double Process(double Sample) => Process(Sample, State);
 
-    public override Complex GetTransmissionCoefficient(double f) => DoubleArrayDSPExtensions.GetTransmissionCoefficient(_A, _B, f);
+    public override Complex FrequencyResponse(double f) => DoubleArrayDSPExtensions.FrequencyResponse(_A, _B, f);
 
     /// <summary>Последовательное соединение фильтра с другим <see cref="IIR"/></summary>
     /// <param name="filter">Соединяемый фильтр</param>

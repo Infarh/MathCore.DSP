@@ -1,10 +1,20 @@
-﻿using MathCore.DSP.Signals;
+﻿using MathCore.DSP.Filters.Builders;
+using MathCore.DSP.Signals;
 
 namespace MathCore.DSP.Filters;
 
 /// <summary>Фильтр</summary>
 public abstract class Filter
 {
+    public static LowPassBuilder LowPass(double dt) => new(dt);
+    public static HighPassBuilder HighPass(double dt) => new(dt);
+    public static BandPassBuilder BandPass(double dt) => new(dt);
+    public static BandStopBuilder BandStop(double dt) => new(dt);
+
+    public static ButterworthBuilder Butterworth => new();
+    public static ChebyshevBuilder Chebyshev => new();
+    public static EllipticBuilder Elliptic => new();
+
     /// <summary>Обработать очередной отсчёт сигнала</summary>
     /// <param name="Sample">Обрабатываемый отсчёт сигнала</param>
     /// <returns>Значение на выходе фильтра</returns>
@@ -33,7 +43,7 @@ public abstract class Filter
     /// <summary>Получить комплексный коэффициент передачи</summary>
     /// <param name="f">Частота расчёта комплексного коэффициента передачи</param>
     /// <returns>Значение комплексного коэффициента передачи фильтра на заданной частоте</returns>
-    public abstract Complex GetTransmissionCoefficient(double f);
+    public abstract Complex FrequencyResponse(double f);
 
     /// <summary>Оператор структурного умножения фильтра и цифрового сигнала</summary>
     /// <param name="filter">Фильтр</param>

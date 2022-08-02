@@ -41,33 +41,33 @@ public class BandPass_fp500_fs1500_df5000 : ComplexTest
         public static AnalogBasedFilter.Specification GetSpecification() => new(dt, fp, fs, (-Rp).From_dB(), (-Rs).From_dB());
     }
 
-    [TestMethod]
-    public void Butterworth()
-    {
-        var filter = new ButterworthBandPass(
-            Information.dt,
-            Information.fp, Information.fs,
-            Information.fmin, Information.fmax,
-            (-Information.Rp).From_dB(), (-Information.Rs).From_dB());
+    //[TestMethod]
+    //public void Butterworth()
+    //{
+    //    var filter = new DSP.Filters.ButterworthBandPass(
+    //        Information.dt,
+    //        Information.fp, Information.fs,
+    //        Information.fmin, Information.fmax,
+    //        (-Information.Rp).From_dB(), (-Information.Rs).From_dB());
 
-        var spec = filter.Spec;
+    //    var spec = filter.Spec;
 
-        //var hh = Enumerable.Range(1, 151).Select(i => i * 1500d / 150)
-        //   .Select(f => (f, K: GetTransmigrationCoefficient(filter, f, 1000)))
-        //   .Select(v => $"{v.f,5} {v.K.In_dB_byPower().Round(2)}")
-        //   .ToArray();
+    //    //var hh = Enumerable.Range(1, 151).Select(i => i * 1500d / 150)
+    //    //   .Select(f => (f, K: GetTransmigrationCoefficient(filter, f, 1000)))
+    //    //   .Select(v => $"{v.f,5} {v.K.In_dB_byPower().Round(2)}")
+    //    //   .ToArray();
 
-        CheckTransmissionGreaterThan(filter, -spec.Rp, filter.F, 0.1);
+    //    CheckTransmissionGreaterThan(filter, -spec.Rp, filter.F, 0.1);
 
-        var h____0 = GetTransmigrationCoefficient(filter, 0, 1000).In_dB_byPower();
-        var h___01 = GetTransmigrationCoefficient(filter, 0.1, 10000).In_dB_byPower();
-        var h____1 = GetTransmigrationCoefficient(filter, 1, 1000).In_dB_byPower();
-        var h_down = GetTransmigrationCoefficient(filter, 10, 1000).In_dB_byPower();
-        var h__low = GetTransmigrationCoefficient(filter, 100, 1000).In_dB_byPower();
-    }
+    //    var h____0 = GetTransmigrationCoefficient(filter, 0, 1000).In_dB_byPower();
+    //    var h___01 = GetTransmigrationCoefficient(filter, 0.1, 10000).In_dB_byPower();
+    //    var h____1 = GetTransmigrationCoefficient(filter, 1, 1000).In_dB_byPower();
+    //    var h_down = GetTransmigrationCoefficient(filter, 10, 1000).In_dB_byPower();
+    //    var h__low = GetTransmigrationCoefficient(filter, 100, 1000).In_dB_byPower();
+    //}
 
-    public void Elliptic()
-    {
+    //public void Elliptic()
+    //{
         
-    }
+    //}
 }

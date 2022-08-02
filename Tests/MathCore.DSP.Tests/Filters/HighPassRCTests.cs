@@ -113,7 +113,7 @@ public class HighPassRCTests : UnitTest
 
         var rc = new HighPassRC(f0, dt);
 
-        var c = rc.GetTransmissionCoefficient(f, dt);
+        var c = rc.FrequencyResponse(f, dt);
 
         Assert.That.Value(c.Abs).IsEqual(0);
     }
@@ -129,7 +129,7 @@ public class HighPassRCTests : UnitTest
 
         var rc = new HighPassRC(f0, dt);
 
-        var c = rc.GetTransmissionCoefficient(f, dt);
+        var c = rc.FrequencyResponse(f, dt);
 
         Assert.That.Value(c.Abs).IsEqual(Consts.sqrt_2_inv, 1e-14);
         Assert.That.Value(c.Arg * Consts.ToDeg).IsEqual(45);

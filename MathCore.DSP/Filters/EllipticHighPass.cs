@@ -1,14 +1,14 @@
-﻿using static System.Array;
+﻿using System.Diagnostics;
 using static System.Math;
 
 namespace MathCore.DSP.Filters;
 
 public class EllipticHighPass : EllipticFilter
 {
-    public static (double[] A, double[] B) GetPolynoms(Specification opt)
+    public static (double[] A, double[] B) GetPolynoms(Specification Spec)
     {
-        var k_w = opt.kw;
-        var k_eps = 1 / opt.kEps;
+        var k_w = 1 / Spec.kw;
+        var k_eps = 1 / Spec.kEps;
 
         var Kw = K(k_w);
         var Tw = T(k_w);
@@ -17,33 +17,35 @@ public class EllipticHighPass : EllipticFilter
 
         var double_N = T_eps * Kw / (K_eps * Tw);
         var N = (int)Ceiling(double_N); // Порядок фильтра
+        Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
 
-        var (zeros, poles) = GetNormedZeros(N, opt.EpsP, opt.EpsS);
+        var (zeros, poles) = GetNormedZerosPoles(N, Spec.EpsP, Spec.EpsS);
 
         // Масштабируем полюса на требуемую частоту пропускания
-        var Fp = opt.Fp;
-        var translated_zeros = TransformToHighPass(zeros, Fp);
-        var translated_poles = TransformToHighPass(poles, Fp);
+        var Ws = Spec.Ws;
+        var high_pass_zeros_enum = TransformToHighPassW(zeros, Ws);
+        if (N.IsOdd())
+            high_pass_zeros_enum = high_pass_zeros_enum.AppendFirst(0);
+        var high_pass_zeros = high_pass_zeros_enum;
+        var high_pass_poles = TransformToHighPassW(poles, Ws);
 
-        var is_odd = N.IsOdd();
-        if (is_odd)
-            translated_zeros = translated_zeros.Prepend(0);
-
-        var zz = translated_zeros.ToArray();
-        var pp = translated_poles.ToArray();
+        var zz = high_pass_zeros.ToArray();
+        var pp = high_pass_poles.ToArray();
 
         // Переходим из p-плоскости в z-плоскость
-        var dt = opt.dt;
-        var z_zeros = ToZArray(translated_zeros, dt);
-        var z_poles = ToZArray(translated_poles, dt);
-        //var z_poles = translated_poles.ToArray(p => ToZ(p, dt));
-        // Вычисляем нормирующий множитель
-        //var kz = GetNormalizeCoefficient(translated_poles, dt);
+        var dt = Spec.dt;
+        var z_zeros = ToZArray(zz, dt);
+        var z_poles = ToZArray(pp, dt);
 
-        var Gz0 = (z_zeros.Multiply(z => 1 + z) / z_poles.Multiply(z => 1 + z)).Abs;
-        var G_norm = (is_odd ? 1 : opt.Gp) / Gz0;
+        var k_zeros = z_zeros.Multiply(z => 1 + z).Re;
+        var k_poles = z_poles.Multiply(z => 1 + z).Re;
 
-        var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToArray(v => (v * G_norm).Re);
+        var g_norm = N.IsEven() 
+            ? Spec.Gp * k_poles / k_zeros 
+            : k_poles / k_zeros;
+
+
+        var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToArray(v => v.Re * g_norm);
         var A = Polynom.Array.GetCoefficientsInverted(z_poles).ToRe();
 
         return (A, B);
@@ -54,8 +56,8 @@ public class EllipticHighPass : EllipticFilter
         double fs,
         double fp,
         double Gp = 0.891250938,
-        double Gs = 0.031622777) 
-        : this(GetSpecification(dt, fp, fs, Gp, Gs)) { }
+        double Gs = 0.01) 
+        : this(GetSpecification(dt, fs, fp, Gp, Gs)) { }
 
     public EllipticHighPass(Specification Spec) : this(GetPolynoms(Spec), Spec) { }
 

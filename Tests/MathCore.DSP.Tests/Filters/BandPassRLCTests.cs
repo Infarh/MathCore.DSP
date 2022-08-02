@@ -162,7 +162,7 @@ public class BandPassRLCTests : UnitTest
 
         var rlc = new BandPassRLC(f0, Df, dt);
 
-        var c = rlc.GetTransmissionCoefficient(f0, dt);
+        var c = rlc.FrequencyResponse(f0, dt);
 
         const double eps = 1.12e-15;
         Assert.AreEqual(1, c.Abs, eps, $"delta:{Abs(1 - c.Abs):e2}");
@@ -178,7 +178,7 @@ public class BandPassRLCTests : UnitTest
 
         var rlc = new BandPassRLC(f0, Df, dt);
 
-        var c = rlc.GetTransmissionCoefficient(0, dt);
+        var c = rlc.FrequencyResponse(0, dt);
 
         Assert.AreEqual(0, c.Abs, $"delta:{Abs(0 - c.Abs):e2}");
     }
@@ -193,7 +193,7 @@ public class BandPassRLCTests : UnitTest
 
         var rlc = new BandPassRLC(f0, Df, dt);
 
-        var c = rlc.GetTransmissionCoefficient(fd / 2, dt);
+        var c = rlc.FrequencyResponse(fd / 2, dt);
 
         const double eps = 1.93e-18;
         Assert.AreEqual(0, c.Abs, eps, $"delta:{Abs(0 - c.Abs):e2}");
@@ -232,9 +232,9 @@ public class BandPassRLCTests : UnitTest
         var abs_Y_30 = abs_Y[30];
         var abs_Y_35 = abs_Y[35];
 
-        var H_25 = rlc.GetTransmissionCoefficient(f0 - Df / 2, dt);
-        var H_30 = rlc.GetTransmissionCoefficient(f0, dt);
-        var H_35 = rlc.GetTransmissionCoefficient(f0 + Df / 2, dt);
+        var H_25 = rlc.FrequencyResponse(f0 - Df / 2, dt);
+        var H_30 = rlc.FrequencyResponse(f0, dt);
+        var H_35 = rlc.FrequencyResponse(f0 + Df / 2, dt);
 
         var H_25_abs = H_25.Abs;
         var H_30_abs = H_30.Abs;

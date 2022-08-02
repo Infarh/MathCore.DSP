@@ -161,7 +161,7 @@ public class BandStopRLCTests : UnitTest
 
         var rlc = new BandStopRLC(f0, delta_f, dt);
 
-        var c = rlc.GetTransmissionCoefficient(f0, dt);
+        var c = rlc.FrequencyResponse(f0, dt);
 
         const double eps = 1.91e-14;
         Assert.AreEqual(0, c.Abs, eps, $"delta:{Abs(0 - c.Abs):e2}");
@@ -177,7 +177,7 @@ public class BandStopRLCTests : UnitTest
 
         var rlc = new BandStopRLC(f0, delta_f, dt);
 
-        var c = rlc.GetTransmissionCoefficient(0, dt);
+        var c = rlc.FrequencyResponse(0, dt);
 
         Assert.AreEqual(1, c.Abs, $"delta:{Abs(1 - c.Abs):e2}");
     }
@@ -192,7 +192,7 @@ public class BandStopRLCTests : UnitTest
 
         var rlc = new BandStopRLC(f0, delta_f, dt);
 
-        var c = rlc.GetTransmissionCoefficient(fd / 2, dt);
+        var c = rlc.FrequencyResponse(fd / 2, dt);
 
         const double eps = 1.93e-18;
         Assert.AreEqual(1, c.Abs, eps, $"delta:{Abs(1 - c.Abs):e2}");

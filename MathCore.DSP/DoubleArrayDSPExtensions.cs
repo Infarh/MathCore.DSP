@@ -1,25 +1,27 @@
 ﻿using System.Numerics;
 
+using MathCore.DSP.Infrastructure;
+
 namespace MathCore.DSP;
 
 /// <summary>Методы-расширения для вещественных массивов</summary>
 public static class DoubleArrayDSPExtensions
 {
     internal static Vector<double> ToVector(this double[] array) => new(array);
-        
+
     /// <summary>Вычислить значение коэффициента передачи фильтра, заданного импульсной характеристикой</summary>
     /// <param name="ImpulseResponse">Массив отсчётов импульсной характеристики</param>
     /// <param name="f">Частота вычисления коэффициента передачи</param>
     /// <param name="dt">Период дискретизации импульсной характеристики</param>
     /// <returns>Комплексное значение коэффициента передачи фильтра с указанной импульсной характеристикой</returns>
-    public static Complex GetTransmissionCoefficient(this double[] ImpulseResponse, double f, double dt)
-        => ImpulseResponse.GetTransmissionCoefficient(f * dt);
+    public static Complex FrequencyResponse(this double[] ImpulseResponse, double f, double dt)
+        => ImpulseResponse.FrequencyResponse(f * dt);
 
     /// <summary>Вычислить значение коэффициента передачи фильтра, заданного импульсной характеристикой</summary>
     /// <param name="ImpulseResponse">Массив отсчётов импульсной характеристики</param>
     /// <param name="f">Нормированная частота вычисления коэффициента передачи</param>
     /// <returns>Комплексное значение коэффициента передачи фильтра с указанной импульсной характеристикой</returns>
-    public static Complex GetTransmissionCoefficient(this double[] ImpulseResponse, double f)
+    public static Complex FrequencyResponse(this double[] ImpulseResponse, double f)
     {
         var e = Complex.Exp(-2 * Math.PI * f);
         Complex result = ImpulseResponse[^1];
@@ -79,15 +81,21 @@ public static class DoubleArrayDSPExtensions
         => samples.FilterFIR(ImpulseResponse, new double[ImpulseResponse.Length]);
 
 
-    public static Complex GetTransmissionCoefficient(double[] A, double[] B, double f, double dt)
-        => GetTransmissionCoefficient(A, B, f * dt);
+    public static Complex FrequencyResponse(double[] A, double[] B, double f, double dt)
+        => FrequencyResponse(A, B, f * dt);
+
+    public static Complex FrequencyResponse(this (IReadOnlyList<double> A, IReadOnlyList<double> B) Filter, double f, double dt) =>
+        FrequencyResponse(Filter.A, Filter.B, f * dt);
+
+    public static Complex FrequencyResponse(this (IReadOnlyList<double> A, IReadOnlyList<double> B) Filter, double f) =>
+        FrequencyResponse(Filter.A, Filter.B, f);
 
     /// <summary>Расчёт коэффициента передачи рекуррентного фильтра, заданного массивами своих коэффициентов для указанной частоты</summary>
     /// <param name="A">Массив коэффициентов обратных связей</param>
     /// <param name="B">Массив коэффициентов прямых связей</param>
     /// <param name="f">Частота, на которой требуется рассчитать коэффициент передачи фильтра</param>
     /// <returns>Значение комплексного коэффициента передачи рекуррентного фильтра на заданной частоте</returns>
-    public static Complex GetTransmissionCoefficient(IReadOnlyList<double> A, IReadOnlyList<double> B, double f)
+    public static Complex FrequencyResponse(IReadOnlyList<double> A, IReadOnlyList<double> B, double f)
     {
         //var p = new Complex(0, Consts.pi2 * f);
         var p = Complex.Exp(-Consts.pi2 * f);
@@ -113,9 +121,9 @@ public static class DoubleArrayDSPExtensions
         return Sum(B, p) / Sum(A, p);
     }
 
-    public static Complex GetDigitalTransmissionCoefficientFromPoles(
-        IEnumerable<Complex> Zeros,
-        IEnumerable<Complex> Poles,
+    public static Complex DigitalFrequencyResponseFromZPoles(
+        IEnumerable<Complex> ZerosZ,
+        IEnumerable<Complex> PolesZ,
         double f,
         double dt)
     {
@@ -123,50 +131,50 @@ public static class DoubleArrayDSPExtensions
 
         var P0 = Complex.Real;
         var one = Complex.Real;
-        foreach (var z0 in Zeros)
+        foreach (var z0 in ZerosZ)
         {
             var zz = z0 * z;
-            if (one == zz)
+            if (zz == one)
                 return 0;
             P0 *= 1 - zz;
         }
 
         var Pp = Complex.Real;
-        foreach (var zp in Poles)
+        foreach (var zp in PolesZ)
         {
             var zz = zp * z;
-            if (one == zz)
+            if (zz == one)
                 return new Complex(double.PositiveInfinity, double.PositiveInfinity);
-            Pp *= 1 - zp;
+            Pp *= 1 - zz;
         }
 
         return P0 / Pp;
     }
 
-    public static Complex GetAnalogTransmissionCoefficientFromPoles(
-        IEnumerable<Complex> Zeros,
-        IEnumerable<Complex> Poles,
+    public static Complex AnalogFrequencyResponseFromPoles(
+        IEnumerable<Complex> P0,
+        IEnumerable<Complex> Pp,
         double f)
     {
         var p = Complex.ImValue(Consts.pi2 * f);
 
-        var P0 = Complex.Real;
-        foreach (var p0 in Zeros)
+        var zeros = Complex.Real;
+        foreach (var p0 in P0)
         {
-            if (p0 == p) 
+            if (p0 == p)
                 return 0;
-            P0 *= p - p0;
+            zeros *= p - p0;
         }
 
-        var Pp = Complex.Real;
-        foreach (var pp in Poles)
+        var poles = Complex.Real;
+        foreach (var pp in Pp)
         {
             if (p == pp)
                 return new Complex(double.PositiveInfinity, double.PositiveInfinity);
-            Pp *= p - pp;
+            poles *= p - pp;
         }
 
-        return P0 / Pp;
+        return zeros / poles;
     }
 
     /// <summary>Выполнение фильтрации очередного отсчёта цифрового сигнала с помощью коэффициентов рекуррентного фильтра</summary>
@@ -177,7 +185,7 @@ public static class DoubleArrayDSPExtensions
     /// <returns>Обработанное значение</returns>
     public static double FilterSample(
         this double[] State,
-        double[] A, 
+        double[] A,
         double[] B,
         double Sample)
     {
@@ -189,6 +197,7 @@ public static class DoubleArrayDSPExtensions
         if (A.Length == b_length)
             for (var i = State.Length - 1; i >= 1; i--)
             {
+                //(State[i], result, input) = (State[i - 1], result + State[i - 1] * B[i] * a0, input - State[i - 1] * A[i] * a0);
                 var v = State[i - 1];
                 State[i] = v;
                 result += v * B[i] * a0;
@@ -219,7 +228,7 @@ public static class DoubleArrayDSPExtensions
     public static IEnumerable<double> FilterIIR(
         this IEnumerable<double> samples,
         double[] A,
-        double[] B, 
+        double[] B,
         double[] State)
     {
         if (samples is null) throw new ArgumentNullException(nameof(samples));
@@ -233,8 +242,8 @@ public static class DoubleArrayDSPExtensions
     }
 
     public static IEnumerable<double> FilterIIR(
-        this IEnumerable<double> samples, 
-        double[] A, 
+        this IEnumerable<double> samples,
+        double[] A,
         double[] B)
         => samples.FilterIIR(A, B, new double[A.Length]);
 }

@@ -16,7 +16,7 @@ public abstract class ComplexTest
     protected static void CheckChebyshevII(ChebyshevLowPass filter, int N = 100)
     {
         // Фильтр должен быть фильтром Чебышева второго рода
-        Assert.That.Value(filter.FilterType).IsEqual(ChebyshevFilter.ChebyshevType.II);
+        Assert.That.Value(filter.FilterType).IsEqual(ChebyshevType.II);
 
         var specification = filter.Spec;
 
@@ -118,7 +118,7 @@ public abstract class ComplexTest
     private static void CheckBandPass(AnalogBasedFilter Filter, AnalogBasedFilter.Specification Specification, int N)
     {
         var k0 = GetTransmigrationCoefficient(Filter, 0, N).In_dB_byPower();
-        Assert.That.Value(k0).GreaterThan(-Specification.Rp);
+        Assert.That.Value(k0).GreaterThan(-Specification.Rp, 6.8e-3);
 
         var df = Specification.fp / 10;
         for (var f0 = df; Specification.fp - f0 > df; f0 += df)

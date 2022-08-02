@@ -1,4 +1,5 @@
 ﻿using System.Data;
+// ReSharper disable InconsistentNaming
 
 namespace MathCore.DSP.Filters;
 
@@ -20,17 +21,17 @@ public class EllipticBandStop : EllipticFilter
         double fsl,
         double fsh,
         double fph,
-        double Gp = 0.891250938,
-        double Gs = 0.031622777)
+        double Gp,
+        double Gs)
     {
         if (Gp <= Gs)
             throw new ArgumentOutOfRangeException(
                 nameof(Gp), Gp, $"Уровень АЧХ в полосе пропускания Gp={Gp} был меньше, либо равен уровню АЧХ в полосе заграждения Gs={Gs}");
 
-        var Fpl = ToAnalogFrequency(fpl, dt);
-        var Fsl = ToAnalogFrequency(fsl, dt);
-        var Fsh = ToAnalogFrequency(fsh, dt);
-        var Fph = ToAnalogFrequency(fph, dt);
+        var Fpl = ToDigitalFrequency(fpl, dt);
+        var Fsl = ToDigitalFrequency(fsl, dt);
+        var Fsh = ToDigitalFrequency(fsh, dt);
+        var Fph = ToDigitalFrequency(fph, dt);
 
         var Wpl = Consts.pi2 * Fpl;
         var Wsl = Consts.pi2 * Fsl;
@@ -50,14 +51,12 @@ public class EllipticBandStop : EllipticFilter
         var Wp = Wc / Wph > Wpl
             ? Wph
             : Wpl;
-        var W0 = Math.Abs(dW * Wp / (Wc - Wp.Pow2())); // пересчитываем выбранную границу в нижнюю границу пропускания АЧХ аналогового прототипа
-        const double W1 = 1;                           // верхняя граница АЧХ аналогового прототипа будет всегда равна 1 рад/с
-        var Fp = W0 / Consts.pi2;
+        var Fp = Math.Abs(dW * Wp / (Wc - Wp.Pow2())) / Consts.pi2;
         const double Fs = 1 / Consts.pi2;
 
         // Для передачи информации о граничных частотах в спецификацию аналогвого прототипа перечситываем частоты цифрового фильтра обратно
-        var fp = ToDigitalFrequency(Fp, dt);
-        var fs = ToDigitalFrequency(Fs, dt);
+        var fp = ToAnalogFrequency(Fp, dt);
+        var fs = ToAnalogFrequency(Fs, dt);
 
         return new Specification(dt, fp, fs, Gp, Gs);
     }
@@ -70,17 +69,17 @@ public class EllipticBandStop : EllipticFilter
     private static (double[] A, double[] B) Initialize(double fsl, double fsh, Specification Spec)
     {
         var kW = 1 / Spec.kW;
-        var k_eps = 1 / Spec.kEps;
+        var kEps = 1 / Spec.kEps;
 
-        var N = (int)Math.Ceiling(T(k_eps) * K(kW) / (K(k_eps) * T(kW))); // Порядок фильтра
+        var N = (int)Math.Ceiling(T(kEps) * K(kW) / (K(kEps) * T(kW))); // Порядок фильтра
 
         // Нули и полюса аналогового прототипа - эллиптического ФНЧ
-        var (zeros, poles) = GetNormedZeros(N, Spec.EpsP, Spec.EpsS, Spec.Wp);
+        var (zeros, poles) = GetNormedZerosPoles(N, Spec.EpsP, Spec.EpsS, Spec.Wp);
 
         // Пересчитываем аналоговые частоты полосы заграждения в цифровые
         var dt = Spec.dt;
-        var Fsl = ToAnalogFrequency(fsl, dt);
-        var Fsh = ToAnalogFrequency(fsh, dt);
+        var Fsl = ToDigitalFrequency(fsl, dt);
+        var Fsh = ToDigitalFrequency(fsh, dt);
 
         // Переносим нули и полюса аналогового нормированного ФНЧ в полосы ПЗФ
         var pzf_zeros = TransformToBandStop(zeros, Fsl, Fsh);
@@ -99,12 +98,12 @@ public class EllipticBandStop : EllipticFilter
         var z_zeros = ToZArray(pzf_zeros, dt);
         var z_poles = ToZArray(pzf_poles, dt);
 
-        // Выычисляем коэффициент нормировки фильтра на нулевой частоте 
-        var G_norm = (N.IsOdd() ? 1 : Spec.Gp)
+        // Вычисляем коэффициент нормировки фильтра на нулевой частоте 
+        var g_norm = (N.IsOdd() ? 1 : Spec.Gp)
             / (z_zeros.Multiply(z => 1 - z) / z_poles.Multiply(z => 1 - z)).Abs;
 
         // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
-        var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToArray(b => b * G_norm).ToRe();
+        var B = Polynom.Array.GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * g_norm);
         var A = Polynom.Array.GetCoefficientsInverted(z_poles).ToRe();
 
         return (A, B);
@@ -125,11 +124,8 @@ public class EllipticBandStop : EllipticFilter
         double fsh,
         double fph,
         double Gp = 0.89125093813374556,
-        double Gs = 0.031622777)
-        : this(fsl, fsh, GetSpecification(dt, fpl, fsl, fsh, fph, Gp, Gs))
-    {
-
-    }
+        double Gs = 0.01)
+        : this(fsl, fsh, GetSpecification(dt, fpl, fsl, fsh, fph, Gp, Gs)) { }
 
     /// <summary>Инициализация нового эллиптического полосозаграждающего фильтра (ПЗФ)</summary>
     /// <param name="fsl">Нижняя граница полосы подавления</param>

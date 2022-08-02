@@ -1,17 +1,52 @@
 ﻿using System;
+using System.Collections;
+using System.Diagnostics;
 using System.Linq;
 
 using MathCore.DSP.Filters;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting.Extensions;
+
 // ReSharper disable RedundantArgumentDefaultValue
 // ReSharper disable InconsistentNaming
 
 namespace MathCore.DSP.Tests.Filters.ComplexTests;
 
-[TestClass]
+[TestClassHandler("FailResultHandler")]
 public class LowPass_fp500_fs1500_df5000 : ComplexTest
 {
+    // ReSharper disable once UnusedMember.Local
+    private static void FailResultHandler(TestResult result)
+    {
+        if (result.TestFailureException?.InnerException is not AssertFailedException exception) return;
+        switch (exception.Data["Actual"])
+        {
+            case IEnumerable<Complex> actual:
+                result.ToDebugEnum(actual);
+                break;
+            case IEnumerable actual:
+                result.ToDebugEnum(actual);
+                break;
+            case { } actual:
+                result.ToDebug(actual);
+                break;
+        }
+
+        //switch (exception.Data["Expected"])
+        //{
+        //    case IEnumerable<Complex> expected:
+        //        result.ToDebugEnum(expected);
+        //        break;
+        //    case IEnumerable expected:
+        //        result.ToDebugEnum(expected);
+        //        break;
+        //    case { } expected:
+        //        result.ToDebug(expected);
+        //        break;
+        //}
+    }
+
     private static class Information
     {
         /// <summary>Частота дискретизации, Гц</summary>
@@ -47,7 +82,7 @@ public class LowPass_fp500_fs1500_df5000 : ComplexTest
     public void ChebyshevI()
     {
         var specification = Information.GetSpecification();
-        var filter = new ChebyshevLowPass(specification, ChebyshevFilter.ChebyshevType.I);
+        var filter = new ChebyshevLowPass(specification, ChebyshevType.I);
         CheckFilter(filter);
     }
 
@@ -55,7 +90,7 @@ public class LowPass_fp500_fs1500_df5000 : ComplexTest
     public void ChebyshevII()
     {
         var specification = Information.GetSpecification();
-        var filter = new ChebyshevLowPass(specification, ChebyshevFilter.ChebyshevType.II);
+        var filter = new ChebyshevLowPass(specification, ChebyshevType.II);
 
         CheckChebyshevII(filter);
     }

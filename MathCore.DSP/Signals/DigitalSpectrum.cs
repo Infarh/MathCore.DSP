@@ -1,10 +1,11 @@
-﻿using System.Data;
+﻿using System.Collections;
+using System.Data;
 
 using MathCore.DSP.Fourier;
 
 namespace MathCore.DSP.Signals;
 
-public class DigitalSpectrum
+public class DigitalSpectrum : IEnumerable<Complex>
 {
     private double _fd;
     private readonly Complex[] _Samples;
@@ -19,6 +20,18 @@ public class DigitalSpectrum
     public int SamplesCount => _Samples.Length;
 
     public ref Complex this[int m] => ref _Samples[m];
+
+    /// <summary>Отсчёты сигнала</summary>
+    public virtual IEnumerable<SpectrumSample> Samples
+    {
+        get
+        {
+            var df = this.df;
+            var f = 0d;
+            foreach (var sample in _Samples)
+                yield return new(f += df, sample);
+        }
+    }
 
     public DigitalSpectrum(double fd, Complex[] Samples, double t0 = 0)
     {
@@ -96,4 +109,8 @@ public class DigitalSpectrum
         var q = new SamplesDigitalSignal(dt, im, _t0);
         return (i, q);
     }
+
+    public IEnumerator<Complex> GetEnumerator() => ((IEnumerable<Complex>)_Samples).GetEnumerator();
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
