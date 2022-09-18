@@ -7,6 +7,16 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <NoWarn>
+      0108;
+      0219;0649;
+      1701;1702;
+      8601;8602;8604;8607;8618;8619;8622;8625;8632;
+      8794
+    </NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.13.2" />
   </ItemGroup>
