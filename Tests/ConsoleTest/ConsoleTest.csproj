@@ -11,15 +11,25 @@
     <EnableUnsafeBinaryFormatterSerializationx>true</EnableUnsafeBinaryFormatterSerializationx>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <NoWarn>
+      0108;
+      0219;0649;
+      1701;1702;
+      8601;8602;8604;8607;8618;8619;8622;8625;8632;
+      8794
+    </NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <!--<PackageReference Include="MathCore" Version="0.0.66" />-->
     <!--<PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.2" />-->
     <PackageReference Include="OxyPlot.ImageSharp" Version="2.1.0" />
-    <PackageReference Include="System.ServiceModel.Duplex" Version="4.9.0" />
-    <PackageReference Include="System.ServiceModel.Federation" Version="4.9.0" />
-    <PackageReference Include="System.ServiceModel.Http" Version="4.9.0" />
-    <PackageReference Include="System.ServiceModel.NetTcp" Version="4.9.0" />
-    <PackageReference Include="System.ServiceModel.Security" Version="4.9.0" />
+    <PackageReference Include="System.ServiceModel.Duplex" Version="4.10.0" />
+    <PackageReference Include="System.ServiceModel.Federation" Version="4.10.0" />
+    <PackageReference Include="System.ServiceModel.Http" Version="4.10.0" />
+    <PackageReference Include="System.ServiceModel.NetTcp" Version="4.10.0" />
+    <PackageReference Include="System.ServiceModel.Security" Version="4.10.0" />
   </ItemGroup>
 
   <ItemGroup>
