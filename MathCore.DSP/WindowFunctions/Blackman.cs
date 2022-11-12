@@ -15,6 +15,4 @@ public static class Functions
         Abs(x) <= 0.5
             ? (121_849 * Cos(2 * PI * x) + 36_058 * Cos(4 * PI * x) + 3_151 * Cos(6 * PI * x) + 88_942) / 250_000
             : 0;
-
-
 }

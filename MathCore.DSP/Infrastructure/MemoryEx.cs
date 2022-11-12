@@ -37,8 +37,5 @@ internal static class MemoryEx
         protected override void Dispose(bool disposing) { }
     }
 
-    public static Memory<T> Cast<T>(this Memory<byte> memory) where T : unmanaged
-    {
-        return Cast<byte, T>(memory);
-    }
+    public static Memory<T> Cast<T>(this Memory<byte> memory) where T : unmanaged => Cast<byte, T>(memory);
 }

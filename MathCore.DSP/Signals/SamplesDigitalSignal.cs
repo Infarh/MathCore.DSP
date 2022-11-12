@@ -1,4 +1,5 @@
 ﻿using MathCore.Annotations;
+
 using Suppress = System.Diagnostics.CodeAnalysis.SuppressMessageAttribute;
 // ReSharper disable InconsistentNaming
 // ReSharper disable UnusedMember.Global
@@ -35,15 +36,15 @@ public class SamplesDigitalSignal : DigitalSignal, IEquatable<SamplesDigitalSign
     {
         get
         {
-            var count = _Samples.Length;
-            for(var i = 0; i < count; i++)
-                yield return new SignalSample(i * _dt + _t0, _Samples[i]);
+            var (t0, dt, samples, count) = (_t0, _dt, _Samples, _Samples.Length);
+            for (var i = 0; i < count; i++)
+                yield return new SignalSample(i * dt + t0, samples[i]);
         }
     }
 
-    public SamplesDigitalSignal(double dt, double[] Samples, double t0 = 0) : base(dt, t0) => _Samples = Samples ?? throw new ArgumentNullException(nameof(Samples));
+    public SamplesDigitalSignal(double dt, double[] Samples, double t0 = 0) : base(dt, t0) => _Samples = Samples.NotNull();
 
-    public SamplesDigitalSignal(double dt, int SamplesCount, Func<double, double> f, double t0 = 0) : this(dt, f.Sampling(0, dt, SamplesCount), t0) { }
+    public SamplesDigitalSignal(double dt, int SamplesCount, Func<double, double> f, double t0 = 0) : this(dt, f.NotNull().Sampling(0, dt, SamplesCount), t0) { }
 
     private static double[] GetSamplesArray(IEnumerable<double> Samples) => Samples switch
     {
@@ -51,8 +52,9 @@ public class SamplesDigitalSignal : DigitalSignal, IEquatable<SamplesDigitalSign
         { } => Samples.ToArray(),
         _ => throw new ArgumentNullException(nameof(Samples))
     };
-    public SamplesDigitalSignal(double dt, IEnumerable<double> Samples, double t0 = 0) : this(dt, GetSamplesArray(Samples), t0) { }
-    public SamplesDigitalSignal(double dt, IEnumerable<int> Samples, double t0 = 0) : this(dt, (Samples ?? throw new ArgumentNullException(nameof(Samples))).ToArray(v => (double)v), t0) { }
+    public SamplesDigitalSignal(double dt, IEnumerable<double> Samples, double t0 = 0) : this(dt, GetSamplesArray(Samples.NotNull()), t0) { }
+
+    public SamplesDigitalSignal(double dt, IEnumerable<int> Samples, double t0 = 0) : this(dt, Samples.NotNull().ToArray(v => (double)v), t0) { }
 
     /// <inheritdoc />
     protected override IEnumerable<double> GetIntegralSamples(double s0)
@@ -60,9 +62,11 @@ public class SamplesDigitalSignal : DigitalSignal, IEquatable<SamplesDigitalSign
         var dt05 = dt / 2;
         var s = s0;
         yield return s0;
-        var last = _Samples[0];
-        for (int i = 1, count = _Samples.Length; i < count; i++)
-            yield return s += (last + (last = _Samples[i])) / dt05;
+
+        var samples = _Samples;
+        var last = samples[0];
+        for (int i = 1, count = samples.Length; i < count; i++)
+            yield return s += (last + (last = samples[i])) / dt05;
     }
 
     /// <summary>Вычисление интеграла</summary>
@@ -70,13 +74,15 @@ public class SamplesDigitalSignal : DigitalSignal, IEquatable<SamplesDigitalSign
     /// <returns>Цифровой сигнал, как результат интегрирования</returns>
     public SamplesDigitalSignal GetIntegralSampled(double s0 = 0)
     {
-        var samples = new double[_Samples.Length];
+        var source = _Samples;
+        var source_length = source.Length;
+        var samples = new double[source_length];
         var dt05 = _dt / 2;
         var s = s0;
-        var last = _Samples[0];
+        var last = source[0];
         samples[0] = s0;
-        for (int i = 1, count = samples.Length; i < count; i++)
-            samples[i] = s += (last + (last = _Samples[i])) / dt05;
+        for (var i = 1; i < source_length; i++)
+            samples[i] = s += (last + (last = source[i])) / dt05;
 
         return new SamplesDigitalSignal(_dt, samples);
     }
@@ -93,20 +99,25 @@ public class SamplesDigitalSignal : DigitalSignal, IEquatable<SamplesDigitalSign
     public override string ToString() => $"signal dt:{_dt}; count:{_Samples.Length}; power:{Power.RoundAdaptive(2)}";
 
     /// <inheritdoc />
-    public bool Equals(SamplesDigitalSignal other)
+    public bool Equals(SamplesDigitalSignal? other)
     {
         if (other is null) return false;
         if (ReferenceEquals(this, other)) return true;
-        if (!_dt.Equals(other._dt) || _Samples.Length != other._Samples.Length) return false;
-        if (ReferenceEquals(_Samples, other._Samples)) return true;
-        for (var i = 0; i < _Samples.Length; i++)
-            if (!_Samples[i].Equals(other._Samples[i]))
+
+        var samples = _Samples;
+        var length = samples.Length;
+        if (!_dt.Equals(other._dt) || length != other._Samples.Length) return false;
+        if (ReferenceEquals(samples, other._Samples)) return true;
+
+        for (var i = 0; i < length; i++)
+            if (samples[i] != other._Samples[i])
                 return false;
+
         return true;
     }
 
     /// <inheritdoc />
-    public override bool Equals(object obj) =>
+    public override bool Equals(object? obj) =>
         obj != null
         && (ReferenceEquals(this, obj)
             || obj.GetType() == GetType() && Equals((SamplesDigitalSignal)obj));
@@ -114,14 +125,13 @@ public class SamplesDigitalSignal : DigitalSignal, IEquatable<SamplesDigitalSign
     /// <inheritdoc />
     public override int GetHashCode()
     {
-        unchecked
-        {
-            var hash = _dt.GetHashCode() * 397;
-            hash = (hash * 397) ^ _t0.GetHashCode();
-            for (var i = 0; i < _Samples.Length; i++)
-                hash = (hash * 397) ^ _Samples[i].GetHashCode();
-            return hash;
-        }
+        var hash = _dt.GetHashCode() * 397;
+        hash = unchecked((hash * 397) ^ _t0.GetHashCode());
+        var samples = _Samples;
+        var length = samples.Length;
+        for (var i = 0; i < length; i++)
+            hash = unchecked((hash * 397) ^ samples[i].GetHashCode());
+        return hash;
     }
 
     #endregion

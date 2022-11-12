@@ -74,9 +74,7 @@ public static partial class Signal
             for (var i = 0; i < samples.Length; i++)
                 samples[i] /= p;
 
-            var signal = new SamplesDigitalSignal(dt, samples);
-
-            return signal;
+            return new SamplesDigitalSignal(dt, samples);
         }
     }
 }

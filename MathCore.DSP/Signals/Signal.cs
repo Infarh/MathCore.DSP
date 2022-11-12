@@ -15,13 +15,7 @@ public static partial class Signal
         return new SamplesDigitalSignal(dt, samples);
     }
 
-    private static IEnumerable<double> Repeat(double Value, int Count)
-    {
-        for (var i = 0; i < Count; i++)
-            yield return Value;
-    }
-
     public static DigitalSignal Zero(double dt, double t0, int SamplesCount) => Const(0, dt, t0, SamplesCount);
 
-    public static DigitalSignal Const(double A, double dt, double t0, int SamplesCount) => new EnumerableSignal(dt, Repeat(A, SamplesCount), t0);
+    public static DigitalSignal Const(double A, double dt, double t0, int SamplesCount) => new EnumerableSignal(dt, Enumerable.Repeat(A, SamplesCount), t0);
 }

@@ -9,6 +9,19 @@ namespace MathCore.DSP.Fourier;
 /// <summary>Класс преобразования Фурье</summary>
 public static class FT
 {
+    private static (double Sin, double Cos)[] GetCoefficients(int N, bool IsInverse = false)
+    {
+        var w   = new (double Sin, double Cos)[N];
+        var w0  = IsInverse ? -Consts.pi2 / N : Consts.pi2 / N;
+        var arg = 0.0;
+        for (var i = 0; i < N; i++)
+        {
+            w[i] =  (Math.Sin(arg), Math.Cos(arg));
+            arg  += w0;
+        }
+        return w;
+    }
+
     /* -------------------------------------------------------------------------------------------- */
 
     /// <summary>Коэффициент прямого преобразования Фурье</summary>
@@ -47,7 +60,7 @@ public static class FT
 
         var N = Values.Length;
         var spectrum = new Complex[N];
-        var w = Exp.GetCoefficients(N, IsInverse);
+        var w = GetCoefficients(N, IsInverse);
 
         for (var m = 0; m < N; m++)
         {
@@ -55,13 +68,12 @@ public static class FT
             var q = 0.0;
             for (var n = 0; n < N; n++)
             {
-                var v = Values[n];
-                var i = m * n % N;
-                var ww = w[i];
-                p += v * ww.Cos;
-                q += v * ww.Sin;
+                var v          = Values[n];
+                var (sin, cos) =  w[m * n % N];
+                p              += v * cos;
+                q              += v * sin;
             }
-            spectrum[m] = new Complex(p / N, q / N);
+            spectrum[m] = new(p / N, q / N);
         }
 
         return spectrum;
@@ -77,7 +89,7 @@ public static class FT
 
         var N = Values.Length;
         var spectrum = new Complex[N];
-        var w = Exp.GetCoefficients(N, IsInverse);
+        var w = GetCoefficients(N, IsInverse);
 
         for (var m = 0; m < N; m++)
         {
@@ -85,13 +97,12 @@ public static class FT
             var q = 0.0;
             for (var n = 0; n < N; n++)
             {
-                var v = Values[n];
-                var i = m * n % N;
-                var ww = w[i];
-                p += v * ww.Cos;
-                q += v * ww.Sin;
+                var v          = Values[n];
+                var (sin, cos) =  w[m * n % N];
+                p              += v * cos;
+                q              += v * sin;
             }
-            spectrum[m] = new Complex(p / N, q / N);
+            spectrum[m] = new(p / N, q / N);
             progress?.Invoke((double)m / N);
         }
         progress?.Invoke(1);
@@ -108,7 +119,7 @@ public static class FT
 
         var spectrum = new Complex[Values.Length];
         var N = spectrum.Length;
-        var w = Exp.GetCoefficients(N, Inverse);
+        var w = GetCoefficients(N, Inverse);
 
         for (var m = 0; m < N; m++)
         {
@@ -116,13 +127,12 @@ public static class FT
             var Q = 0.0;
             for (var n = 0; n < N; n++)
             {
-                var (re, im) = Values[n];
-                var i = n * m % N;
-                var ww = w[i];
-                P += re * ww.Cos - im * ww.Sin;
-                Q += im * ww.Cos + re * ww.Sin;
+                var (re, im)   =  Values[n];
+                var (sin, cos) =  w[n * m % N];
+                P              += re * cos - im * sin;
+                Q              += im * cos + re * sin;
             }
-            spectrum[m] = Inverse ? new Complex(P, Q) : new Complex(P / N, Q / N);
+            spectrum[m] = Inverse ? new(P, Q) : new(P / N, Q / N);
         }
         return spectrum;
     }
@@ -137,7 +147,7 @@ public static class FT
 
         var spectrum = new Complex[Values.Length];
         var N = spectrum.Length;
-        var w = Exp.GetCoefficients(N, Inverse);
+        var w = GetCoefficients(N, Inverse);
 
         for (var m = 0; m < N; m++)
         {
@@ -146,15 +156,14 @@ public static class FT
             for (var n = 0; n < N; n++)
             {
                 // ReSharper disable once UseDeconstruction
-                var (re, im) = Values[n];
-                var i = n * m % N;
-                var ww = w[i];
-                P += re * ww.Cos - im * ww.Sin;
-                Q += im * ww.Cos + re * ww.Sin;
+                var (re, im)   =  Values[n];
+                var (sin, cos) =  w[n * m % N];
+                P              += re * cos - im * sin;
+                Q              += im * cos + re * sin;
             }
 
             progress?.Invoke((double)m / N);
-            spectrum[m] = Inverse ? new Complex(P, Q) : new Complex(P / N, Q / N);
+            spectrum[m] = Inverse ? new(P, Q) : new(P / N, Q / N);
         }
         progress?.Invoke(1);
         return spectrum;

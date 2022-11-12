@@ -28,6 +28,9 @@ public abstract class AnalogBasedFilter : IIR
         /// <returns>Нули/полюса нового фильтра ФВЧ</returns>
         public static IEnumerable<Complex> ToHigh(IEnumerable<Complex> Z, double wp) => Z.Select(z => z * wp);
 
+        private static void Set(in Complex p, in Complex D, out Complex p1, out Complex p2) => (p1, p2) = (p + D, p - D);
+
+
         /// <summary>Преобразование нулей/полюсов фильтра ФНЧ-ППФ</summary>
         /// <param name="Poles">Полюса прототипа (нормированного ФНЧ)</param>
         /// <param name="Zeros">Нули прототипа (нормированного ФНЧ)</param>
@@ -46,11 +49,8 @@ public abstract class AnalogBasedFilter : IIR
             if (Poles.Length == 0) throw new ArgumentException("Размер вектора полюсов должен быть больше 0", nameof(Poles));
             if (Zeros.Length > Poles.Length) throw new ArgumentException("Число нулей не должна быть больше числа полюсов", nameof(Zeros));
 
-            var wpl = pi2 * fpl;
-            var wph = pi2 * fph;
-
-            var dw05 = (wph - wph) / 2;
-            var wc2 = wpl * wph;
+            var (wpl, wph)  = (pi2 * fpl, pi2 * fph);
+            var (dw05, wc2) = ((wph - wph) / 2, wpl * wph);
 
             // На каждый исходный полюс формируется пара новых полюсов
             // Число нулей равно удвоенному числу исходных нулей
@@ -58,11 +58,6 @@ public abstract class AnalogBasedFilter : IIR
             var poles = new Complex[Poles.Length * 2];
             var zeros = new Complex[Zeros.Length * 2 + (Poles.Length - Zeros.Length)];
 
-            static void Set(in Complex p, in Complex D, out Complex p1, out Complex p2)
-            {
-                p1 = p + D;
-                p2 = p - D;
-            }
 
             for (var i = 0; i < Poles.Length; i++)
             {
@@ -103,11 +98,8 @@ public abstract class AnalogBasedFilter : IIR
             if (count_p == 0) throw new ArgumentException("Размер вектора полюсов должен быть больше 0", nameof(Poles));
             if (count_0 > count_p) throw new ArgumentException("Число нулей не должна быть больше числа полюсов", nameof(Zeros));
 
-            var wpl = pi2 * fpl;
-            var wph = pi2 * fph;
-
-            var dw05 = (wph - wph) / 2;
-            var wc2 = wpl * wph;
+            var (wpl, wph)  = (pi2 * fpl, pi2 * fph);
+            var (dw05, wc2) = ((wph - wph) / 2, wpl * wph);
 
             // На каждый исходный полюс формируется пара новых полюсов
             // Число нулей равно удвоенному числу исходных нулей
@@ -115,11 +107,11 @@ public abstract class AnalogBasedFilter : IIR
             var poles = new Complex[count_p * 2];
             var zeros = new Complex[poles.Length];
 
-            static void Set(in Complex p, in Complex D, out Complex p1, out Complex p2)
-            {
-                p1 = p + D;
-                p2 = p - D;
-            }
+            //static void Set(in Complex p, in Complex D, out Complex p1, out Complex p2)
+            //{
+            //    p1 = p + D;
+            //    p2 = p - D;
+            //}
 
             for (var i = 0; i < count_p; i++)
             {
@@ -240,11 +232,8 @@ public abstract class AnalogBasedFilter : IIR
             Fp = ToDigitalFrequency(fp, dt);  // Частота пропускания аналогового прототипа
             Fs = ToDigitalFrequency(fs, dt);  // Частота подавления аналогового пропита
 
-            wp = pi2 * fp;
-            ws = pi2 * fs;
-
-            Wp = pi2 * Fp;
-            Ws = pi2 * Fs;
+            (wp, ws) = (pi2 * fp, pi2 * fs);
+            (Wp, Ws) = (pi2 * Fp, pi2 * Fs);
         }
 
         public void Deconstruct(out double dt, out double fp, out double fs, out double Gp, out double Gs) =>
@@ -306,8 +295,7 @@ public abstract class AnalogBasedFilter : IIR
     /// <returns>Нули и полюса ППФ</returns>
     public static IEnumerable<Complex> TransformToBandPassW(IEnumerable<Complex> Normed, double w_min, double w_max)
     {
-        var dw05 = (w_max - w_min) / 2;
-        var wc2 = w_min * w_max;
+        var (dw05, wc2) = ((w_max - w_min) / 2, w_min * w_max);
 
         foreach (var p in Normed)
         {
@@ -333,8 +321,7 @@ public abstract class AnalogBasedFilter : IIR
     /// <returns>Нули и полюса ПЗФ</returns>
     public static IEnumerable<Complex> TransformToBandStopW(IEnumerable<Complex> Normed, double w_min, double w_max)
     {
-        var dw05 = (w_max - w_min) / 2;
-        var wc2 = w_min * w_max;
+        var (dw05, wc2) = ((w_max - w_min) / 2, w_min * w_max);
 
         foreach (var p in Normed)
         {

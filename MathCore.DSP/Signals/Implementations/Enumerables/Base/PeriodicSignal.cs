@@ -9,6 +9,7 @@ public abstract class PeriodicSignal : EnumerableSignalImplementation
     {
         /// <summary>Частота</summary>
         protected double _f0;
+
         /// <summary>Фаза</summary>
         protected double _phi0;
 
@@ -33,7 +34,8 @@ public abstract class PeriodicSignal : EnumerableSignalImplementation
         /// <param name="phi0">Начальная фаза</param>
         /// <param name="dt">Период дискретизации</param>
         /// <param name="SamplesCount">Число отсчётов сигнала</param>
-        protected PeriodicSignalInfo(double A, double f0, double phi0, double dt, int SamplesCount) : base(A, dt, SamplesCount)
+        protected PeriodicSignalInfo(double A, double f0, double phi0, double dt, int SamplesCount) 
+            : base(A, dt, SamplesCount)
         {
             _f0 = f0;
             _phi0 = phi0;

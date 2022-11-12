@@ -27,11 +27,12 @@ public abstract class BinaryScalarOperationResultSignal : OperationResultSignal
     /// <param name="Signal">Исходный сигнал</param>
     /// <param name="Value">Вещественное число</param>
     /// <param name="Function">Функция, вызываемая для каждого отсчёта сигнала (первый аргумент) и вещественного числа (второй аргумент)</param>
-    protected BinaryScalarOperationResultSignal(DigitalSignal Signal, double Value, SignalCombinator Function) : base(Signal.dt)
+    protected BinaryScalarOperationResultSignal(DigitalSignal Signal, double Value, SignalCombinator Function) 
+        : base(Signal.NotNull().dt)
     {
-        this.Signal = Signal ?? throw new ArgumentNullException(nameof(Signal));
+        this.Signal = Signal;
         _Value = Value;
-        _Function = Function ?? throw new ArgumentNullException(nameof(Function));
+        _Function = Function.NotNull();
     }
 
     public override IEnumerator<double> GetEnumerator() => Signal.Select(s => _Function(s, _Value)).GetEnumerator();
