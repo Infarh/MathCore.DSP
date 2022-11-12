@@ -97,5 +97,5 @@ public class SamplesPack
     public IEnumerable<Interval> Sgm2 => Values.Select(v => v.Sgm2);
     public IEnumerable<Interval> Sgm3 => Values.Select(v => v.Sgm3);
 
-    private SamplesPack(Value[] Values) => this.Values = Values;
+    private SamplesPack(IReadOnlyList<Value> Values) => this.Values = Values;
 }

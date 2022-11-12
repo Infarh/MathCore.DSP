@@ -14,10 +14,10 @@ public class EnumerableSignal : DigitalSignal
     {
         get => _Samples switch
         {
-            double[] array => array[n],
-            List<double> list => list[n],
+            double[] array     => array[n],
+            List<double> list  => list[n],
             IList<double> list => list[n],
-            _ => _Samples.ElementAt(n)
+            _                  => _Samples.ElementAt(n)
         };
         set
         {

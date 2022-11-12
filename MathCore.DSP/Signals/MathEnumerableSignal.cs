@@ -12,13 +12,13 @@ public static class MathEnumerableSignal
 
     public static EnumerableSignal Sin(double dt, double f0, int SamplesCount, double A = 1, double phi0 = 0)
     {
-        var w0 = 2 * Math.PI * f0;
+        var w0 = Consts.pi2 * f0;
         return new EnumerableSignal(dt, GetSamples(t => A * Math.Sin(w0 * t + phi0), dt, SamplesCount));
     }
 
     public static EnumerableSignal Cos(double dt, double f0, int SamplesCount, double A = 1, double phi0 = 0)
     {
-        var w0 = 2 * Math.PI * f0;
+        var w0 = Consts.pi2 * f0;
         return new EnumerableSignal(dt, GetSamples(t => A * Math.Sin(w0 * t + phi0), dt, SamplesCount));
     }
 

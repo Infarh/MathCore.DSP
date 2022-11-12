@@ -62,9 +62,9 @@ public abstract class DigitalSignal : IEnumerable<double>, ICollection
     {
         get
         {
-            var t = _t0;
+            var (t, dt) = (_t0, _dt);
             foreach (var sample in GetSamples())
-                yield return new SignalSample(t += _dt, sample);
+                yield return new SignalSample(t += dt, sample);
         }
     }
 

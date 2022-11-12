@@ -32,15 +32,12 @@ public static class fft
     [Copyright("29.05.2009 by Bochkanov Sergey", url = "alglib.sources.ru")]
     public static Complex[] FFT(Complex[] x)
     {
-        var N = x.Length;
+        var N   = x.Length;
         if (N == 1) return new[] { x[0] };
 
         var buf = new double[2 * N];
-        for (var i = 0; i < N; i++)
-        {
-            buf[2 * i] = x[i].Re;
-            buf[2 * i + 1] = x[i].Im;
-        }
+        for (var i = 0; i < N; i++) 
+            (buf[2 * i], buf[2 * i + 1]) = x[i];
 
         //
         // Generate plan and execute it.
@@ -59,7 +56,7 @@ public static class fft
             if (i % 2 == 0)
                 last = buf[i] / N;
             else
-                result[i0++] = new Complex(last, buf[i] / N);
+                result[i0++] = new(last, buf[i] / N);
         return result;
     }
 
@@ -117,12 +114,11 @@ public static class fft
     public static Complex[] FFT(double[] x)
     {
         var N = x.Length;
-        switch (N)
+        switch (x)
         {
-            case 1: return new[] { new Complex(x[0]) };
-            case 2: return new[] { new Complex(x[0] + x[1]), new Complex(x[0] - x[1]) };
+            case [var x0]        : return new[] { new Complex(x0) };
+            case [var x0, var x1]: return new[] { new Complex(x0 + x1), new Complex(x0 - x1) };
         }
-
 
         var result = new Complex[N];
         if (N % 2 == 0)
@@ -153,16 +149,19 @@ public static class fft
                 h_mn_c_re = z[i_dx];
                 h_mn_c_im = -z[i_dx + 1];
 
-                result[i] = new Complex(
-                    (h_n_re + h_mn_c_re - nsin * (h_n_re - h_mn_c_re) + cos * (h_n_im - h_mn_c_im)) * N05, 
-                    (h_n_im + h_mn_c_im - nsin * (h_n_im - h_mn_c_im) - cos * (h_n_re - h_mn_c_re)) * N05);
+                result[i] = new
+                (
+                    Re: (h_n_re + h_mn_c_re - nsin * (h_n_re - h_mn_c_re) + cos * (h_n_im - h_mn_c_im)) * N05, 
+                    Im: (h_n_im + h_mn_c_im - nsin * (h_n_im - h_mn_c_im) - cos * (h_n_re - h_mn_c_re)) * N05
+                );
             }
             for (var i = n05 + 1; i < N; i++)
                 result[i] = result[N - i].ComplexConjugate;
             return result;
         }
-           
-        for (var i = 0; i < N; i++) result[i] = new Complex(x[i]);
+
+        for (var i = 0; i < N; i++) 
+            result[i] = new(x[i]);
         return FFT(result);
     }
 
@@ -223,21 +222,24 @@ public static class fft
         var n05 = (int)Floor(n / 2d);
         for (var i = 1; i < n05; i++)
         {
-            h[i] = f[i].Re - f[i].Im;
-            h[n - i] = f[i].Re + f[i].Im;
+            var (re, im)     = f[i];
+            (h[i], h[n - i]) = (re - im, re + im);
         }
 
         if (n % 2 == 0) h[n05] = f[n05].Re;
         else
         {
-            h[n05] = f[n05].Re - f[n05].Im;
-            h[n05 + 1] = f[n05].Re + f[n05].Im;
+            var (re, im)         = f[n05];
+            (h[n05], h[n05 + 1]) = (re - im, re + im);
         }
 
         var fh = FFT(h);
 
         for (var i = 0; i < n; i++)
-            result[i] = (fh[i].Re - fh[i].Im) / n;
+        {
+            var (re, im) = fh[i];
+            result[i]    = (re - im) / n;
+        }
         return result;
     }
 
@@ -873,8 +875,8 @@ public static class fft
                     t5x = t1x + t2x;
                     var t5y = t1y + t2y;
 
-                    A[Aoffset + 0] = A[Aoffset + 0] + t5x;
-                    A[Aoffset + 1] = A[Aoffset + 1] + t5y;
+                    A[Aoffset + 0] += t5x;
+                    A[Aoffset + 1] += t5y;
 
                     m1x = c1 * t5x;
                     m1y = c1 * t5y;
@@ -1294,7 +1296,7 @@ public static class fft
             // generate plans
             //
             FT_BaseFactorize(n, out var n1, out var n2);
-            if (TaskType == c_FT_BaseCfftTask || TaskType == FT_BaserFFT_Task)
+            if (TaskType is c_FT_BaseCfftTask or FT_BaserFFT_Task)
             {
                 //
                 // complex FFT plans
@@ -1327,7 +1329,7 @@ public static class fft
                     return;
                 }
 
-                if (n == 2 || n == 3 || n == 4 || n == 5)
+                if (n is 2 or 3 or 4 or 5)
                 {
                     //
                     // hard-coded plan
@@ -1415,7 +1417,7 @@ public static class fft
             plan.plan[entryoffset + 6] = -1;
             plan.plan[entryoffset + 7] = -1;
 
-            if (n == 2 || n == 3 || n == 4 || n == 5)
+            if (n is 2 or 3 or 4 or 5)
             {
                 //
                 // hard-coded plan
@@ -1432,9 +1434,7 @@ public static class fft
                 if (n == 3) PreComputedSize += 2;
 
                 if (n == 5) PreComputedSize += 5;
-                return;
             }
-            return;
         }
 
 
@@ -1515,7 +1515,6 @@ public static class fft
             }
 
             FT_BaseExecutePlanRec(ref plan.PreComputed, offs, plan, plan.plan[entryoffset + 5], stack_ptr);
-            return;
         }
 
 
@@ -1606,9 +1605,9 @@ public static class fft
         private static void InternalComplexLinTranspose(ref double[] a, int m, int n, int astart, ref double[] buf)
         {
             FFTicltRec(ref a, astart, n, ref buf, 0, m, m, n);
-            var lv_I1 = 0 - astart;
+            var i1 = 0 - astart;
             for (var i = astart; i <= astart + 2 * m * n - 1; i++)
-                a[i] = buf[i + lv_I1];
+                a[i] = buf[i + i1];
         }
 
 
@@ -1641,8 +1640,15 @@ public static class fft
           -- ALGLIB --
              Copyright 01.05.2009 by Bochkanov Sergey
         *************************************************************************/
-        private static void FFTicltRec(ref double[] a, int astart, int astride, ref double[] b,
-            int bstart, int bstride, int m, int n)
+        private static void FFTicltRec(
+            ref double[] a, 
+            int astart, 
+            int astride, 
+            ref double[] b,
+            int bstart,
+            int bstride, 
+            int m,
+            int n)
         {
             if (m == 0 || n == 0) return;
             if (Max(m, n) <= 8)

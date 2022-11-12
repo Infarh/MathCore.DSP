@@ -8,9 +8,12 @@ public class Linear : Interpolator
     {
         var N = Values.Length;
         var x1 = (int)pos;
-        if(x1 >= N - 1) return Values[N - 1];
+        if(x1 >= N - 1) 
+            return Values[N - 1];
+
         var x2 = x1 + 1;
-        if(x2 <= 0) return Values[0];
+        if(x2 <= 0) 
+            return Values[0];
 
         var y1 = Values[x1];
         var y2 = Values[x2];

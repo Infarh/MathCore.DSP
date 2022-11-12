@@ -27,22 +27,19 @@ public static class DoubleFuncFT
         var delta_t = t2 - t1;
         var N = (int)Abs(delta_t / dt);
         dt = delta_t / N;
-        var w = pi2;
-        if(IsInverse) w *= -1;
+        var w = IsInverse ? -pi2 : pi2;
 
         return f =>
         {
-            var pif = w * f;
-            if(IsInverse) pif *= -1;
+            var pif = IsInverse ? -w * f : w * f;
             var t = t1;
             var val = s(t);
             var arg = pif * t;
-            var p = val * Cos(arg);
-            var q = val * Sin(arg);
-            
+            var (p, q) = (val * Cos(arg), val * Sin(arg));
+
             var re_s = .0;
             var im_s = .0;
-            for(var i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 val = s(t);
                 arg = pif * t;
@@ -63,7 +60,7 @@ public static class DoubleFuncFT
     /// <returns>Спектр</returns>
     public static DoubleSpectrum GetFourierTransformation(
         this DoubleSpectrum s,
-        double t1, 
+        double t1,
         double t2,
         bool IsInverse = false,
         double dt = 1e-4)
@@ -71,8 +68,7 @@ public static class DoubleFuncFT
         var delta_t = t2 - t1;
         var N = (int)Abs(delta_t / dt);
         dt = delta_t / N;
-        var w = pi2;
-        if(IsInverse) w *= -1;
+        var w = IsInverse ? -pi2 : pi2;
 
         return f =>
         {   //todo: проверить алгоритм!
@@ -81,7 +77,7 @@ public static class DoubleFuncFT
             var z = s(t).Rotate(pif * t);
 
             var (re, im) = z;
-            for(var i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 z = s(t).Rotate(pif * t);
                 re += z.Re;
@@ -110,7 +106,7 @@ public static class DoubleFuncFT
         var N = (int)Abs(delta_t / dt);
         var ss = new double[N];
         dt = delta_t / N;
-        for(var n = 0; n < N; n++)
+        for (var n = 0; n < N; n++)
             ss[n] = s(t1 + n * dt);
         return ss.GetFourierTransformation(IsInverse);
     }
@@ -124,7 +120,7 @@ public static class DoubleFuncFT
     /// <returns>Спектр по целочисленным значениям частот</returns>
     public static IntSpectrum GetFourierSpectrum(
         this DoubleSpectrum s,
-        double t1, 
+        double t1,
         double t2,
         bool IsInverse = false,
         double dt = 1e-4)
@@ -134,7 +130,7 @@ public static class DoubleFuncFT
 
         var ss = new Complex[N];
         dt = delta_t / N;
-        for(var n = 0; n < N; n++)
+        for (var n = 0; n < N; n++)
             ss[n] = s(t1 + n * dt);
         return ss.GetFourierTransformation(IsInverse);
     }

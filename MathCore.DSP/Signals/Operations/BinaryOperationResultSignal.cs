@@ -29,11 +29,11 @@ public abstract class BinaryOperationResultSignal : OperationResultSignal
         DigitalSignal Signal1, 
         DigitalSignal Signal2, 
         Func<double, double, double> Function) 
-        : base(Signal1.dt, Math.Min(Signal1.t0, Signal2.t0))
+        : base(Signal1.NotNull().dt, Math.Min(Signal1.t0, Signal2.NotNull().t0))
     {
-        this.Signal1 = Signal1 ?? throw new ArgumentNullException(nameof(Signal1));
-        this.Signal2 = Signal2 ?? throw new ArgumentNullException(nameof(Signal2));
-        _Function = Function ?? throw new ArgumentNullException(nameof(Function));
+        this.Signal1 = Signal1;
+        this.Signal2 = Signal2;
+        _Function = Function.NotNull();
     }
 
     public override IEnumerator<double> GetEnumerator() => Signal1.Zip(Signal2, _Function).GetEnumerator();

@@ -4,6 +4,7 @@ using MathCore.DSP.Infrastructure;
 
 using static System.Math;
 
+using static MathCore.Consts;
 using static MathCore.Polynom.Array;
 
 // ReSharper disable InconsistentNaming
@@ -130,10 +131,10 @@ public class ButterworthBandPass : ButterworthFilter
         var Fph = ToDigitalFrequency(fph, dt);
         var Fsh = ToDigitalFrequency(fsh, dt);
 
-        var Wsl = Consts.pi2 * Fsl;
-        var Wpl = Consts.pi2 * Fpl;
-        var Wph = Consts.pi2 * Fph;
-        var Wsh = Consts.pi2 * Fsh;
+        var Wsl = pi2 * Fsl;
+        var Wpl = pi2 * Fpl;
+        var Wph = pi2 * Fph;
+        var Wsh = pi2 * Fsh;
 
         var Wc = Wpl * Wph;
         var dW = Wph - Wpl;
@@ -148,8 +149,8 @@ public class ButterworthBandPass : ButterworthFilter
         var Ws = Wc / Wsh > Wsl
             ? Wsh
             : Wsl;
-        var Fp = Abs(dW * Ws / (Wc - Ws.Pow2())) / Consts.pi2;
-        const double Fs = 1 / Consts.pi2;
+        var Fp = Abs(dW * Ws / (Wc - Ws.Pow2())) / pi2;
+        const double Fs = 1 / pi2;
 
         // Для передачи информации о граничных частотах в спецификацию аналогвого прототипа перечситываем частоты цифрового фильтра обратно
         var fp = ToAnalogFrequency(Fp, dt);
@@ -163,8 +164,8 @@ public class ButterworthBandPass : ButterworthFilter
         // Пересчитываем аналоговые частоты полосы заграждения в цифровые
         var dt = Spec.dt;
 
-        var Wpl = Consts.pi2 * ToDigitalFrequency(fpl, dt);
-        var Wph = Consts.pi2 * ToDigitalFrequency(fph, dt);
+        var Wpl = pi2 * ToDigitalFrequency(fpl, dt);
+        var Wph = pi2 * ToDigitalFrequency(fph, dt);
 
         var dW = Wph - Wpl;
 

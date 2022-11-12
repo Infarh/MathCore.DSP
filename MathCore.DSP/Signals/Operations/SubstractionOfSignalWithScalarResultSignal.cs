@@ -2,5 +2,5 @@
 
 public class SubstractionOfSignalWithScalarResultSignal : BinaryScalarOperationResultSignal
 {
-    public SubstractionOfSignalWithScalarResultSignal(DigitalSignal S, double X) : base(S, X, (x, y) => x - y) { }
+    public SubstractionOfSignalWithScalarResultSignal(DigitalSignal S, double X) : base(S.NotNull(), X, (x, y) => x - y) { }
 }

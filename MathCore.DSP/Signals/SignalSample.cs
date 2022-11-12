@@ -13,32 +13,28 @@ public readonly struct SignalSample : IEquatable<SignalSample>
     public double Value { get; init; }
 
     /// <summary>Новый отсчёт сигнала</summary>
+    public SignalSample() { }
+
+    /// <summary>Новый отсчёт сигнала</summary>
     /// <param name="Time">Время</param>
     /// <param name="Value">Значение</param>
-    public SignalSample(double Time, double Value)
-    {
-        this.Time = Time;
-        this.Value = Value;
-    }
+    public SignalSample(double Time, double Value) => (this.Time, this.Value) = (Time, Value);
 
-    public bool Equals(SignalSample other) => Time.Equals(other.Time) && Value.Equals(other.Value);
+    public bool Equals(SignalSample other) => Time == other.Time && Value == other.Value;
 
     public override bool Equals(object obj) => obj is SignalSample other && Equals(other);
 
-    public override int GetHashCode()
-    {
-        unchecked
-        {
-            return (Time.GetHashCode() * 397) ^ Value.GetHashCode();
-        }
-    }
+    public override int GetHashCode() => unchecked((Time.GetHashCode() * 397) ^ Value.GetHashCode());
 
     public override string ToString() => $"{Time}:{Value}";
 
     public static bool operator ==(SignalSample left, SignalSample right) => left.Equals(right);
+
     public static bool operator !=(SignalSample left, SignalSample right) => !left.Equals(right);
 
     public static implicit operator double(SignalSample sample) => sample.Value;
+
+    public void Deconstruct(out double Time, out double Value) => (Time, Value) = (this.Time, this.Value);
 }
 
 /// <summary>Класс методов-расширений для отсчётов сигнала</summary>
@@ -83,24 +79,21 @@ public readonly struct SpectrumSample : IEquatable<SpectrumSample>
         this.Value = Value;
     }
 
-    public bool Equals(SpectrumSample other) => Frequency.Equals(other.Frequency) && Value.Equals(other.Value);
+    public bool Equals(SpectrumSample other) => Frequency == other.Frequency && Value == other.Value;
 
     public override bool Equals(object obj) => obj is SignalSample other && Equals(other);
 
-    public override int GetHashCode()
-    {
-        unchecked
-        {
-            return (Frequency.GetHashCode() * 397) ^ Value.GetHashCode();
-        }
-    }
+    public override int GetHashCode() => unchecked((Frequency.GetHashCode() * 397) ^ Value.GetHashCode());
 
     public override string ToString() => $"{Frequency}:{Value}";
 
     public static bool operator ==(SpectrumSample left, SpectrumSample right) => left.Equals(right);
+
     public static bool operator !=(SpectrumSample left, SpectrumSample right) => !left.Equals(right);
 
     public static implicit operator Complex(SpectrumSample sample) => sample.Value;
+
+    public void Deconstruct(out double Frequency, out Complex Value) => (Frequency, Value) = (this.Frequency, this.Value);
 }
 
 

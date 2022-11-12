@@ -23,7 +23,7 @@ public static class DoubleArrayDSPExtensions
     /// <returns>Комплексное значение коэффициента передачи фильтра с указанной импульсной характеристикой</returns>
     public static Complex FrequencyResponse(this double[] ImpulseResponse, double f)
     {
-        var e = Complex.Exp(-2 * Math.PI * f);
+        var e = Complex.Exp(-Consts.pi2 * f);
         Complex result = ImpulseResponse[^1];
         for (var i = ImpulseResponse.Length - 2; i >= 0; i--)
             result = result * e + ImpulseResponse[i];
@@ -78,11 +78,11 @@ public static class DoubleArrayDSPExtensions
     }
 
     public static IEnumerable<double> FilterFIR(this IEnumerable<double> samples, double[] ImpulseResponse)
-        => samples.FilterFIR(ImpulseResponse, new double[ImpulseResponse.Length]);
+        => samples.NotNull().FilterFIR(ImpulseResponse.NotNull(), new double[ImpulseResponse.Length]);
 
 
     public static Complex FrequencyResponse(double[] A, double[] B, double f, double dt)
-        => FrequencyResponse(A, B, f * dt);
+        => FrequencyResponse(A.NotNull(), B.NotNull(), f * dt);
 
     public static Complex FrequencyResponse(this (IReadOnlyList<double> A, IReadOnlyList<double> B) Filter, double f, double dt) =>
         FrequencyResponse(Filter.A, Filter.B, f * dt);
@@ -97,25 +97,17 @@ public static class DoubleArrayDSPExtensions
     /// <returns>Значение комплексного коэффициента передачи рекуррентного фильтра на заданной частоте</returns>
     public static Complex FrequencyResponse(IReadOnlyList<double> A, IReadOnlyList<double> B, double f)
     {
-        //var p = new Complex(0, Consts.pi2 * f);
         var p = Complex.Exp(-Consts.pi2 * f);
 
         static Complex Sum(IReadOnlyList<double> V, Complex p)
         {
-            var sum_re = V[^1];
-            var sum_im = 0d;
-            var (exp_re, exp_im) = p;
+            var (re, im)     = (V[^1], 0d);
+            var (e_re, e_im) = p;
 
-            for (var i = V.Count - 2; i >= 0; i--)
-            {
-                var s_re = sum_re * exp_re - sum_im * exp_im + V[i];
-                var s_im = sum_re * exp_im + sum_im * exp_re;
-
-                sum_re = s_re;
-                sum_im = s_im;
-
-            }
-            return new Complex(sum_re, sum_im);
+            for (var i = V.Count - 2; i >= 0; i--) 
+                (re, im) = (re * e_re - im * e_im + V[i], re * e_im + im * e_re);
+            
+            return new Complex(re, im);
         }
 
         return Sum(B, p) / Sum(A, p);
@@ -202,6 +194,7 @@ public static class DoubleArrayDSPExtensions
                 State[i] = v;
                 result += v * B[i] * a0;
                 input -= v * A[i] * a0;
+                //(State[i], result, input) = (v, result + v * B[i] * a0, input - v * A[i] * a0);
             }
         else
         {
@@ -221,8 +214,7 @@ public static class DoubleArrayDSPExtensions
         }
 
         State[0] = input;
-        var r = result + input * B[0] * a0;
-        return r;
+        return result + input * B[0] * a0;
     }
 
     public static IEnumerable<double> FilterIIR(

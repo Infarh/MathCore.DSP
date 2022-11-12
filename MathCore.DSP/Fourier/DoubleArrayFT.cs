@@ -5,7 +5,18 @@ namespace MathCore.DSP.Fourier;
 /// <summary>Методы-расширения для вещественного и комплексного массивов</summary>
 public static class DoubleArrayFT
 {
-    
+    private static (double Sin, double Cos)[] GetCoefficients(int N, bool IsInverse = false)
+    {
+        var w   = new (double Sin, double Cos)[N];
+        var w0  = IsInverse ? -Consts.pi2 / N : Consts.pi2 / N;
+        var arg = 0.0;
+        for (var i = 0; i < N; i++)
+        {
+            w[i] =  (Math.Sin(arg), Math.Cos(arg));
+            arg  += w0;
+        }
+        return w;
+    }
 
     /// <summary>Выполнить преобразование Фурье для вещественного массива</summary>
     /// <param name="s">Массив вещественных значений отсчётов</param>
@@ -14,7 +25,7 @@ public static class DoubleArrayFT
     public static Spectrum GetFourierTransformation(this double[] s, bool IsInverse = false)
     {
         var N = s.Length;
-        var w = Exp.GetCoefficients(N, IsInverse);
+        var w = GetCoefficients(N, IsInverse);
 
         return m =>
         {
@@ -23,9 +34,9 @@ public static class DoubleArrayFT
             for(var n = 0; n < N; n++)
             {
                 var val = s[n];
-                var ww = w[n * m % N];
-                P += val * ww.Cos;
-                Q += val * ww.Sin;
+                var (sin, cos) = w[n * m % N];
+                P += val * cos;
+                Q += val * sin;
             }
 
             return new Complex(P / N, Q / N);
@@ -39,7 +50,7 @@ public static class DoubleArrayFT
     public static Spectrum GetFourierTransformation(this Complex[] s, bool IsInverse = false)
     {
         var N = s.Length;
-        var w = Exp.GetCoefficients(N, IsInverse);
+        var w = GetCoefficients(N, IsInverse);
 
         return m =>
         {
@@ -48,9 +59,7 @@ public static class DoubleArrayFT
             for(var n = 0; n < N; n++)
             {
                 var (re, im) = s[n];
-                var ww = w[n * m % N];
-                var sin = ww.Sin;
-                var cos = ww.Cos;
+                var (sin, cos) = w[n * m % N];
                 P += re * cos - im * sin;
                 Q += im * cos + re * sin;
             }
