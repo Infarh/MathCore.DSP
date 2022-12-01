@@ -222,8 +222,8 @@ public class ButterworthLowPass : UnitTest
 
         var tr_k = filter.FrequencyResponse(fs, dt).Abs.In_dB();
 
-        Assert.That.Collection(filter.A).IsEqualTo(a, 3e-12);
-        Assert.That.Collection(filter.B).IsEqualTo(b, 1e-16);
+        filter.A.AssertEquals(Accuracy.Eps(3e-12), a);
+        filter.B.AssertEquals(Accuracy.Eps(1e-16), b);
     }
 
     [TestMethod]
