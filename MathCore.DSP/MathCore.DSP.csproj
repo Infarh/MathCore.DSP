@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <LangVersion>preview</LangVersion>
-    <Version>0.0.13.7</Version>
+    <Version>0.0.13.8</Version>
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageReleaseNotes>
       Обновление пакетов
@@ -48,7 +48,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MathCore" Version="0.0.84.1" />
+    <PackageReference Include="MathCore" Version="0.0.85" />
     <PackageReference Include="System.Memory" Version="4.5.5" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
     <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.7.0" PrivateAssets="All" />
