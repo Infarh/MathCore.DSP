@@ -1,6 +1,4 @@
-﻿using MathCore.DSP.Signals;
-
-using OxyPlot;
+﻿using OxyPlot;
 
 namespace MathCore.DSP.Extensions;
 

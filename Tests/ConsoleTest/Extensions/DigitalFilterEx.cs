@@ -1,7 +1,4 @@
-﻿using MathCore.DSP.Filters;
-using MathCore.DSP.Signals;
-
-namespace MathCore.DSP.Extensions;
+﻿namespace MathCore.DSP.Extensions;
 
 public static class DigitalFilterEx
 {
@@ -44,9 +41,7 @@ public static class DigitalFilterEx
             var H = y.Power / (f == 0 ? 1 : x.Power);
 
             if (f == 400)
-            {
                 Console.WriteLine();
-            }
 
             yield return (f, H);
             f += dF;

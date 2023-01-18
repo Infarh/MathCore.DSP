@@ -15,7 +15,7 @@ public class EqualizerUnitTests
         const double fd = 10e3;
         const double dt = 1 / fd;
 
-        const double alpha = 0.0;
+        const double alpha = 0.3;
         const double df    = 0.5e3;
 
         //const double w0 = Consts.pi2 * f0 * dt;
@@ -39,11 +39,11 @@ public class EqualizerUnitTests
 
         var k_fmin  = equalizer.FrequencyResponse(equalizer.fmin, dt).Abs;
 
-        var k_fmax2 = equalizer.FrequencyResponse(equalizer.fmax + (equalizer.fmax - f0), dt).Abs;
+        var k_fmax = equalizer.FrequencyResponse(equalizer.fmax, dt).Abs;
 
         var kk  = alpha / k_fmin;
 
-        var k_min_max_expected = (1 - alpha).Abs() / Consts.sqrt_2;
+        var k_min_max_expected = (1 - alpha).Abs() / Consts.sqrt_2 + alpha;
     }
 
     [DataTestMethod]

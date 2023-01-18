@@ -1,154 +1,100 @@
-﻿using System.ServiceModel;
-using System.Xml.Linq;
+﻿const double fd = 2000;
+const double dt = 1 / fd;
 
-using MathCore.DSP.Extensions;
-using MathCore.DSP.Filters;
-using MathCore.DSP.Signals;
+const double fp = 400;
+const double fs = 300;
+const double Rp = -1;
+const double Rs = -40;
 
-using NASA;
+//const double df = 0.001;
+//const int N = 10000;
+//const double fd = N * df;
+//const double dt = 1 / fd;
+//var HH = Enumerable.Range(0, N)
+//   .Select(i => i * df)
+//   .Select(f => eq.GetTransmissionCoefficient(f, dt))
+//   .ToAbs();
 
-namespace MathCore.DSP;
+//var model = new PlotModel()
+//   .SetBackground(OxyColors.White)
+//   .Grid()
+//   .Line(HH, df)
+//   .SetMinY(0)
+//   .ToPNG("test.png")
+//   .Execute();
 
-class Program
-{
-    static async Task Main()
-    {
-        var log10_e = Math.Log10(Math.E);
+//return;
 
-
-        var xml_data = await new CBR.Daily.DailyInfoSoapClient(
-                new BasicHttpsBinding(),
-                new("https://cbr.ru/DailyInfoWebServ/DailyInfo.asmx"))
-           .DisposeAfterAsync(async c => await c.BiCurBaseXMLAsync(DateTime.Now.AddMonths(-1), DateTime.Now));
-
-        var xml = XDocument.Load(xml_data.CreateNavigator().ReadSubtree());
-
-        var rub2dollar = xml.Descendants("BCB")
-           .Select(node => new DXmlNode(node))
-           .Select((dynamic value) => (Date: (string)value.D0, Value: (string)value.VAL));
-           //.Select(value => (Date: (DateTime)value.Element("D0"), Value: (double)value.Element("VAL")));
-        
-        //using (var daily_info_client = new CBR.Daily.DailyInfoSoapClient(
-        //           new BasicHttpsBinding(), 
-        //           new("https://cbr.ru/DailyInfoWebServ/DailyInfo.asmx")))
-        //{
-        //    await daily_info_client.OpenAsync();
-        //    var data = await daily_info_client.BiCurBaseXMLAsync(DateTime.Now.AddDays(-5), DateTime.Now);
-        //    xml = XDocument.Parse(data.OuterXml);
-        //}
+var Gp = Rp.From_dB();
+var Gs = Rs.From_dB();
 
 
-        // https://data.nasa.gov/Space-Science/Heliocentric-Trajectories-Web-Services-API/79p5-emwr
-        getAllObjectsResponse trajectory_objects = null;
-        using (var nasa_client = new NASA.HeliocentricTrajectoriesInterfaceClient())
-        {
-            await nasa_client.OpenAsync();
-            trajectory_objects = await nasa_client.getAllObjectsAsync();
-        }
+var filter = new ButterworthHighPass(dt, fs, fp, Gp, Gs);
 
-        //var eq = new Equalizer(1, 0.2)
-        //{ 
-        //    Alpha = 1.2
-        //};
+var impulse_length = filter.GetImpulseResponse(Accuracy: Gs).Count();
 
-        //const double df = 0.001;
-        //const int N = 10000;
-        //const double fd = N * df;
-        //const double dt = 1 / fd;
-        //var HH = Enumerable.Range(0, N)
-        //   .Select(i => i * df)
-        //   .Select(f => eq.GetTransmissionCoefficient(f, dt))
-        //   .ToAbs();
+var x = MathEnumerableSignal.Sin(dt, fs, (int)(50 / fp / dt));
+var y = filter.ProcessIndividual(x);
+var k = y.Power / x.Power;
+var kdb = k.In_dB();
+var x_a = x.PeakToPeakAmplitude;
+var y_a = y.PeakToPeakAmplitude;
+var k_a = y_a / x_a;
 
-        //var model = new PlotModel()
-        //   .SetBackground(OxyColors.White)
-        //   .Grid()
-        //   .Line(HH, df)
-        //   .SetMinY(0)
-        //   .ToPNG("test.png")
-        //   .Execute();
+var Hf = filter.EnumTransmissionCoefficients(0, fd / 2, 1).ToArray();
+var Hf_Abs = Hf.ToArray(v => v with { H = v.H.Power.In_dB_byPower() });
+var Hf_Arg = Hf.ToArray(v => v with { H = v.H.Arg.ToDeg() });
+var Ht = filter.EnumTransmissionCoefficientsTransient(dt, 20 / fp, 0, fd / 2, 1)
+   .ToArray(v => v with { H = v.H.In_dB_byPower() });
 
-        //return;
+const int count = 520;
+//const double T = count * dt;
+const double f_min = 295;
+const double f_max = 305;
 
-        const double fd = 2000;
-        const double dt = 1 / fd;
-
-        const double fp = 400;
-        const double fs = 300;
-        const double Rp = -1;
-        const double Rs = -40;
-
-        var Gp = Rp.From_dB();
-        var Gs = Rs.From_dB();
-
-        var filter = new ButterworthHighPass(dt, fs, fp, Gp, Gs);
-
-        var impulse_length = filter.GetImpulseResponse(Accuracy: Gs).Count();
-
-        var x = MathEnumerableSignal.Sin(dt, fs, (int)(50 / fp / dt));
-        var y = filter.ProcessIndividual(x);
-        var k = y.Power / x.Power;
-        var kdb = k.In_dB();
-        var x_a = x.PeakToPeakAmplitude;
-        var y_a = y.PeakToPeakAmplitude;
-        var k_a = y_a / x_a;
-
-        var Hf = filter.EnumTransmissionCoefficients(0, fd / 2, 1).ToArray();
-        var Hf_Abs = Hf.ToArray(v => v with { H = v.H.Power.In_dB_byPower() });
-        var Hf_Arg = Hf.ToArray(v => v with { H = v.H.Arg.ToDeg() });
-        var Ht = filter.EnumTransmissionCoefficientsTransient(dt, 20 / fp, 0, fd / 2, 1)
-           .ToArray(v => v with { H = v.H.In_dB_byPower() });
-
-        const int count = 520;
-        //const double T = count * dt;
-        const double f_min = 295;
-        const double f_max = 305;
-
-        var file = new FileInfo($"test[{DateTime.Now:yyyy-MM-ddTHH-mm-ss}].png");
-        Signal.Random.SpectrumBand(dt, count, f_min, f_max)
-           .Plot()
-           .ToPNG(file)
-           .Execute();
+var file = new FileInfo($"test[{DateTime.Now:yyyy-MM-ddTHH-mm-ss}].png");
+Signal.Random.SpectrumBand(dt, count, f_min, f_max)
+   .Plot()
+   .ToPNG(file)
+   .Execute();
 
 
-        //await Task.Delay(3000);
+//await Task.Delay(3000);
 
-        //var process = Process.GetProcessesByName("Microsoft.Photos");
+//var process = Process.GetProcessesByName("Microsoft.Photos");
 
-        //if (process is null)
-        //{
-        //    Console.WriteLine("Complete!");
-        //    return;
-        //}
+//if (process is null)
+//{
+//    Console.WriteLine("Complete!");
+//    return;
+//}
 
-        //var cancellation = new CancellationTokenSource();
-        //Console.CancelKeyPress += (_, e) =>
-        //{
-        //    Console.WriteLine("Ctrl+C pressed");
-        //    e.Cancel = true;
-        //    cancellation.Cancel();
-        //};
+//var cancellation = new CancellationTokenSource();
+//Console.CancelKeyPress += (_, e) =>
+//{
+//    Console.WriteLine("Ctrl+C pressed");
+//    e.Cancel = true;
+//    cancellation.Cancel();
+//};
 
-        //await using var terminator = cancellation.Token.Register(p =>
-        //{
-        //    Console.WriteLine("Terminating window");
-        //    ((Process)p).CloseMainWindow();
-        //}, process);
+//await using var terminator = cancellation.Token.Register(p =>
+//{
+//    Console.WriteLine("Terminating window");
+//    ((Process)p).CloseMainWindow();
+//}, process);
 
-        //Console.WriteLine("Plot ready");
+//Console.WriteLine("Plot ready");
 
-        //try
-        //{
-        //    await process.WaitForExitAsync(cancellation.Token);
+//try
+//{
+//    await process.WaitForExitAsync(cancellation.Token);
 
-        //    Console.WriteLine("Complete!");
-        //}
-        //catch (OperationCanceledException e) when(e.CancellationToken == cancellation.Token)
-        //{
-        //    Console.WriteLine("Operation terminated");
-        //}
-    }
-}
+//    Console.WriteLine("Complete!");
+//}
+//catch (OperationCanceledException e) when(e.CancellationToken == cancellation.Token)
+//{
+//    Console.WriteLine("Operation terminated");
+//}
 
 //internal static class Ext
 //{
