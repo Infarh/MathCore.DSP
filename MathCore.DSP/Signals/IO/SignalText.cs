@@ -1,7 +1,4 @@
-﻿using System.Buffers;
-using System.Globalization;
-
-using MathCore.Values;
+﻿using System.Globalization;
 
 namespace MathCore.DSP.Signals.IO;
 

@@ -1,9 +1,5 @@
-﻿using System;
-
-using MathCore.DSP.Filters;
+﻿using MathCore.DSP.Filters;
 using MathCore.DSP.Signals;
-
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace MathCore.DSP.Tests.Filters.ComplexTests;
 

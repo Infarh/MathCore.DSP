@@ -1,5 +1,4 @@
-﻿using static System.Array;
-using static System.Math;
+﻿using static System.Math;
 
 using static MathCore.Polynom.Array;
 

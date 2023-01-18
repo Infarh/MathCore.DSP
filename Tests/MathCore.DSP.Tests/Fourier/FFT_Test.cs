@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using MathCore.DSP.Fourier;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using MathCore.DSP.Fourier;
 
 using static System.Math;
 

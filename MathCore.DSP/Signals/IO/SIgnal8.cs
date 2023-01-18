@@ -1,5 +1,4 @@
 ﻿using System.Buffers;
-using System.Drawing;
 
 namespace MathCore.DSP.Signals.IO;
 

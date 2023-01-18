@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Diagnostics;
-using System.Linq;
 
 using MathCore.DSP.Filters;
-
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.VisualStudio.TestTools.UnitTesting.Extensions;
 
 // ReSharper disable RedundantArgumentDefaultValue
 // ReSharper disable InconsistentNaming

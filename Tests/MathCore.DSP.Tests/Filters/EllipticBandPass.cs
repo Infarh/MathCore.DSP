@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
 
 using MathCore.DSP.Filters;
-
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.VisualStudio.TestTools.UnitTesting.Extensions;
 
 using static System.Linq.Enumerable;
 using static System.Math;

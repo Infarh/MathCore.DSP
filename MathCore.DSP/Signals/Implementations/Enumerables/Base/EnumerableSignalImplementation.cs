@@ -1,7 +1,5 @@
 ﻿using System.Collections;
 
-using MathCore.Annotations;
-
 namespace MathCore.DSP.Signals.Implementations.Enumerables.Base;
 
 public abstract class EnumerableSignalImplementation : EnumerableSignal

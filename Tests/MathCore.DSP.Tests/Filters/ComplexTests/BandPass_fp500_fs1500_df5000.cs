@@ -1,8 +1,5 @@
-﻿using System;
+﻿using MathCore.DSP.Filters;
 
-using MathCore.DSP.Filters;
-
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 // ReSharper disable UnusedVariable
 // ReSharper disable InconsistentNaming
 // ReSharper disable MemberCanBePrivate.Local

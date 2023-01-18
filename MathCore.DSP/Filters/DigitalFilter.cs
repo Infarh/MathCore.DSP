@@ -2,7 +2,6 @@
 
 using static System.Math;
 
-using static MathCore.Complex;
 // ReSharper disable InconsistentNaming
 
 namespace MathCore.DSP.Filters;

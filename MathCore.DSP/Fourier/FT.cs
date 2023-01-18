@@ -1,5 +1,4 @@
 ﻿using MathCore.Annotations;
-using MathCore.DSP.Signals;
 
 using static MathCore.Complex;
 using static MathCore.Consts;

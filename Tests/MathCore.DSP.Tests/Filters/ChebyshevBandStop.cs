@@ -1,14 +1,10 @@
 ﻿using System.Diagnostics;
-using System;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MathCore.DSP.Filters;
-
-using Microsoft.VisualStudio.TestTools.UnitTesting.Extensions;
 
 using static System.Math;
 using static MathCore.Polynom.Array;
-using System.Linq;
+
 using MathCore.DSP.Signals;
 using MathCore.DSP.Tests.Infrastructure;
 // ReSharper disable RedundantArgumentDefaultValue

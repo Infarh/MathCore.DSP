@@ -1,6 +1,4 @@
-﻿using MathCore.Annotations;
-
-using Suppress = System.Diagnostics.CodeAnalysis.SuppressMessageAttribute;
+﻿using Suppress = System.Diagnostics.CodeAnalysis.SuppressMessageAttribute;
 // ReSharper disable InconsistentNaming
 // ReSharper disable UnusedMember.Global
 // ReSharper disable ConvertToAutoPropertyWhenPossible

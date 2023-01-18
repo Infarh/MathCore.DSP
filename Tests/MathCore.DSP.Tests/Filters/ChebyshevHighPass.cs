@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Text;
 
 using MathCore.DSP.Filters;
 using MathCore.DSP.Signals;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.VisualStudio.TestTools.UnitTesting.Extensions;
-
-using static System.Linq.Enumerable;
 using static System.Math;
 
-using static MathCore.DSP.DoubleArrayDSPExtensions;
 using static MathCore.DSP.Filters.DigitalFilter;
 using static MathCore.Polynom.Array;
 using static MathCore.SpecialFunctions;

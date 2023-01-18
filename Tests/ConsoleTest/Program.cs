@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using System.Reflection;
-using System.ServiceModel;
-using System.ServiceModel.Channels;
+﻿using System.ServiceModel;
 using System.Xml.Linq;
 
 using MathCore.DSP.Extensions;
@@ -9,8 +6,6 @@ using MathCore.DSP.Filters;
 using MathCore.DSP.Signals;
 
 using NASA;
-
-using OxyPlot;
 
 namespace MathCore.DSP;
 

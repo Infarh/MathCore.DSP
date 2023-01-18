@@ -1,6 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-using static System.Math;
+﻿using static System.Math;
 
 namespace MathCore.DSP.Tests.Filters;
 

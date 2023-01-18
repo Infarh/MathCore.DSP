@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Data;
 
 using MathCore.DSP.Fourier;
 

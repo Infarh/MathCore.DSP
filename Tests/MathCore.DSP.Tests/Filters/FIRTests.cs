@@ -1,6 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-namespace MathCore.DSP.Tests.Filters;
+﻿namespace MathCore.DSP.Tests.Filters;
 
 [TestClass]
 public class FIRTests : UnitTest

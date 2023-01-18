@@ -1,13 +1,6 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
-
-using MathCore.DSP.Filters;
+﻿using MathCore.DSP.Filters;
 using MathCore.DSP.Signals;
 using MathCore.DSP.Tests.Infrastructure;
-
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.VisualStudio.TestTools.UnitTesting.Extensions;
 
 using static System.Math;
 using static MathCore.Polynom.Array;

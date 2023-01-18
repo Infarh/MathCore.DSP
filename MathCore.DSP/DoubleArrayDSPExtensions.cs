@@ -1,7 +1,5 @@
 ﻿using System.Numerics;
 
-using MathCore.DSP.Infrastructure;
-
 namespace MathCore.DSP;
 
 /// <summary>Методы-расширения для вещественных массивов</summary>

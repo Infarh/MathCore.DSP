@@ -1,9 +1,5 @@
-﻿using System.Net.Security;
-
-using MathCore.DSP.Filters;
+﻿using MathCore.DSP.Filters;
 using MathCore.DSP.Signals;
-
-using Microsoft.VisualStudio.TestTools.UnitTesting.Extensions;
 
 using static System.Math;
 

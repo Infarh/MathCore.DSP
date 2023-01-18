@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics;
 
-using MathCore.DSP.Infrastructure;
-
 using static System.Math;
 
 using static MathCore.Polynom.Array;
