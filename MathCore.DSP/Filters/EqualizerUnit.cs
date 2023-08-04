@@ -1,12 +1,12 @@
 ﻿namespace MathCore.DSP.Filters;
 
-public class EqualizerUnit : AllPassFilter2
+public class EqualizerUnit(double w0, double dw) : AllPassFilter2(-Math.Cos(w0), (1 - Math.Sin(dw)) / Math.Cos(dw))
 {
     public double Alpha { get; set; } = 1;
 
-    public double w0 { get; }
+    public double w0 { get; } = w0;
 
-    public double dw { get; }
+    public double dw { get; } = dw;
 
     public double dt { get; } = 1;
 
@@ -19,12 +19,6 @@ public class EqualizerUnit : AllPassFilter2
     public double fmax => (w0 + 0.5 * dw) / (Consts.pi2 * dt);
 
     public EqualizerUnit(double dt, double f0, double df) : this(Consts.pi2 * f0 * dt, Consts.pi2 * df * dt) => this.dt = dt;
-
-    public EqualizerUnit(double w0, double dw) : base(-Math.Cos(w0), (1 - Math.Sin(dw)) / Math.Cos(dw))
-    {
-        this.w0 = w0;
-        this.dw = dw;
-    }
 
     public override Complex FrequencyResponse(double f)
     {

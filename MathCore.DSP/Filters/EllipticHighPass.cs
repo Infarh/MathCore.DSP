@@ -3,7 +3,7 @@ using static System.Math;
 
 namespace MathCore.DSP.Filters;
 
-public class EllipticHighPass : EllipticFilter
+public class EllipticHighPass((double[] A, double[] B) config, AnalogBasedFilter.Specification Spec) : EllipticFilter(config.B, config.A, Spec)
 {
     public static (double[] A, double[] B) GetPolynoms(Specification Spec)
     {
@@ -60,6 +60,4 @@ public class EllipticHighPass : EllipticFilter
         : this(GetSpecification(dt, fs, fp, Gp, Gs)) { }
 
     public EllipticHighPass(Specification Spec) : this(GetPolynoms(Spec), Spec) { }
-
-    public EllipticHighPass((double[] A, double[] B) config, Specification Spec) : base(config.B, config.A, Spec) { }
 }

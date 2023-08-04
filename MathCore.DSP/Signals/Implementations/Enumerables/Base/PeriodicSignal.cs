@@ -2,7 +2,8 @@
 namespace MathCore.DSP.Signals.Implementations.Enumerables.Base;
 
 /// <summary>Гармонический сигнал</summary>
-public abstract class PeriodicSignal : EnumerableSignalImplementation
+public abstract class PeriodicSignal(double dt, PeriodicSignal.PeriodicSignalInfo Info, double t0)
+    : EnumerableSignalImplementation(dt, Info, t0)
 {
     /// <summary>Гармоническая основа</summary>
     protected abstract class PeriodicSignalInfo : SignalInfo
@@ -42,13 +43,9 @@ public abstract class PeriodicSignal : EnumerableSignalImplementation
         }
     }
 
-    private readonly PeriodicSignalInfo _SignalInfo;
+    public double A { get => Info.A; set => Info.A = value; }
 
-    public double A { get => _SignalInfo.A; set => _SignalInfo.A = value; }
+    public double f0 { get => Info.f0; set => Info.f0 = value; }
 
-    public double f0 { get => _SignalInfo.f0; set => _SignalInfo.f0 = value; }
-
-    public double phi0 { get => _SignalInfo.phi0; set => _SignalInfo.phi0 = value; }
-            
-    protected PeriodicSignal(double dt, PeriodicSignalInfo SignalInfo, double t0) : base(dt, SignalInfo, t0) => _SignalInfo = SignalInfo;
+    public double phi0 { get => Info.phi0; set => Info.phi0 = value; }
 }

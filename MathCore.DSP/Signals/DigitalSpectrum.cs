@@ -4,11 +4,11 @@ using MathCore.DSP.Fourier;
 
 namespace MathCore.DSP.Signals;
 
-public class DigitalSpectrum : IEnumerable<Complex>
+public class DigitalSpectrum(double fd, Complex[] Samples, double t0 = 0) : IEnumerable<Complex>
 {
-    private readonly double _fd;
-    private readonly Complex[] _Samples;
-    private readonly double _t0;
+    private readonly double _fd = fd;
+    private readonly Complex[] _Samples = Samples;
+    private readonly double _t0 = t0;
 
     public double fd => _fd;
 
@@ -31,8 +31,6 @@ public class DigitalSpectrum : IEnumerable<Complex>
                 yield return new(f += df, sample);
         }
     }
-
-    public DigitalSpectrum(double fd, Complex[] Samples, double t0 = 0) => (_fd, _Samples, _t0) = (fd, Samples, t0);
 
     public static DigitalSpectrum operator /(DigitalSpectrum X, DigitalSpectrum Y)
     {
