@@ -1,6 +1,4 @@
-﻿using MathCore.DSP.Filters;
-
-namespace MathCore.DSP;
+﻿namespace MathCore.DSP;
 
 public class FilterTest
 {

@@ -1,4 +1,4 @@
-﻿using System.Data;
+﻿
 // ReSharper disable InconsistentNaming
 
 namespace MathCore.DSP.Filters;

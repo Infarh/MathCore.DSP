@@ -1,6 +1,4 @@
-﻿using MathCore.Annotations;
-
-using Suppress = System.Diagnostics.CodeAnalysis.SuppressMessageAttribute;
+﻿using Suppress = System.Diagnostics.CodeAnalysis.SuppressMessageAttribute;
 // ReSharper disable InconsistentNaming
 // ReSharper disable UnusedMember.Global
 // ReSharper disable ConvertToAutoPropertyWhenPossible
@@ -11,10 +9,10 @@ namespace MathCore.DSP.Signals;
 
 /// <summary>Цифровой сигнал на основе массива отсчётов</summary>
 [Suppress("Performance", "CA1819:Properties should not return arrays")]
-public class SamplesDigitalSignal : DigitalSignal, IEquatable<SamplesDigitalSignal>, IIndexableRef<double>
+public class SamplesDigitalSignal(double dt, double[] Samples, double t0 = 0) : DigitalSignal(dt, t0), IEquatable<SamplesDigitalSignal>, IIndexableRef<double>
 {
     /// <summary>Массив отсчётов</summary>
-    private readonly double[] _Samples;
+    private readonly double[] _Samples = Samples.NotNull();
 
     /// <inheritdoc />
     /// <summary>Число элементов массива</summary>
@@ -41,8 +39,6 @@ public class SamplesDigitalSignal : DigitalSignal, IEquatable<SamplesDigitalSign
                 yield return new SignalSample(i * dt + t0, samples[i]);
         }
     }
-
-    public SamplesDigitalSignal(double dt, double[] Samples, double t0 = 0) : base(dt, t0) => _Samples = Samples.NotNull();
 
     public SamplesDigitalSignal(double dt, int SamplesCount, Func<double, double> f, double t0 = 0) : this(dt, f.NotNull().Sampling(0, dt, SamplesCount), t0) { }
 

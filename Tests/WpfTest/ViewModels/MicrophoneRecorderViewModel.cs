@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 using MathCore.Annotations;
 using MathCore.DI;

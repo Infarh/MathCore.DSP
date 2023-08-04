@@ -1,6 +1,4 @@
-﻿using System;
-
-using MathCore.Hosting.WPF;
+﻿using MathCore.Hosting.WPF;
 
 using Microsoft.Extensions.DependencyInjection;
 

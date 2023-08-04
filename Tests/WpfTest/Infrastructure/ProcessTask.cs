@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace WpfTest.Infrastructure;
+﻿namespace WpfTest.Infrastructure;
 
 public sealed class ProcessTask<T> : IDisposable
 {

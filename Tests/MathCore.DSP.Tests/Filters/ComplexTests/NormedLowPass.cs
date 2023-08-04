@@ -1,8 +1,4 @@
-﻿using System;
-
-using MathCore.DSP.Filters;
-
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using MathCore.DSP.Filters;
 
 // ReSharper disable RedundantArgumentDefaultValue
 

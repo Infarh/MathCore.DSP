@@ -2,12 +2,12 @@
 
 public class SamplesPack
 {
-    public readonly struct Value
+    public readonly struct Value(double Mu, double Sgm, double Min, double Max)
     {
-        public double Mu { get; }
-        public double Sgm { get; }
-        public double Min { get; }
-        public double Max { get; }
+        public double Mu { get; } = Mu;
+        public double Sgm { get; } = Sgm;
+        public double Min { get; } = Min;
+        public double Max { get; } = Max;
 
         public double Delta => Max - Min;
 
@@ -23,14 +23,6 @@ public class SamplesPack
         public Interval Sgm1 => new(MinSgm1, MaxSgm1);
         public Interval Sgm2 => new(MinSgm2, MaxSgm2);
         public Interval Sgm3 => new(MinSgm3, MaxSgm3);
-
-        public Value(double Mu, double Sgm, double Min, double Max)
-        {
-            this.Mu = Mu;
-            this.Sgm = Sgm;
-            this.Min = Min;
-            this.Max = Max;
-        }
 
         public override string ToString() => $"{Mu}(±{3 * Sgm})[{Min}..{Max}]";
     }

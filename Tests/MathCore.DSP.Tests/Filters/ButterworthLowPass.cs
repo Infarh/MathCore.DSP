@@ -1,16 +1,8 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO.Compression;
-using System.Linq;
-using System.Reflection;
+﻿using System.Diagnostics;
 
 using MathCore.DSP.Filters;
 using MathCore.DSP.Signals;
 using MathCore.DSP.Tests.Infrastructure;
-using MathCore.DSP.Tests.Service;
-
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.VisualStudio.TestTools.UnitTesting.Extensions;
 
 using static System.Linq.Enumerable;
 using static System.Math;

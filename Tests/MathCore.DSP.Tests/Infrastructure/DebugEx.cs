@@ -1,13 +1,10 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text;
-using System.Xml.Linq;
 
 using MathCore;
 
-using static MathCore.Values.CSV;
 // ReSharper disable CheckNamespace
 namespace System.Diagnostics;
 

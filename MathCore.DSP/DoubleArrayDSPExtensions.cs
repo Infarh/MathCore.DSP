@@ -1,7 +1,5 @@
 ﻿using System.Numerics;
 
-using MathCore.DSP.Infrastructure;
-
 namespace MathCore.DSP;
 
 /// <summary>Методы-расширения для вещественных массивов</summary>
@@ -107,7 +105,7 @@ public static class DoubleArrayDSPExtensions
             for (var i = V.Count - 2; i >= 0; i--) 
                 (re, im) = (re * e_re - im * e_im + V[i], re * e_im + im * e_re);
             
-            return new Complex(re, im);
+            return new(re, im);
         }
 
         return Sum(B, p) / Sum(A, p);

@@ -1,8 +1,4 @@
-﻿using MathCore.Values;
-
-using System.Buffers;
-
-namespace MathCore.DSP.Signals.IO;
+﻿namespace MathCore.DSP.Signals.IO;
 
 public class SignalDouble : FileSignal
 {

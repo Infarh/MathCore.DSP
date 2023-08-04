@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics;
 
-using MathCore.DSP.Infrastructure;
-
 using static System.Math;
 
 using static MathCore.Polynom.Array;
@@ -9,7 +7,7 @@ using static MathCore.SpecialFunctions;
 
 namespace MathCore.DSP.Filters;
 
-public class ButterworthHighPass : ButterworthFilter
+public class ButterworthHighPass((double[] A, double[] B) config, AnalogBasedFilter.Specification Spec) : ButterworthFilter(config.B, config.A, Spec)
 {
     public static (double[] A, double[] B) GetPolynoms(Specification Spec)
     {
@@ -44,6 +42,4 @@ public class ButterworthHighPass : ButterworthFilter
         : this(GetSpecification(dt, fp, fs, Gp, Gs)) { }
 
     public ButterworthHighPass(Specification Spec) : this(GetPolynoms(Spec), Spec) { }
-
-    public ButterworthHighPass((double[] A, double[] B) config, Specification Spec) : base(config.B, config.A, Spec) { }
 }

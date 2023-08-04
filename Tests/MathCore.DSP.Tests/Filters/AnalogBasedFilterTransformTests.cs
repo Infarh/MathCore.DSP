@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-
-using MathCore.DSP.Filters;
-
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using MathCore.DSP.Filters;
 
 namespace MathCore.DSP.Tests.Filters;
 

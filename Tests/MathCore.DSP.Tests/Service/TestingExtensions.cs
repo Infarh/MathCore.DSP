@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-namespace MathCore.DSP.Tests.Service;
+﻿namespace MathCore.DSP.Tests.Service;
 
 //internal static class TestingExtensions
 //{

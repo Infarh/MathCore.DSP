@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace System.Linq;
+﻿namespace System.Linq;
 
 internal static class EnumerableEx
 {

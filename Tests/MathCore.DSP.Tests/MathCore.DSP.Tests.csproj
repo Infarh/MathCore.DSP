@@ -6,9 +6,11 @@
     <IsPackable>false</IsPackable>
     <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
+    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting.Extensions" />
     <Using Include="System" />
     <Using Include="System.Linq" />
     <Using Include="System.Collections.Generic" />
@@ -18,9 +20,9 @@
 
   <ItemGroup>
     <PackageReference Include="MathCore.TestsExtensions" Version="0.1.43.5" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.0.0" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.1.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.1.1" />
   </ItemGroup>
 
   <ItemGroup>

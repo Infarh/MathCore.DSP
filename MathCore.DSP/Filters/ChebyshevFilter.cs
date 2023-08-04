@@ -1,7 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Runtime.Serialization;
-
-using MathCore.DSP.Infrastructure;
+﻿using System.Runtime.Serialization;
 
 using static System.Math;
 // ReSharper disable InconsistentNaming

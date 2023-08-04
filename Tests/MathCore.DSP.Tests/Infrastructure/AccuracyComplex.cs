@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace MathCore.DSP.Tests.Infrastructure;
+﻿namespace MathCore.DSP.Tests.Infrastructure;
 
 public static class AccuracyComplex
 {

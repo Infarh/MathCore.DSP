@@ -1,10 +1,5 @@
-﻿using System;
-using System.Linq;
-
-using MathCore.DSP.Filters;
+﻿using MathCore.DSP.Filters;
 using MathCore.DSP.Signals;
-
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using static System.Linq.Enumerable;
 using static System.Math;

@@ -1,12 +1,11 @@
 ﻿using System.Buffers;
-using System;
 using System.Collections;
 
 using MathCore.DSP.Infrastructure;
 
 namespace MathCore.DSP.Signals.IO;
 
-public abstract class FileSignal : IEnumerable<double>, ICollection
+public abstract class FileSignal(FileInfo File) : IEnumerable<double>, ICollection
 {
     protected const int __HeaderByteLength = 8 * 4;
 
@@ -66,7 +65,7 @@ public abstract class FileSignal : IEnumerable<double>, ICollection
 
     protected double _dt = double.NaN;
     protected double _t0;
-    protected readonly FileInfo _File;
+    protected readonly FileInfo _File = File;
 
     public string FilePath => _File.FullName;
     public string FileName => _File.Name;
@@ -101,8 +100,6 @@ public abstract class FileSignal : IEnumerable<double>, ICollection
         }
         set => _t0 = value;
     }
-
-    protected FileSignal(FileInfo File) => _File = File;
 
     protected FileSignal(string FilePath) : this(new FileInfo(FilePath)) { }
 

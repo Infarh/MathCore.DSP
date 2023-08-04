@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 
-using MathCore.DSP.Infrastructure;
-
 namespace MathCore.DSP.Filters;
 
 /// <summary>Фильтр Чебышева нижних частот</summary>

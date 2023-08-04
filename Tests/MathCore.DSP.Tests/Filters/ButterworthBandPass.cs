@@ -1,10 +1,4 @@
 ﻿using MathCore.DSP.Filters;
-using System;
-using System.Diagnostics;
-using System.Linq;
-
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.VisualStudio.TestTools.UnitTesting.Extensions;
 
 using static System.Math;
 
