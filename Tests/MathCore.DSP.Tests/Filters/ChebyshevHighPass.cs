@@ -126,7 +126,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         //var zz0 = Complex.Exp(-Consts.pi2 * fs / fd);
         //var zz0 = Complex.Exp(-Consts.pi2 * fp / fd);
         //var zz0 = Complex.Exp(-Consts.pi2 * fd / 2 / fd);
-        //var P0 = (1 - zz0).Power(N);
+        //var P0 = (1 - zz0).Pow(N);
         //var Pp = z_poles.Multiply(z => 1 - z * zz0);
         //var k0 = g_norm * P0 / Pp;
         //k0.Abs.ToDebug();
@@ -292,7 +292,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         //var zz0 = Complex.Exp(-Consts.pi2 * fs / fd);
         //var zz0 = Complex.Exp(-Consts.pi2 * fp / fd);
         //var zz0 = Complex.Exp(-Consts.pi2 * fd / 2 / fd);
-        //var P0 = (1 - zz0).Power(N);
+        //var P0 = (1 - zz0).Pow(N);
         //var Pp = z_poles.Multiply(z => 1 - z * zz0);
         //var k0 = g_norm * P0 / Pp;
         //k0.Abs.ToDebug();
@@ -504,7 +504,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         //var zz0 = Complex.Exp(-Consts.pi2 * fs / fd);
         //var zz0 = Complex.Exp(-Consts.pi2 * fp / fd);
         //var zz0 = Complex.Exp(-Consts.pi2 * fd / 2 / fd);
-        //var P0 = (1 - zz0).Power(N);
+        //var P0 = (1 - zz0).Pow(N);
         //var Pp = z_poles.Multiply(z => 1 - z * zz0);
         //var k0 = g_norm * P0 / Pp;
         //k0.Abs.ToDebug();
@@ -704,7 +704,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         //var zz0 = Complex.Exp(-Consts.pi2 * fs / fd);
         //var zz0 = Complex.Exp(-Consts.pi2 * fp / fd);
         //var zz0 = Complex.Exp(-Consts.pi2 * fd / 2 / fd);
-        //var P0 = (1 - zz0).Power(N);
+        //var P0 = (1 - zz0).Pow(N);
         //var Pp = z_poles.Multiply(z => 1 - z * zz0);
         //var k0 = g_norm * P0 / Pp;
         //k0.Abs.ToDebug();
@@ -913,7 +913,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         //var zz0 = Complex.Exp(-Consts.pi2 * fs / fd);
         //var zz0 = Complex.Exp(-Consts.pi2 * fp / fd);
         //var zz0 = Complex.Exp(-Consts.pi2 * fd / 2 / fd);
-        //var P0 = (1 - zz0).Power(N);
+        //var P0 = (1 - zz0).Pow(N);
         //var Pp = z_poles.Multiply(z => 1 - z * zz0);
         //var k0 = g_norm * P0 / Pp;
         //k0.Abs.ToDebug();
@@ -1108,7 +1108,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         //var zz0 = Complex.Exp(-Consts.pi2 * fs / fd);
         //var zz0 = Complex.Exp(-Consts.pi2 * fp / fd);
         //var zz0 = Complex.Exp(-Consts.pi2 * fd / 2 / fd);
-        //var P0 = (1 - zz0).Power(N);
+        //var P0 = (1 - zz0).Pow(N);
         //var Pp = z_poles.Multiply(z => 1 - z * zz0);
         //var k0 = g_norm * P0 / Pp;
         //k0.Abs.ToDebug();
@@ -1404,7 +1404,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
     public void TypeI_Even_ImpulseResponse()
     {
         double[] expected_h =
-        {
+        [
             +0.224811971559488000, -0.632593721592196000, +0.269045081867305000, +0.338963022597473000, +0.071226091837917200,
             -0.115555846809572000, -0.161752313338841000, -0.129072421247452000, -0.061582644281420800, +0.015734064422365000,
             +0.078828799662082100, +0.108044682917050000, +0.097614400425606100, +0.056894523500653300, +0.003886813694557760,
@@ -1425,7 +1425,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
             +0.007793767731849430, +0.006660901581628520, +0.004570105079575940, +0.001843607092202990, -0.001107168513063940,
             -0.003841595807511310, -0.005954546131888210, -0.007136393783901750, -0.007219298417376810, -0.006202522762030570,
             -0.004252553082627180, -0.001677596755372440, +0.001119951431237760, +0.003705912951975380, +0.005681928809655460
-        };
+        ];
 
         const double fd = 10;                 // Гц // Частота дискретизации
         const double dt = 1 / fd;               // 2с // Период дискретизации
@@ -1454,7 +1454,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
     public void TypeI_Odd_ImpulseResponse()
     {
         double[] expected_h =
-        {
+        [
             +0.414203053702161000, -0.692809274016991000, -0.065641613135659300, +0.135612285710467000, +0.189913794868845000,
             +0.161125935352069000, +0.087552015077432400, +0.003804032739121860, -0.063456225756700300, -0.099767750876810300,
             -0.103025252550870000, -0.080320752719879400, -0.043337141300307800, -0.004009133337524600, +0.028475539033938300,
@@ -1475,7 +1475,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
             -0.002103579518850910, -0.003022799400860810, -0.003413224612300030, -0.003250631134697020, -0.002597739482737430,
             -0.001588622616624900, -0.000403170161016594, +0.000763775686575668, +0.001733489556908560, +0.002369831678042250,
             +0.002597346775040560, +0.002408771339986930, +0.001861512328300180, +0.001064391063165980, +0.000157359511452362
-        };
+        ];
 
         const double fd = 10;                 // Гц // Частота дискретизации
         const double dt = 1 / fd;               // 2с // Период дискретизации
@@ -1531,7 +1531,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         //ReadImpulseResponse("ChebyshevII.Even.HighPass.Impulse.csv");
 
         double[] expected_h =
-        {
+        [
             +0.482941835853120000, -0.681048717443790000, -0.137429045565316000, +0.125245800043701000,
             +0.194620802937324000, +0.152096008083167000, +0.064323856664702900, -0.021425378968517800,
             -0.078112176487666200, -0.096619424582816400, -0.081287214752554700, -0.044449474554657500,
@@ -1557,7 +1557,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
             -0.000677360618082777, -2.58276484150249e-05, +0.000565527598104008, +0.000974955806258183,
             +0.001132315034460690, +0.001029025148209250, +0.000713711980832986, +0.000275925975033635,
             -0.000177342771820655, -0.000546550272082854, -0.000760364838253820, -0.000788240484661646
-        };
+        ];
 
         const double fd = 10;                 // Гц // Частота дискретизации
         const double dt = 1 / fd;               // 2с // Период дискретизации
@@ -1588,7 +1588,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         //ReadImpulseResponse("ChebyshevII.Odd.HighPass.Impulse.csv");
 
         double[] expected_h =
-        {
+        [
             +0.442760561352705000, -0.691031013613667000, -0.065823648807067700, +0.185550419860105000, //  1
             +0.201332378851880000, +0.106573164710804000, -0.005085565979994560, -0.079331801927750000, //  2
             -0.098817162964092100, -0.073147054494754100, -0.025431288829409900, +0.020302956985340200, //  3
@@ -1614,7 +1614,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
             -1.44741852154404e-08, -5.48783618195211e-07, -7.687093275448e-0700, -6.81419927089322e-07, // 23
             -3.9291175350389e-070, -4.83881213857461e-08, +2.25182881539987e-07, +3.56064709640052e-07, // 24
             +3.37335314513599e-07, +2.12824525296398e-07, +4.99698209161341e-08, -8.82220162103009e-08, // 25
-        };
+        ];
 
         const double fd = 10;                 // Гц // Частота дискретизации
         const double dt = 1 / fd;               // 2с // Период дискретизации
@@ -1645,7 +1645,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         //ReadImpulseResponse("ChebyshevII.Corrected.Even.HighPassImpulse.csv");
 
         double[] expected_h =
-        {
+        [
             +0.577137257237147000, -0.623110210255885000, -0.253390741919103000, -0.020940094629099100,
             +0.102494174254646000, +0.145494874375050000, +0.134870572707153000, +0.094032220251121900,
             +0.041915131400757900, -0.007543532406946140, -0.045410778230985500, -0.067326647733892900,
@@ -1671,7 +1671,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
             +0.003140863479428640, +0.002578262245313260, +0.001735188177288520, +0.000739831061548968,
             -0.000270473484804181, -0.001167268178040270, -0.001846469293079870, -0.002239576712167080,
             -0.002319520385678260, -0.002100825656071490, -0.001634521293568140, -0.000998844003805030
-        };
+        ];
 
         const double fd = 10;                 // Гц // Частота дискретизации
         const double dt = 1 / fd;               // 2с // Период дискретизации
@@ -1702,7 +1702,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         //ReadImpulseResponse("ChebyshevII.Corrected.Odd.HighPassImpulse.csv");
 
         double[] expected_h =
-        {
+        [
             +0.660982739493786000, -0.541251087174461000, -0.301698251142820000, -0.126304978563997000,
             -0.006797581247875740, +0.065915850230827100, +0.101241497297906000, +0.108422341123950000,
             +0.096113391366116500, +0.072032081697388300, +0.042700407001810000, +0.013288011671961300,
@@ -1728,7 +1728,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
             +0.000188793964083477, +0.000134122926603918, +7.47733682036106e-05, +1.69691654566576e-05,
             -3.41057650425988e-05, -7.46426899089079e-05, -0.000102366433366721, -0.000116527534501616,
             -0.000117752835393298, -0.000107788842523960, -8.91772915919568e-05, -6.49030137195547e-05
-        };
+        ];
 
         const double fd = 10;                 // Гц // Частота дискретизации
         const double dt = 1 / fd;               // 2с // Период дискретизации

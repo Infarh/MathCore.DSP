@@ -1,10 +1,14 @@
 ﻿namespace MathCore.DSP.Signals;
 
 /// <summary>Цифровой сигнал на основе последовательности (потенциально бесконечной) отсчётов</summary>
-public class EnumerableSignal : DigitalSignal
+/// <remarks>Инициализация нового цифрового сигнал на основе перечисления отсчётов</remarks>
+/// <param name="dt">Период дискретизации</param>
+/// <param name="Samples">Перечисление отсчётов сигнала</param>
+/// <param name="t0">Смещение сигнала во времени</param>
+public class EnumerableSignal(double dt, IEnumerable<double> Samples, double t0 = 0) : DigitalSignal(dt, t0)
 {
     /// <summary>Перечисление отсчётов сигнала</summary>
-    private readonly IEnumerable<double> _Samples;
+    private readonly IEnumerable<double> _Samples = Samples ?? throw new ArgumentNullException(nameof(Samples));
 
     /// <summary>Количество отсчётов</summary>
     public override int SamplesCount => _Samples.Count();
@@ -30,12 +34,6 @@ public class EnumerableSignal : DigitalSignal
             }
         }
     }
-
-    /// <summary>Инициализация нового цифрового сигнал на основе перечисления отсчётов</summary>
-    /// <param name="dt">Период дискретизации</param>
-    /// <param name="Samples">Перечисление отсчётов сигнала</param>
-    /// <param name="t0">Смещение сигнала во времени</param>
-    public EnumerableSignal(double dt, IEnumerable<double> Samples, double t0 = 0) : base(dt, t0) => _Samples = Samples ?? throw new ArgumentNullException(nameof(Samples));
 
     private static IEnumerable<double> GetIntegralSamples(IEnumerable<double> samples, double dt, double s0)
     {

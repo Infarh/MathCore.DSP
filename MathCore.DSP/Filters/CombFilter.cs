@@ -1,7 +1,9 @@
 ﻿namespace MathCore.DSP.Filters;
 
 /// <summary>Гребенчатый фильтр</summary>
-public class CombFilter : FIR
+/// <remarks>Инициализация нового гребенчатого фильтра</remarks>
+/// <param name="D">Задержка</param>
+public class CombFilter(int D) : FIR(GetImpulseResponse(D))
 {
     /// <summary>Импульсная характеристика гребенчатого фильтра</summary>
     /// <param name="DelayLineLength">Длина линии задержки</param>
@@ -16,8 +18,4 @@ public class CombFilter : FIR
         result[DelayLineLength] = -1;
         return result;
     }
-
-    /// <summary>Инициализация нового гребенчатого фильтра</summary>
-    /// <param name="D">Задержка</param>
-    public CombFilter(int D) : base(GetImpulseResponse(D)) { }
 }

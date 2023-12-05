@@ -29,7 +29,7 @@ public abstract class EllipticFilter : AnalogBasedFilter
         var u = Range(1, L).ToArray(i => (2 * i - 1d) / N);
 
         var m = (1 - kEps.Pow2()).Sqrt();
-        var kp = m.Power(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Pow2().Pow2());
+        var kp = m.Pow(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Pow2().Pow2());
         var k_w = (1 - kp.Pow2()).Sqrt();
 
         for (var i = 0; i < L; i++)
@@ -51,7 +51,7 @@ public abstract class EllipticFilter : AnalogBasedFilter
         var u = Range(1, L).ToArray(i => (2 * i - 1d) / N);
 
         var m = (1 - kEps.Pow2()).Sqrt();
-        var kp = m.Power(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Pow2().Pow2());
+        var kp = m.Pow(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Pow2().Pow2());
         var k_w = (1 - kp.Pow2()).Sqrt();
         var v0_complex = sn_inverse((0, 1 / EpsP), kEps) / N;
 
@@ -85,7 +85,7 @@ public abstract class EllipticFilter : AnalogBasedFilter
         var u = Range(1, L).ToArray(i => (2 * i - 1d) / N);
 
         var m = (1 - kEps.Pow2()).Sqrt();
-        var kp = m.Power(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Pow2().Pow2());
+        var kp = m.Pow(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Pow2().Pow2());
         var k_w = (1 - kp.Pow2()).Sqrt();
         var v0_complex = sn_inverse((0, 1 / EpsP), kEps) / N;
 

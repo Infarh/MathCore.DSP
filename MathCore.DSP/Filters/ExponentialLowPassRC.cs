@@ -10,5 +10,5 @@ public class ExponentialLowPassRC : IIR
     /// <param name="dt">Период дискретизации</param>
     public ExponentialLowPassRC(double f0, double dt) : this(Exp(-2 * PI * f0 * dt)) { }
 
-    private ExponentialLowPassRC(double z) : base(A: new[] { 1, z }, B: new[] { 0, 1 - z }) { }
+    private ExponentialLowPassRC(double z) : base(A: [1, z], B: [0, 1 - z]) { }
 }

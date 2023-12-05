@@ -16,7 +16,7 @@ public class BandPassRLC : IIR
     /// <param name="dw">Обобщённая полоса частот</param>
     private BandPassRLC(double w0, double dw)
         : base(
-            A: new[] { w0 * w0 + dw + 1, 2 * (w0 * w0 - 1), w0 * w0 - dw + 1 },
-            B: new[] { dw, 0, -dw })
+            A: [w0 * w0 + dw + 1, 2 * (w0 * w0 - 1), w0 * w0 - dw + 1],
+            B: [dw, 0, -dw])
     { }
 }

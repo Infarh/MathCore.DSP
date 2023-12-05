@@ -131,7 +131,7 @@ public class ButterworthBandStop
 
         var Hf = DoubleArrayDSPExtensions.AnalogFrequencyResponseFromPoles(Enumerable.Empty<Complex>(), poles, F0);
 
-        //var HHf = (W0.Power(N) / eps_p * Hf);
+        //var HHf = (W0.Pow(N) / eps_p * Hf);
         //var HHf_abs = HHf.Abs;
         //var HHf_db = HHf.Power.In_dB_byPower();
 
@@ -356,7 +356,7 @@ public class ButterworthBandStop
     public void ImpulseResponse()
     {
         double[] expected_h =
-        {
+        [
             +0.012857326529209, -0.078254837176753, +0.235536716014149, -0.405294467801370, +0.389957586557365,
             -0.094916570445630, -0.195017788724925, +0.166876192948785, +0.101455000886883, -0.136517871263717,
             -0.039418143498773, +0.138086585873978, +0.059945245448144, -0.071401263517821, -0.002748962419780,
@@ -377,7 +377,7 @@ public class ButterworthBandStop
             -0.004152037748306, -0.001377746959476, +0.001461393258891, +0.004075305558487, +0.006092281295104,
             +0.007354503620271, +0.007909261879345, +0.007780154470734, +0.006929646876150, +0.005432284237838,
             +0.003527001406808, +0.001463649835504, -0.000600428915935, -0.002526651937652, -0.004123667020692
-        };
+        ];
 
         const double fd = 10;         // Частота дискретизации
         const double dt = 1 / fd;       // Период дискретизации

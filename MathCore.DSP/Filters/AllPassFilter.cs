@@ -7,5 +7,5 @@ public class AllPassFilter : IIR
 {
     /// <summary>Инициализация нового экземпляра <see cref="AllPassFilter"/></summary>
     /// <param name="k">Коэффициент передачи</param>
-    public AllPassFilter(double k) : base(B: new[] { k, 1 }, A: new[] { 1, k }) { }
+    public AllPassFilter(double k) : base(B: [k, 1], A: [1, k]) { }
 }

@@ -73,8 +73,7 @@ public abstract class DigitalSignal : IEnumerable<double>, ICollection
     /// <param name="t0">Смещение сигнала во времени</param>
     protected DigitalSignal(double dt, double t0 = 0)
     {
-        if (dt <= 0) throw new ArgumentOutOfRangeException(nameof(dt), "Период дискретизации должен быть больше 0");
-        _dt = dt;
+        _dt = dt > 0 ? dt : throw new ArgumentOutOfRangeException(nameof(dt), "Период дискретизации должен быть больше 0");
         _t0 = t0;
     }
 

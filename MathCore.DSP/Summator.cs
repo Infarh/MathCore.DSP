@@ -11,10 +11,10 @@ public class Summator
         (
             name: "Sum",
             returnType: typeof(int),
-            parameterTypes: new[]
-            {
+            parameterTypes:
+            [
                 typeof(int[]),
-            },
+            ],
             m: Assembly.GetExecutingAssembly().ManifestModule
         );
 
