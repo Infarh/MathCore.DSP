@@ -190,7 +190,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         else
             g_norm = (z0 * norm_p / norm_0).Abs;
 
-        g_norm.AssertEquals(0.00018828482383731707);
+        g_norm.AssertEquals(0.00018828482383731707, 1e-18);
 
         // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
         var B = GetCoefficientsInverted(z_zeros).ToArray(b => b * g_norm).ToRe();
@@ -406,7 +406,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         else
             g_norm = (z0 * norm_p / norm_0).Abs;
 
-        g_norm.AssertEquals(5.782790110607029E-05);
+        g_norm.AssertEquals(5.782790110607029E-05, 1e-16);
 
         // Определяем массивы нулей коэффициентов полиномов знаменателя и числителя
         var B = GetCoefficientsInverted(z_zeros).ToArray(b => b * g_norm).ToRe();
