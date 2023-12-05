@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <LangVersion>preview</LangVersion>
-    <Version>0.0.13.10</Version>
+    <Version>0.0.13.11</Version>
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageReleaseNotes>
       Обновление пакетов

@@ -25,13 +25,8 @@ public class LowPassRCTests : UnitTest
         var a = rc.A;
         var b = rc.B;
 
-        Assert.AreEqual(2, a.Count);
-        Assert.AreEqual(2, b.Count);
-
-        var a0 = a[0];
-        var a1 = a[1];
-        var b0 = b[0];
-        var b1 = b[1];
+        if (a is not [var a0, var a1]) throw new AssertFailedException();
+        if (b is not [var b0, var b1]) throw new AssertFailedException();
 
         var w0 = 1 / Tan(PI * f0 * dt);
         Assert.AreEqual(1 / (1 + w0), b0 / a0);
@@ -57,15 +52,15 @@ public class LowPassRCTests : UnitTest
         var b0 = b[0] / a0;
         var b1 = b[1] / a0;
 
-        var expected_impulse_response = new List<double>
-        {
+        List<double> expected_impulse_response =
+        [
             b0,
             b0 * -a1 + b1,
             b0 * -a1 * -a1 + b1 * -a1,
             b0 * -a1 * -a1 * -a1 + b1 * -a1 * -a1,
             b0 * -a1 * -a1 * -a1 * -a1 + b1 * -a1 * -a1 * -a1,
             b0 * -a1 * -a1 * -a1 * -a1 * -a1 + b1 * -a1 * -a1 * -a1 * -a1,
-        };
+        ];
 
         var delta = new double[expected_impulse_response.Count];
         delta[0] = 1;

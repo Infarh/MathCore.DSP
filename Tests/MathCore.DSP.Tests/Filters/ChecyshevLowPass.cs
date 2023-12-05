@@ -820,7 +820,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         Assert.That.Value(filter.Order).IsEven();
 
         double[] expected_impulse_response =
-        {
+        [
             +0.00884055732125126,   //  0
             +0.05614365197974830,   //  1
             +0.16099203897373400,   //  2
@@ -837,7 +837,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
             -0.03089992850593000,   // 13
             -0.05045951649249290,   // 14
             -0.02740883863154980    // 15
-        };
+        ];
 
         var impulse_response = filter.GetImpulseResponse(expected_impulse_response.Length, 1e-10).ToArray();
 
@@ -867,7 +867,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         Assert.That.Value(filter.Order).IsOdd();
 
         double[] expected_impulse_response =
-        {
+        [
             +0.00226822329232988,   //  0
             +0.01839598031217860,   //  1
             +0.06923715452579570,   //  2
@@ -884,7 +884,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
             +0.07349323870675280,   // 13
             +0.02314957138213890,   // 14
             -0.02296390124555760,   // 15
-        };
+        ];
         // impulse_response.Select(s => s.ToString("+0.00000000000000000',';-0.00000000000000000','", System.Globalization.CultureInfo.InvariantCulture)).Select((s,i) => $"{s}   // {i,2}").ToSeparatedStr("\r\n")
         var impulse_response = filter.GetImpulseResponse(expected_impulse_response.Length, 1e-10).ToArray();
 
@@ -914,7 +914,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         Assert.That.Value(filter.Order).IsEven();
 
         double[] expected_impulse_response =
-        {
+        [
             +0.05012504332253210,   //  0
             +0.09392699112998970,   //  1
             +0.16880264674281600,   //  2
@@ -931,7 +931,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
             +0.01029315475076850,   // 13
             +0.02479638209856960,   // 14
             +0.02529890931233970,   // 15
-        };
+        ];
 
         var impulse_response = filter.GetImpulseResponse(expected_impulse_response.Length, 1e-10).ToArray();
 
@@ -961,7 +961,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         Assert.That.Value(filter.Order).IsOdd();
 
         double[] expected_impulse_response =
-        {
+        [
             +0.03341146639120000,   //  0
             +0.07900569722913120,   //  1
             +0.13452296315034400,   //  2
@@ -978,7 +978,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
             +0.01368462023930950,   // 13
             +0.03775672984570410,   // 14
             +0.03925364904843500,   // 15
-        };
+        ];
         // impulse_response.Select(s => s.ToString("+0.00000000000000000',';-0.00000000000000000','", System.Globalization.CultureInfo.InvariantCulture)).Select((s,i) => $"{s}   // {i,2}").ToSeparatedStr("\r\n")
         var impulse_response = filter.GetImpulseResponse(expected_impulse_response.Length, 1e-10).ToArray();
 
@@ -1008,7 +1008,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         Assert.That.Value(filter.Order).IsEven();
 
         double[] expected_impulse_response =
-        {
+        [
             +0.09748158833651720,   //  0
             +0.24801587857989800,   //  1
             +0.36603707048083000,   //  2
@@ -1025,7 +1025,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
             -0.00237250156111623,   // 13
             +0.01065544118382300,   // 14
             +0.00836193578789439,   // 15
-        };
+        ];
 
         var impulse_response = filter.GetImpulseResponse(expected_impulse_response.Length, 1e-10).ToArray();
 
@@ -1055,7 +1055,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         Assert.That.Value(filter.Order).IsOdd();
 
         double[] expected_impulse_response =
-        {
+        [
             +0.06209522819412170,   //  0
             +0.17825169051418800,   //  1
             +0.30124398324431900,   //  2
@@ -1072,7 +1072,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
             -0.03487370097223260,   // 13
             -0.00752873612681361,   // 14
             +0.01714269771629890,   // 15
-        };
+        ];
         // impulse_response.Select(s => s.ToString("+0.00000000000000000',';-0.00000000000000000','", System.Globalization.CultureInfo.InvariantCulture)).Select((s,i) => $"{s}   // {i,2}").ToSeparatedStr("\r\n")
         var impulse_response = filter.GetImpulseResponse(expected_impulse_response.Length, 1e-10).ToArray();
 

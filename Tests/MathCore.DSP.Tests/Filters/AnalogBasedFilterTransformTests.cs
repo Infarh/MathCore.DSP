@@ -9,11 +9,11 @@ public class AnalogBasedFilterTransformTests : UnitTest
     public void LowToLow_transform_poles()
     {
         Complex[] poles =
-        {
+        [
             -0.364,
             (-0.057, 0.997),
             (-0.224, 0.716)
-        };
+        ];
 
         var poles_lowpas = AnalogBasedFilter.Transform.ToLow(poles, 2 * Math.PI).ToArray();
     }
