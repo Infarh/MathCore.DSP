@@ -131,7 +131,7 @@ public class ButterworthBandStop
 
         var Hf = DoubleArrayDSPExtensions.AnalogFrequencyResponseFromPoles(Enumerable.Empty<Complex>(), poles, F0);
 
-        //var HHf = (W0.Power(N) / eps_p * Hf);
+        //var HHf = (W0.Pow(N) / eps_p * Hf);
         //var HHf_abs = HHf.Abs;
         //var HHf_db = HHf.Power.In_dB_byPower();
 

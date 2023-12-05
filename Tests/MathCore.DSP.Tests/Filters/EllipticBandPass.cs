@@ -161,7 +161,7 @@ public class EllipticBandPass : UnitTest
         var u = Range(1, L).ToArray(i => (2 * i - 1d) / N);
         var m = (1 - kEps * kEps).Sqrt();
 
-        var kp = m.Power(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Power(4));
+        var kp = m.Pow(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Pow(4));
 
         var k_W = Sqrt(1 - kp * kp);
 

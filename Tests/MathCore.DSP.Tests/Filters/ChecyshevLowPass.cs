@@ -122,7 +122,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
             -0.4503476466802788);
 
         var G_norm = (r > 0 ? 1 : Gp)
-            / (2.Power(N) / z_poles.Aggregate(Complex.Real, (Z, z) => Z * (1 - z), z => z.Re));
+            / (2.Pow(N) / z_poles.Aggregate(Complex.Real, (Z, z) => Z * (1 - z), z => z.Re));
 
         Assert.That.Value(G_norm).IsEqual(0.0022682232923298762);
 
@@ -212,7 +212,7 @@ public class ChecyshevLowPass : ChebyshevFiltersTests
         var (A, a_im) = GetCoefficientsInverted(z_poles);
 
         var G_norm = (r > 0 ? 1 : Gp)
-            / (2.Power(N) / z_poles.Aggregate(Complex.Real, (Z, z) => Z * (1 - z), z => z.Re));
+            / (2.Pow(N) / z_poles.Aggregate(Complex.Real, (Z, z) => Z * (1 - z), z => z.Re));
 
         var B = Range(0, N + 1).ToArray(i => G_norm * SpecialFunctions.BinomialCoefficient(N, i));
 

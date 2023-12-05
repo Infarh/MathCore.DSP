@@ -120,7 +120,7 @@ public class EllipticLowPass : UnitTest
         var m = (1 - kEps * kEps).Sqrt();
         m.AssertEquals(0.999987052350832961);
 
-        var kp = m.Power(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Power(4));
+        var kp = m.Pow(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Pow(4));
         kp.AssertEquals(0.910333343015472751);
 
         kW = (1 - kp * kp).Sqrt();
@@ -288,7 +288,7 @@ public class EllipticLowPass : UnitTest
 
         var m = (1 - k_eps * k_eps).Sqrt();
 
-        var kp = m.Power(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Power(4));
+        var kp = m.Pow(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Pow(4));
 
         k_W = (1 - kp * kp).Sqrt();
 

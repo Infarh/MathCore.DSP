@@ -126,7 +126,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         //var zz0 = Complex.Exp(-Consts.pi2 * fs / fd);
         //var zz0 = Complex.Exp(-Consts.pi2 * fp / fd);
         //var zz0 = Complex.Exp(-Consts.pi2 * fd / 2 / fd);
-        //var P0 = (1 - zz0).Power(N);
+        //var P0 = (1 - zz0).Pow(N);
         //var Pp = z_poles.Multiply(z => 1 - z * zz0);
         //var k0 = g_norm * P0 / Pp;
         //k0.Abs.ToDebug();
@@ -292,7 +292,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         //var zz0 = Complex.Exp(-Consts.pi2 * fs / fd);
         //var zz0 = Complex.Exp(-Consts.pi2 * fp / fd);
         //var zz0 = Complex.Exp(-Consts.pi2 * fd / 2 / fd);
-        //var P0 = (1 - zz0).Power(N);
+        //var P0 = (1 - zz0).Pow(N);
         //var Pp = z_poles.Multiply(z => 1 - z * zz0);
         //var k0 = g_norm * P0 / Pp;
         //k0.Abs.ToDebug();
@@ -504,7 +504,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         //var zz0 = Complex.Exp(-Consts.pi2 * fs / fd);
         //var zz0 = Complex.Exp(-Consts.pi2 * fp / fd);
         //var zz0 = Complex.Exp(-Consts.pi2 * fd / 2 / fd);
-        //var P0 = (1 - zz0).Power(N);
+        //var P0 = (1 - zz0).Pow(N);
         //var Pp = z_poles.Multiply(z => 1 - z * zz0);
         //var k0 = g_norm * P0 / Pp;
         //k0.Abs.ToDebug();
@@ -704,7 +704,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         //var zz0 = Complex.Exp(-Consts.pi2 * fs / fd);
         //var zz0 = Complex.Exp(-Consts.pi2 * fp / fd);
         //var zz0 = Complex.Exp(-Consts.pi2 * fd / 2 / fd);
-        //var P0 = (1 - zz0).Power(N);
+        //var P0 = (1 - zz0).Pow(N);
         //var Pp = z_poles.Multiply(z => 1 - z * zz0);
         //var k0 = g_norm * P0 / Pp;
         //k0.Abs.ToDebug();
@@ -913,7 +913,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         //var zz0 = Complex.Exp(-Consts.pi2 * fs / fd);
         //var zz0 = Complex.Exp(-Consts.pi2 * fp / fd);
         //var zz0 = Complex.Exp(-Consts.pi2 * fd / 2 / fd);
-        //var P0 = (1 - zz0).Power(N);
+        //var P0 = (1 - zz0).Pow(N);
         //var Pp = z_poles.Multiply(z => 1 - z * zz0);
         //var k0 = g_norm * P0 / Pp;
         //k0.Abs.ToDebug();
@@ -1108,7 +1108,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         //var zz0 = Complex.Exp(-Consts.pi2 * fs / fd);
         //var zz0 = Complex.Exp(-Consts.pi2 * fp / fd);
         //var zz0 = Complex.Exp(-Consts.pi2 * fd / 2 / fd);
-        //var P0 = (1 - zz0).Power(N);
+        //var P0 = (1 - zz0).Pow(N);
         //var Pp = z_poles.Multiply(z => 1 - z * zz0);
         //var k0 = g_norm * P0 / Pp;
         //k0.Abs.ToDebug();
