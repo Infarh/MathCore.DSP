@@ -88,8 +88,8 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         F1.AssertEquals(0.2587635531331195);
 
         var eps_p = (1 / (Gp * Gp) - 1).Sqrt();
-        //var eps_p = Sqrt(10.Power(Rp / 10) - 1);
-        var eps_s = Sqrt(10.Power(Rs / 10) - 1);
+        //var eps_p = Sqrt(10.Pow(Rp / 10) - 1);
+        var eps_s = Sqrt(10.Pow(Rs / 10) - 1);
 
         eps_p.AssertEquals(0.5088471399095873);
         eps_s.AssertEquals(99.994999874993752);
@@ -299,8 +299,8 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         F1.AssertEquals(0.23764146349419665, 1e-15);
 
         var eps_p = (1 / (Gp * Gp) - 1).Sqrt();
-        //var eps_p = Sqrt(10.Power(Rp / 10) - 1);
-        var eps_s = Sqrt(10.Power(Rs / 10) - 1);
+        //var eps_p = Sqrt(10.Pow(Rp / 10) - 1);
+        var eps_s = Sqrt(10.Pow(Rs / 10) - 1);
 
         eps_p.AssertEquals(0.5088471399095873);
         eps_s.AssertEquals(99.994999874993752);
@@ -507,8 +507,8 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         F1.AssertEquals(0.2587635531331195);
 
         var eps_p = (1 / (Gp * Gp) - 1).Sqrt();
-        //var eps_p = Sqrt(10.Power(Rp / 10) - 1);
-        var eps_s = Sqrt(10.Power(Rs / 10) - 1);
+        //var eps_p = Sqrt(10.Pow(Rp / 10) - 1);
+        var eps_s = Sqrt(10.Pow(Rs / 10) - 1);
 
         eps_p.AssertEquals(0.5088471399095873);
         eps_s.AssertEquals(99.994999874993752);
@@ -756,8 +756,8 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         F1.AssertEquals(0.23764146349419665, 1e-14);
 
         var eps_p = (1 / (Gp * Gp) - 1).Sqrt();
-        //var eps_p = Sqrt(10.Power(Rp / 10) - 1);
-        var eps_s = Sqrt(10.Power(Rs / 10) - 1);
+        //var eps_p = Sqrt(10.Pow(Rp / 10) - 1);
+        var eps_s = Sqrt(10.Pow(Rs / 10) - 1);
 
         eps_p.AssertEquals(0.5088471399095873);
         eps_s.AssertEquals(99.994999874993752);
@@ -1053,8 +1053,8 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         F1.AssertEquals(0.2587635531331195);
 
         var eps_p = (1 / (Gp * Gp) - 1).Sqrt();
-        //var eps_p = Sqrt(10.Power(Rp / 10) - 1);
-        var eps_s = Sqrt(10.Power(Rs / 10) - 1);
+        //var eps_p = Sqrt(10.Pow(Rp / 10) - 1);
+        var eps_s = Sqrt(10.Pow(Rs / 10) - 1);
 
         eps_p.AssertEquals(0.5088471399095873);
         eps_s.AssertEquals(99.994999874993752);
@@ -1305,8 +1305,8 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         F1.AssertEquals(0.23764146349419665, 1e-15);
 
         var eps_p = (1 / (Gp * Gp) - 1).Sqrt();
-        //var eps_p = Sqrt(10.Power(Rp / 10) - 1);
-        var eps_s = Sqrt(10.Power(Rs / 10) - 1);
+        //var eps_p = Sqrt(10.Pow(Rp / 10) - 1);
+        var eps_s = Sqrt(10.Pow(Rs / 10) - 1);
 
         eps_p.AssertEquals(0.5088471399095873);
         eps_s.AssertEquals(99.994999874993752);

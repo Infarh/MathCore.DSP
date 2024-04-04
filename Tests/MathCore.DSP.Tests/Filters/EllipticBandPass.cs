@@ -131,8 +131,8 @@ public class EllipticBandPass : UnitTest
         F0.AssertEquals(0.0978897360307671);
 
         var eps_p = (1 / (Gp * Gp) - 1).Sqrt();
-        //var eps_p = Sqrt(10.Power(Rp / 10) - 1);
-        var eps_s = Sqrt(10.Power(Rs / 10) - 1);
+        //var eps_p = Sqrt(10.Pow(Rp / 10) - 1);
+        var eps_s = Sqrt(10.Pow(Rs / 10) - 1);
 
         eps_p.AssertEquals(0.5088471399095873);
         eps_s.AssertEquals(99.994999874993752);

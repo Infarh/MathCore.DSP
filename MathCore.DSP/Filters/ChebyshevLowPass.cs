@@ -72,8 +72,7 @@ public class ChebyshevLowPass : ChebyshevFilter
 
         var A = GetCoefficientsInverted(z_poles).ToRe();
 
-        var g_norm = (N.IsOdd() ? 1 : Spec.Gp)
-            / (2.Power(N) / z_poles.Multiply(z => 1 - z).Re);
+        var g_norm = (N.IsOdd() ? 1 : Spec.Gp) / (2.Pow(N) / z_poles.Multiply(z => 1 - z).Re);
 
         var B = Enumerable
            .Range(0, N + 1)

@@ -89,8 +89,8 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         W0.AssertEquals(0.615059351152204);
         F0.AssertEquals(0.0978897360307671);
 
-        var eps_p = Sqrt(10.Power(Rp / 10) - 1);
-        var eps_s = Sqrt(10.Power(Rs / 10) - 1);
+        var eps_p = Sqrt(10.Pow(Rp / 10) - 1);
+        var eps_s = Sqrt(10.Pow(Rs / 10) - 1);
 
         eps_p.AssertEquals(0.50884713990958752);
         eps_s.AssertEquals(99.994999874993752);
@@ -306,8 +306,8 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         W0.AssertEquals(0.7104461884009043);
         F0.AssertEquals(0.11307102268479989);
 
-        var eps_p = Sqrt(10.Power(Rp / 10) - 1);
-        var eps_s = Sqrt(10.Power(Rs / 10) - 1);
+        var eps_p = Sqrt(10.Pow(Rp / 10) - 1);
+        var eps_s = Sqrt(10.Pow(Rs / 10) - 1);
 
         eps_p.AssertEquals(0.50884713990958752);
         eps_s.AssertEquals(99.994999874993752);
@@ -533,8 +533,8 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         W0.AssertEquals(0.615059351152204);
         F0.AssertEquals(0.0978897360307671);
 
-        var eps_p = Sqrt(10.Power(Rp / 10) - 1);
-        var eps_s = Sqrt(10.Power(Rs / 10) - 1);
+        var eps_p = Sqrt(10.Pow(Rp / 10) - 1);
+        var eps_s = Sqrt(10.Pow(Rs / 10) - 1);
 
         eps_p.AssertEquals(0.50884713990958752);
         eps_s.AssertEquals(99.994999874993752);
@@ -787,8 +787,8 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         W0.AssertEquals(0.7104461884009043);
         F0.AssertEquals(0.11307102268479989);
 
-        var eps_p = Sqrt(10.Power(Rp / 10) - 1);
-        var eps_s = Sqrt(10.Power(Rs / 10) - 1);
+        var eps_p = Sqrt(10.Pow(Rp / 10) - 1);
+        var eps_s = Sqrt(10.Pow(Rs / 10) - 1);
 
         eps_p.AssertEquals(0.50884713990958752);
         eps_s.AssertEquals(99.994999874993752);
@@ -1052,8 +1052,8 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         W0.AssertEquals(0.615059351152204);
         F0.AssertEquals(0.0978897360307671);
 
-        var eps_p = Sqrt(10.Power(Rp / 10) - 1);
-        var eps_s = Sqrt(10.Power(Rs / 10) - 1);
+        var eps_p = Sqrt(10.Pow(Rp / 10) - 1);
+        var eps_s = Sqrt(10.Pow(Rs / 10) - 1);
 
         eps_p.AssertEquals(0.50884713990958752);
         eps_s.AssertEquals(99.994999874993752);
@@ -1303,8 +1303,8 @@ public class ChebyshevBandStop : ChebyshevFiltersTests
         W0.AssertEquals(0.7104461884009043);
         F0.AssertEquals(0.11307102268479989);
 
-        var eps_p = Sqrt(10.Power(Rp / 10) - 1);
-        var eps_s = Sqrt(10.Power(Rs / 10) - 1);
+        var eps_p = Sqrt(10.Pow(Rp / 10) - 1);
+        var eps_s = Sqrt(10.Pow(Rs / 10) - 1);
 
         eps_p.AssertEquals(0.50884713990958752);
         eps_s.AssertEquals(99.994999874993752);
