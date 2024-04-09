@@ -33,7 +33,7 @@ public static class fft
     public static Complex[] FFT(Complex[] x)
     {
         var N   = x.Length;
-        if (N == 1) return new[] { x[0] };
+        if (N == 1) return [x[0]];
 
         var buf = new double[2 * N];
         for (var i = 0; i < N; i++) 
@@ -116,8 +116,8 @@ public static class fft
         var N = x.Length;
         switch (x)
         {
-            case [var x0]        : return new[] { new Complex(x0) };
-            case [var x0, var x1]: return new[] { new Complex(x0 + x1), new Complex(x0 - x1) };
+            case [var x0]        : return [new Complex(x0)];
+            case [var x0, var x1]: return [new Complex(x0 + x1), new Complex(x0 - x1)];
         }
 
         var result = new Complex[N];
@@ -207,7 +207,7 @@ public static class fft
         // Special case: N=1, FFT is just identity transform.
         // After this block we assume that N is strictly greater than 1.
         //
-        if (n == 1) return new[] { f[0].Re };
+        if (n == 1) return [f[0].Re];
 
         //
         // inverse real FFT is reduced to the inverse real FHT,

@@ -5,5 +5,5 @@
 public class Integrator : IIR
 {
     /// <summary>Инициализация нового интегратора</summary>
-    public Integrator() : base(new[] { 1d }, new[] { 1d, -1d }) { }
+    public Integrator() : base([1d], [1d, -1d]) { }
 }

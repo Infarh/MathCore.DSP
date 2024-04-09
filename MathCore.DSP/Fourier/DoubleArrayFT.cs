@@ -39,7 +39,7 @@ public static class DoubleArrayFT
                 Q += val * sin;
             }
 
-            return new Complex(P / N, Q / N);
+            return new(P / N, Q / N);
         };
     }
 
@@ -64,7 +64,7 @@ public static class DoubleArrayFT
                 Q += im * cos + re * sin;
             }
 
-            return new Complex(P / N, Q / N);
+            return new(P / N, Q / N);
         };
     }
 }

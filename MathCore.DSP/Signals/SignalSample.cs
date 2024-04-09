@@ -4,21 +4,19 @@
 namespace MathCore.DSP.Signals;
 
 /// <summary>Отсчёт сигнала</summary>
-public readonly struct SignalSample : IEquatable<SignalSample>
+/// <remarks>Новый отсчёт сигнала</remarks>
+/// <param name="Time">Время</param>
+/// <param name="Value">Значение</param>
+public readonly struct SignalSample(double Time, double Value) : IEquatable<SignalSample>
 {
+    /// <summary>Новый отсчёт сигнала</summary>
+    public SignalSample() : this(0, 0) { }
+
     /// <summary>Время</summary>
-    public double Time { get; init; }
+    public double Time { get; init; } = Time;
 
     /// <summary>Значение</summary>
-    public double Value { get; init; }
-
-    /// <summary>Новый отсчёт сигнала</summary>
-    public SignalSample() { }
-
-    /// <summary>Новый отсчёт сигнала</summary>
-    /// <param name="Time">Время</param>
-    /// <param name="Value">Значение</param>
-    public SignalSample(double Time, double Value) => (this.Time, this.Value) = (Time, Value);
+    public double Value { get; init; } = Value;
 
     public bool Equals(SignalSample other) => Time == other.Time && Value == other.Value;
 
@@ -62,22 +60,16 @@ public static class SignalSampleEx
 }
 
 /// <summary>Отсчёт сигнала</summary>
-public readonly struct SpectrumSample : IEquatable<SpectrumSample>
+/// <remarks>Новый отсчёт сигнала</remarks>
+/// <param name="Frequency">Частота</param>
+/// <param name="Value">Значение</param>
+public readonly struct SpectrumSample(double Frequency, Complex Value) : IEquatable<SpectrumSample>
 {
     /// <summary>Частота</summary>
-    public double Frequency { get; init; }
+    public double Frequency { get; init; } = Frequency;
 
     /// <summary>Значение</summary>
-    public Complex Value { get; init; }
-
-    /// <summary>Новый отсчёт сигнала</summary>
-    /// <param name="Frequency">Частота</param>
-    /// <param name="Value">Значение</param>
-    public SpectrumSample(double Frequency, Complex Value)
-    {
-        this.Frequency = Frequency;
-        this.Value = Value;
-    }
+    public Complex Value { get; init; } = Value;
 
     public bool Equals(SpectrumSample other) => Frequency == other.Frequency && Value == other.Value;
 

@@ -28,7 +28,7 @@ public class IIRTests : UnitTest
 
         Assert.AreEqual(impulse_response_length, impulse_response.Length);
 
-        double[] expected_impulse_response = { b0, -a1 * b0, -a1 * -a1 * b0 };
+        double[] expected_impulse_response = [b0, -a1 * b0, -a1 * -a1 * b0];
         CollectionAssert.AreEqual(expected_impulse_response, impulse_response);
     }
 
@@ -49,12 +49,12 @@ public class IIRTests : UnitTest
         var B = filter.B;
 
         double[] expected_a =
-        {
-            1.53476636079571,
+        [
+            +1.53476636079571,
             -0.33307051181674,
             -0.568158087680825
-        };
-        double[] expected_b = { 1, 0, -1 };
+        ];
+        double[] expected_b = [1, 0, -1];
         CollectionAssert.AreEqual(expected_b, B);
         CollectionAssert.AreEqual(expected_a, A, GetComparer(1e-15));
 
@@ -104,17 +104,17 @@ public class IIRTests : UnitTest
         var B = filter.B;
 
         double[] expected_a =
-        {
-            1.53476636079571,
+        [
+            +1.53476636079571,
             -0.33307051181674,
             -0.568158087680825
-        };
+        ];
         double[] expected_b =
-        {
-            1.241652068278721,
+        [
+            +1.241652068278721,
             -0.16653525590837,
             -0.758347931721279
-        };
+        ];
         CollectionAssert.AreEqual(expected_b, B, GetComparer(1e-15));
         CollectionAssert.AreEqual(expected_a, A, GetComparer(1e-15));
 

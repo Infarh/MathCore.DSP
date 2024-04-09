@@ -13,12 +13,12 @@ public class MainWindowViewModel : TitledViewModel
     public MainWindowViewModel() => Title = "Главное окно";
 
     public FilterDesign[] FilterDesigners { get; } = 
-    {
+    [
         new ButterworthBandPassDesign(),
         new EllipticBandPassDesign(),
         new ChebyshevIBandPassDesign(),
         new ChebyshevIIBandPassDesign()
-    };
+    ];
 
     #region SelectedDesigner : FilterDesign - Выбранный фильтр
 

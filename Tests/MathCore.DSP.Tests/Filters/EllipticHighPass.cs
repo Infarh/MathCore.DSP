@@ -99,7 +99,7 @@ public class EllipticHighPass
         var u = Enumerable.Range(1, L).ToArray(i => (2 * i - 1d) / N);
         var m = (1 - k_eps * k_eps).Sqrt();
 
-        var kp = m.Power(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Power(4));
+        var kp = m.Pow(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Pow(4));
 
         var k_W = Sqrt(1 - kp * kp);
 
@@ -298,7 +298,7 @@ public class EllipticHighPass
         var u = Enumerable.Range(1, L).ToArray(i => (2 * i - 1d) / N);
         var m = (1 - k_eps * k_eps).Sqrt();
 
-        var kp = m.Power(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Power(4));
+        var kp = m.Pow(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Pow(4));
 
         var k_W = Sqrt(1 - kp * kp);
 

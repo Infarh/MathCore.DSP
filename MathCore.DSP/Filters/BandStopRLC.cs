@@ -16,7 +16,7 @@ public class BandStopRLC : IIR
     /// <param name="dw">Обобщённая полоса частот</param>
     private BandStopRLC(double w0, double dw)
         : base(
-            A: new[] { w0 * w0 + dw + 1, 2 * (w0 * w0 - 1), w0 * w0 - dw + 1 },
-            B: new[] { w0*w0 + 1, 2 * (w0 * w0 - 1), w0 * w0 + 1 })
+            A: [w0 * w0 + dw + 1, 2 * (w0 * w0 - 1), w0 * w0 - dw + 1],
+            B: [w0*w0 + 1, 2 * (w0 * w0 - 1), w0 * w0 + 1])
     { }
 }

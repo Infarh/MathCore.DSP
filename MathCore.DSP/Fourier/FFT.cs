@@ -265,7 +265,7 @@ public static class FFT
         switch (n)
         {
             case 1: return a;
-            case 2: return new[] { a[0] + a[1], a[0] - a[1] };
+            case 2: return [a[0] + a[1], a[0] - a[1]];
         }
 
         var n2 = n / 2;
@@ -308,7 +308,7 @@ public static class FFT
             case 1:
                 return a;
             case 2:
-                return new[] { a[0] + a[1], a[0] - a[1] };
+                return [a[0] + a[1], a[0] - a[1]];
         }
         var n2 = n / 2;
 

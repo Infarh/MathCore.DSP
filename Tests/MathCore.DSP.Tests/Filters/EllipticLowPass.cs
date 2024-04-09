@@ -120,7 +120,7 @@ public class EllipticLowPass : UnitTest
         var m = (1 - kEps * kEps).Sqrt();
         m.AssertEquals(0.999987052350832961);
 
-        var kp = m.Power(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Power(4));
+        var kp = m.Pow(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Pow(4));
         kp.AssertEquals(0.910333343015472751);
 
         kW = (1 - kp * kp).Sqrt();
@@ -288,7 +288,7 @@ public class EllipticLowPass : UnitTest
 
         var m = (1 - k_eps * k_eps).Sqrt();
 
-        var kp = m.Power(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Power(4));
+        var kp = m.Pow(N) * u.Aggregate(1d, (P, ui) => P * sn_uk(ui, m).Pow(4));
 
         k_W = (1 - kp * kp).Sqrt();
 
@@ -432,12 +432,12 @@ public class EllipticLowPass : UnitTest
         var filter = new DSP.Filters.EllipticLowPass(dt, fp, fs, Gp, Gs);
 
         double[] expected_impulse_response =
-        {
+        [
             +0.02316402765395902, +0.07890235175222579, +0.16227581269333505, +0.24853156657007530, +0.28054421394358340,
             +0.22795965026314102, +0.10322811584198478, -0.03550289833716826, -0.11558449693089311, -0.09973469008670285,
             -0.01432462412676058, +0.07033262928146783, +0.09354381942841251, +0.04804815902953240, -0.02081136468031311,
             -0.05692503754813389
-        };
+        ];
         var impulse_response = filter.GetImpulseResponse(expected_impulse_response.Length, 1e-10).ToArray();
 
         var error2 = impulse_response

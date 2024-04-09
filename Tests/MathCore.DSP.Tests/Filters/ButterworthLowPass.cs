@@ -286,7 +286,7 @@ public class ButterworthLowPass : UnitTest
         var filter = new DSP.Filters.ButterworthLowPass(dt, fp, fs, Gp, Gs);
 
         double[] expected_impulse_response =
-        {
+        [
             +0.030466713814017596,
             +0.13656962408945683,
             +0.2655529821380315,
@@ -303,7 +303,7 @@ public class ButterworthLowPass : UnitTest
             +0.007517462792239407,
             +0.0036947291372435315,
             +0.0002967473365659246
-        };
+        ];
         var impulse_response = filter.GetImpulseResponse(expected_impulse_response.Length, 1e-10).ToArray();
 
         Assert.That.Collection(impulse_response)
