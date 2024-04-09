@@ -1037,18 +1037,18 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
 
         //zeros.ToIm().ToDebugEnum();
         zeros.ToIm().AssertEquals(
-            /*[ 0]*/ 2.1029244484765344,
+            /*[ 0]*/ +2.1029244484765344,
             /*[ 1]*/ -2.1029244484765344,
-            /*[ 2]*/ 3.4026032334081595,
+            /*[ 2]*/ +3.4026032334081595,
             /*[ 3]*/ -3.4026032334081595
         );
 
         //poles.ToDebugEnum();
         poles.AssertEquals(
             /*[ 0]*/  -1.575540533713846836,
-            /*[ 1]*/ (-0.311831190556909887, 1.221740635279751741),
+            /*[ 1]*/ (-0.311831190556909887, +1.221740635279751741),
             /*[ 2]*/ (-0.311831190556909887, -1.221740635279751741),
-            /*[ 3]*/ (-1.049598957226317575, 0.970778022597644896),
+            /*[ 3]*/ (-1.049598957226317575, +0.970778022597644896),
             /*[ 4]*/ (-1.049598957226317575, -0.970778022597644896)
         );
 
@@ -1059,20 +1059,20 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
 
         //high_pass_zeros.ToIm().ToDebugEnum();
         high_pass_zeros.ToIm().AssertEquals(
-            /*[ 0]*/ 0,
+            /*[ 0]*/ +0,
             /*[ 1]*/ -1.92788700188945,
-            /*[ 2]*/ 1.92788700188945,
+            /*[ 2]*/ +1.92788700188945,
             /*[ 3]*/ -1.1914996936368127,
-            /*[ 4]*/ 1.1914996936368127
+            /*[ 4]*/ +1.1914996936368127
         );
 
         //high_pass_poles.ToDebugEnum();
         high_pass_poles.AssertEquals(
             /*[ 0]*/  -2.573212572714287827,
             /*[ 1]*/ (-0.795166415107994906, -3.115426392761265539),
-            /*[ 2]*/ (-0.795166415107994906, 3.115426392761265539),
+            /*[ 2]*/ (-0.795166415107994906, +3.115426392761265539),
             /*[ 3]*/ (-2.081772701465139708, -1.925439400174942195),
-            /*[ 4]*/ (-2.081772701465139708, 1.925439400174942195)
+            /*[ 4]*/ (-2.081772701465139708, +1.925439400174942195)
         );
 
         var z_zeros = ToZArray(high_pass_zeros, dt);
@@ -1082,9 +1082,9 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         z_zeros.AssertEquals(
             /*[ 0]*/  1,
             /*[ 1]*/ (0.981587346535519156, -0.191013824424721645),
-            /*[ 2]*/ (0.981587346535519156, 0.191013824424721645),
+            /*[ 2]*/ (0.981587346535519156, +0.191013824424721645),
             /*[ 3]*/ (0.992926746641183966, -0.118728580403179032),
-            /*[ 4]*/ (0.992926746641183966, 0.118728580403179032)
+            /*[ 4]*/ (0.992926746641183966, +0.118728580403179032)
         );
 
 
@@ -1092,9 +1092,9 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         z_poles.AssertEquals(
             /*[ 0]*/  0.772011842406100768,
             /*[ 1]*/ (0.881299077197208569, -0.281846688830509118),
-            /*[ 2]*/ (0.881299077197208569, 0.281846688830509118),
+            /*[ 2]*/ (0.881299077197208569, +0.281846688830509118),
             /*[ 3]*/ (0.797780032897538738, -0.156758995529333173),
-            /*[ 4]*/ (0.797780032897538738, 0.156758995529333173)
+            /*[ 4]*/ (0.797780032897538738, +0.156758995529333173)
         );
 
         var k_zeros = z_zeros.Multiply(z => 1 + z).Re;
@@ -1120,21 +1120,21 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
 
         //B.ToDebugEnum();
         B.AssertEquals(
-            /*[ 0]*/ 0.6609827401950336,
+            /*[ 0]*/ +0.6609827401950336,
             /*[ 1]*/ -3.271222211918332,
-            /*[ 2]*/ 6.509097273376015,
+            /*[ 2]*/ +6.509097273376015,
             /*[ 3]*/ -6.509097273376013,
-            /*[ 4]*/ 3.271222211918331,
+            /*[ 4]*/ +3.271222211918331,
             /*[ 5]*/ -0.6609827401950334
         );
 
         //A.ToDebugEnum();
         A.AssertEquals(
-            /*[ 0]*/ 1,
+            /*[ 0]*/ +1,
             /*[ 1]*/ -4.130170062595595,
-            /*[ 2]*/ 6.92202112489826,
+            /*[ 2]*/ +6.92202112489826,
             /*[ 3]*/ -5.873536007971762,
-            /*[ 4]*/ 2.5199790745804,
+            /*[ 4]*/ +2.5199790745804,
             /*[ 5]*/ -0.43689818093273614
         );
 
@@ -1838,7 +1838,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var k_fd05_db = k_fd05.In_dB_byPower();
 
         /* --------------------------------------*/ //   -Rs  -Rp
-        //                                          // ---+----+->
+        //                                          // ---+----+-> K(f),дБ
         k_low_db.AssertLessThan(-Rs);               // \  |    |
         k_s99_db.AssertLessThan(-Rs, 2.7e-1);       //  \ |    |
         k_s_db.AssertLessOrEqualsThan(-Rs, 3e-1);   //   \+    | fs
@@ -1851,9 +1851,9 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         k_p_db.AssertEquals(-Rp, 2.19e-2);          //          |
         k_pd_db.AssertGreaterOrEqualsThan(-Rp);     //          |
         k_dp_db.AssertGreaterOrEqualsThan(-Rp);     //          |
-        k_fd05_db.AssertGreaterOrEqualsThan(-Rp);   //          |fd
+        k_fd05_db.AssertGreaterOrEqualsThan(-Rp);   //          |fd / 2
 
-        /* ----------------------------------------------- */
+        /* ----------------------------------------------------- */
 
         var x =
             x_low +
@@ -1887,7 +1887,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var h_fd05 = H.GetValue(0.9 * (fd / 2)).Power.In_dB_byPower();
 
         /* --------------------------------------*/ //   -Rs  -Rp
-        //                                          // ---+----+->
+        //                                          // ---+----+-> K(f),дБ
         h_low.AssertLessThan(-Rs);                  // \  |    |
         h_s99.AssertLessThan(-Rs);                  //  \ |    |
         h_s.AssertLessOrEqualsThan(-Rs);            //   \+    | fs
@@ -1900,7 +1900,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         h_p.AssertEquals(-Rp, 8.1e-5);              //          |
         h_pd.AssertGreaterOrEqualsThan(-Rp);        //          |
         h_dp.AssertGreaterOrEqualsThan(-Rp);        //          |
-        h_fd05.AssertGreaterOrEqualsThan(-Rp);      //          |fd
+        h_fd05.AssertGreaterOrEqualsThan(-Rp);      //          |fd / 2
     }
 
     [TestMethod]
@@ -1988,7 +1988,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var k_fd05_db = k_fd05.In_dB_byPower();
 
         /* --------------------------------------*/ //   -Rs  -Rp
-        //                                          // ---+----+->
+        //                                          // ---+----+-> K(f),дБ
         k_low_db.AssertLessThan(-Rs);               // \  |    |
         k_s99_db.AssertLessThan(-Rs, 2.7e-1);       //  \ |    |
         k_s_db.AssertLessOrEqualsThan(-Rs, 3e-1);   //   \+    | fs
@@ -2001,7 +2001,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         k_p_db.AssertEquals(-Rp, 2.19e-2);          //          |
         k_pd_db.AssertGreaterOrEqualsThan(-Rp);     //          |
         k_dp_db.AssertGreaterOrEqualsThan(-Rp);     //          |
-        k_fd05_db.AssertGreaterOrEqualsThan(-Rp);   //          |fd
+        k_fd05_db.AssertGreaterOrEqualsThan(-Rp);   //          |fd / 2
 
         /* ----------------------------------------------- */
 
@@ -2037,7 +2037,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var h_fd05 = H.GetValue(0.9 * (fd / 2)).Power.In_dB_byPower();
 
         /* --------------------------------------*/ //   -Rs  -Rp
-        //                                          // ---+----+->
+        //                                          // ---+----+-> K(f),дБ
         h_low.AssertLessThan(-Rs);                  // \  |    |
         h_s99.AssertLessThan(-Rs);                  //  \ |    |
         h_s.AssertLessOrEqualsThan(-Rs);            //   \+    | fs
@@ -2050,7 +2050,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         h_p.AssertEquals(-Rp, 8.1e-5);              //          |
         h_pd.AssertGreaterOrEqualsThan(-Rp);        //          |
         h_dp.AssertGreaterOrEqualsThan(-Rp);        //          |
-        h_fd05.AssertGreaterOrEqualsThan(-Rp);      //          |fd
+        h_fd05.AssertGreaterOrEqualsThan(-Rp);      //          |fd / 2
     }
 
     [TestMethod]
@@ -2138,7 +2138,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var k_fd05_db = k_fd05.In_dB_byPower();
 
         /* --------------------------------------*/ //   -Rs  -Rp
-        //                                          // ---+----+->
+        //                                          // ---+----+-> K(f),дБ
         k_low_db.AssertLessThan(-Rs);               // \  |    |
         k_s99_db.AssertLessThan(-Rs, 2.7e-1);       //  \ |    |
         k_s_db.AssertLessOrEqualsThan(-Rs, 3e-1);   //   \+    | fs
@@ -2151,7 +2151,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         k_p_db.AssertEquals(-Rs, 2.13);             //          |
         k_pd_db.AssertGreaterOrEqualsThan(-Rp);     //          |
         k_dp_db.AssertGreaterOrEqualsThan(-Rp);     //          |
-        k_fd05_db.AssertGreaterOrEqualsThan(-Rp);   //          |fd
+        k_fd05_db.AssertGreaterOrEqualsThan(-Rp);   //          |fd / 2
 
         /* ----------------------------------------------- */
 
@@ -2187,7 +2187,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var h_fd05 = H.GetValue(0.9 * (fd / 2)).Power.In_dB_byPower();
 
         /* --------------------------------------*/ //   -Rs  -Rp
-        //                                          // ---+----+->
+        //                                          // ---+----+-> K(f),дБ
         h_low.AssertLessThan(-Rs);                  // \  |    |
         h_s99.AssertLessThan(-Rs);                  //  \ |    |
         h_s.AssertLessOrEqualsThan(-Rs);            //   \+    | fs
@@ -2200,7 +2200,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         h_p.AssertEquals(-Rs, 1.25e-3);             //          |
         h_pd.AssertGreaterOrEqualsThan(-Rp);        //          |
         h_dp.AssertGreaterOrEqualsThan(-Rp);        //          |
-        h_fd05.AssertGreaterOrEqualsThan(-Rp);      //          |fd
+        h_fd05.AssertGreaterOrEqualsThan(-Rp);      //          |fd / 2
     }
 
     [TestMethod]
@@ -2288,7 +2288,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var k_fd05_db = k_fd05.In_dB_byPower();
 
         /* --------------------------------------*/  //   -Rs  -Rp
-        //                                           // ---+----+->
+        //                                           // ---+----+-> K(f),дБ
         k_low_db.AssertLessThan(-Rs);                // \  |    |
         k_s99_db.AssertLessThan(-Rs, 2.7e-1);        //  \ |    |
         k_s_db.AssertLessOrEqualsThan(-Rs, 3e-1);    //   \+    | fs
@@ -2301,7 +2301,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         k_p_db.AssertEquals(-Rs, 2.13);              //          |
         k_pd_db.AssertGreaterOrEqualsThan(-Rp, 0.56);//          |
         k_dp_db.AssertGreaterOrEqualsThan(-Rp);      //          |
-        k_fd05_db.AssertGreaterOrEqualsThan(-Rp);    //          |fd
+        k_fd05_db.AssertGreaterOrEqualsThan(-Rp);    //          |fd / 2
 
         /* ----------------------------------------------- */
 
@@ -2337,7 +2337,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var h_fd05 = H.GetValue(0.9 * (fd / 2)).Power.In_dB_byPower();
 
         /* --------------------------------------*/ //   -Rs  -Rp
-        //                                          // ---+----+->
+        //                                          // ---+----+-> K(f),дБ
         h_low.AssertLessThan(-Rs);                  // \  |    |
         h_s99.AssertLessThan(-Rs);                  //  \ |    |
         h_s.AssertLessOrEqualsThan(-Rs);            //   \+    | fs
@@ -2350,7 +2350,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         h_p.AssertEquals(-Rs, 1.25e-3);             //          |
         h_pd.AssertGreaterOrEqualsThan(-Rp, 0.56);  //          |
         h_dp.AssertGreaterOrEqualsThan(-Rp);        //          |
-        h_fd05.AssertGreaterOrEqualsThan(-Rp);      //          |fd
+        h_fd05.AssertGreaterOrEqualsThan(-Rp);      //          |fd / 2
     }
 
     [TestMethod]
@@ -2438,7 +2438,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var k_fd05_db = k_fd05.In_dB_byPower();
 
         /* --------------------------------------*/ //   -Rs  -Rp
-        //                                          // ---+----+->
+        //                                          // ---+----+-> K(f),дБ
         k_low_db.AssertLessThan(-Rs);               // \  |    |
         k_s99_db.AssertLessThan(-Rs, 2.7e-1);       //  \ |    |
         k_s_db.AssertLessOrEqualsThan(-Rs, 0.75);   //   \+    | fs
@@ -2451,7 +2451,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         k_p_db.AssertEquals(-Rp, 0.51);             //          |
         k_pd_db.AssertGreaterOrEqualsThan(-Rp);     //          |
         k_dp_db.AssertGreaterOrEqualsThan(-Rp);     //          |
-        k_fd05_db.AssertGreaterOrEqualsThan(-Rp);   //          |fd
+        k_fd05_db.AssertGreaterOrEqualsThan(-Rp);   //          |fd / 2
 
         /* ----------------------------------------------- */
 
@@ -2487,7 +2487,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var h_fd05 = H.GetValue(0.9 * (fd / 2)).Power.In_dB_byPower();
 
         /* --------------------------------------*/ //   -Rs  -Rp
-        //                                          // ---+----+->
+        //                                          // ---+----+-> K(f),дБ
         h_low.AssertLessThan(-Rs);                  // \  |    |
         h_s99.AssertLessThan(-Rs);                  //  \ |    |
         h_s.AssertLessOrEqualsThan(-Rs);            //   \+    | fs
@@ -2500,7 +2500,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         h_p.AssertEquals(-Rp, 0.52);                //          |
         h_pd.AssertGreaterOrEqualsThan(-Rp);        //          |
         h_dp.AssertGreaterOrEqualsThan(-Rp);        //          |
-        h_fd05.AssertGreaterOrEqualsThan(-Rp);      //          |fd
+        h_fd05.AssertGreaterOrEqualsThan(-Rp);      //          |fd / 2
     }
 
     [TestMethod]
@@ -2588,7 +2588,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var k_fd05_db = k_fd05.In_dB_byPower();
 
         /* --------------------------------------*/ //   -Rs  -Rp
-        //                                          // ---+----+->
+        //                                          // ---+----+-> K(f),дБ
         k_low_db.AssertLessThan(-Rs);               // \  |    |
         k_s99_db.AssertLessThan(-Rs, 2.7e-1);       //  \ |    |
         k_s_db.AssertLessOrEqualsThan(-Rs, 0.75);   //   \+    | fs
@@ -2601,7 +2601,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         k_p_db.AssertEquals(-Rp, 0.68);             //          |
         k_pd_db.AssertGreaterOrEqualsThan(-Rp);     //          |
         k_dp_db.AssertGreaterOrEqualsThan(-Rp);     //          |
-        k_fd05_db.AssertGreaterOrEqualsThan(-Rp);   //          |fd
+        k_fd05_db.AssertGreaterOrEqualsThan(-Rp);   //          |fd / 2
 
         /* ----------------------------------------------- */
 
@@ -2637,7 +2637,7 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         var h_fd05 = H.GetValue(0.9 * (fd / 2)).Power.In_dB_byPower();
 
         /* --------------------------------------*/ //   -Rs  -Rp
-        //                                          // ---+----+->
+        //                                          // ---+----+-> K(f),дБ
         h_low.AssertLessThan(-Rs);                  // \  |    |
         h_s99.AssertLessThan(-Rs);                  //  \ |    |
         h_s.AssertLessOrEqualsThan(-Rs);            //   \+    | fs
@@ -2650,6 +2650,6 @@ public class ChebyshevHighPass : ChebyshevFiltersTests
         h_p.AssertEquals(-Rp, 0.69);                //          |
         h_pd.AssertGreaterOrEqualsThan(-Rp);        //          |
         h_dp.AssertGreaterOrEqualsThan(-Rp);        //          |
-        h_fd05.AssertGreaterOrEqualsThan(-Rp);      //          |fd
+        h_fd05.AssertGreaterOrEqualsThan(-Rp);      //          |fd / 2
     }
 }
