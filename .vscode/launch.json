@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // Если вы изменили требуемые версии .NET Framework, обязательно обновите путь к программе.
-            "program": "${workspaceFolder}/Tests/ConsoleTest/bin/Debug/net7.0/ConsoleTest.dll",
+            "program": "${workspaceFolder}/Tests/ConsoleTest/bin/Debug/net8.0/ConsoleTest.dll",
             "args": [],
             "cwd": "${workspaceFolder}/Tests/ConsoleTest",
             // Дополнительные сведения о поле \"console\" см. в https://aka.ms/VSCode-CS-LaunchJson-Console

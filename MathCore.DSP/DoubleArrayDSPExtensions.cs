@@ -3,7 +3,7 @@
 namespace MathCore.DSP;
 
 /// <summary>Методы-расширения для вещественных массивов</summary>
-public static class DoubleArrayDSPExtensions
+public static partial class DoubleArrayDSPExtensions
 {
     internal static Vector<double> ToVector(this double[] array) => new(array);
 
