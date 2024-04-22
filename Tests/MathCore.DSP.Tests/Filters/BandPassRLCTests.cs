@@ -28,7 +28,7 @@ public class BandPassRLCTests : UnitTest
         var expected_a1 = 2 * (w * w - 1);
         var expected_a2 = w * w - dw + 1;
 
-        var rlc = new BandPassRLC(f0, Df, dt);
+        var rlc = new RLCBandPass(f0, Df, dt);
 
         var a = rlc.A;
         var b = rlc.B;
@@ -50,7 +50,7 @@ public class BandPassRLCTests : UnitTest
         const double f0 = 30;
         const double Df = 10;
 
-        var rlc = new BandPassRLC(f0, Df, dt);
+        var rlc = new RLCBandPass(f0, Df, dt);
 
         var a = rlc.A;
         var b = rlc.B;
@@ -94,7 +94,7 @@ public class BandPassRLCTests : UnitTest
         var x0_power = x0.Power;
         Assert.AreEqual(1, x0_power, eps);
 
-        var rlc = new BandPassRLC(f0, Df, dt);
+        var rlc = new RLCBandPass(f0, Df, dt);
 
         var y0 = rlc.Process(x0);
 
@@ -117,7 +117,7 @@ public class BandPassRLCTests : UnitTest
         var x0_power = x0.Power;
         Assert.AreEqual(1, x0_power, eps);
 
-        var rlc = new BandPassRLC(f0, Df, dt);
+        var rlc = new RLCBandPass(f0, Df, dt);
 
         var y0 = rlc.Process(x0);
 
@@ -140,7 +140,7 @@ public class BandPassRLCTests : UnitTest
         var x0_power = x0.Power;
         Assert.AreEqual(1, x0_power, eps);
 
-        var rlc = new BandPassRLC(f0, Df, dt);
+        var rlc = new RLCBandPass(f0, Df, dt);
 
         var y0 = rlc.Process(x0);
 
@@ -157,7 +157,7 @@ public class BandPassRLCTests : UnitTest
         const double f0 = 30;
         const double Df = 10;
 
-        var rlc = new BandPassRLC(f0, Df, dt);
+        var rlc = new RLCBandPass(f0, Df, dt);
 
         var c = rlc.FrequencyResponse(f0, dt);
 
@@ -173,7 +173,7 @@ public class BandPassRLCTests : UnitTest
         const double f0 = 30;
         const double Df = 10;
 
-        var rlc = new BandPassRLC(f0, Df, dt);
+        var rlc = new RLCBandPass(f0, Df, dt);
 
         var c = rlc.FrequencyResponse(0, dt);
 
@@ -188,7 +188,7 @@ public class BandPassRLCTests : UnitTest
         const double f0 = 30;
         const double Df = 10;
 
-        var rlc = new BandPassRLC(f0, Df, dt);
+        var rlc = new RLCBandPass(f0, Df, dt);
 
         var c = rlc.FrequencyResponse(fd / 2, dt);
 
@@ -204,7 +204,7 @@ public class BandPassRLCTests : UnitTest
         const double f0 = 30;
         const double Df = 10;
 
-        var rlc = new BandPassRLC(f0, Df, dt);
+        var rlc = new RLCBandPass(f0, Df, dt);
 
         const int samples_count = 1000;
         var s0 = new SamplesDigitalSignal(dt, Enumerable.Repeat(1, samples_count));

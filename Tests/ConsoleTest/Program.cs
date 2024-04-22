@@ -1,4 +1,6 @@
-﻿const double fd = 2000;
+﻿using System.IO.Compression;
+
+const double fd = 2000;
 const double dt = 1 / fd;
 
 const double fp = 400;

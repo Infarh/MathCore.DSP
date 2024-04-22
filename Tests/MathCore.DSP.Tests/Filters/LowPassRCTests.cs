@@ -20,7 +20,7 @@ public class LowPassRCTests : UnitTest
         const double f0 = 10;
         //const double eps = 3e-3;
 
-        var rc = new LowPassRC(f0, dt);
+        var rc = new RCLowPass(dt, f0);
 
         var a = rc.A;
         var b = rc.B;
@@ -42,7 +42,7 @@ public class LowPassRCTests : UnitTest
         const double dt = 1 / fd;
         const double f0 = 10;
 
-        var rc = new LowPassRC(f0, dt);
+        var rc = new RCLowPass(dt, f0);
 
         var a = rc.A;
         var b = rc.B;
@@ -85,7 +85,7 @@ public class LowPassRCTests : UnitTest
         var x0_power = x0.Power;
         Assert.AreEqual(1, x0_power, eps);
 
-        var rc = new LowPassRC(f0, dt);
+        var rc = new RCLowPass(dt, f0);
 
         var y0 = rc.Process(x0);
 
@@ -103,7 +103,7 @@ public class LowPassRCTests : UnitTest
         //const double eps = 3.02e-4;
         const double f = 0;
 
-        var rc = new LowPassRC(f0, dt);
+        var rc = new RCLowPass(dt, f0);
 
         var c = rc.FrequencyResponse(f, dt);
 
@@ -119,7 +119,7 @@ public class LowPassRCTests : UnitTest
         const double eps = 1e-14;
         const double f = f0;
 
-        var rc = new LowPassRC(f0, dt);
+        var rc = new RCLowPass(dt, f0);
 
         var c = rc.FrequencyResponse(f, dt);
 
@@ -139,7 +139,7 @@ public class LowPassRCTests : UnitTest
         //const double total_time = dt * samples_count;
         //const double df = 1 / total_time;
 
-        var rc = new LowPassRC(f0, dt);
+        var rc = new RCLowPass(dt, f0);
 
         const double A1 = 1;
         const double f1 = 3;
