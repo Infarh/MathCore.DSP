@@ -27,7 +27,7 @@ public class BandStopRLCTests : UnitTest
         var expected_a1 = 2 * (w * w - 1);
         var expected_a2 = w * w - dw + 1;
 
-        var rlc = new BandStopRLC(f0, delta_f, dt);
+        var rlc = new RLCBandStop(f0, delta_f, dt);
 
         var a = rlc.A;
         var b = rlc.B;
@@ -49,7 +49,7 @@ public class BandStopRLCTests : UnitTest
         const double f0 = 30;
         const double delta_f = 10;
 
-        var rlc = new BandStopRLC(f0, delta_f, dt);
+        var rlc = new RLCBandStop(f0, delta_f, dt);
 
         var a = rlc.A;
         var b = rlc.B;
@@ -93,7 +93,7 @@ public class BandStopRLCTests : UnitTest
         var x0_power = x0.Power;
         Assert.AreEqual(1, x0_power, eps);
 
-        var rlc = new BandStopRLC(f0, delta_f, dt);
+        var rlc = new RLCBandStop(f0, delta_f, dt);
 
         var y0 = rlc.Process(x0);
 
@@ -116,7 +116,7 @@ public class BandStopRLCTests : UnitTest
         var x0_power = x0.Power;
         Assert.AreEqual(1, x0_power, eps);
 
-        var rlc = new BandStopRLC(f0, delta_f, dt);
+        var rlc = new RLCBandStop(f0, delta_f, dt);
 
         var y0 = rlc.Process(x0);
 
@@ -139,7 +139,7 @@ public class BandStopRLCTests : UnitTest
         var x0_power = x0.Power;
         Assert.AreEqual(1, x0_power, eps);
 
-        var rlc = new BandStopRLC(f0, delta_f, dt);
+        var rlc = new RLCBandStop(f0, delta_f, dt);
 
         var y0 = rlc.Process(x0);
 
@@ -156,7 +156,7 @@ public class BandStopRLCTests : UnitTest
         const double f0 = 30;
         const double delta_f = 10;
 
-        var rlc = new BandStopRLC(f0, delta_f, dt);
+        var rlc = new RLCBandStop(f0, delta_f, dt);
 
         var c = rlc.FrequencyResponse(f0, dt);
 
@@ -172,7 +172,7 @@ public class BandStopRLCTests : UnitTest
         const double f0 = 30;
         const double delta_f = 10;
 
-        var rlc = new BandStopRLC(f0, delta_f, dt);
+        var rlc = new RLCBandStop(f0, delta_f, dt);
 
         var c = rlc.FrequencyResponse(0, dt);
 
@@ -187,7 +187,7 @@ public class BandStopRLCTests : UnitTest
         const double f0 = 30;
         const double delta_f = 10;
 
-        var rlc = new BandStopRLC(f0, delta_f, dt);
+        var rlc = new RLCBandStop(f0, delta_f, dt);
 
         var c = rlc.FrequencyResponse(fd / 2, dt);
 

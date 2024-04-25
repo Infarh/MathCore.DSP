@@ -1,4 +1,9 @@
-﻿const double fd = 2000;
+﻿
+MatrixZ.Test();
+
+return;
+
+const double fd = 2000;
 const double dt = 1 / fd;
 
 const double fp = 400;

@@ -15,7 +15,7 @@ public class HighPassRCTests : UnitTest
         const double dt = 1 / fd;
         const double f0 = 10;
 
-        var rc = new HighPassRC(f0, dt);
+        var rc = new RCHighPass(f0, dt);
 
         var a = rc.A;
         var b = rc.B;
@@ -47,7 +47,7 @@ public class HighPassRCTests : UnitTest
         const double dt = 1 / fd;
         const double f0 = 10;
 
-        var rc = new HighPassRC(f0, dt);
+        var rc = new RCHighPass(f0, dt);
 
         var a = rc.A;
         var b = rc.B;
@@ -90,7 +90,7 @@ public class HighPassRCTests : UnitTest
         var x0_power = x0.Power;
         Assert.AreEqual(1, x0_power, eps);
 
-        var rc = new HighPassRC(f0, dt);
+        var rc = new RCHighPass(f0, dt);
 
         var y0 = rc.Process(x0);
 
@@ -108,7 +108,7 @@ public class HighPassRCTests : UnitTest
         //const double eps = 3.02e-4;
         const double f = 0;
 
-        var rc = new HighPassRC(f0, dt);
+        var rc = new RCHighPass(f0, dt);
 
         var c = rc.FrequencyResponse(f, dt);
 
@@ -124,7 +124,7 @@ public class HighPassRCTests : UnitTest
         //const double eps = 3.02e-4;
         const double f = f0;
 
-        var rc = new HighPassRC(f0, dt);
+        var rc = new RCHighPass(f0, dt);
 
         var c = rc.FrequencyResponse(f, dt);
 

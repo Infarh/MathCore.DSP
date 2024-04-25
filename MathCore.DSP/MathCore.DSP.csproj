@@ -1,10 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>
+      net8.0;
+      netstandard2.0
+    </TargetFrameworks>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <LangVersion>preview</LangVersion>
-    <Version>0.0.13.10</Version>
+    <Version>0.0.13.11</Version>
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageReleaseNotes>
       Обновление пакетов
@@ -48,7 +51,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MathCore" Version="0.0.89.1" />
+    <PackageReference Include="MathCore" Version="0.0.90" />
     <PackageReference Include="System.Memory" Version="4.5.5" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
     <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.7.0" PrivateAssets="All" />

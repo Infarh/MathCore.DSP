@@ -40,8 +40,8 @@ public class IIRTests : UnitTest
         const double f0RC = 40;
         const double f0CR = 5;
 
-        var RC = new LowPassRC(f0RC, dt);
-        var CR = new HighPassRC(f0CR, dt);
+        var RC = new RCLowPass(dt, f0RC);
+        var CR = new RCHighPass(f0CR, dt);
 
         var filter = RC.ConnectionSerialTo(CR);
 
@@ -95,8 +95,8 @@ public class IIRTests : UnitTest
         const double f0RC = 40;
         const double f0CR = 5;
 
-        var RC = new LowPassRC(f0RC, dt);
-        var CR = new HighPassRC(f0CR, dt);
+        var RC = new RCLowPass(dt, f0RC);
+        var CR = new RCHighPass(f0CR, dt);
 
         var filter = RC.ConnectionParallelTo(CR);
 
