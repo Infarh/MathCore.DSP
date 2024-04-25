@@ -1,4 +1,7 @@
-﻿using System.IO.Compression;
+﻿
+MatrixZ.Test();
+
+return;
 
 const double fd = 2000;
 const double dt = 1 / fd;

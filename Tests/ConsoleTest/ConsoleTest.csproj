@@ -32,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Using Include="MathCore.DSP" />
     <Using Include="MathCore.DSP.Extensions" />
     <Using Include="MathCore.DSP.Filters" />
     <Using Include="MathCore.DSP.Signals" />
