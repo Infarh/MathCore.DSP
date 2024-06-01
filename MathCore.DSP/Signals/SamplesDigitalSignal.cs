@@ -36,7 +36,7 @@ public class SamplesDigitalSignal(double dt, double[] Samples, double t0 = 0) : 
         {
             var (t0, dt, samples, count) = (_t0, _dt, _Samples, _Samples.Length);
             for (var i = 0; i < count; i++)
-                yield return new SignalSample(i * dt + t0, samples[i]);
+                yield return new(i * dt + t0, samples[i]);
         }
     }
 
@@ -80,7 +80,7 @@ public class SamplesDigitalSignal(double dt, double[] Samples, double t0 = 0) : 
         for (var i = 1; i < source_length; i++)
             samples[i] = s += (last + (last = source[i])) / dt05;
 
-        return new SamplesDigitalSignal(_dt, samples);
+        return new(_dt, samples);
     }
 
     /// <inheritdoc />

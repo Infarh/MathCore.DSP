@@ -179,7 +179,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var ffp0 = DigitalFilter.ToAnalogFrequency(Fp0, dt).AssertEquals(1.1347392325852204);
         //var ffp0 = DigitalFilter.ToDigitalFrequency(Wp0 / Consts.pi2, dt).AssertEquals(1.1347392325852204);
         var z0 = Complex.Exp(Consts.pi2 * ffp0 * dt);
-        z0.AssertEquals(new Complex(0.7564175596225313, 0.6540890424817513));
+        z0.AssertEquals(new(0.7564175596225313, 0.6540890424817513));
 
         var norm_0 = ((z0 - 1) * (z0 + 1)).Pow(N).Abs;
         var norm_p = z_poles.Multiply(z => z0 - z);
@@ -395,7 +395,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var ffp0 = DigitalFilter.ToAnalogFrequency(Fp0, dt).AssertEquals(1.1626842508705897);
         //var ffp0 = DigitalFilter.ToDigitalFrequency(Wp0 / Consts.pi2, dt).AssertEquals(1.1626842508705897);
         var z0 = Complex.Exp(Consts.pi2 * ffp0 * dt);
-        z0.AssertEquals(new Complex(0.7448168130279443, 0.6672689975046767));
+        z0.AssertEquals(new(0.7448168130279443, 0.6672689975046767));
 
         var norm_0 = ((z0 - 1) * (z0 + 1)).Pow(N).Abs;
         var norm_p = z_poles.Multiply(z => z0 - z);
@@ -642,7 +642,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var ffp0 = DigitalFilter.ToAnalogFrequency(Fp0, dt).AssertEquals(1.1347392325852204);
         //var ffp0 = DigitalFilter.ToDigitalFrequency(Wp0 / Consts.pi2, dt).AssertEquals(1.1347392325852204);
         var z0 = Complex.Exp(Consts.pi2 * ffp0 * dt);
-        z0.AssertEquals(new Complex(0.7564175596225313, 0.6540890424817513));
+        z0.AssertEquals(new(0.7564175596225313, 0.6540890424817513));
 
         var norm_0 = z_zeros.Multiply(z => z0 - z);
         var norm_p = z_poles.Multiply(z => z0 - z);
@@ -899,7 +899,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var ffp0 = DigitalFilter.ToAnalogFrequency(Fp0, dt).AssertEquals(1.1626842508705897);
         //var ffp0 = DigitalFilter.ToDigitalFrequency(Wp0 / Consts.pi2, dt).AssertEquals(1.1347392325852204);
         var z0 = Complex.Exp(Consts.pi2 * ffp0 * dt);
-        z0.AssertEquals(new Complex(0.7448168130279443, 0.6672689975046767));
+        z0.AssertEquals(new(0.7448168130279443, 0.6672689975046767));
 
         var norm_0 = z_zeros.Multiply(z => z0 - z);
         var norm_p = z_poles.Multiply(z => z0 - z);
@@ -1192,7 +1192,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var Fp0 = (Fpl * Fph).Sqrt().AssertEquals(1.1853844635393842);
         var ffp0 = DigitalFilter.ToAnalogFrequency(Fp0, dt).AssertEquals(1.1347392325852204);
         var z0 = Complex.Exp(Consts.pi2 * ffp0 * dt);
-        z0.AssertEquals(new Complex(0.7564175596225313, 0.6540890424817513));
+        z0.AssertEquals(new(0.7564175596225313, 0.6540890424817513));
 
         var norm_0 = z_zeros.Multiply(z => z0 - z);
         var norm_p = z_poles.Multiply(z => z0 - z);
@@ -1455,7 +1455,7 @@ public class ChebyshevBandPass : ChebyshevFiltersTests
         var Fp0 = (Fpl * Fph).Sqrt().AssertEquals(1.2173101328677076);
         var ffp0 = DigitalFilter.ToAnalogFrequency(Fp0, dt).AssertEquals(1.1626842508705897);
         var z0 = Complex.Exp(Consts.pi2 * ffp0 * dt);
-        z0.AssertEquals(new Complex(0.7448168130279443, 0.6672689975046767));
+        z0.AssertEquals(new(0.7448168130279443, 0.6672689975046767));
 
         var norm_0 = z_zeros.Multiply(z => z0 - z);
         var norm_p = z_poles.Multiply(z => z0 - z);

@@ -142,7 +142,7 @@ public class EllipticBandPass : EllipticFilter
         var fp = ToAnalogFrequency(Fp, dt);
         var fs = ToAnalogFrequency(Fs, dt);
 
-        return new Specification(dt, fp, fs, Gp, Gs);
+        return new(dt, fp, fs, Gp, Gs);
     }
 
     private static (double[] A, double[] B) Initialize(double fsl, double fpl, double fph, double fsh, Specification Spec)

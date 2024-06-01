@@ -260,7 +260,7 @@ public class EllipticBandPass : UnitTest
         var Fp0 = (Fpl * Fph).Sqrt().AssertEquals(1.1853844635393842);
         var ffp0 = DigitalFilter.ToAnalogFrequency(Fp0, dt).AssertEquals(1.1347392325852204);
         var z0 = Complex.Exp(Consts.pi2 * ffp0 * dt);
-        z0.AssertEquals(new Complex(0.7564175596225313, 0.6540890424817513));
+        z0.AssertEquals(new(0.7564175596225313, 0.6540890424817513));
 
         var norm_0 = z_zeros.Multiply(z => z0 - z);
         var norm_p = z_poles.Multiply(z => z0 - z);

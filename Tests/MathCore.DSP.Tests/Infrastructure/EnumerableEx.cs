@@ -21,7 +21,7 @@ internal static class EnumerableEx
         if (index == 0) 
             yield break;
 
-        System.Array.Resize(ref buffer, index);
+        Array.Resize(ref buffer, index);
         yield return buffer;
     }
 }

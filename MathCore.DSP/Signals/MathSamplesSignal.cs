@@ -8,7 +8,7 @@ public static class MathSamplesSignal
         var samples = new double[SamplesCount];
         for (var i = 0; i < SamplesCount; i++)
             samples[i] = A * Math.Sin(w0 * i + phi0);
-        return new SamplesDigitalSignal(dt, samples);
+        return new(dt, samples);
     }
 
     public static SamplesDigitalSignal Cos(double A, double f0, double phi0, double dt, int SamplesCount)
@@ -17,6 +17,6 @@ public static class MathSamplesSignal
         var samples = new double[SamplesCount];
         for (var i = 0; i < SamplesCount; i++)
             samples[i] = A * Math.Cos(w0 * i + phi0);
-        return new SamplesDigitalSignal(dt, samples);
+        return new(dt, samples);
     }
 }

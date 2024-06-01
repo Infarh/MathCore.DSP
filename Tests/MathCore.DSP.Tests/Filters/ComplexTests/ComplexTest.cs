@@ -9,7 +9,7 @@ public abstract class ComplexTest
     /// <summary>Тест фильтра Чебышева II-рода</summary>
     /// <param name="filter">Тестируемый фильтр чебышева</param>
     /// <param name="N">Число точек сигнала</param>
-    protected static void CheckChebyshevII(ChebyshevLowPass filter, int N = 100)
+    protected static void CheckChebyshevII(DSP.Filters.ChebyshevLowPass filter, int N = 100)
     {
         // Фильтр должен быть фильтром Чебышева второго рода
         Assert.That.Value(filter.FilterType).IsEqual(ChebyshevType.II);

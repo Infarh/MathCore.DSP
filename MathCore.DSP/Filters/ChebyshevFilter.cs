@@ -28,8 +28,8 @@ public abstract class ChebyshevFilter : AnalogBasedFilter
 
             var sin = Sin(th);
             var cos = Cos(th);
-            yield return new Complex(-sh * sin, +ch * cos);
-            yield return new Complex(-sh * sin, -ch * cos);
+            yield return new(-sh * sin, +ch * cos);
+            yield return new(-sh * sin, -ch * cos);
         }
     }
 

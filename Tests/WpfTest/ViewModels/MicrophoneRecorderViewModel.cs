@@ -15,10 +15,9 @@ using WpfTest.Services.Interfaces;
 namespace WpfTest.ViewModels;
 
 [Service(ServiceLifetime.Scoped)]
-internal class MicrophoneRecorderViewModel : ViewModel
+internal class MicrophoneRecorderViewModel(IAudioService Audio, ISignalProcessingService SignalProcessing) : ViewModel
 {
-    private readonly IAudioService _Audio;
-    private readonly ISignalProcessingService _SignalProcessing;
+    private readonly ISignalProcessingService _SignalProcessing = SignalProcessing;
 
     #region Title : string - Заголовок окна
 
@@ -105,12 +104,12 @@ internal class MicrophoneRecorderViewModel : ViewModel
     private ICommand _LoadInputDevicesCommand;
     [NotNull]
     public ICommand LoadInputDevicesCommand => _LoadInputDevicesCommand
-        ??= new LambdaCommand(() => InputDevices = _Audio.GetInputDevices().ToArray());
+        ??= new LambdaCommand(() => InputDevices = Audio.GetInputDevices().ToArray());
 
     private ICommand _LoadOutputDevicesCommand;
     [NotNull]
     public ICommand LoadOutputDevicesCommand => _LoadOutputDevicesCommand
-        ??= new LambdaCommand(() => OutputDevices = _Audio.GetOutputDevices().ToArray());
+        ??= new LambdaCommand(() => OutputDevices = Audio.GetOutputDevices().ToArray());
 
     private CancellationTokenSource _RecordingCancellation;
     private ICommand _RecordSignalCommand;
@@ -122,14 +121,14 @@ internal class MicrophoneRecorderViewModel : ViewModel
 
     private async void OnRecordSignalCommandExecuted()
     {
-        _RecordingCancellation = new CancellationTokenSource();
+        _RecordingCancellation = new();
         var progress = new Progress<double>(p => RecordingProgress = p);
         try
         {
             var time = _SignalTimeLength;
-            const int sampls_rate = 44100;
-            var samples_count = (int)(time * sampls_rate);
-            var signal = await _Audio.GetSignalAsync(InputDevices.SelectedItem, samples_count, sampls_rate, Progress: progress, Cancel: _RecordingCancellation.Token);
+            const int samples_rate = 44100;
+            var samples_count = (int)(time * samples_rate);
+            var signal = await Audio.GetSignalAsync(InputDevices.SelectedItem, samples_count, samples_rate, Progress: progress, Cancel: _RecordingCancellation.Token);
             RecordedSignal = signal;
         }
         catch (OperationCanceledException)
@@ -146,10 +145,4 @@ internal class MicrophoneRecorderViewModel : ViewModel
         ??= new LambdaCommand(() => _RecordingCancellation?.Cancel(), () => _RecordingCancellation != null);
 
     #endregion
-
-    public MicrophoneRecorderViewModel(IAudioService Audio, ISignalProcessingService SignalProcessing)
-    {
-        _Audio = Audio;
-        _SignalProcessing = SignalProcessing;
-    }
 }

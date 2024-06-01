@@ -134,7 +134,7 @@ public static partial class DoubleArrayDSPExtensions
         {
             var zz = zp * z;
             if (zz == one)
-                return new Complex(double.PositiveInfinity, double.PositiveInfinity);
+                return new(double.PositiveInfinity, double.PositiveInfinity);
             Pp *= 1 - zz;
         }
 
@@ -160,7 +160,7 @@ public static partial class DoubleArrayDSPExtensions
         foreach (var pp in Pp)
         {
             if (p == pp)
-                return new Complex(double.PositiveInfinity, double.PositiveInfinity);
+                return new(double.PositiveInfinity, double.PositiveInfinity);
             poles *= p - pp;
         }
 

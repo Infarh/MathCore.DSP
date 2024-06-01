@@ -149,7 +149,7 @@ public class ButterworthBandStop : ButterworthFilter
         var fp = ToAnalogFrequency(Fp, dt);
         var fs = ToAnalogFrequency(Fs, dt);
 
-        return new Specification(dt, fp, fs, Gp, Gs);
+        return new(dt, fp, fs, Gp, Gs);
     }
 
     /// <summary>Расчёт коэффициентов полиномов числителя из знаменателя передаточной функции фильтра</summary>

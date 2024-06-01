@@ -154,7 +154,7 @@ public class ButterworthBandPass : ButterworthFilter
         var fp = ToAnalogFrequency(Fp, dt);
         var fs = ToAnalogFrequency(Fs, dt);
 
-        return new Specification(dt, fp, fs, Gp, Gs);
+        return new(dt, fp, fs, Gp, Gs);
     }
 
     private static (double[] A, double[] B) Initialize(double fpl, double fph, Specification Spec)
