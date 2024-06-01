@@ -1,4 +1,6 @@
-﻿#nullable enable
+﻿#if !NET7_0_OR_GREATER
+
+#nullable enable
 using System.Runtime.CompilerServices;
 
 //https://gist.github.com/meziantou/177600eab9961f3296060d1b8bcd5f40
@@ -208,3 +210,5 @@ namespace System.Runtime.CompilerServices
         }
     }
 }
+
+#endif

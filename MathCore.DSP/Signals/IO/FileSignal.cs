@@ -133,7 +133,7 @@ public abstract class FileSignal(FileInfo File) : IEnumerable<double>, ICollecti
 
     bool ICollection.IsSynchronized => false;
 
-    object? ICollection.SyncRoot => null;
+    object ICollection.SyncRoot => null!;
 
     void ICollection.CopyTo(Array array, int index) => ((ICollection)GetSignal()).CopyTo(array, index);
 

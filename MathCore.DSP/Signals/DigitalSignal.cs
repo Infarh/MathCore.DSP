@@ -64,7 +64,7 @@ public abstract class DigitalSignal : IEnumerable<double>, ICollection
         {
             var (t, dt) = (_t0, _dt);
             foreach (var sample in GetSamples())
-                yield return new SignalSample(t += dt, sample);
+                yield return new(t += dt, sample);
         }
     }
 
@@ -166,7 +166,7 @@ public abstract class DigitalSignal : IEnumerable<double>, ICollection
 
     bool ICollection.IsSynchronized => false;
 
-    object? ICollection.SyncRoot => null;
+    object ICollection.SyncRoot => null!;
 
     void ICollection.CopyTo(Array array, int index)
     {

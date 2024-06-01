@@ -1,5 +1,4 @@
 ﻿#nullable enable
-using MathCore.Annotations;
 using MathCore.DSP.Signals;
 
 // ReSharper disable once CheckNamespace
@@ -10,19 +9,18 @@ public static class WaveInExtensions
     private class WaveInDataLoader
     {
         private readonly WaveIn _Input;
-        [CanBeNull] private readonly IProgress<double> _Progress;
+        private readonly IProgress<double>? _Progress;
         private readonly TaskCompletionSource<DigitalSignal?> _TaskSource = new();
         readonly List<short> _Samples;
         readonly short[] _Buffer;
         private readonly int _SamplesCount;
 
-
-        public WaveInDataLoader(WaveIn Input, int SamplesCount, [CanBeNull] IProgress<double> Progress, CancellationToken Cancel)
+        public WaveInDataLoader(WaveIn Input, int SamplesCount, IProgress<double>? Progress, CancellationToken Cancel)
         {
             _Input = Input;
             _Progress = Progress;
             _SamplesCount = SamplesCount;
-            _Samples = new List<short>(SamplesCount);
+            _Samples = new(SamplesCount);
             var samples_rate = _Input.WaveFormat.SampleRate;
             _Buffer = new short[_Input.BufferMilliseconds * samples_rate / 1000];
             _Input.DataAvailable += DataAvailable;
@@ -69,8 +67,6 @@ public static class WaveInExtensions
 
             return _TaskSource.Task;
         }
-
-            
     }
 
     public static async Task<DigitalSignal> GetSignalMono(

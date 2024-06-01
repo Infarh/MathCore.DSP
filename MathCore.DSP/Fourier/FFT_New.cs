@@ -7,9 +7,11 @@ using static System.Math;
 namespace MathCore.DSP.Fourier;
 
 [Copyright("alglib", url = "alglib.sources.ru")]
+#pragma warning disable CS8981 // Стили именования
 #pragma warning disable IDE1006 // Стили именования
 public static class fft
 #pragma warning restore IDE1006 // Стили именования
+#pragma warning restore CS8981 // Стили именования
 {
     /// <summary>
     /// Быстрое комплексное одномерное преобразование Фурье
@@ -116,8 +118,8 @@ public static class fft
         var N = x.Length;
         switch (x)
         {
-            case [var x0]        : return [new Complex(x0)];
-            case [var x0, var x1]: return [new Complex(x0 + x1), new Complex(x0 - x1)];
+            case [var x0]        : return [new(x0)];
+            case [var x0, var x1]: return [new(x0 + x1), new(x0 - x1)];
         }
 
         var result = new Complex[N];

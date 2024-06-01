@@ -1,4 +1,6 @@
-﻿// ReSharper disable CheckNamespace
+﻿#if !NET7_0_OR_GREATER
+
+// ReSharper disable CheckNamespace
 namespace System.Runtime.CompilerServices;
 
 [AttributeUsage(AttributeTargets.Parameter)]
@@ -6,3 +8,5 @@ internal sealed class CallerArgumentExpressionAttribute(string ParameterName) : 
 {
     public string ParameterName { get; } = ParameterName;
 }
+
+#endif

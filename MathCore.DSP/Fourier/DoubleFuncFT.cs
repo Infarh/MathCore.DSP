@@ -47,7 +47,7 @@ public static class DoubleFuncFT
                 im_s += q + (q = val * Sin(arg));
                 t += dt;
             }
-            return new Complex(re_s * .5 * dt, im_s * .5 * dt);
+            return new(re_s * .5 * dt, im_s * .5 * dt);
         };
     }
 

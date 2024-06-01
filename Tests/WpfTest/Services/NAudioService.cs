@@ -15,7 +15,7 @@ internal class NAudioService : IAudioService
         for (var i = 0; i < devices_count; i++)
         {
             var device = WaveIn.GetCapabilities(i);
-            yield return new Device(i, device.ProductName, device.Channels);
+            yield return new(i, device.ProductName, device.Channels);
         }
     }
 
@@ -25,7 +25,7 @@ internal class NAudioService : IAudioService
         for (var i = 0; i < devices_count; i++)
         {
             var device = WaveOut.GetCapabilities(i);
-            yield return new Device(i, device.ProductName, device.Channels);
+            yield return new(i, device.ProductName, device.Channels);
         }
     }
 
@@ -34,7 +34,7 @@ internal class NAudioService : IAudioService
         using var input = new WaveIn
         {
             DeviceNumber = device.Index,
-            WaveFormat = new WaveFormat(SamplesRate, BitsCount, 1)
+            WaveFormat = new(SamplesRate, BitsCount, 1)
         };
 
         return await input.GetSignalMono(SamplesCount, Progress, Cancel).ConfigureAwait(true);
@@ -51,7 +51,7 @@ internal class NAudioService : IAudioService
 
         output.PlaybackStopped += (s, e) => tcs.SetResult(null);
 
-        var provider = new BufferedWaveProvider(new WaveFormat(44100, 16, 1));
+        var provider = new BufferedWaveProvider(new(44100, 16, 1));
 
         var buffer = new byte[Signal.SamplesCount * 2];
 
@@ -62,7 +62,7 @@ internal class NAudioService : IAudioService
 
         if (Cancel.CanBeCanceled)
         {
-            Cancel.Register(() => output.Stop());
+            Cancel.Register(output.Stop);
             Cancel.Register(() => tcs.TrySetCanceled());
         }
 

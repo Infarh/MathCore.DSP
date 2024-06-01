@@ -1,25 +1,18 @@
 ﻿namespace WpfTest.Infrastructure;
 
-public sealed class ProcessTask<T> : IDisposable
+public sealed class ProcessTask<T>(
+    Action<IProgress<T>, CancellationToken> Action,
+    Action<T> OnProgress = null,
+    Action<Exception> OnException = null)
+    : IDisposable
 {
-    private readonly Action<IProgress<T>, CancellationToken> _Action;
-    private readonly Action<Exception> _OnException;
+    private readonly Action<IProgress<T>, CancellationToken> _Action = Action ?? throw new ArgumentNullException(nameof(Action));
 
-    private readonly IProgress<T> _Progress;
+    private readonly IProgress<T> _Progress = OnProgress is null ? null : new Progress<T>(OnProgress);
 
     private readonly CancellationTokenSource _Cancellation = new();
 
     private Task _Task;
-
-    public ProcessTask(
-        Action<IProgress<T>, CancellationToken> Action, 
-        Action<T> OnProgress = null,
-        Action<Exception> OnException = null)
-    {
-        _Action = Action ?? throw new ArgumentNullException(nameof(Action));
-        _OnException = OnException;
-        _Progress = OnProgress is null ? null : new Progress<T>(OnProgress);
-    }
 
     public async void Start()
     {
@@ -37,7 +30,7 @@ public sealed class ProcessTask<T> : IDisposable
         catch (OperationCanceledException) { }
         catch (Exception e)
         {
-            _OnException(e);
+            OnException(e);
         }
         _Task = null;
     }

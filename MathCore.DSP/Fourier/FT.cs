@@ -1,6 +1,4 @@
-﻿using MathCore.Annotations;
-
-using static MathCore.Complex;
+﻿using static MathCore.Complex;
 using static MathCore.Consts;
 
 namespace MathCore.DSP.Fourier;
@@ -140,7 +138,7 @@ public static class FT
     /// <param name="Values">Массив отсчётов функции</param>
     /// <param name="Inverse">Обратное преобразование</param>
     /// <param name="progress">Метод индикации прогресса выполнения</param>
-    public static Complex[] GetFourierTransform(this Complex[] Values, bool Inverse, [CanBeNull] Action<double> progress)
+    public static Complex[] GetFourierTransform(this Complex[] Values, bool Inverse, Action<double>? progress)
     {
         if (Values is null) throw new ArgumentNullException(nameof(Values));
 
