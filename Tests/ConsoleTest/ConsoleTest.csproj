@@ -24,7 +24,7 @@
   <ItemGroup>
     <!--<PackageReference Include="MathCore" Version="0.0.66" />-->
     <!--<PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.2" />-->
-    <PackageReference Include="OxyPlot.ImageSharp" Version="2.1.2" />
+    <PackageReference Include="OxyPlot.ImageSharp" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
