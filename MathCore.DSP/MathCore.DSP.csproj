@@ -8,7 +8,7 @@
     </TargetFrameworks>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <LangVersion>preview</LangVersion>
-    <Version>0.0.14</Version>
+    <Version>0.0.14.1</Version>
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageReleaseNotes>
       Обновление пакетов
@@ -52,9 +52,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MathCore" Version="0.0.92.1" />
-    <PackageReference Include="System.Memory" Version="4.5.5" />
-    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+    <PackageReference Include="MathCore" Version="0.0.93.1" />
+    <PackageReference Include="System.Memory" Version="4.6.0" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.6.0" />
     <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.7.0" PrivateAssets="All" />
   </ItemGroup>
 
