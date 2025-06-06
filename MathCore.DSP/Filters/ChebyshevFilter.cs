@@ -12,9 +12,21 @@ namespace MathCore.DSP.Filters;
 [KnownType(typeof(ChebyshevBandStop))]
 public abstract class ChebyshevFilter : AnalogBasedFilter
 {
+    /// <summary>Вычисляет арксинус гиперболический</summary>
+    /// <param name="x">Аргумент функции</param>
+    /// <returns>Значение арксинуса гиперболического</returns>
     protected static double arcsh(double x) => Log(x + Sqrt(x * x + 1));
+
+    /// <summary>Вычисляет арккосинус гиперболический</summary>
+    /// <param name="x">Аргумент функции</param>
+    /// <returns>Значение арккосинуса гиперболического</returns>
     protected static double arcch(double x) => Log(x + Sqrt(x * x - 1));
 
+    /// <summary>Возвращает нормированные полюса фильтра Чебышева первого рода</summary>
+    /// <param name="N">Порядок фильтра</param>
+    /// <param name="EpsP">Неоднородность АЧХ в полосе пропускания</param>
+    /// <param name="W0">Нормирующий множитель</param>
+    /// <returns>Перечисление комплексных полюсов</returns>
     protected static IEnumerable<Complex> GetNormedPolesI(int N, double EpsP, double W0 = 1)
     {
         var beta = arcsh(1 / EpsP) / N;
@@ -33,6 +45,11 @@ public abstract class ChebyshevFilter : AnalogBasedFilter
         }
     }
 
+    /// <summary>Возвращает нормированные нули и полюса фильтра Чебышева второго рода</summary>
+    /// <param name="N">Порядок фильтра</param>
+    /// <param name="EpsS">Неоднородность АЧХ в полосе заграждения</param>
+    /// <param name="W0">Нормирующий множитель</param>
+    /// <returns>Кортеж массивов нулей и полюсов</returns>
     protected static (Complex[] Zeros, Complex[] Poles) GetNormedPolesII(int N, double EpsS, double W0 = 1)
     {
         var beta = arcsh(EpsS) / N;

@@ -5,6 +5,7 @@ using static MathCore.Polynom.Array;
 
 namespace MathCore.DSP.Filters;
 
+/// <summary>Фильтр Чебышева с полосой заграждения</summary>
 public class ChebyshevBandStop : ChebyshevFilter
 {
     /// <summary>Формирование спецификации фильтра</summary>
@@ -62,13 +63,13 @@ public class ChebyshevBandStop : ChebyshevFilter
         return new(dt, fp, fs, Gp, Gs);
     }
 
-    /// <summary>Расчёт коэффициентов полиномов числителя из знаменателя передаточной функции фильтра</summary>
+    /// <summary>Вычисляет коэффициенты фильтра Чебышева первого рода для полосы заграждения</summary>
     /// <param name="fpl">Нижняя частота полосы пропускания</param>
     /// <param name="fsl">Нижняя частота полосы подавления</param>
     /// <param name="fsh">Верхняя частота полосы подавления</param>
     /// <param name="fph">Верхняя частота полосы пропускания</param>
     /// <param name="Spec">Спецификация фильтра</param>
-    /// <returns>Кортеж, содержащий массивы A - коэффициенты полинома знаменателя и B - коэффициенты полинома числителя</returns>
+    /// <returns>Кортеж массивов коэффициентов знаменателя и числителя</returns>
     private static (double[] A, double[] B) InitializeI(double fpl, double fsl, double fsh, double fph, Specification Spec)
     {
         // Пересчитываем аналоговые частоты полосы заграждения в цифровые
@@ -108,6 +109,13 @@ public class ChebyshevBandStop : ChebyshevFilter
         return (A, B);
     }
 
+    /// <summary>Вычисляет коэффициенты фильтра Чебышева второго рода для полосы заграждения</summary>
+    /// <param name="fpl">Нижняя частота полосы пропускания</param>
+    /// <param name="fsl">Нижняя частота полосы подавления</param>
+    /// <param name="fsh">Верхняя частота полосы подавления</param>
+    /// <param name="fph">Верхняя частота полосы пропускания</param>
+    /// <param name="Spec">Спецификация фильтра</param>
+    /// <returns>Кортеж массивов коэффициентов знаменателя и числителя</returns>
     private static (double[] A, double[] B) InitializeII(double fpl, double fsl, double fsh, double fph, Specification Spec)
     {
         // Пересчитываем аналоговые частоты полосы заграждения в цифровые
@@ -150,6 +158,13 @@ public class ChebyshevBandStop : ChebyshevFilter
         return (A, B);
     }
 
+    /// <summary>Вычисляет коэффициенты фильтра Чебышева второго рода с коррекцией для полосы заграждения</summary>
+    /// <param name="fpl">Нижняя частота полосы пропускания</param>
+    /// <param name="fsl">Нижняя частота полосы подавления</param>
+    /// <param name="fsh">Верхняя частота полосы подавления</param>
+    /// <param name="fph">Верхняя частота полосы пропускания</param>
+    /// <param name="Spec">Спецификация фильтра</param>
+    /// <returns>Кортеж массивов коэффициентов знаменателя и числителя</returns>
     private static (double[] A, double[] B) InitializeIICorrected(double fpl, double fsl, double fsh, double fph, Specification Spec)
     {
         // Пересчитываем аналоговые частоты полосы заграждения в цифровые

@@ -12,6 +12,13 @@ namespace MathCore.DSP.Filters;
 /// <summary>Фильтр Чебышева нижних частот</summary>
 public class ChebyshevLowPass : ChebyshevFilter
 {
+    /// <summary>Вычисляет частоту заграждения для фильтра первого рода</summary>
+    /// <param name="dt">Период дискретизации</param>
+    /// <param name="fp">Частота пропускания</param>
+    /// <param name="Order">Порядок фильтра</param>
+    /// <param name="Gp">Затухание в полосе пропускания</param>
+    /// <param name="Gs">Затухание в полосе заграждения</param>
+    /// <returns>Частота заграждения</returns>
     public static double GetFrequencyStopTypeI(double dt, double fp, int Order, double Gp = 0.891250938, double Gs = 0.01)
     {
         var g2 = (1 / (Gs * Gs) - 1) / (1 / (Gp * Gp) - 1);
@@ -21,6 +28,14 @@ public class ChebyshevLowPass : ChebyshevFilter
         var log_g = Math.Log(Sqrt(g2) + Sqrt(g2 - 1));
         return Fp * Cosh(log_g / Order);
     }
+
+    /// <summary>Вычисляет частоту пропускания для фильтра первого рода</summary>
+    /// <param name="dt">Период дискретизации</param>
+    /// <param name="fs">Частота заграждения</param>
+    /// <param name="Order">Порядок фильтра</param>
+    /// <param name="Gp">Затухание в полосе пропускания</param>
+    /// <param name="Gs">Затухание в полосе заграждения</param>
+    /// <returns>Частота пропускания</returns>
     public static double GetFrequencyPassTypeI(double dt, double fs, int Order, double Gp = 0.891250938, double Gs = 0.01)
     {
         var g2 = (1 / (Gs * Gs) - 1) / (1 / (Gp * Gp) - 1);
@@ -31,6 +46,13 @@ public class ChebyshevLowPass : ChebyshevFilter
         return Fs / Cosh(log_g / Order);
     }
 
+    /// <summary>Вычисляет коэффициент передачи в полосе подавления для фильтра первого рода</summary>
+    /// <param name="dt">Период дискретизации</param>
+    /// <param name="fp">Частота пропускания</param>
+    /// <param name="fs">Частота заграждения</param>
+    /// <param name="Order">Порядок фильтра</param>
+    /// <param name="Gp">Затухание в полосе пропускания</param>
+    /// <returns>Коэффициент передачи в полосе подавления</returns>
     public static double GetGsTypeI(double dt, double fp, double fs, int Order, double Gp = 0.891250938)
     {
         var pi_dt = PI * dt;
@@ -42,6 +64,13 @@ public class ChebyshevLowPass : ChebyshevFilter
         return 1 / Sqrt(0.25 * q * q * (1 / (Gp * Gp) - 1) + 1);
     }
 
+    /// <summary>Вычисляет коэффициент передачи в полосе пропускания для фильтра первого рода</summary>
+    /// <param name="dt">Период дискретизации</param>
+    /// <param name="fp">Частота пропускания</param>
+    /// <param name="fs">Частота заграждения</param>
+    /// <param name="Order">Порядок фильтра</param>
+    /// <param name="Gs">Затухание в полосе заграждения</param>
+    /// <returns>Коэффициент передачи в полосе пропускания</returns>
     public static double GetGpTypeI(double dt, double fp, double fs, int Order, double Gs = 0.01)
     {
         var pi_dt = PI * dt;
@@ -53,6 +82,13 @@ public class ChebyshevLowPass : ChebyshevFilter
         return 1 / Sqrt((4 / (Gs * Gs) - 4) / (q * q));
     }
 
+    /// <summary>Вычисляет порядок фильтра первого рода</summary>
+    /// <param name="dt">Период дискретизации</param>
+    /// <param name="fp">Частота пропускания</param>
+    /// <param name="fs">Частота заграждения</param>
+    /// <param name="Gp">Затухание в полосе пропускания</param>
+    /// <param name="Gs">Затухание в полосе заграждения</param>
+    /// <returns>Порядок фильтра</returns>
     public static int GetOrderTypeI(double dt, double fp, double fs, double Gp = 0.891250938, double Gs = 0.01)
     {
         var kEps = Sqrt((1 / (Gs * Gs) - 1) / (1 / (Gp * Gp) - 1));
@@ -62,6 +98,9 @@ public class ChebyshevLowPass : ChebyshevFilter
         return N;
     }
 
+    /// <summary>Вычисляет коэффициенты фильтра Чебышева первого рода</summary>
+    /// <param name="Spec">Спецификация фильтра</param>
+    /// <returns>Кортеж массивов коэффициентов знаменателя и числителя</returns>
     private static (double[] A, double[] B) InitializeI(Specification Spec)
     {
         var N = (int)Ceiling(arcch(Spec.kEps) / arcch(Spec.kW)); // Порядок фильтра
@@ -81,6 +120,9 @@ public class ChebyshevLowPass : ChebyshevFilter
         return (A, B);
     }
 
+    /// <summary>Вычисляет коэффициенты фильтра Чебышева второго рода</summary>
+    /// <param name="Spec">Спецификация фильтра</param>
+    /// <returns>Кортеж массивов коэффициентов знаменателя и числителя</returns>
     private static (double[] A, double[] B) InitializeII(Specification Spec)
     {
         var N = (int)Ceiling(arcch(Spec.kEps) / arcch(Spec.kW)); // Порядок фильтра
@@ -102,6 +144,9 @@ public class ChebyshevLowPass : ChebyshevFilter
         return (A, B);
     }
 
+    /// <summary>Вычисляет коэффициенты фильтра Чебышева второго рода с коррекцией</summary>
+    /// <param name="Spec">Спецификация фильтра</param>
+    /// <returns>Кортеж массивов коэффициентов знаменателя и числителя</returns>
     private static (double[] A, double[] B) InitializeIICorrected(Specification Spec)
     {
         var N = (int)Ceiling(arcch(Spec.kEps) / arcch(Spec.kW)); // Порядок фильтра
@@ -124,12 +169,12 @@ public class ChebyshevLowPass : ChebyshevFilter
         return (A, B);
     }
 
-    /// <summary>Инициализация нового фильтра Чебышева нижних частот</summary>
+    /// <summary>Создаёт фильтр Чебышева нижних частот</summary>
     /// <param name="dt">Период дискретизации</param>
     /// <param name="fp">Частота пропускания</param>
     /// <param name="fs">Частота заграждения</param>
     /// <param name="Gp">Затухание в полосе пропускания (0.891250938 = -1 дБ)</param>
-    /// <param name="Gs">Затухание в полосе заграждения (0.01        = -40 дБ)</param>
+    /// <param name="Gs">Затухание в полосе заграждения (0.01 = -40 дБ)</param>
     /// <param name="Type">Тип (род) фильтра чебышева</param>
     public ChebyshevLowPass(
         double dt,
@@ -140,6 +185,9 @@ public class ChebyshevLowPass : ChebyshevFilter
         ChebyshevType Type = ChebyshevType.I)
         : this(GetSpecification(dt, fp, fs, Gp, Gs), Type) { }
 
+    /// <summary>Создаёт фильтр Чебышева нижних частот по спецификации</summary>
+    /// <param name="Spec">Спецификация фильтра</param>
+    /// <param name="Type">Тип (род) фильтра чебышева</param>
     public ChebyshevLowPass(Specification Spec, ChebyshevType Type = ChebyshevType.I)
         : this(Type switch
         {
@@ -150,5 +198,9 @@ public class ChebyshevLowPass : ChebyshevFilter
         }, Spec, Type)
     { }
 
+    /// <summary>Создаёт фильтр Чебышева нижних частот по массивам коэффициентов</summary>
+    /// <param name="config">Кортеж массивов коэффициентов</param>
+    /// <param name="Spec">Спецификация фильтра</param>
+    /// <param name="Type">Тип (род) фильтра чебышева</param>
     private ChebyshevLowPass((double[] A, double[] B) config, Specification Spec, ChebyshevType Type) : base(config.B, config.A, Spec, Type) { }
 }

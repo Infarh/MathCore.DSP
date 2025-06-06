@@ -3,9 +3,12 @@ using System.Diagnostics;
 
 namespace MathCore.DSP.Filters;
 
-/// <summary>Фильтр Чебышева нижних частот</summary>
+/// <summary>Фильтр Чебышева верхних частот</summary>
 public class ChebyshevHighPass : ChebyshevFilter
 {
+    /// <summary>Вычисляет коэффициенты фильтра Чебышева первого рода для верхних частот</summary>
+    /// <param name="Spec">Спецификация фильтра</param>
+    /// <returns>Кортеж массивов коэффициентов знаменателя и числителя</returns>
     private static (double[] A, double[] B) InitializeI(Specification Spec)
     {
         var N = (int)Math.Ceiling(arcch(Spec.kEps) / arcch(Spec.kW)); // Порядок фильтра
@@ -31,6 +34,9 @@ public class ChebyshevHighPass : ChebyshevFilter
         return (A, B);
     }
 
+    /// <summary>Вычисляет коэффициенты фильтра Чебышева второго рода для верхних частот</summary>
+    /// <param name="Spec">Спецификация фильтра</param>
+    /// <returns>Кортеж массивов коэффициентов знаменателя и числителя</returns>
     private static (double[] A, double[] B) InitializeII(Specification Spec)
     {
         var N = (int)Math.Ceiling(arcch(Spec.kEps) / arcch(Spec.kW)); // Порядок фильтра
@@ -59,6 +65,9 @@ public class ChebyshevHighPass : ChebyshevFilter
         return (A, B);
     }
 
+    /// <summary>Вычисляет коэффициенты фильтра Чебышева второго рода с коррекцией для верхних частот</summary>
+    /// <param name="Spec">Спецификация фильтра</param>
+    /// <returns>Кортеж массивов коэффициентов знаменателя и числителя</returns>
     private static (double[] A, double[] B) InitializeIICorrected(Specification Spec)
     {
         var N = (int)Math.Ceiling(arcch(Spec.kEps) / arcch(Spec.kW)); // Порядок фильтра
@@ -87,12 +96,12 @@ public class ChebyshevHighPass : ChebyshevFilter
         return (A, B);
     }
 
-    /// <summary>Инициализация нового фильтра Чебышева нижних частот</summary>
+    /// <summary>Создаёт фильтр Чебышева верхних частот</summary>
     /// <param name="dt">Период дискретизации</param>
     /// <param name="fs">Частота заграждения</param>
     /// <param name="fp">Частота пропускания</param>
     /// <param name="Gp">Затухание в полосе пропускания (0.891250938 = -1 дБ)</param>
-    /// <param name="Gs">Затухание в полосе заграждения (0.01        = -40 дБ)</param>
+    /// <param name="Gs">Затухание в полосе заграждения (0.01 = -40 дБ)</param>
     /// <param name="Type">Тип (род) фильтра чебышева</param>
     public ChebyshevHighPass(double dt,
         double fs,
@@ -102,6 +111,9 @@ public class ChebyshevHighPass : ChebyshevFilter
         ChebyshevType Type = ChebyshevType.I)
         : this(GetSpecification(dt, fs, fp, Gp, Gs), Type) { }
 
+    /// <summary>Создаёт фильтр Чебышева верхних частот по спецификации</summary>
+    /// <param name="Spec">Спецификация фильтра</param>
+    /// <param name="Type">Тип (род) фильтра чебышева</param>
     public ChebyshevHighPass(Specification Spec, ChebyshevType Type = ChebyshevType.I)
         : this(Type switch
         {
@@ -111,5 +123,9 @@ public class ChebyshevHighPass : ChebyshevFilter
             _ => throw new InvalidEnumArgumentException(nameof(Type), (int)Type, typeof(ChebyshevType))
         }, Spec, Type) { }
 
+    /// <summary>Создаёт фильтр Чебышева верхних частот по массивам коэффициентов</summary>
+    /// <param name="config">Кортеж массивов коэффициентов</param>
+    /// <param name="Spec">Спецификация фильтра</param>
+    /// <param name="Type">Тип (род) фильтра чебышева</param>
     private ChebyshevHighPass((double[] A, double[] B) config, Specification Spec, ChebyshevType Type) : base(config.B, config.A, Spec, Type) { }
 }

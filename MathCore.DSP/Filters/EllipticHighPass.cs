@@ -3,8 +3,12 @@ using static System.Math;
 
 namespace MathCore.DSP.Filters;
 
+/// <summary>Эллиптический фильтр верхних частот</summary>
 public class EllipticHighPass((double[] A, double[] B) config, AnalogBasedFilter.Specification Spec) : EllipticFilter(config.B, config.A, Spec)
 {
+    /// <summary>Вычисляет коэффициенты полиномов фильтра</summary>
+    /// <param name="Spec">Спецификация фильтра</param>
+    /// <returns>Кортеж массивов коэффициентов знаменателя и числителя</returns>
     public static (double[] A, double[] B) GetPolynoms(Specification Spec)
     {
         var k_w = 1 / Spec.kw;
@@ -51,6 +55,12 @@ public class EllipticHighPass((double[] A, double[] B) config, AnalogBasedFilter
         return (A, B);
     }
 
+    /// <summary>Инициализирует новый эллиптический фильтр верхних частот</summary>
+    /// <param name="dt">Период дискретизации</param>
+    /// <param name="fs">Частота заграждения</param>
+    /// <param name="fp">Частота пропускания</param>
+    /// <param name="Gp">Затухание в полосе пропускания (по умолчанию -1 дБ)</param>
+    /// <param name="Gs">Затухание в полосе заграждения (по умолчанию -40 дБ)</param>
     public EllipticHighPass(
         double dt,
         double fs,
@@ -59,5 +69,7 @@ public class EllipticHighPass((double[] A, double[] B) config, AnalogBasedFilter
         double Gs = 0.01) 
         : this(GetSpecification(dt, fs, fp, Gp, Gs)) { }
 
+    /// <summary>Инициализирует новый эллиптический фильтр верхних частот по спецификации</summary>
+    /// <param name="Spec">Спецификация фильтра</param>
     public EllipticHighPass(Specification Spec) : this(GetPolynoms(Spec), Spec) { }
 }

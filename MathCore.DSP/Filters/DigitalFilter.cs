@@ -51,9 +51,8 @@ public abstract class DigitalFilter : Filter
     /// <exception cref="ArgumentException">Если число нулей больше числа полюсов</exception>
     public static (Complex[] zPoles, Complex[] zZeros) ToZ(Complex[] pPoles, Complex[] pZeros, double dt)
     {
-        if (pPoles is null) throw new ArgumentNullException(nameof(pPoles));
-        if (pZeros is null) throw new ArgumentNullException(nameof(pZeros));
-        if (pZeros.Length > pPoles.Length) throw new ArgumentException("Число нулей не должно превышать числа полюсов", nameof(pZeros));
+        if (pZeros.NotNull().Length > pPoles.NotNull().Length)
+            throw new ArgumentException("Число нулей не должно превышать числа полюсов", nameof(pZeros));
 
         var poles_count = pPoles.Length;
 
@@ -73,7 +72,7 @@ public abstract class DigitalFilter : Filter
     /// <returns>Нули/полюса z-плоскости</returns>
     public static IEnumerable<Complex> ToZ(IEnumerable<Complex> p, double dt)
     {
-        foreach (var z in p) 
+        foreach (var z in p)
             yield return ToZ(z, dt);
     }
 
@@ -84,11 +83,11 @@ public abstract class DigitalFilter : Filter
     /// <returns>Нули/полюса z-плоскости с масштабированием</returns>
     public static IEnumerable<Complex> ToZ(IEnumerable<Complex> p, double W0, double dt)
     {
-        foreach (var z in p) 
+        foreach (var z in p)
             yield return ToZ(z * W0, dt);
     }
 
-    /// <summary>Преобразоване нулей/полюсов в массив в z-плоскости</summary>
+    /// <summary>Преобразование нулей/полюсов в массив в z-плоскости</summary>
     /// <param name="p">Нули/полюса p-плоскости</param>
     /// <param name="dt">Частота дискретизации</param>
     /// <param name="W0">Коэффициент масштабирования</param>
@@ -145,11 +144,10 @@ public abstract class DigitalFilter : Filter
 
     public DigitalSignal Process(DigitalSignal Signal, double[] state)
     {
-        if (Signal is null) throw new ArgumentNullException(nameof(Signal));
-        if (state is null) throw new ArgumentNullException(nameof(state));
-        if (state.Length != Order + 1) throw new InvalidOperationException($"Длина вектора состояний {state.Length} не равна порядку фильтра {Order} + 1");
+        if (state.NotNull().Length != Order + 1)
+            throw new InvalidOperationException($"Длина вектора состояний {state.Length} не равна порядку фильтра {Order} + 1");
 
-        return new SamplesDigitalSignal(Signal.dt, Signal.Select(s => Process(s, state)));
+        return new SamplesDigitalSignal(Signal.NotNull().dt, Signal.Select(s => Process(s, state)));
     }
 
     /// <summary>Обработать цифровой сигнал независимо от состояния фильтра (вектор состояния создаётся на каждый вызов этого метода)</summary>

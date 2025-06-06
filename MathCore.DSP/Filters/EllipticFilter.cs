@@ -17,6 +17,12 @@ namespace MathCore.DSP.Filters;
 [KnownType(typeof(EllipticBandStop))]
 public abstract class EllipticFilter : AnalogBasedFilter
 {
+    /// <summary>Перечисляет нормированные нули эллиптического фильтра</summary>
+    /// <param name="N">Порядок фильтра</param>
+    /// <param name="EpsP">Неоднородность АЧХ в полосе пропускания</param>
+    /// <param name="EpsS">Неоднородность АЧХ в полосе заграждения</param>
+    /// <param name="W0">Нормирующий множитель частоты (по умолчанию 1)</param>
+    /// <returns>Перечисление комплексных нулей</returns>
     protected static IEnumerable<Complex> EnumNormedZeros(int N, double EpsP, double EpsS, double W0 = 1)
     {
         Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
@@ -40,6 +46,12 @@ public abstract class EllipticFilter : AnalogBasedFilter
         }
     }
 
+    /// <summary>Перечисляет нормированные полюса эллиптического фильтра</summary>
+    /// <param name="N">Порядок фильтра</param>
+    /// <param name="EpsP">Неоднородность АЧХ в полосе пропускания</param>
+    /// <param name="EpsS">Неоднородность АЧХ в полосе заграждения</param>
+    /// <param name="W0">Нормирующий множитель частоты (по умолчанию 1)</param>
+    /// <returns>Перечисление комплексных полюсов</returns>
     protected static IEnumerable<Complex> EnumNormedPoles(int N, double EpsP, double EpsS, double W0 = 1)
     {
         Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
@@ -66,6 +78,12 @@ public abstract class EllipticFilter : AnalogBasedFilter
         }
     }
 
+    /// <summary>Перечисляет нормированные нули и полюса эллиптического фильтра</summary>
+    /// <param name="N">Порядок фильтра</param>
+    /// <param name="EpsP">Неоднородность АЧХ в полосе пропускания</param>
+    /// <param name="EpsS">Неоднородность АЧХ в полосе заграждения</param>
+    /// <param name="W0">Нормирующий множитель частоты (по умолчанию 1)</param>
+    /// <returns>Кортеж перечислений комплексных нулей и полюсов</returns>
     protected static (IEnumerable<Complex> Zeros, IEnumerable<Complex> Poles) EnumNormedZerosPoles(int N, double EpsP, double EpsS, double W0 = 1)
     {
         var zeros = EnumNormedZeros(N, EpsP, EpsS, W0);
@@ -73,6 +91,12 @@ public abstract class EllipticFilter : AnalogBasedFilter
         return (zeros, poles);
     }
 
+    /// <summary>Получает массив нормированных нулей и полюсов эллиптического фильтра</summary>
+    /// <param name="N">Порядок фильтра</param>
+    /// <param name="EpsP">Неоднородность АЧХ в полосе пропускания</param>
+    /// <param name="EpsS">Неоднородность АЧХ в полосе заграждения</param>
+    /// <param name="W0">Нормирующий множитель частоты (по умолчанию 1)</param>
+    /// <returns>Кортеж массивов комплексных нулей и полюсов</returns>
     protected static (Complex[] Zeros, Complex[] Poles) GetNormedZerosPoles(int N, double EpsP, double EpsS, double W0 = 1)
     {
         Debug.Assert(N > 0, $"N > 0 :: {N} > 0");
@@ -107,17 +131,18 @@ public abstract class EllipticFilter : AnalogBasedFilter
         return (zeros, poles);
     }
 
-    /// <summary>Инициализация нового эллиптического фильтра</summary>
-    /// <param name="B">Коэффициенты полинома числителя</param>
-    /// <param name="A">Коэффициенты полинома знаменателя</param>
-    /// <param name="Spec">Спецификация фильтра</param>
+    /// <inheritdoc/>
     protected EllipticFilter(double[] B, double[] A, Specification Spec) : base(B, A, Spec) { }
 
-    /// <summary>Полный эллиптический интеграл</summary>
+    /// <summary>Вычисляет полный эллиптический интеграл</summary>
+    /// <param name="k">Параметр эллиптического интеграла</param>
+    /// <returns>Значение полного эллиптического интеграла</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     protected static double K(double k) => FullEllipticIntegral(k);
-     
-    /// <summary>Полный комплиментарный эллиптический интеграл</summary>
+
+    /// <summary>Вычисляет полный комплиментарный эллиптический интеграл</summary>
+    /// <param name="k">Параметр эллиптического интеграла</param>
+    /// <returns>Значение полного комплиментарного эллиптического интеграла</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     protected static double T(double k) => FullEllipticIntegralComplimentary(k);
 }
