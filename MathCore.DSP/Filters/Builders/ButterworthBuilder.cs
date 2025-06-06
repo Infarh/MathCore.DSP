@@ -1,81 +1,53 @@
 ﻿namespace MathCore.DSP.Filters.Builders;
 
+/// <summary>Построитель фильтра Батерворта</summary>
 public readonly ref struct ButterworthBuilder
 {
+    /// <summary>Тип пропускания полосы частот</summary>
     public FrequencyPassType PassType { get; init; }
 
+    /// <summary>Период дискретизации фильтра</summary>
     public double dt { get; init; }
 
+    /// <summary>Частота дискретизации фильтра</summary>
     public double fd { get => 1 / dt; init => dt = 1 / value; }
 
+    /// <summary>Фильтр нижних частот</summary>
     public ButterworthBuilder LowPass => this with { PassType = FrequencyPassType.LowPass };
+
+    /// <summary>Фильтр верхних частот</summary>
     public ButterworthBuilder HighPass => this with { PassType = FrequencyPassType.HighPass };
+
+    /// <summary>Полосопропускающий фильтр</summary>
     public ButterworthBuilder BandPass => this with { PassType = FrequencyPassType.BandPass };
+
+    /// <summary>Полосозадерживающий фильтр</summary>
     public ButterworthBuilder BandStop => this with { PassType = FrequencyPassType.BandStop };
 
-    private readonly double? _PassFrequency;
-    private readonly double? _StopFrequency;
-    private readonly double? _PassHighFrequency;
-    private readonly double? _StopHighFrequency;
+    /// <summary>Частота пропускания</summary>
+    public double? PassFrequency { get; init; }
 
-    private readonly int? _Order;
+    /// <summary>Частота заграждения</summary>
+    public double? StopFrequency { get; init; }
 
-    private readonly double? _Gp;
-    private readonly double? _Gs;
-    private readonly double? _Rp;
-    private readonly double? _Rs;
+    /// <summary>Верхняя частота пропускания</summary>
+    public double? PassHighFrequency { get; init; }
 
-    public double? PassFrequency
-    {
-        get => _PassFrequency;
-        init => _PassFrequency = value;
-    }
+    /// <summary>Верхняя частота заграждения</summary>
+    public double? StopHighFrequency { get; init; }
 
-    public double? StopFrequency
-    {
-        get => _StopFrequency;
-        init => _StopFrequency = value;
-    }
+    /// <summary>Порядок фильтра</summary>
+    public int? Order { get; init; }
 
-    public double? PassHighFrequency
-    {
-        get => _PassHighFrequency;
-        init => _PassHighFrequency = value;
-    }
+    /// <summary>Коэффициент пропускания</summary>
+    public double? Gp { get; init; }
 
-    public double? StopHighFrequency
-    {
-        get => _StopHighFrequency;
-        init => _StopHighFrequency = value;
-    }
+    /// <summary>Коэффициент заграждения</summary>
+    public double? Gs { get; init; }
 
-    public int? Order
-    {
-        get => _Order;
-        init  => _Order = value;
-    }
+    /// <summary>Неравномерность в полосе пропускания</summary>
+    public double? Rp { get; init; }
 
-    public double? Gp
-    {
-        get => _Gp;
-        init => _Gp = value;
-    }
-
-    public double? Gs
-    {
-        get => _Gs;
-        init => _Gs = value;
-    }
-
-    public double? Rp
-    {
-        get => _Rp;
-        init => _Rp = value;
-    }
-
-    public double? Rs
-    {
-        get => _Rs;
-        init => _Rs = value;
-    }
+    /// <summary>Неравномерность в полосе заграждения</summary>
+    public double? Rs { get; init; }
 }
