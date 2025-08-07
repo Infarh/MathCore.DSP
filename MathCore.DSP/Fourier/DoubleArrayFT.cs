@@ -7,13 +7,13 @@ public static class DoubleArrayFT
 {
     private static (double Sin, double Cos)[] GetCoefficients(int N, bool IsInverse = false)
     {
-        var w   = new (double Sin, double Cos)[N];
-        var w0  = IsInverse ? -Consts.pi2 / N : Consts.pi2 / N;
+        var w = new (double Sin, double Cos)[N];
+        var w0 = IsInverse ? -Consts.pi2 / N : Consts.pi2 / N;
         var arg = 0.0;
         for (var i = 0; i < N; i++)
         {
-            w[i] =  (Math.Sin(arg), Math.Cos(arg));
-            arg  += w0;
+            w[i] = (Math.Sin(arg), Math.Cos(arg));
+            arg += w0;
         }
         return w;
     }
@@ -29,17 +29,17 @@ public static class DoubleArrayFT
 
         return m =>
         {
-            var P = 0.0;
-            var Q = 0.0;
-            for(var n = 0; n < N; n++)
+            var p = 0.0;
+            var q = 0.0;
+            for (var n = 0; n < N; n++)
             {
                 var val = s[n];
                 var (sin, cos) = w[n * m % N];
-                P += val * cos;
-                Q += val * sin;
+                p += val * cos;
+                q += val * sin;
             }
 
-            return new(P / N, Q / N);
+            return new(p / N, q / N);
         };
     }
 
@@ -54,17 +54,17 @@ public static class DoubleArrayFT
 
         return m =>
         {
-            var P = 0.0;
-            var Q = 0.0;
-            for(var n = 0; n < N; n++)
+            var p = 0.0;
+            var q = 0.0;
+            for (var n = 0; n < N; n++)
             {
                 var (re, im) = s[n];
                 var (sin, cos) = w[n * m % N];
-                P += re * cos - im * sin;
-                Q += im * cos + re * sin;
+                p += re * cos - im * sin;
+                q += im * cos + re * sin;
             }
 
-            return new(P / N, Q / N);
+            return new(p / N, q / N);
         };
     }
 }

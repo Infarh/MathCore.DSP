@@ -34,11 +34,11 @@ public static class fft
     [Copyright("29.05.2009 by Bochkanov Sergey", url = "alglib.sources.ru")]
     public static Complex[] FFT(Complex[] x)
     {
-        var N   = x.Length;
+        var N = x.Length;
         if (N == 1) return [x[0]];
 
         var buf = new double[2 * N];
-        for (var i = 0; i < N; i++) 
+        for (var i = 0; i < N; i++)
             (buf[2 * i], buf[2 * i + 1]) = x[i];
 
         //
@@ -107,9 +107,7 @@ public static class fft
       -- ALGLIB --
          Copyright 01.06.2009 by Bochkanov Sergey
     *************************************************************************/
-    /// <summary>
-    /// Быстрое одномерное вещественное преобразование Фурье
-    /// </summary>
+    /// <summary>Быстрое одномерное вещественное преобразование Фурье</summary>
     /// <param name="x">Массив входных значений</param>
     /// <value>Массив комплексных значений спектра</value>
     [SuppressMessage("ReSharper", "TooWideLocalVariableScope")]
@@ -118,7 +116,7 @@ public static class fft
         var N = x.Length;
         switch (x)
         {
-            case [var x0]        : return [new(x0)];
+            case [var x0]: return [new(x0)];
             case [var x0, var x1]: return [new(x0 + x1), new(x0 - x1)];
         }
 
@@ -153,7 +151,7 @@ public static class fft
 
                 result[i] = new
                 (
-                    Re: (h_n_re + h_mn_c_re - nsin * (h_n_re - h_mn_c_re) + cos * (h_n_im - h_mn_c_im)) * N05, 
+                    Re: (h_n_re + h_mn_c_re - nsin * (h_n_re - h_mn_c_re) + cos * (h_n_im - h_mn_c_im)) * N05,
                     Im: (h_n_im + h_mn_c_im - nsin * (h_n_im - h_mn_c_im) - cos * (h_n_re - h_mn_c_re)) * N05
                 );
             }
@@ -162,7 +160,7 @@ public static class fft
             return result;
         }
 
-        for (var i = 0; i < N; i++) 
+        for (var i = 0; i < N; i++)
             result[i] = new(x[i]);
         return FFT(result);
     }
@@ -224,14 +222,14 @@ public static class fft
         var n05 = (int)Floor(n / 2d);
         for (var i = 1; i < n05; i++)
         {
-            var (re, im)     = f[i];
+            var (re, im) = f[i];
             (h[i], h[n - i]) = (re - im, re + im);
         }
 
         if (n % 2 == 0) h[n05] = f[n05].Re;
         else
         {
-            var (re, im)         = f[n05];
+            var (re, im) = f[n05];
             (h[n05], h[n05 + 1]) = (re - im, re + im);
         }
 
@@ -240,7 +238,7 @@ public static class fft
         for (var i = 0; i < n; i++)
         {
             var (re, im) = fh[i];
-            result[i]    = (re - im) / n;
+            result[i] = (re - im) / n;
         }
         return result;
     }
@@ -1643,12 +1641,12 @@ public static class fft
              Copyright 01.05.2009 by Bochkanov Sergey
         *************************************************************************/
         private static void FFTicltRec(
-            ref double[] a, 
-            int astart, 
-            int astride, 
+            ref double[] a,
+            int astart,
+            int astride,
             ref double[] b,
             int bstart,
-            int bstride, 
+            int bstride,
             int m,
             int n)
         {
