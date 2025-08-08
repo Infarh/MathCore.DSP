@@ -25,4 +25,8 @@
     <ProjectReference Include="..\..\MathCore.DSP\MathCore.DSP.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Using Include="Benchmarks" />
+  </ItemGroup>
+
 </Project>
