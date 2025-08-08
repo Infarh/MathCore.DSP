@@ -4,7 +4,7 @@ using MathCore.DSP.Samples.Extensions;
 namespace MathCore.DSP.Tests.Samples;
 
 [TestClass]
-public class SampleSI16ExTests
+public class SampleSI16PhaseModulationExTests
 {
     /// <summary>Тест фазовой демодуляции для пустого массива</summary>
     [TestMethod]
@@ -52,7 +52,7 @@ public class SampleSI16ExTests
             new(100, 0),
             new(100, 0)
         }.AsSpan();
-        
+
         const double f0 = 1000.0;
         const double fd = 48000.0;
 
@@ -62,12 +62,12 @@ public class SampleSI16ExTests
         // Assert
         Assert.AreEqual(5, result.Length);
         Assert.AreEqual(0f, result[0]); // Первый всегда 0
-        
+
         // Для постоянного сигнала мгновенная частота должна быть близка к нулю
         // после вычитания центральной частоты результат должен быть близок к -f0
         for (var i = 1; i < result.Length; i++)
         {
-            Assert.IsTrue(Math.Abs(result[i] + f0) < 50, 
+            Assert.IsTrue(Math.Abs(result[i] + f0) < 50,
                 $"Sample {i}: expected ~{-f0}, got {result[i]}");
         }
     }
@@ -81,16 +81,16 @@ public class SampleSI16ExTests
         const double f0 = 1000.0;      // Центральная частота
         const double f_signal = 1500.0; // Частота сигнала
         const int samples_count = 200;
-        
+
         var samples = new SampleSI16[samples_count];
         var dt = 1.0 / fd;
-        
+
         for (var i = 0; i < samples_count; i++)
         {
             var t = i * dt;
             var angle = 2.0 * Math.PI * f_signal * t;
             var amplitude = 100.0;
-            
+
             samples[i] = new SampleSI16(
                 (sbyte)(amplitude * Math.Cos(angle)),
                 (sbyte)(amplitude * Math.Sin(angle))
@@ -103,11 +103,11 @@ public class SampleSI16ExTests
         // Assert
         Assert.AreEqual(samples_count, result.Length);
         Assert.AreEqual(0f, result[0]); // Первый всегда 0
-        
+
         // Проверяем, что результат близок к ожидаемой частоте (f_signal - f0)
         var expected_frequency = f_signal - f0;
         var tolerance = 100.0; // Допуск в Гц
-        
+
         // Проверяем стабильную часть сигнала (пропускаем начальные образцы)
         var stable_samples = 0;
         for (var i = 20; i < result.Length - 20; i++) // Пропускаем края для стабилизации
@@ -115,7 +115,7 @@ public class SampleSI16ExTests
             if (Math.Abs(result[i] - expected_frequency) < tolerance)
                 stable_samples++;
         }
-        
+
         // Проверяем, что большинство образцов дает правильную частоту
         var expected_stable_count = (result.Length - 40) * 0.8; // 80% образцов должны быть стабильными
         Assert.IsTrue(stable_samples > expected_stable_count,
@@ -130,7 +130,7 @@ public class SampleSI16ExTests
         const int samples_count = 1_000_000; // Увеличиваем размер для лучшего измерения
         var samples = new SampleSI16[samples_count];
         var random = new Random(42); // Фиксированное семя для воспроизводимости
-        
+
         for (var i = 0; i < samples_count; i++)
         {
             samples[i] = new SampleSI16(
@@ -150,17 +150,17 @@ public class SampleSI16ExTests
             var result = samples.AsSpan().PhaseDemodulation(f0, fd);
             stopwatch.Stop();
             times.Add(stopwatch.ElapsedMilliseconds);
-            
+
             // Проверяем корректность результата
             Assert.AreEqual(samples_count, result.Length);
         }
 
         var average_time = times.Average();
-        
+
         // Assert - должно быть быстрее чем 1000 мс для 1M образцов
-        Assert.IsTrue(average_time < 1000, 
+        Assert.IsTrue(average_time < 1000,
             $"Optimized demodulation took {average_time:F1} ms on average, expected < 1000 ms");
-        
+
         Console.WriteLine($"Оптимизированная фазовая демодуляция {samples_count} образцов:");
         Console.WriteLine($"Среднее время: {average_time:F1} мс");
         Console.WriteLine($"Производительность: {samples_count / average_time / 1000:F1} млн. образцов/сек");
@@ -173,7 +173,7 @@ public class SampleSI16ExTests
         // Arrange - создаем сигнал с плавно изменяющейся фазой, но с перескоками ±2π
         const double fd = 1000.0;
         const double f0 = 0.0; // Нулевая центральная частота для простоты
-        
+
         var samples = new SampleSI16[]
         {
             new(100, 0),     // фаза ≈ 0
@@ -192,11 +192,11 @@ public class SampleSI16ExTests
         // Assert
         Assert.AreEqual(samples.Length, result.Length);
         Assert.AreEqual(0f, result[0]); // Первый всегда 0
-        
+
         // Проверяем, что результаты имеют разумные значения без больших скачков
         for (var i = 1; i < result.Length; i++)
         {
-            Assert.IsTrue(Math.Abs(result[i]) < 1000, 
+            Assert.IsTrue(Math.Abs(result[i]) < 1000,
                 $"Sample {i}: frequency {result[i]} Hz seems too high");
         }
     }
@@ -208,18 +208,18 @@ public class SampleSI16ExTests
         // Arrange - создаем чистый синусоидальный сигнал
         const double fd = 48000.0;
         const double f0 = 1000.0;
-        const double f_signal = 1200.0; 
+        const double f_signal = 1200.0;
         const int samples_count = 100;
-        
+
         var samples = new SampleSI16[samples_count];
         var dt = 1.0 / fd;
-        
+
         for (var i = 0; i < samples_count; i++)
         {
             var t = i * dt;
             var angle = 2.0 * Math.PI * f_signal * t;
             var amplitude = 120.0; // Используем почти максимальную амплитуду
-            
+
             samples[i] = new SampleSI16(
                 (sbyte)(amplitude * Math.Cos(angle)),
                 (sbyte)(amplitude * Math.Sin(angle))
@@ -232,19 +232,19 @@ public class SampleSI16ExTests
         // Assert - проверяем точность на стабильной части
         var expected_frequency = f_signal - f0;
         var errors = new List<float>();
-        
+
         for (var i = 10; i < optimized_result.Length - 10; i++)
         {
             var error = (float)Math.Abs(optimized_result[i] - expected_frequency);
             errors.Add(error);
         }
-        
+
         var average_error = errors.Average();
         var max_error = errors.Max();
-        
+
         Assert.IsTrue(average_error < 50, $"Average error {average_error:F1} Hz too high");
         Assert.IsTrue(max_error < 100, $"Max error {max_error:F1} Hz too high");
-        
+
         Console.WriteLine($"Точность оптимизированного алгоритма:");
         Console.WriteLine($"Средняя ошибка: {average_error:F1} Гц");
         Console.WriteLine($"Максимальная ошибка: {max_error:F1} Гц");
@@ -283,12 +283,12 @@ public class SampleSI16ExTests
 
         // Assert
         Assert.AreEqual(data.Length, result.Length);
-        
+
         // Проверяем, что амплитуда близка к заданной
         for (var i = 0; i < result.Length; i++)
         {
             var sample_amplitude = Math.Sqrt(result[i].I * result[i].I + result[i].Q * result[i].Q);
-            Assert.IsTrue(Math.Abs(sample_amplitude - amplitude) < 5, 
+            Assert.IsTrue(Math.Abs(sample_amplitude - amplitude) < 5,
                 $"Sample {i}: amplitude {sample_amplitude:F1} too far from expected {amplitude}");
         }
     }
@@ -298,8 +298,8 @@ public class SampleSI16ExTests
     public void PhaseModulation_RoundTrip_PreservesData()
     {
         // Arrange - создаем тестовые данные с различными частотами
-        var original_data = new float[] 
-        { 
+        var original_data = new float[]
+        {
             0f,     // Без отклонения
             100f,   // +100 Гц
             -200f,  // -200 Гц  
@@ -308,21 +308,21 @@ public class SampleSI16ExTests
             0f,     // Возврат к центральной
             50f,    // Небольшое отклонение
         };
-        
+
         const double f0 = 2000.0;
         const double fd = 48000.0;
         const float amplitude = 120f;
 
         // Act - модуляция
         var modulated = original_data.AsSpan().PhaseModulation(f0, fd, amplitude);
-        
+
         // Демодуляция
         var demodulated = modulated.AsSpan().PhaseDemodulation(f0, fd);
 
         // Assert
         Assert.AreEqual(original_data.Length, demodulated.Length);
         Assert.AreEqual(0f, demodulated[0]); // Первый отсчёт всегда 0
-        
+
         // Проверяем восстановление данных (пропускаем первый отсчёт и края)
         const float tolerance = 50f; // Допуск в Гц
         for (var i = 2; i < demodulated.Length - 1; i++) // Пропускаем края из-за переходных процессов
@@ -345,26 +345,26 @@ public class SampleSI16ExTests
 
         // Act - первый блок
         var (samples1, final_phase1) = data1.AsSpan().PhaseModulation(f0, fd, 0.0);
-        
+
         // Второй блок с продолжением фазы
         var (samples2, final_phase2) = data2.AsSpan().PhaseModulation(f0, fd, final_phase1);
 
         // Assert
         Assert.AreEqual(data1.Length, samples1.Length);
         Assert.AreEqual(data2.Length, samples2.Length);
-        
+
         // Проверяем непрерывность фазы на стыке блоков
         var last_sample = samples1[^1];
         var first_sample = samples2[0];
-        
+
         var last_phase = Math.Atan2(last_sample.Q, last_sample.I);
         var first_phase = Math.Atan2(first_sample.Q, first_sample.I);
-        
+
         // Разность фаз должна быть небольшой (с учётом возможного перескока через ±π)
         var phase_diff = Math.Abs(first_phase - last_phase);
         if (phase_diff > Math.PI) phase_diff = 2 * Math.PI - phase_diff;
-        
-        Assert.IsTrue(phase_diff < 0.5, 
+
+        Assert.IsTrue(phase_diff < 0.5,
             $"Phase discontinuity too large: {phase_diff:F3} rad");
     }
 
@@ -376,10 +376,10 @@ public class SampleSI16ExTests
         const int data_count = 1_000_000;
         var data = new float[data_count];
         var random = new Random(42);
-        
+
         for (var i = 0; i < data_count; i++)
             data[i] = (float)(random.NextDouble() * 1000 - 500); // ±500 Гц
-        
+
         const double f0 = 2400.0;
         const double fd = 48000.0;
 
@@ -390,9 +390,9 @@ public class SampleSI16ExTests
 
         // Assert
         Assert.AreEqual(data_count, result.Length);
-        Assert.IsTrue(stopwatch.ElapsedMilliseconds < 500, 
+        Assert.IsTrue(stopwatch.ElapsedMilliseconds < 500,
             $"Modulation took {stopwatch.ElapsedMilliseconds} ms, expected < 500 ms");
-        
+
         Console.WriteLine($"Фазовая модуляция {data_count} образцов заняла {stopwatch.ElapsedMilliseconds} мс");
         Console.WriteLine($"Производительность: {data_count / (double)stopwatch.ElapsedMilliseconds / 1000:F1} млн. образцов/сек");
     }

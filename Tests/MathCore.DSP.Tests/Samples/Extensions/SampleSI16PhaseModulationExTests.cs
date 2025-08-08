@@ -4,7 +4,7 @@ using MathCore.DSP.Samples.Extensions;
 namespace MathCore.DSP.Tests.Samples.Extensions;
 
 [TestClass]
-public class SampleSI16ExTests
+public class SampleSI16PhaseModulationExTests
 {
     /// <summary>Тест фазовой демодуляции для пустого массива</summary>
     [TestMethod]

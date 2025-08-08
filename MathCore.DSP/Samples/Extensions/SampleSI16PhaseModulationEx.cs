@@ -2,7 +2,7 @@
 
 namespace MathCore.DSP.Samples.Extensions;
 
-public static class SampleSI16Ex
+public static class SampleSI16PhaseModulationEx
 {
     /// <summary>Фазовая демодуляция радиосигнала</summary>
     /// <param name="samples">Последовательность отсчётов квадратурного радиосигнала</param>
@@ -64,7 +64,6 @@ public static class SampleSI16Ex
 
         var result = new SampleSI16[data.Length];
         var dt = 1.0 / fd;
-        var omega0 = 2.0 * Math.PI * f0;
         var accumulated_phase = 0.0;
 
         for (var i = 0; i < data.Length; i++)
@@ -78,8 +77,7 @@ public static class SampleSI16Ex
 
             // Генерируем квадратурный сигнал: I = A*cos(φ), Q = A*sin(φ)
 #if NET8_0_OR_GREATER
-            var cos_phase = MathF.Cos((float)accumulated_phase);
-            var sin_phase = MathF.Sin((float)accumulated_phase);
+            var (sin_phase, cos_phase) = MathF.SinCos((float)accumulated_phase);
 #else
             var cos_phase = (float)Math.Cos(accumulated_phase);
             var sin_phase = (float)Math.Sin(accumulated_phase);
@@ -89,7 +87,7 @@ public static class SampleSI16Ex
             var i_sample = ClampToSByte(amplitude * cos_phase);
             var q_sample = ClampToSByte(amplitude * sin_phase);
 
-            result[i] = new SampleSI16(i_sample, q_sample);
+            result[i] = new(i_sample, q_sample);
         }
 
         return result;
