@@ -52,6 +52,96 @@ public static class SampleSI16Ex
         return result;
     }
 
+    /// <summary>Фазовая модуляция сигнала для передачи</summary>
+    /// <param name="data">Модулирующие данные (мгновенные частоты в Гц)</param>
+    /// <param name="f0">Центральная частота передачи</param>
+    /// <param name="fd">Частота дискретизации</param>
+    /// <param name="amplitude">Амплитуда выходного сигнала (по умолчанию 120 для максимального использования динамического диапазона)</param>
+    /// <returns>Массив квадратурных отсчётов для передачи</returns>
+    public static SampleSI16[] PhaseModulation(this ReadOnlySpan<float> data, double f0, double fd, float amplitude = 120f)
+    {
+        if (data.IsEmpty) return [];
+
+        var result = new SampleSI16[data.Length];
+        var dt = 1.0 / fd;
+        var omega0 = 2.0 * Math.PI * f0;
+        var accumulated_phase = 0.0;
+
+        for (var i = 0; i < data.Length; i++)
+        {
+            // Мгновенная частота = f0 + данные[i] 
+            var instantaneous_frequency = f0 + data[i];
+
+            // Интегрируем частоту для получения фазы: φ(t) = ∫ω(t)dt
+            var omega_instant = 2.0 * Math.PI * instantaneous_frequency;
+            accumulated_phase += omega_instant * dt;
+
+            // Генерируем квадратурный сигнал: I = A*cos(φ), Q = A*sin(φ)
+#if NET8_0_OR_GREATER
+            var cos_phase = MathF.Cos((float)accumulated_phase);
+            var sin_phase = MathF.Sin((float)accumulated_phase);
+#else
+            var cos_phase = (float)Math.Cos(accumulated_phase);
+            var sin_phase = (float)Math.Sin(accumulated_phase);
+#endif
+
+            // Масштабируем и ограничиваем в диапазоне sbyte
+            var i_sample = ClampToSByte(amplitude * cos_phase);
+            var q_sample = ClampToSByte(amplitude * sin_phase);
+
+            result[i] = new SampleSI16(i_sample, q_sample);
+        }
+
+        return result;
+    }
+
+    /// <summary>Фазовая модуляция с опорным сигналом для непрерывности фазы</summary>
+    /// <param name="data">Модулирующие данные (мгновенные частоты в Гц)</param>
+    /// <param name="f0">Центральная частота передачи</param>
+    /// <param name="fd">Частота дискретизации</param>
+    /// <param name="initial_phase">Начальная фаза для обеспечения непрерывности</param>
+    /// <param name="amplitude">Амплитуда выходного сигнала</param>
+    /// <returns>Массив квадратурных отсчётов и финальная фаза для следующего блока</returns>
+    public static (SampleSI16[] samples, double final_phase) PhaseModulation(
+        this ReadOnlySpan<float> data,
+        double f0,
+        double fd,
+        double initial_phase,
+        float amplitude = 120f)
+    {
+        if (data.IsEmpty) return ([], initial_phase);
+
+        var result = new SampleSI16[data.Length];
+        var dt = 1.0 / fd;
+        var accumulated_phase = initial_phase;
+
+        for (var i = 0; i < data.Length; i++)
+        {
+            // Мгновенная частота = f0 + данные[i] 
+            var instantaneous_frequency = f0 + data[i];
+
+            // Интегрируем частоту для получения фазы
+            var omega_instant = 2.0 * Math.PI * instantaneous_frequency;
+            accumulated_phase += omega_instant * dt;
+
+            // Генерируем квадратурный сигнал
+#if NET8_0_OR_GREATER
+            var cos_phase = MathF.Cos((float)accumulated_phase);
+            var sin_phase = MathF.Sin((float)accumulated_phase);
+#else
+            var cos_phase = (float)Math.Cos(accumulated_phase);
+            var sin_phase = (float)Math.Sin(accumulated_phase);
+#endif
+
+            var i_sample = ClampToSByte(amplitude * cos_phase);
+            var q_sample = ClampToSByte(amplitude * sin_phase);
+
+            result[i] = new SampleSI16(i_sample, q_sample);
+        }
+
+        return (result, accumulated_phase);
+    }
+
     /// <summary>Unwrapping одной разности фаз с накоплением коррекции</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static float UnwrapSinglePhaseDiff(float phase_diff, ref float accumulated_correction)
@@ -77,4 +167,14 @@ public static class SampleSI16Ex
 
         return phase_diff;
     }
+
+    /// <summary>Ограничивает значение в диапазоне sbyte с оптимальным использованием динамического диапазона</summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static sbyte ClampToSByte(float value) =>
+        value switch // Ограничиваем в диапазоне [-127, 127] для избежания переполнения
+        {
+            > 127f => 127,
+            < -128f => -128,
+            _ => (sbyte)Math.Round(value)
+        };
 }

@@ -249,4 +249,151 @@ public class SampleSI16ExTests
         Console.WriteLine($"Средняя ошибка: {average_error:F1} Гц");
         Console.WriteLine($"Максимальная ошибка: {max_error:F1} Гц");
     }
+
+    // ===== ТЕСТЫ ФАЗОВОЙ МОДУЛЯЦИИ =====
+
+    /// <summary>Тест фазовой модуляции для пустого массива</summary>
+    [TestMethod]
+    public void PhaseModulation_EmptyArray_ReturnsEmpty()
+    {
+        // Arrange
+        var data = ReadOnlySpan<float>.Empty;
+        const double f0 = 1000.0;
+        const double fd = 48000.0;
+
+        // Act
+        var result = data.PhaseModulation(f0, fd);
+
+        // Assert
+        Assert.AreEqual(0, result.Length);
+    }
+
+    /// <summary>Тест фазовой модуляции для постоянной частоты</summary>
+    [TestMethod]
+    public void PhaseModulation_ConstantFrequency_GeneratesCorrectSignal()
+    {
+        // Arrange - постоянное отклонение частоты +500 Гц
+        var data = new float[] { 500f, 500f, 500f, 500f, 500f };
+        const double f0 = 1000.0;  // Центральная частота
+        const double fd = 48000.0; // Частота дискретизации
+        const float amplitude = 100f;
+
+        // Act
+        var result = data.AsSpan().PhaseModulation(f0, fd, amplitude);
+
+        // Assert
+        Assert.AreEqual(data.Length, result.Length);
+        
+        // Проверяем, что амплитуда близка к заданной
+        for (var i = 0; i < result.Length; i++)
+        {
+            var sample_amplitude = Math.Sqrt(result[i].I * result[i].I + result[i].Q * result[i].Q);
+            Assert.IsTrue(Math.Abs(sample_amplitude - amplitude) < 5, 
+                $"Sample {i}: amplitude {sample_amplitude:F1} too far from expected {amplitude}");
+        }
+    }
+
+    /// <summary>Тест круглого преобразования: модуляция -> демодуляция</summary>
+    [TestMethod]
+    public void PhaseModulation_RoundTrip_PreservesData()
+    {
+        // Arrange - создаем тестовые данные с различными частотами
+        var original_data = new float[] 
+        { 
+            0f,     // Без отклонения
+            100f,   // +100 Гц
+            -200f,  // -200 Гц  
+            300f,   // +300 Гц
+            -150f,  // -150 Гц
+            0f,     // Возврат к центральной
+            50f,    // Небольшое отклонение
+        };
+        
+        const double f0 = 2000.0;
+        const double fd = 48000.0;
+        const float amplitude = 120f;
+
+        // Act - модуляция
+        var modulated = original_data.AsSpan().PhaseModulation(f0, fd, amplitude);
+        
+        // Демодуляция
+        var demodulated = modulated.AsSpan().PhaseDemodulation(f0, fd);
+
+        // Assert
+        Assert.AreEqual(original_data.Length, demodulated.Length);
+        Assert.AreEqual(0f, demodulated[0]); // Первый отсчёт всегда 0
+        
+        // Проверяем восстановление данных (пропускаем первый отсчёт и края)
+        const float tolerance = 50f; // Допуск в Гц
+        for (var i = 2; i < demodulated.Length - 1; i++) // Пропускаем края из-за переходных процессов
+        {
+            var error = Math.Abs(demodulated[i] - original_data[i]);
+            Assert.IsTrue(error < tolerance,
+                $"Sample {i}: expected {original_data[i]:F1} Hz, got {demodulated[i]:F1} Hz, error {error:F1} Hz");
+        }
+    }
+
+    /// <summary>Тест фазовой модуляции с начальной фазой</summary>
+    [TestMethod]
+    public void PhaseModulation_WithInitialPhase_MaintainsPhaseContinuity()
+    {
+        // Arrange
+        var data1 = new float[] { 0f, 100f, 200f };
+        var data2 = new float[] { 200f, 100f, 0f };
+        const double f0 = 1000.0;
+        const double fd = 48000.0;
+
+        // Act - первый блок
+        var (samples1, final_phase1) = data1.AsSpan().PhaseModulation(f0, fd, 0.0);
+        
+        // Второй блок с продолжением фазы
+        var (samples2, final_phase2) = data2.AsSpan().PhaseModulation(f0, fd, final_phase1);
+
+        // Assert
+        Assert.AreEqual(data1.Length, samples1.Length);
+        Assert.AreEqual(data2.Length, samples2.Length);
+        
+        // Проверяем непрерывность фазы на стыке блоков
+        var last_sample = samples1[^1];
+        var first_sample = samples2[0];
+        
+        var last_phase = Math.Atan2(last_sample.Q, last_sample.I);
+        var first_phase = Math.Atan2(first_sample.Q, first_sample.I);
+        
+        // Разность фаз должна быть небольшой (с учётом возможного перескока через ±π)
+        var phase_diff = Math.Abs(first_phase - last_phase);
+        if (phase_diff > Math.PI) phase_diff = 2 * Math.PI - phase_diff;
+        
+        Assert.IsTrue(phase_diff < 0.5, 
+            $"Phase discontinuity too large: {phase_diff:F3} rad");
+    }
+
+    /// <summary>Тест производительности фазовой модуляции</summary>
+    [TestMethod]
+    public void PhaseModulation_Performance_CompletesQuickly()
+    {
+        // Arrange - большой массив данных
+        const int data_count = 1_000_000;
+        var data = new float[data_count];
+        var random = new Random(42);
+        
+        for (var i = 0; i < data_count; i++)
+            data[i] = (float)(random.NextDouble() * 1000 - 500); // ±500 Гц
+        
+        const double f0 = 2400.0;
+        const double fd = 48000.0;
+
+        // Act
+        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+        var result = data.AsSpan().PhaseModulation(f0, fd);
+        stopwatch.Stop();
+
+        // Assert
+        Assert.AreEqual(data_count, result.Length);
+        Assert.IsTrue(stopwatch.ElapsedMilliseconds < 500, 
+            $"Modulation took {stopwatch.ElapsedMilliseconds} ms, expected < 500 ms");
+        
+        Console.WriteLine($"Фазовая модуляция {data_count} образцов заняла {stopwatch.ElapsedMilliseconds} мс");
+        Console.WriteLine($"Производительность: {data_count / (double)stopwatch.ElapsedMilliseconds / 1000:F1} млн. образцов/сек");
+    }
 }
