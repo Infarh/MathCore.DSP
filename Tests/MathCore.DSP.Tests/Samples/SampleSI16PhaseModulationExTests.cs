@@ -19,7 +19,7 @@ public class SampleSI16PhaseModulationExTests
         var result = samples.PhaseDemodulation(f0, fd);
 
         // Assert
-        Assert.AreEqual(0, result.Length);
+        Assert.IsEmpty(result);
     }
 
     /// <summary>Тест фазовой демодуляции для массива с одним элементом</summary>
@@ -35,7 +35,7 @@ public class SampleSI16PhaseModulationExTests
         var result = samples.PhaseDemodulation(f0, fd);
 
         // Assert
-        Assert.AreEqual(1, result.Length);
+        Assert.HasCount(1, result);
         Assert.AreEqual(0f, result[0]);
     }
 
@@ -60,15 +60,15 @@ public class SampleSI16PhaseModulationExTests
         var result = samples.PhaseDemodulation(f0, fd);
 
         // Assert
-        Assert.AreEqual(5, result.Length);
+        Assert.HasCount(5, result);
         Assert.AreEqual(0f, result[0]); // Первый всегда 0
 
         // Для постоянного сигнала мгновенная частота должна быть близка к нулю
         // после вычитания центральной частоты результат должен быть близок к -f0
         for (var i = 1; i < result.Length; i++)
         {
-            Assert.IsTrue(Math.Abs(result[i] + f0) < 50,
-                $"Sample {i}: expected ~{-f0}, got {result[i]}");
+            Assert.IsLessThan(50,
+Math.Abs(result[i] + f0), $"Sample {i}: expected ~{-f0}, got {result[i]}");
         }
     }
 
@@ -101,7 +101,7 @@ public class SampleSI16PhaseModulationExTests
         var result = samples.AsSpan().PhaseDemodulation(f0, fd);
 
         // Assert
-        Assert.AreEqual(samples_count, result.Length);
+        Assert.HasCount(samples_count, result);
         Assert.AreEqual(0f, result[0]); // Первый всегда 0
 
         // Проверяем, что результат близок к ожидаемой частоте (f_signal - f0)
@@ -118,8 +118,8 @@ public class SampleSI16PhaseModulationExTests
 
         // Проверяем, что большинство образцов дает правильную частоту
         var expected_stable_count = (result.Length - 40) * 0.8; // 80% образцов должны быть стабильными
-        Assert.IsTrue(stable_samples > expected_stable_count,
-            $"Expected at least {expected_stable_count} stable samples, got {stable_samples}");
+        Assert.IsGreaterThan(expected_stable_count,
+stable_samples, $"Expected at least {expected_stable_count} stable samples, got {stable_samples}");
     }
 
     /// <summary>Тест производительности оптимизированной фазовой демодуляции</summary>
@@ -152,14 +152,14 @@ public class SampleSI16PhaseModulationExTests
             times.Add(stopwatch.ElapsedMilliseconds);
 
             // Проверяем корректность результата
-            Assert.AreEqual(samples_count, result.Length);
+            Assert.HasCount(samples_count, result);
         }
 
         var average_time = times.Average();
 
         // Assert - должно быть быстрее чем 1000 мс для 1M образцов
-        Assert.IsTrue(average_time < 1000,
-            $"Optimized demodulation took {average_time:F1} ms on average, expected < 1000 ms");
+        Assert.IsLessThan(1000,
+average_time, $"Optimized demodulation took {average_time:F1} ms on average, expected < 1000 ms");
 
         Console.WriteLine($"Оптимизированная фазовая демодуляция {samples_count} образцов:");
         Console.WriteLine($"Среднее время: {average_time:F1} мс");
@@ -190,14 +190,14 @@ public class SampleSI16PhaseModulationExTests
         var result = samples.PhaseDemodulation(f0, fd);
 
         // Assert
-        Assert.AreEqual(samples.Length, result.Length);
+        Assert.HasCount(samples.Length, result);
         Assert.AreEqual(0f, result[0]); // Первый всегда 0
 
         // Проверяем, что результаты имеют разумные значения без больших скачков
         for (var i = 1; i < result.Length; i++)
         {
-            Assert.IsTrue(Math.Abs(result[i]) < 1000,
-                $"Sample {i}: frequency {result[i]} Hz seems too high");
+            Assert.IsLessThan(1000,
+Math.Abs(result[i]), $"Sample {i}: frequency {result[i]} Hz seems too high");
         }
     }
 
@@ -242,8 +242,8 @@ public class SampleSI16PhaseModulationExTests
         var average_error = errors.Average();
         var max_error = errors.Max();
 
-        Assert.IsTrue(average_error < 50, $"Average error {average_error:F1} Hz too high");
-        Assert.IsTrue(max_error < 100, $"Max error {max_error:F1} Hz too high");
+        Assert.IsLessThan(50, average_error, $"Average error {average_error:F1} Hz too high");
+        Assert.IsLessThan(100, max_error, $"Max error {max_error:F1} Hz too high");
 
         Console.WriteLine($"Точность оптимизированного алгоритма:");
         Console.WriteLine($"Средняя ошибка: {average_error:F1} Гц");
@@ -265,7 +265,7 @@ public class SampleSI16PhaseModulationExTests
         var result = data.PhaseModulation(f0, fd);
 
         // Assert
-        Assert.AreEqual(0, result.Length);
+        Assert.IsEmpty(result);
     }
 
     /// <summary>Тест фазовой модуляции для постоянной частоты</summary>
@@ -282,14 +282,14 @@ public class SampleSI16PhaseModulationExTests
         var result = data.AsSpan().PhaseModulation(f0, fd, amplitude);
 
         // Assert
-        Assert.AreEqual(data.Length, result.Length);
+        Assert.HasCount(data.Length, result);
 
         // Проверяем, что амплитуда близка к заданной
         for (var i = 0; i < result.Length; i++)
         {
             var sample_amplitude = Math.Sqrt(result[i].I * result[i].I + result[i].Q * result[i].Q);
-            Assert.IsTrue(Math.Abs(sample_amplitude - amplitude) < 5,
-                $"Sample {i}: amplitude {sample_amplitude:F1} too far from expected {amplitude}");
+            Assert.IsLessThan(5,
+Math.Abs(sample_amplitude - amplitude), $"Sample {i}: amplitude {sample_amplitude:F1} too far from expected {amplitude}");
         }
     }
 
@@ -320,7 +320,7 @@ public class SampleSI16PhaseModulationExTests
         var demodulated = modulated.AsSpan().PhaseDemodulation(f0, fd);
 
         // Assert
-        Assert.AreEqual(original_data.Length, demodulated.Length);
+        Assert.HasCount(original_data.Length, demodulated);
         Assert.AreEqual(0f, demodulated[0]); // Первый отсчёт всегда 0
 
         // Проверяем восстановление данных (пропускаем первый отсчёт и края)
@@ -328,8 +328,8 @@ public class SampleSI16PhaseModulationExTests
         for (var i = 2; i < demodulated.Length - 1; i++) // Пропускаем края из-за переходных процессов
         {
             var error = Math.Abs(demodulated[i] - original_data[i]);
-            Assert.IsTrue(error < tolerance,
-                $"Sample {i}: expected {original_data[i]:F1} Hz, got {demodulated[i]:F1} Hz, error {error:F1} Hz");
+            Assert.IsLessThan(tolerance,
+error, $"Sample {i}: expected {original_data[i]:F1} Hz, got {demodulated[i]:F1} Hz, error {error:F1} Hz");
         }
     }
 
@@ -350,8 +350,8 @@ public class SampleSI16PhaseModulationExTests
         var (samples2, final_phase2) = data2.AsSpan().PhaseModulation(f0, fd, final_phase1);
 
         // Assert
-        Assert.AreEqual(data1.Length, samples1.Length);
-        Assert.AreEqual(data2.Length, samples2.Length);
+        Assert.HasCount(data1.Length, samples1);
+        Assert.HasCount(data2.Length, samples2);
 
         // Проверяем непрерывность фазы на стыке блоков
         var last_sample = samples1[^1];
@@ -364,8 +364,8 @@ public class SampleSI16PhaseModulationExTests
         var phase_diff = Math.Abs(first_phase - last_phase);
         if (phase_diff > Math.PI) phase_diff = 2 * Math.PI - phase_diff;
 
-        Assert.IsTrue(phase_diff < 0.5,
-            $"Phase discontinuity too large: {phase_diff:F3} rad");
+        Assert.IsLessThan(0.5,
+phase_diff, $"Phase discontinuity too large: {phase_diff:F3} rad");
     }
 
     /// <summary>Тест производительности фазовой модуляции</summary>
@@ -389,9 +389,9 @@ public class SampleSI16PhaseModulationExTests
         stopwatch.Stop();
 
         // Assert
-        Assert.AreEqual(data_count, result.Length);
-        Assert.IsTrue(stopwatch.ElapsedMilliseconds < 500,
-            $"Modulation took {stopwatch.ElapsedMilliseconds} ms, expected < 500 ms");
+        Assert.HasCount(data_count, result);
+        Assert.IsLessThan(500,
+stopwatch.ElapsedMilliseconds, $"Modulation took {stopwatch.ElapsedMilliseconds} ms, expected < 500 ms");
 
         Console.WriteLine($"Фазовая модуляция {data_count} образцов заняла {stopwatch.ElapsedMilliseconds} мс");
         Console.WriteLine($"Производительность: {data_count / (double)stopwatch.ElapsedMilliseconds / 1000:F1} млн. образцов/сек");

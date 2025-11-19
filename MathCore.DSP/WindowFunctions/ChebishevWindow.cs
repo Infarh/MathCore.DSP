@@ -1,13 +1,18 @@
 ﻿namespace MathCore.DSP.WindowFunctions;
 
-/// <summary>Параметрическое окно Дольфа-Чебышева</summary>
+/// <summary>Окно Дольфа–Чебышева (Chebyshev, Dolph–Chebyshev)</summary>
+/// <remarks>
+/// Параметрическое окно с равноволновыми (equiripple) боковыми лепестками, позволяющее задавать их уровень через параметр gamma (в дБ)
+/// Применяется в задачах, где требуется строгий контроль уровня боковых лепестков при конкретной ширине главного лепестка; подходит для узкополосного спектрального анализа и синтеза FIR‑фильтров
+/// Источник: C. L. Dolph, A current distribution for broadside arrays which optimizes the relationship between beam width and side-lobe level, Proc. IRE, 1946; также F. J. Harris, 1978, https://ieeexplore.ieee.org/document/1455100
+/// </remarks>
 public static class ChebyshevWindow
 {
-    /// <summary>Значение отсчёта окна Чебышева</summary>
-    /// <param name="n">Номер отсчёта окна (должен быть меньше N)</param>
-    /// <param name="N">размер окна</param>
+    /// <summary>Значение окна Чебышева в дискретной точке</summary>
+    /// <param name="n">Номер отсчёта (0 ≤ n &lt; N)</param>
+    /// <param name="N">Размер окна</param>
     /// <param name="gamma">Уровень боковых лепестков в дБ</param>
-    /// <returns></returns>
+    /// <returns>Значение оконной функции в точке n</returns>
     public static double Value(int n, int N, int gamma)
     {
         var q = 10.Pow(gamma / 20);
@@ -21,8 +26,6 @@ public static class ChebyshevWindow
 #else
         var b = Math.Cosh(MathEx.Hyperbolic.Acosh(q) / (N - 1));
 #endif
-
-        static double C(int N1, double x) => Math.Cos(N1 * Math.Acos(x));
 
         var pin = Consts.pi / N;
         var p2in = Consts.pi2 / N;
@@ -39,5 +42,7 @@ public static class ChebyshevWindow
         var result = q + 2 * sum;
 
         return result;
+
+        static double C(int N1, double x) => Math.Cos(N1 * Math.Acos(x));
     }
 }

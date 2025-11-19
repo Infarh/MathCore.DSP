@@ -19,9 +19,7 @@ public class SampleSI16MagnitudeCalculatorTests
                 var actual = calculator.GetMagnitude(sample);
 
                 // Проверяем с небольшим допуском из-за float
-                Assert.IsTrue(
-                    condition: Math.Abs(expected - actual) < 1e-5f,
-                    message: $"I={i}, Q={q}, expected={expected}, actual={actual}");
+                Assert.IsLessThan(1e-5f, Math.Abs(expected - actual), $"I={i}, Q={q}, expected={expected}, actual={actual}");
             }
     }
 }

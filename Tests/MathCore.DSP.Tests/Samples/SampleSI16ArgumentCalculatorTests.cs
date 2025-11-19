@@ -20,9 +20,9 @@ public class SampleSI16ArgumentCalculatorTests
                 var actual = calculator.GetArgument(sample);
 
                 // Проверяем с небольшим допуском из-за float
-                Assert.IsTrue(
-                    Math.Abs(expected - actual) < 1e-5f,
-                    $"I={i}, Q={q}, expected={expected}, actual={actual}");
+                Assert.IsLessThan(
+1e-5f,
+                    Math.Abs(expected - actual), $"I={i}, Q={q}, expected={expected}, actual={actual}");
             }
     }
 }

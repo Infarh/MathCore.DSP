@@ -24,8 +24,8 @@ public class ButterworthLowPass : UnitTest
         const double fp = 2 / Consts.pi2;   // Гц // Граничная частота полосы запирания
         const double fs = 4 / Consts.pi2;   // Гц // Граничная частота полосы пропускания
 
-        Assert.IsTrue(fp < fs);
-        Assert.IsTrue(fp < fd / 2);
+        Assert.IsLessThan(fs, fp);
+        Assert.IsLessThan(fd / 2, fp);
 
         //const double wp = Consts.pi2 * fp * dt; // 0.628318530717959 рад/с
         //const double ws = Consts.pi2 * fs * dt; // 1.884955592153876 рад/с

@@ -20,8 +20,8 @@ public class HighPassRCTests : UnitTest
         var a = rc.A;
         var b = rc.B;
 
-        Assert.AreEqual(2, a.Count);
-        Assert.AreEqual(2, b.Count);
+        Assert.HasCount(2, a);
+        Assert.HasCount(2, b);
 
         var a0 = a[0];
         var a1 = a[1];

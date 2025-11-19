@@ -33,8 +33,8 @@ public class ChebyshevLowPass : ChebyshevFiltersTests
 
         #region Аналитический расчёт
 
-        Assert.IsTrue(fp < fs);
-        Assert.IsTrue(fp < fd / 2);
+        Assert.IsLessThan(fs, fp);
+        Assert.IsLessThan(fd / 2, fp);
 
         var eps_p = (10d.Pow(Rp / 10) - 1).Sqrt();
         var eps_s = (10d.Pow(Rs / 10) - 1).Sqrt();
@@ -251,8 +251,8 @@ public class ChebyshevLowPass : ChebyshevFiltersTests
 
         #region Аналитический расчёт
 
-        Assert.IsTrue(fp < fs);
-        Assert.IsTrue(fp < fd / 2);
+        Assert.IsLessThan(fs, fp);
+        Assert.IsLessThan(fd / 2, fp);
 
         var eps_p = (10d.Pow(Rp / 10) - 1).Sqrt();
         var eps_s = (10d.Pow(Rs / 10) - 1).Sqrt();
@@ -419,8 +419,8 @@ public class ChebyshevLowPass : ChebyshevFiltersTests
 
         #region Аналитический расчёт
 
-        Assert.IsTrue(fp < fs);
-        Assert.IsTrue(fp < fd / 2);
+        Assert.IsLessThan(fs, fp);
+        Assert.IsLessThan(fd / 2, fp);
 
         var eps_p = (10d.Pow(Rp / 10) - 1).Sqrt();
         var eps_s = (10d.Pow(Rs / 10) - 1).Sqrt();

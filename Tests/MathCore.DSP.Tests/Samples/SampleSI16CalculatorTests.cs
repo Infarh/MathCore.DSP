@@ -30,6 +30,6 @@ public class SampleSI16CalculatorTests
                 indices.Add(index1);
             }
 
-        Assert.AreEqual(8385, indices.Count); // Проверка уникальности
+        Assert.HasCount(8385, indices); // Проверка уникальности
     }
 }

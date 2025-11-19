@@ -19,7 +19,7 @@ public class SampleSI16PhaseModulationExTests
         var result = samples.PhaseDemodulation(f0, fd);
 
         // Assert
-        Assert.AreEqual(0, result.Length);
+        Assert.IsEmpty(result);
     }
 
     /// <summary>Тест фазовой демодуляции для массива с одним элементом</summary>
@@ -35,7 +35,7 @@ public class SampleSI16PhaseModulationExTests
         var result = samples.PhaseDemodulation(f0, fd);
 
         // Assert
-        Assert.AreEqual(1, result.Length);
+        Assert.HasCount(1, result);
         Assert.AreEqual(0f, result[0]);
     }
 
@@ -60,14 +60,14 @@ public class SampleSI16PhaseModulationExTests
         var result = samples.PhaseDemodulation(f0, fd);
 
         // Assert
-        Assert.AreEqual(5, result.Length);
+        Assert.HasCount(5, result);
         Assert.AreEqual(0f, result[0]); // Первый всегда 0
 
         // Для постоянного сигнала мгновенная частота должна быть близка к нулю
         // после вычитания центральной частоты результат должен быть близок к -f0
         for (var i = 1; i < result.Length; i++)
-            Assert.IsTrue(Math.Abs(result[i] + f0) < 50,
-                $"Sample {i}: expected ~{-f0}, got {result[i]}");
+            Assert.IsLessThan(50,
+Math.Abs(result[i] + f0), $"Sample {i}: expected ~{-f0}, got {result[i]}");
     }
 
     /// <summary>Тест фазовой демодуляции для синусоидального сигнала с известной частотой</summary>
@@ -99,7 +99,7 @@ public class SampleSI16PhaseModulationExTests
         var result = samples.AsSpan().PhaseDemodulation(f0, fd);
 
         // Assert
-        Assert.AreEqual(samples_count, result.Length);
+        Assert.HasCount(samples_count, result);
         Assert.AreEqual(0f, result[0]); // Первый всегда 0
 
         // Проверяем, что результат близок к ожидаемой частоте (f_signal - f0)
@@ -114,8 +114,8 @@ public class SampleSI16PhaseModulationExTests
 
         // Проверяем, что большинство образцов дает правильную частоту
         var expected_stable_count = (result.Length - 40) * 0.8; // 80% образцов должны быть стабильными
-        Assert.IsTrue(stable_samples > expected_stable_count,
-            $"Expected at least {expected_stable_count} stable samples, got {stable_samples}");
+        Assert.IsGreaterThan(expected_stable_count,
+stable_samples, $"Expected at least {expected_stable_count} stable samples, got {stable_samples}");
     }
 
     /// <summary>Тест производительности фазовой демодуляции</summary>
@@ -142,11 +142,11 @@ public class SampleSI16PhaseModulationExTests
         stopwatch.Stop();
 
         // Assert
-        Assert.AreEqual(samples_count, result.Length);
+        Assert.HasCount(samples_count, result);
 
         // Проверяем, что выполняется достаточно быстро (менее 200 мс для 100k образцов)
-        Assert.IsTrue(stopwatch.ElapsedMilliseconds < 200,
-            $"Деmodulation took {stopwatch.ElapsedMilliseconds} ms, expected < 200 ms");
+        Assert.IsLessThan(200,
+stopwatch.ElapsedMilliseconds, $"Деmodulation took {stopwatch.ElapsedMilliseconds} ms, expected < 200 ms");
 
         Console.WriteLine($"Фазовая демодуляция {samples_count} образцов заняла {stopwatch.ElapsedMilliseconds} мс");
     }
@@ -175,12 +175,12 @@ public class SampleSI16PhaseModulationExTests
         var result = samples.PhaseDemodulation(f0, fd);
 
         // Assert
-        Assert.AreEqual(samples.Length, result.Length);
+        Assert.HasCount(samples.Length, result);
         Assert.AreEqual(0f, result[0]); // Первый всегда 0
 
         // Проверяем, что результаты имеют разумные значения без больших скачков
         for (var i = 1; i < result.Length; i++)
-            Assert.IsTrue(Math.Abs(result[i]) < 1000,
-                $"Sample {i}: frequency {result[i]} Hz seems too high");
+            Assert.IsLessThan(1000,
+Math.Abs(result[i]), $"Sample {i}: frequency {result[i]} Hz seems too high");
     }
 }

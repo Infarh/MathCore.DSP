@@ -5,88 +5,138 @@ namespace MathCore.DSP;
 /// <summary>Методы-расширения для вещественных массивов</summary>
 public static partial class DoubleArrayDSPExtensions
 {
-    internal static Vector<double> ToVector(this double[] array) => new(array);
-
-    /// <summary>Вычислить значение коэффициента передачи фильтра, заданного импульсной характеристикой</summary>
-    /// <param name="ImpulseResponse">Массив отсчётов импульсной характеристики</param>
-    /// <param name="f">Частота вычисления коэффициента передачи</param>
-    /// <param name="dt">Период дискретизации импульсной характеристики</param>
-    /// <returns>Комплексное значение коэффициента передачи фильтра с указанной импульсной характеристикой</returns>
-    public static Complex FrequencyResponse(this double[] ImpulseResponse, double f, double dt)
-        => ImpulseResponse.FrequencyResponse(f * dt);
-
-    /// <summary>Вычислить значение коэффициента передачи фильтра, заданного импульсной характеристикой</summary>
-    /// <param name="ImpulseResponse">Массив отсчётов импульсной характеристики</param>
-    /// <param name="f">Нормированная частота вычисления коэффициента передачи</param>
-    /// <returns>Комплексное значение коэффициента передачи фильтра с указанной импульсной характеристикой</returns>
-    public static Complex FrequencyResponse(this double[] ImpulseResponse, double f)
+    /// <param name="array">Массив отсчётов импульсной характеристики</param>
+    extension(double[] array)
     {
-        var e = Complex.Exp(-Consts.pi2 * f);
-        Complex result = ImpulseResponse[^1];
-        for (var i = ImpulseResponse.Length - 2; i >= 0; i--)
-            result = result * e + ImpulseResponse[i];
-        return result;
-    }
+        internal Vector<double> ToVector() => new(array);
 
-    /// <summary>Вычисление выходного значения фильтра, заданного вектором состояния и импульсной характеристикой</summary>
-    /// <param name="State">Вектор состояния фильтра</param>
-    /// <param name="ImpulseResponse">Массив значений импульсной характеристики</param>
-    /// <param name="Sample">Значение входного отсчёта фильтра</param>
-    /// <returns>Значение выходного отсчёта фильтра</returns>
-    public static double FilterSample(this double[] State, double[] ImpulseResponse, double Sample)
-    {
-        var result = 0d;
+        /// <summary>Вычислить значение коэффициента передачи фильтра, заданного импульсной характеристикой</summary>
+        /// <param name="f">Частота вычисления коэффициента передачи</param>
+        /// <param name="dt">Период дискретизации импульсной характеристики</param>
+        /// <returns>Комплексное значение коэффициента передачи фильтра с указанной импульсной характеристикой</returns>
+        public Complex FrequencyResponse(double f, double dt)
+            => array.FrequencyResponse(f * dt);
 
-        for (var i = State.Length - 1; i >= 1; i--)
+        /// <summary>Вычислить значение коэффициента передачи фильтра, заданного импульсной характеристикой</summary>
+        /// <param name="f">Нормированная частота вычисления коэффициента передачи</param>
+        /// <returns>Комплексное значение коэффициента передачи фильтра с указанной импульсной характеристикой</returns>
+        public Complex FrequencyResponse(double f)
         {
-            State[i] = State[i - 1];
-            result += State[i] * ImpulseResponse[i];
+            var e = Complex.Exp(-Consts.pi2 * f);
+            Complex result = array[^1];
+            for (var i = array.Length - 2; i >= 0; i--)
+                result = result * e + array[i];
+            return result;
         }
 
-        State[0] = Sample;
+        /// <summary>Вычисление выходного значения фильтра, заданного вектором состояния и импульсной характеристикой</summary>
+        /// <param name="ImpulseResponse">Массив значений импульсной характеристики</param>
+        /// <param name="Sample">Значение входного отсчёта фильтра</param>
+        /// <returns>Значение выходного отсчёта фильтра</returns>
+        public double FilterSample(double[] ImpulseResponse, double Sample)
+        {
+            var result = 0d;
 
-        return result + Sample * ImpulseResponse[0];
+            for (var i = array.Length - 1; i >= 1; i--)
+            {
+                array[i] = array[i - 1];
+                result += array[i] * ImpulseResponse[i];
+            }
+
+            array[0] = Sample;
+
+            return result + Sample * ImpulseResponse[0];
+        }
+
+        /// <summary>Вычисление выходного значения фильтра, заданного вектором состояния и импульсной характеристикой</summary>
+        /// <param name="ImpulseResponse">Массив значений импульсной характеристики</param>
+        /// <param name="Sample">Значение входного отсчёта фильтра</param>
+        /// <returns>Значение выходного отсчёта фильтра</returns>
+        public double FilterSampleVector(double[] ImpulseResponse, double Sample)
+        {
+            Array.Copy(array, 0, array, 1, array.Length - 1);
+            array[0] = Sample;
+
+            return Vector.Dot(array.ToVector() * ImpulseResponse.ToVector(), Vector<double>.One);
+        }
+
+        /// <summary>Выполнение фильтрации очередного отсчёта цифрового сигнала с помощью коэффициентов рекуррентного фильтра</summary>
+        /// <param name="A">Вектор коэффициентов обратных связей</param>
+        /// <param name="B">Вектор коэффициентов прямых связей</param>
+        /// <param name="Sample">Фильтруемый отсчёт</param>
+        /// <returns>Обработанное значение</returns>
+        public double FilterSample(double[] A, double[] B, double Sample)
+        {
+            var a0 = 1 / A[0];
+
+            var result = 0d;
+            var input = Sample;
+            var b_length = B.Length;
+            if (A.Length == b_length)
+                for (var i = array.Length - 1; i >= 1; i--)
+                {
+                    //(State[i], result, input) = (State[i - 1], result + State[i - 1] * B[i] * a0, input - State[i - 1] * A[i] * a0);
+                    var v = array[i - 1];
+                    array[i] = v;
+                    result += v * B[i] * a0;
+                    input -= v * A[i] * a0;
+                    //(State[i], result, input) = (v, result + v * B[i] * a0, input - v * A[i] * a0);
+                }
+            else
+            {
+                for (var i = array.Length - 1; i >= b_length; i--)
+                {
+                    var v = array[i - 1];
+                    array[i] = v;
+                    input -= v * A[i] * a0;
+                }
+                for (var i = b_length - 1; i >= 1; i--)
+                {
+                    var v = array[i - 1];
+                    array[i] = v;
+                    result += v * B[i] * a0;
+                    input -= v * A[i] * a0;
+                }
+            }
+
+            array[0] = input;
+            return result + input * B[0] * a0;
+        }
     }
 
-    /// <summary>Вычисление выходного значения фильтра, заданного вектором состояния и импульсной характеристикой</summary>
-    /// <param name="State">Вектор состояния фильтра</param>
-    /// <param name="ImpulseResponse">Массив значений импульсной характеристики</param>
-    /// <param name="Sample">Значение входного отсчёта фильтра</param>
-    /// <returns>Значение выходного отсчёта фильтра</returns>
-    public static double FilterSampleVector(this double[] State, double[] ImpulseResponse, double Sample)
+    /// <param name="samples">Последовательность отсчётов цифрового сигнала для фильтрации</param>
+    extension(IEnumerable<double> samples)
     {
-        Array.Copy(State, 0, State, 1, State.Length - 1);
-        State[0] = Sample;
+        /// <summary>Выполнение фильтрации цифрового сигнала с помощью FIR-фильтра</summary>
+        /// <param name="ImpulseResponse">Импульсная характеристика фильтра</param>
+        /// <param name="State">Вектор состояния фильтра</param>
+        /// <returns>Перечисление отсчётов на выходе фильтра</returns>
+        /// <exception cref="ArgumentNullException">Передана пустая ссылка в одном из параметров</exception>
+        /// <exception cref="InvalidOperationException">Размер массива импульсной характеристики не соответствует размеру массива состояния фильтра</exception>
+        public IEnumerable<double> FilterFIR(double[] ImpulseResponse, double[] State)
+        {
+            ArgumentNullException.ThrowIfNull(samples);
+            ArgumentNullException.ThrowIfNull(ImpulseResponse);
+            ArgumentNullException.ThrowIfNull(State);
+            if (ImpulseResponse.Length != State.Length) 
+                throw new InvalidOperationException("Размер массива импульсной характеристики не соответствует размеру массива состояния фильтра");
 
-        return Vector.Dot(State.ToVector() * ImpulseResponse.ToVector(), Vector<double>.One);
+            foreach (var sample in samples)
+                yield return State.FilterSample(ImpulseResponse, sample);
+        }
+
+        public IEnumerable<double> FilterFIR(double[] ImpulseResponse) => samples.NotNull().FilterFIR(ImpulseResponse.NotNull(), new double[ImpulseResponse.Length]);
     }
-
-    public static IEnumerable<double> FilterFIR(
-        this IEnumerable<double> samples,
-        double[] ImpulseResponse,
-        double[] State)
-    {
-        if (samples is null) throw new ArgumentNullException(nameof(samples));
-        if (ImpulseResponse is null) throw new ArgumentNullException(nameof(ImpulseResponse));
-        if (State is null) throw new ArgumentNullException(nameof(State));
-        if (ImpulseResponse.Length != State.Length) throw new InvalidOperationException("Размер массива импульсной характеристики не соответствует размеру массива состояния фильтра");
-
-        foreach (var sample in samples)
-            yield return State.FilterSample(ImpulseResponse, sample);
-    }
-
-    public static IEnumerable<double> FilterFIR(this IEnumerable<double> samples, double[] ImpulseResponse)
-        => samples.NotNull().FilterFIR(ImpulseResponse.NotNull(), new double[ImpulseResponse.Length]);
-
 
     public static Complex FrequencyResponse(double[] A, double[] B, double f, double dt)
         => FrequencyResponse(A.NotNull(), B.NotNull(), f * dt);
 
-    public static Complex FrequencyResponse(this (IReadOnlyList<double> A, IReadOnlyList<double> B) Filter, double f, double dt) =>
-        FrequencyResponse(Filter.A, Filter.B, f * dt);
+    extension((IReadOnlyList<double> A, IReadOnlyList<double> B) Filter)
+    {
+        public Complex FrequencyResponse(double f, double dt) => FrequencyResponse(Filter.A, Filter.B, f * dt);
 
-    public static Complex FrequencyResponse(this (IReadOnlyList<double> A, IReadOnlyList<double> B) Filter, double f) =>
-        FrequencyResponse(Filter.A, Filter.B, f);
+        public Complex FrequencyResponse(double f) => FrequencyResponse(Filter.A, Filter.B, f);
+    }
 
     /// <summary>Расчёт коэффициента передачи рекуррентного фильтра, заданного массивами своих коэффициентов для указанной частоты</summary>
     /// <param name="A">Массив коэффициентов обратных связей</param>
@@ -96,6 +146,8 @@ public static partial class DoubleArrayDSPExtensions
     public static Complex FrequencyResponse(IReadOnlyList<double> A, IReadOnlyList<double> B, double f)
     {
         var p = Complex.Exp(-Consts.pi2 * f);
+
+        return Sum(B, p) / Sum(A, p);
 
         static Complex Sum(IReadOnlyList<double> V, Complex p)
         {
@@ -107,8 +159,6 @@ public static partial class DoubleArrayDSPExtensions
             
             return new(re, im);
         }
-
-        return Sum(B, p) / Sum(A, p);
     }
 
     public static Complex DigitalFrequencyResponseFromZPoles(
@@ -119,26 +169,26 @@ public static partial class DoubleArrayDSPExtensions
     {
         var z = Complex.Exp(-Consts.pi2 * f * dt);
 
-        var P0 = Complex.Real;
+        var p0 = Complex.Real;
         var one = Complex.Real;
         foreach (var z0 in ZerosZ)
         {
             var zz = z0 * z;
             if (zz == one)
                 return 0;
-            P0 *= 1 - zz;
+            p0 *= 1 - zz;
         }
 
-        var Pp = Complex.Real;
+        var pp = Complex.Real;
         foreach (var zp in PolesZ)
         {
             var zz = zp * z;
             if (zz == one)
                 return new(double.PositiveInfinity, double.PositiveInfinity);
-            Pp *= 1 - zz;
+            pp *= 1 - zz;
         }
 
-        return P0 / Pp;
+        return p0 / pp;
     }
 
     public static Complex AnalogFrequencyResponseFromPoles(
@@ -167,73 +217,20 @@ public static partial class DoubleArrayDSPExtensions
         return zeros / poles;
     }
 
-    /// <summary>Выполнение фильтрации очередного отсчёта цифрового сигнала с помощью коэффициентов рекуррентного фильтра</summary>
-    /// <param name="State">Вектор состояния фильтра</param>
-    /// <param name="A">Вектор коэффициентов обратных связей</param>
-    /// <param name="B">Вектор коэффициентов прямых связей</param>
-    /// <param name="Sample">Фильтруемый отсчёт</param>
-    /// <returns>Обработанное значение</returns>
-    public static double FilterSample(
-        this double[] State,
-        double[] A,
-        double[] B,
-        double Sample)
+    extension(IEnumerable<double> samples)
     {
-        var a0 = 1 / A[0];
-
-        var result = 0d;
-        var input = Sample;
-        var b_length = B.Length;
-        if (A.Length == b_length)
-            for (var i = State.Length - 1; i >= 1; i--)
-            {
-                //(State[i], result, input) = (State[i - 1], result + State[i - 1] * B[i] * a0, input - State[i - 1] * A[i] * a0);
-                var v = State[i - 1];
-                State[i] = v;
-                result += v * B[i] * a0;
-                input -= v * A[i] * a0;
-                //(State[i], result, input) = (v, result + v * B[i] * a0, input - v * A[i] * a0);
-            }
-        else
+        public IEnumerable<double> FilterIIR(double[] A, double[] B, double[] State)
         {
-            for (var i = State.Length - 1; i >= b_length; i--)
-            {
-                var v = State[i - 1];
-                State[i] = v;
-                input -= v * A[i] * a0;
-            }
-            for (var i = b_length - 1; i >= 1; i--)
-            {
-                var v = State[i - 1];
-                State[i] = v;
-                result += v * B[i] * a0;
-                input -= v * A[i] * a0;
-            }
+            ArgumentNullException.ThrowIfNull(samples);
+            ArgumentNullException.ThrowIfNull(A);
+            ArgumentNullException.ThrowIfNull(B);
+            if (A.Length < B.Length) throw new InvalidOperationException("Размеры массивов числителя и знаменателя передаточной функции не равны");
+            ArgumentNullException.ThrowIfNull(State);
+
+            foreach (var sample in samples)
+                yield return FilterSample(State, A, B, sample);
         }
 
-        State[0] = input;
-        return result + input * B[0] * a0;
+        public IEnumerable<double> FilterIIR(double[] A, double[] B) => samples.FilterIIR(A, B, new double[A.Length]);
     }
-
-    public static IEnumerable<double> FilterIIR(
-        this IEnumerable<double> samples,
-        double[] A,
-        double[] B,
-        double[] State)
-    {
-        if (samples is null) throw new ArgumentNullException(nameof(samples));
-        if (A is null) throw new ArgumentNullException(nameof(A));
-        if (B is null) throw new ArgumentNullException(nameof(B));
-        if (A.Length < B.Length) throw new InvalidOperationException("Размеры массивов числителя и знаменателя передаточной функции не равны");
-        if (State is null) throw new ArgumentNullException(nameof(State));
-
-        foreach (var sample in samples)
-            yield return FilterSample(State, A, B, sample);
-    }
-
-    public static IEnumerable<double> FilterIIR(
-        this IEnumerable<double> samples,
-        double[] A,
-        double[] B)
-        => samples.FilterIIR(A, B, new double[A.Length]);
 }
