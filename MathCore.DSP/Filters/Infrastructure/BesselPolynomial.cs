@@ -1,7 +1,13 @@
 ﻿namespace MathCore.DSP.Filters.Infrastructure;
 
+/// <summary>Класс для вычисления полиномов Бесселя</summary>
 internal static class BesselPolynomial
 {
+    /// <summary>Вычисляет значение полинома Бесселя n-й степени в точке x</summary>
+    /// <param name="x">Аргумент полинома</param>
+    /// <param name="n">Степень полинома (n ≥ 0)</param>
+    /// <returns>Значение полинома Бесселя n-й степени в точке x</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Если n &lt; 0</exception>
     public static double Th(double x, int n) => n switch
     {
         < 0 => throw new ArgumentOutOfRangeException(nameof(n), n, "n должно быть >= 0"),

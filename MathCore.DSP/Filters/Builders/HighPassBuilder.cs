@@ -1,4 +1,5 @@
-﻿namespace MathCore.DSP.Filters.Builders;
+﻿// ReSharper disable InconsistentNaming
+namespace MathCore.DSP.Filters.Builders;
 
 /// <summary>Строитель фильтров верхних частот</summary>
 /// <param name="dt">Период дискретизации</param>
@@ -20,7 +21,7 @@ public readonly record struct HighPassBuilder(double dt)
 }
 
 /// <summary>Строитель фильтра Баттерворта верхних частот</summary>
-/// <param name="dt">Период дискретизации</param> /// <param name="fs">Частота заграждения</param>
+/// <param name="dt">Период дискретизации</param>
 /// <param name="fs">Частота заграждения</param>
 /// <param name="fp">Частота пропускания</param>
 /// <param name="Gp">Коэффициент передачи в полосе пропускания</param>

@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
 
+using MathCore.Extensions;
+
 using static System.Math;
 
 using static MathCore.Polynom.Array;
@@ -8,95 +10,104 @@ using static MathCore.SpecialFunctions.EllipticJacobi;
 
 namespace MathCore.DSP.Filters;
 
+/// <summary>Полосовой эллиптический фильтр</summary>
 public class EllipticBandPass : EllipticFilter
 {
+    /// <summary>Проверяет корректность частот полосы фильтра</summary>
+    /// <param name="dt">Период дискретизации</param>
+    /// <param name="fsl">Нижняя частота среза</param>
+    /// <param name="fpl">Нижняя частота пропускания</param>
+    /// <param name="fph">Верхняя частота пропускания</param>
+    /// <param name="fsh">Верхняя частота среза</param>
     private static void CheckFrequencies(double dt, double fsl, double fpl, double fph, double fsh)
     {
         if (dt <= 0)
             throw new InvalidOperationException($"Период дискретизации dt={dt} не может быть меньше, либо равен нулю")
-            {
-                Data =
-                {
-                    { nameof(dt), dt },
-                    { "fd", 1/dt },
-                    { nameof(fsl), fsl },
-                    { nameof(fpl), fpl },
-                    { nameof(fph), fph },
-                    { nameof(fsh), fsh },
-                }
-            };
-
+                .WithData(nameof(dt), dt)
+                .WithData("fd", 1 / dt)
+                .WithData(nameof(fsl), fsl)
+                .WithData(nameof(fpl), fpl)
+                .WithData(nameof(fph), fph)
+                .WithData(nameof(fsh), fsh);
         if (1 / dt == 0)
             throw new InvalidOperationException("Частота дискретизации не может быть равна нулю")
-            {
-                Data =
-                {
-                    { nameof(dt), dt },
-                    { "fd", 1/dt },
-                    { nameof(fsl), fsl },
-                    { nameof(fpl), fpl },
-                    { nameof(fph), fph },
-                    { nameof(fsh), fsh },
-                }
-            };
-
+                .WithData(nameof(dt), dt)
+                .WithData("fd", 1 / dt)
+                .WithData(nameof(fsl), fsl)
+                .WithData(nameof(fpl), fpl)
+                .WithData(nameof(fph), fph)
+                .WithData(nameof(fsh), fsh);
         if (fsl >= fpl)
-            throw new InvalidOperationException($"Нижняя частота среза fsl должна быть ниже нижней частоты пропускания fpl\r\n  dt={dt}\r\n  fsl={fsl}\r\n  fpl={fpl}\r\n  fph={fph}\r\n  fsh={fsh}")
-            {
-                Data =
-                {
-                    { nameof(dt), dt },
-                    { "fd", 1/dt },
-                    { nameof(fsl), fsl },
-                    { nameof(fpl), fpl },
-                    { nameof(fph), fph },
-                    { nameof(fsh), fsh },
-                }
-            };
-
+            throw new InvalidOperationException($"""
+                Нижняя частота среза fsl должна быть ниже нижней частоты пропускания fpl
+                  dt={dt}
+                  fsl={fsl}
+                  fpl={fpl}
+                  fph={fph}
+                  fsh={fsh}
+                """)
+                .WithData(nameof(dt), dt)
+                .WithData("fd", 1 / dt)
+                .WithData(nameof(fsl), fsl)
+                .WithData(nameof(fpl), fpl)
+                .WithData(nameof(fph), fph)
+                .WithData(nameof(fsh), fsh);
         if (fpl >= fph)
-            throw new InvalidOperationException($"Нижняя частота пропускания fpl должна быть ниже верхней частоты пропускания fph\r\n  dt={dt}\r\n  fsl={fsl}\r\n  fpl={fpl}\r\n  fph={fph}\r\n  fsh={fsh}")
-            {
-                Data =
-                {
-                    { nameof(dt), dt },
-                    { "fd", 1/dt },
-                    { nameof(fsl), fsl },
-                    { nameof(fpl), fpl },
-                    { nameof(fph), fph },
-                    { nameof(fsh), fsh },
-                }
-            };
-
+            throw new InvalidOperationException($"""
+                Нижняя частота пропускания fpl должна быть ниже верхней частоты пропускания fph
+                  dt={dt}
+                  fsl={fsl}
+                  fpl={fpl}
+                  fph={fph}
+                  fsh={fsh}
+                """)
+                .WithData(nameof(dt), dt)
+                .WithData("fd", 1 / dt)
+                .WithData(nameof(fsl), fsl)
+                .WithData(nameof(fpl), fpl)
+                .WithData(nameof(fph), fph)
+                .WithData(nameof(fsh), fsh);
         if (fph >= fsh)
-            throw new InvalidOperationException($"Верхняя частота пропускания fph должна быть ниже верхней частоты среза fsh\r\n  dt={dt}\r\n  fsl={fsl}\r\n  fpl={fpl}\r\n  fph={fph}\r\n  fsh={fsh}")
-            {
-                Data =
-                {
-                    { nameof(dt), dt },
-                    { "fd", 1/dt },
-                    { nameof(fsl), fsl },
-                    { nameof(fpl), fpl },
-                    { nameof(fph), fph },
-                    { nameof(fsh), fsh },
-                }
-            };
-
+            throw new InvalidOperationException($"""
+                Верхняя частота пропускания fph должна быть ниже верхней частоты среза fsh
+                  dt={dt}
+                  fsl={fsl}
+                  fpl={fpl}
+                  fph={fph}
+                  fsh={fsh}
+                """)
+                .WithData(nameof(dt), dt)
+                .WithData("fd", 1 / dt)
+                .WithData(nameof(fsl), fsl)
+                .WithData(nameof(fpl), fpl)
+                .WithData(nameof(fph), fph)
+                .WithData(nameof(fsh), fsh);
         if (fsh >= 1 / dt / 2)
-            throw new InvalidOperationException($"Верхняя частота среза fsh должна быть ниже половины частоты дискретизации fd={1 / dt} (1 / (dt={dt}))\r\n  dt={dt}\r\n  fsl={fsl}\r\n  fpl={fpl}\r\n  fph={fph}\r\n  fsh={fsh}")
-            {
-                Data =
-                {
-                    { nameof(dt), dt },
-                    { "fd", 1/dt },
-                    { nameof(fsl), fsl },
-                    { nameof(fpl), fpl },
-                    { nameof(fph), fph },
-                    { nameof(fsh), fsh },
-                }
-            };
+            throw new InvalidOperationException($"""
+                Верхняя частота среза fsh должна быть ниже половины частоты дискретизации fd={1 / dt} (1 / (dt={dt}))
+                  dt={dt}
+                  fsl={fsl}
+                  fpl={fpl}
+                  fph={fph}
+                  fsh={fsh}
+                """)
+                .WithData(nameof(dt), dt)
+                .WithData("fd", 1 / dt)
+                .WithData(nameof(fsl), fsl)
+                .WithData(nameof(fpl), fpl)
+                .WithData(nameof(fph), fph)
+                .WithData(nameof(fsh), fsh);
     }
 
+    /// <summary>Формирует спецификацию фильтра</summary>
+    /// <param name="dt">Период дискретизации</param>
+    /// <param name="fsl">Нижняя частота среза</param>
+    /// <param name="fpl">Нижняя частота пропускания</param>
+    /// <param name="fph">Верхняя частота пропускания</param>
+    /// <param name="fsh">Верхняя частота среза</param>
+    /// <param name="Gp">Коэффициент передачи в полосе пропускания</param>
+    /// <param name="Gs">Коэффициент передачи в полосе заграждения</param>
+    /// <returns>Спецификация фильтра</returns>
     private static Specification GetSpecification(
         double dt,
         double fsl,
@@ -145,6 +156,13 @@ public class EllipticBandPass : EllipticFilter
         return new(dt, fp, fs, Gp, Gs);
     }
 
+    /// <summary>Вычисляет коэффициенты фильтра</summary>
+    /// <param name="fsl">Нижняя частота среза</param>
+    /// <param name="fpl">Нижняя частота пропускания</param>
+    /// <param name="fph">Верхняя частота пропускания</param>
+    /// <param name="fsh">Верхняя частота среза</param>
+    /// <param name="Spec">Спецификация фильтра</param>
+    /// <returns>Кортеж массивов коэффициентов знаменателя и числителя</returns>
     private static (double[] A, double[] B) Initialize(double fsl, double fpl, double fph, double fsh, Specification Spec)
     {
         // Пересчитываем аналоговые частоты полосы заграждения в цифровые
@@ -187,8 +205,8 @@ public class EllipticBandPass : EllipticFilter
         var norm_0 = z_zeros.Multiply(z => z0 - z);
         var norm_p = z_poles.Multiply(z => z0 - z);
 
-        var g_norm = N.IsEven() 
-            ? Spec.Gp * (norm_p / norm_0).Abs 
+        var g_norm = N.IsEven()
+            ? Spec.Gp * (norm_p / norm_0).Abs
             : (z0 * norm_p / norm_0).Abs;
 
         var B = GetCoefficientsInverted(z_zeros).ToArray(b => b.Re * g_norm);
@@ -197,6 +215,14 @@ public class EllipticBandPass : EllipticFilter
         return (A, B);
     }
 
+    /// <summary>Создаёт полосовой эллиптический фильтр</summary>
+    /// <param name="dt">Период дискретизации</param>
+    /// <param name="fsl">Нижняя частота среза</param>
+    /// <param name="fpl">Нижняя частота пропускания</param>
+    /// <param name="fph">Верхняя частота пропускания</param>
+    /// <param name="fsh">Верхняя частота среза</param>
+    /// <param name="Gp">Коэффициент передачи в полосе пропускания</param>
+    /// <param name="Gs">Коэффициент передачи в полосе заграждения</param>
     public EllipticBandPass(
         double dt,
         double fsl,
@@ -207,10 +233,23 @@ public class EllipticBandPass : EllipticFilter
         double Gs = 0.01)
         : this(fsl, fpl, fph, fsh, GetSpecification(dt, fsl, fpl, fph, fsh, Gp, Gs)) { }
 
+    /// <summary>Создаёт полосовой эллиптический фильтр по спецификации</summary>
+    /// <param name="fsl">Нижняя частота среза</param>
+    /// <param name="fpl">Нижняя частота пропускания</param>
+    /// <param name="fph">Верхняя частота пропускания</param>
+    /// <param name="fsh">Верхняя частота среза</param>
+    /// <param name="Spec">Спецификация фильтра</param>
     private EllipticBandPass(double fsl, double fpl, double fph, double fsh, Specification Spec)
         : this(Initialize(fsl, fpl, fph, fsh, Spec), Spec) { }
 
+    /// <summary>Создаёт полосовой эллиптический фильтр по массивам коэффициентов</summary>
+    /// <param name="Polynoms">Кортеж массивов коэффициентов</param>
+    /// <param name="Spec">Спецификация фильтра</param>
     private EllipticBandPass((double[] A, double[] B) Polynoms, Specification Spec) : this(Polynoms.B, Polynoms.A, Spec) { }
 
+    /// <summary>Создаёт полосовой эллиптический фильтр по массивам коэффициентов</summary>
+    /// <param name="B">Коэффициенты числителя</param>
+    /// <param name="A">Коэффициенты знаменателя</param>
+    /// <param name="Spec">Спецификация фильтра</param>
     private EllipticBandPass(double[] B, double[] A, Specification Spec) : base(B, A, Spec) { }
 }

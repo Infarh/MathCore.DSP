@@ -2,17 +2,19 @@
 
  <PropertyGroup>
     <TargetFrameworks>
+      net10.0;
       net9.0;
       net8.0;
       netstandard2.0
     </TargetFrameworks>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <LangVersion>preview</LangVersion>
-    <Version>0.0.14.2</Version>
+    <Version>0.0.15</Version>
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageReleaseNotes>
-      Обновление пакетов
+      Миграция на .NET 10.0 и обновление зависимостей.
     </PackageReleaseNotes>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -20,6 +22,7 @@
     <Description>Библиотека алгоритмов цифровой обработки сигналов</Description>
     <PackageProjectUrl>https://github.com/Infarh/MathCore.DSP</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Infarh/MathCore.DSP.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     <PackageTags>DSP;Signal processing</PackageTags>
     <Copyright>shmachilin@gmail.com</Copyright>
     <SignAssembly>true</SignAssembly>
@@ -52,10 +55,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MathCore" Version="0.0.93.2" />
+    <PackageReference Include="MathCore" Version="0.0.94.1" />
     <PackageReference Include="System.Memory" Version="4.6.3" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.6.1" />
     <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.7.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="MathCore.DSP.Infrastructure" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="readme.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>

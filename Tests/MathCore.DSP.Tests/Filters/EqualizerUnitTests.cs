@@ -46,7 +46,7 @@ public class EqualizerUnitTests
         var k_min_max_expected = (1 - alpha).Abs() / Consts.sqrt_2 + alpha;
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(2.0, 1.12e-14, DisplayName = "SignalProcessing_f0 alpha=2.0 eps=1.12e-14")]
     [DataRow(1.9, 1.05e-14, DisplayName = "SignalProcessing_f0 alpha=1.9 eps=1.05e-14")]
     [DataRow(1.8, 9.56e-15, DisplayName = "SignalProcessing_f0 alpha=1.8 eps=9.56e-15")]

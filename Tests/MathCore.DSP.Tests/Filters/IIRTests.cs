@@ -26,7 +26,7 @@ public class IIRTests : UnitTest
 
         var impulse_response = filter.Process(delta).ToArray();
 
-        Assert.AreEqual(impulse_response_length, impulse_response.Length);
+        Assert.HasCount(impulse_response_length, impulse_response);
 
         double[] expected_impulse_response = [b0, -a1 * b0, -a1 * -a1 * b0];
         CollectionAssert.AreEqual(expected_impulse_response, impulse_response);

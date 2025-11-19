@@ -7,13 +7,14 @@ using static MathCore.Consts;
 namespace MathCore.DSP.Filters;
 
 /// <summary>Цифровой фильтр на основе аналогового прототипа</summary>
-//[KnownType(typeof(BesselFilter))]       // Наихудшее аппроксимация прямоугольной АЧХ (близка по форме к гаусовой кривой), но наилучшая форма переходной хар-ки
+//[KnownType(typeof(BesselFilter))]     // Наихудшая аппроксимация прямоугольной АЧХ (близка по форме к гауссовой кривой), но наилучшая форма переходной хар-ки
 [KnownType(typeof(ButterworthFilter))]  // Промежуточные качества по прямоугольности АЧХ и переходной хар-ке
 [KnownType(typeof(ChebyshevFilter))]    // АЧХ наиболее приближена к прямоугольной - наибольшие пульсации в переходной хор-ке
 [KnownType(typeof(EllipticFilter))]     // Максимальная крутизна АЧХ
 public abstract class AnalogBasedFilter : IIR
 {
     //https://ru.dsplib.org/content/filter_low2low/filter_low2low.html
+    /// <summary>Класс преобразований нулей и полюсов аналоговых прототипов</summary>
     public static class Transform
     {
         /// <summary>Преобразование нулей/полюсов фильтра ФНЧ-ФНЧ</summary>
@@ -28,8 +29,12 @@ public abstract class AnalogBasedFilter : IIR
         /// <returns>Нули/полюса нового фильтра ФВЧ</returns>
         public static IEnumerable<Complex> ToHigh(IEnumerable<Complex> Z, double wp) => Z.Select(z => z * wp);
 
+        /// <summary>Установить значения новых полюсов/нулей</summary>
+        /// <param name="p">Исходное значение</param>
+        /// <param name="D">Смещение</param>
+        /// <param name="p1">Первое значение</param>
+        /// <param name="p2">Второе значение</param>
         private static void Set(in Complex p, in Complex D, out Complex p1, out Complex p2) => (p1, p2) = (p + D, p - D);
-
 
         /// <summary>Преобразование нулей/полюсов фильтра ФНЧ-ППФ</summary>
         /// <param name="Poles">Полюса прототипа (нормированного ФНЧ)</param>
@@ -49,7 +54,7 @@ public abstract class AnalogBasedFilter : IIR
             if (Poles.Length == 0) throw new ArgumentException("Размер вектора полюсов должен быть больше 0", nameof(Poles));
             if (Zeros.Length > Poles.Length) throw new ArgumentException("Число нулей не должна быть больше числа полюсов", nameof(Zeros));
 
-            var (wpl, wph)  = (pi2 * fpl, pi2 * fph);
+            var (wpl, wph) = (pi2 * fpl, pi2 * fph);
             var (dw05, wc2) = ((wph - wph) / 2, wpl * wph);
 
             // На каждый исходный полюс формируется пара новых полюсов
@@ -98,7 +103,7 @@ public abstract class AnalogBasedFilter : IIR
             if (count_p == 0) throw new ArgumentException("Размер вектора полюсов должен быть больше 0", nameof(Poles));
             if (count_0 > count_p) throw new ArgumentException("Число нулей не должна быть больше числа полюсов", nameof(Zeros));
 
-            var (wpl, wph)  = (pi2 * fpl, pi2 * fph);
+            var (wpl, wph) = (pi2 * fpl, pi2 * fph);
             var (dw05, wc2) = ((wph - wph) / 2, wpl * wph);
 
             // На каждый исходный полюс формируется пара новых полюсов
@@ -236,6 +241,12 @@ public abstract class AnalogBasedFilter : IIR
             (Wp, Ws) = (pi2 * Fp, pi2 * Fs);
         }
 
+        /// <summary>Деконструктор спецификации фильтра</summary>
+        /// <param name="dt">Период дискретизации</param>
+        /// <param name="fp">Граничная частота полосы пропускания</param>
+        /// <param name="fs">Граничная частота полосы заграждения</param>
+        /// <param name="Gp">Коэффициент передачи в полосе пропускания</param>
+        /// <param name="Gs">Коэффициент передачи в полосе заграждения</param>
         public void Deconstruct(out double dt, out double fp, out double fs, out double Gp, out double Gs) =>
             (dt, fp, fs, Gp, Gs) = (this.dt, this.fp, this.fs, this.Gp, this.Gs);
     }
@@ -276,10 +287,12 @@ public abstract class AnalogBasedFilter : IIR
     /// <param name="Spec">Спецификация фильтра</param>
     protected AnalogBasedFilter(double[] B, double[] A, Specification Spec) : base(B, A) => (dt, fp, fs, Gp, Gs) = Spec;
 
+    /// <inheritdoc/>
     public override Complex FrequencyResponse(double f) => base.FrequencyResponse(f / fd);
 
+    /// <inheritdoc/>
     public override Complex FrequencyResponse(double f, double dt) => base.FrequencyResponse(f * dt);
-    
+
     /// <summary>Метод преобразования нулей и полюсов нормированного ФНЧ в нули и полюса ППФ</summary>
     /// <param name="Normed">Нормированные нули и полюса ФНЧ</param>
     /// <param name="fmin">Нижняя частота среза</param>
@@ -332,18 +345,34 @@ public abstract class AnalogBasedFilter : IIR
         }
     }
 
+    /// <summary>Преобразование нулей/полюсов нормированного ФНЧ в нули/полюса ФНЧ с другой частотой среза</summary>
+    /// <param name="Normed">Нормированные нули/полюса ФНЧ</param>
+    /// <param name="fp">Новая частота среза</param>
+    /// <returns>Нули/полюса нового ФНЧ</returns>
     public static IEnumerable<Complex> TransformToLowPass(IEnumerable<Complex> Normed, double fp) =>
         TransformToLowPassW(Normed, pi2 * fp);
 
+    /// <summary>Преобразование нулей/полюсов нормированного ФНЧ в нули/полюса ФНЧ с другой частотой среза (в циклических частотах)</summary>
+    /// <param name="Normed">Нормированные нули/полюса ФНЧ</param>
+    /// <param name="wp">Новая циклическая частота среза</param>
+    /// <returns>Нули/полюса нового ФНЧ</returns>
     public static IEnumerable<Complex> TransformToLowPassW(IEnumerable<Complex> Normed, double wp)
     {
         foreach (var p in Normed)
             yield return wp * p;
     }
 
-    public static IEnumerable<Complex> TransformToHighPass(IEnumerable<Complex> Normed, double fp) => 
+    /// <summary>Преобразование нулей/полюсов нормированного ФНЧ в нули/полюса ФВЧ с другой частотой среза</summary>
+    /// <param name="Normed">Нормированные нули/полюса ФНЧ</param>
+    /// <param name="fp">Новая частота среза</param>
+    /// <returns>Нули/полюса нового ФВЧ</returns>
+    public static IEnumerable<Complex> TransformToHighPass(IEnumerable<Complex> Normed, double fp) =>
         TransformToHighPassW(Normed, pi2 * fp);
 
+    /// <summary>Преобразование нулей/полюсов нормированного ФНЧ в нули/полюса ФВЧ с другой частотой среза (в циклических частотах)</summary>
+    /// <param name="Normed">Нормированные нули/полюса ФНЧ</param>
+    /// <param name="wp">Новая циклическая частота среза</param>
+    /// <returns>Нули/полюса нового ФВЧ</returns>
     public static IEnumerable<Complex> TransformToHighPassW(IEnumerable<Complex> Normed, double wp)
     {
         foreach (var p in Normed)

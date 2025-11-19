@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
 
+using MathCore.Extensions;
+
 using static System.Math;
 using static MathCore.Polynom.Array;
 // ReSharper disable InconsistentNaming
@@ -12,87 +14,85 @@ public class ButterworthBandStop : ButterworthFilter
     {
         if (dt <= 0)
             throw new InvalidOperationException($"Период дискретизации dt={dt} не может быть меньше, либо равен нулю")
-            {
-                Data =
-                {
-                    { nameof(dt), dt },
-                    { "fd", 1/dt },
-                    { nameof(fpl), fpl },
-                    { nameof(fsl), fsl },
-                    { nameof(fsh), fsh },
-                    { nameof(fph), fph },
-                }
-            };
+                .WithData(nameof(dt), dt)
+                .WithData("fd", 1 / dt)
+                .WithData(nameof(fpl), fpl)
+                .WithData(nameof(fsl), fsl)
+                .WithData(nameof(fsh), fsh)
+                .WithData(nameof(fph), fph);
 
         if (1 / dt == 0)
             throw new InvalidOperationException("Частота дискретизации не может быть равна нулю")
-            {
-                Data =
-                {
-                    { nameof(dt), dt },
-                    { "fd", 1/dt },
-                    { nameof(fpl), fpl },
-                    { nameof(fsl), fsl },
-                    { nameof(fsh), fsh },
-                    { nameof(fph), fph },
-                }
-            };
+                .WithData(nameof(dt), dt)
+                .WithData("fd", 1 / dt)
+                .WithData(nameof(fpl), fpl)
+                .WithData(nameof(fsl), fsl)
+                .WithData(nameof(fsh), fsh)
+                .WithData(nameof(fph), fph);
 
         if (fpl >= fsl)
-            throw new InvalidOperationException($"Нижняя частота пропускания fpl должна быть ниже нижней частоты среза fsl\r\n  dt={dt}\r\n  fpl={fpl}\r\n  fsl={fsl}\r\n  fsh={fsh}\r\n  fph={fsh}")
-            {
-                Data =
-                {
-                    { nameof(dt), dt },
-                    { "fd", 1/dt },
-                    { nameof(fpl), fpl },
-                    { nameof(fsl), fsl },
-                    { nameof(fsh), fsh },
-                    { nameof(fph), fph },
-                }
-            };
+            throw new InvalidOperationException($"""
+                Нижняя частота пропускания fpl должна быть ниже нижней частоты среза fsl
+                  dt={dt}
+                  fpl={fpl}
+                  fsl={fsl}
+                  fsh={fsh}
+                  fph={fsh}
+                """)
+                .WithData(nameof(dt), dt)
+                .WithData("fd", 1 / dt)
+                .WithData(nameof(fpl), fpl)
+                .WithData(nameof(fsl), fsl)
+                .WithData(nameof(fsh), fsh)
+                .WithData(nameof(fph), fph);
 
         if (fsl >= fsh)
-            throw new InvalidOperationException($"Нижняя частота среза fsl должна быть ниже верхней частоты среза fsh\r\n  dt={dt}\r\n  fpl={fpl}\r\n  fsl={fsl}\r\n  fsh={fsh}\r\n  fph={fsh}")
-            {
-                Data =
-                {
-                    { nameof(dt), dt },
-                    { "fd", 1/dt },
-                    { nameof(fpl), fpl },
-                    { nameof(fsl), fsl },
-                    { nameof(fsh), fsh },
-                    { nameof(fph), fph },
-                }
-            };
+            throw new InvalidOperationException($"""
+                Нижняя частота среза fsl должна быть ниже верхней частоты среза fsh
+                  dt={dt}
+                  fpl={fpl}
+                  fsl={fsl}
+                  fsh={fsh}
+                  fph={fsh}
+                """)
+                .WithData(nameof(dt), dt)
+                .WithData("fd", 1 / dt)
+                .WithData(nameof(fpl), fpl)
+                .WithData(nameof(fsl), fsl)
+                .WithData(nameof(fsh), fsh)
+                .WithData(nameof(fph), fph);
 
         if (fsh >= fph)
-            throw new InvalidOperationException($"Верхняя частота среза fsh должна быть ниже верхней частоты пропускания fph\r\n  dt={dt}\r\n  fpl={fpl}\r\n  fsl={fsl}\r\n  fsh={fsh}\r\n  fph={fsh}")
-            {
-                Data =
-                {
-                    { nameof(dt), dt },
-                    { "fd", 1/dt },
-                    { nameof(fpl), fpl },
-                    { nameof(fsl), fsl },
-                    { nameof(fsh), fsh },
-                    { nameof(fph), fph },
-                }
-            };
+            throw new InvalidOperationException($"""
+                Верхняя частота среза fsh должна быть ниже верхней частоты пропускания fph
+                  dt={dt}
+                  fpl={fpl}
+                  fsl={fsl}
+                  fsh={fsh}
+                  fph={fsh}
+                """)
+                .WithData(nameof(dt), dt)
+                .WithData("fd", 1 / dt)
+                .WithData(nameof(fpl), fpl)
+                .WithData(nameof(fsl), fsl)
+                .WithData(nameof(fsh), fsh)
+                .WithData(nameof(fph), fph);
 
         if (fph >= 1 / dt / 2)
-            throw new InvalidOperationException($"Верхняя частота пропускания fph должна быть ниже половины частоты дискретизации fd={1 / dt} (1 / (dt={dt}))\r\n  dt={dt}\r\n  fpl={fpl}\r\n  fsl={fsl}\r\n  fsh={fsh}\r\n  fph={fsh}")
-            {
-                Data =
-                {
-                    { nameof(dt), dt },
-                    { "fd", 1/dt },
-                    { nameof(fpl), fpl },
-                    { nameof(fsl), fsl },
-                    { nameof(fsh), fsh },
-                    { nameof(fph), fph },
-                }
-            };
+            throw new InvalidOperationException($"""
+                Верхняя частота пропускания fph должна быть ниже половины частоты дискретизации fd={1 / dt} (1 / (dt={dt}))
+                  dt={dt}
+                  fpl={fpl}
+                  fsl={fsl}
+                  fsh={fsh}
+                  fph={fsh}
+                """)
+                .WithData(nameof(dt), dt)
+                .WithData("fd", 1 / dt)
+                .WithData(nameof(fpl), fpl)
+                .WithData(nameof(fsl), fsl)
+                .WithData(nameof(fsh), fsh)
+                .WithData(nameof(fph), fph);
     }
 
     /// <summary>Формирование спецификации фильтра</summary>
@@ -215,8 +215,8 @@ public class ButterworthBandStop : ButterworthFilter
         double fsl,
         double fsh,
         double fph,
-        double Gp = 0.89125093813374556,
-        double Gs = 0.01) 
+        double Gp = 0.89125093813374556, // -30дБ
+        double Gs = 0.01)
         : this(fpl, fsl, fsh, fph, GetSpecification(dt, fpl, fsl, fsh, fph, Gp, Gs)) { }
 
     /// <summary>Инициализация нового эллиптического полосозаграждающего фильтра (ПЗФ)</summary>
@@ -225,7 +225,7 @@ public class ButterworthBandStop : ButterworthFilter
     /// <param name="fsh">Верхняя граница полосы подавления</param>
     /// <param name="fph">Верхняя граница полосы пропускания</param>
     /// <param name="Spec">Спецификация фильтра</param>
-    private ButterworthBandStop(double fpl,double fsl, double fsh, double fph, Specification Spec) 
+    private ButterworthBandStop(double fpl, double fsl, double fsh, double fph, Specification Spec)
         : this(Initialize(fpl, fsl, fsh, fph, Spec), Spec) { }
 
     /// <summary>Инициализация нового эллиптического полосозаграждающего фильтра (ПЗФ)</summary>

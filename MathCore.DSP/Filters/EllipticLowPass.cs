@@ -6,8 +6,16 @@ using static MathCore.Polynom.Array;
 
 namespace MathCore.DSP.Filters;
 
+/// <summary>Эллиптический фильтр нижних частот</summary>
 public class EllipticLowPass : EllipticFilter
 {
+    /// <summary>Вычисляет порядок эллиптического фильтра</summary>
+    /// <param name="dt">Период дискретизации</param>
+    /// <param name="fp">Частота пропускания</param>
+    /// <param name="fs">Частота заграждения</param>
+    /// <param name="Gp">Затухание в полосе пропускания (по умолчанию -1 дБ)</param>
+    /// <param name="Gs">Затухание в полосе заграждения (по умолчанию -40 дБ)</param>
+    /// <returns>Порядок фильтра</returns>
     public static int GetOrder(double dt, double fp, double fs, double Gp = 0.891250938, double Gs = 0.01)
     {
         var kEps = Sqrt((1 / (Gp * Gp) - 1) / (1 / (Gs * Gs) - 1));
@@ -18,6 +26,13 @@ public class EllipticLowPass : EllipticFilter
         return N;
     }
 
+    /// <summary>Вычисляет нули и полюса фильтра</summary>
+    /// <param name="dt">Период дискретизации</param>
+    /// <param name="fp">Частота пропускания</param>
+    /// <param name="fs">Частота заграждения</param>
+    /// <param name="Gp">Затухание в полосе пропускания (по умолчанию -1 дБ)</param>
+    /// <param name="Gs">Затухание в полосе заграждения (по умолчанию -40 дБ)</param>
+    /// <returns>Кортеж перечислений комплексных нулей и полюсов</returns>
     public static (IEnumerable<Complex> Zeros, IEnumerable<Complex> Poles) GetPoles(double dt, double fp, double fs, double Gp = 0.891250938, double Gs = 0.01)
     {
         var N = GetOrder(fp, fs, Gp, Gs);
@@ -38,8 +53,9 @@ public class EllipticLowPass : EllipticFilter
         return (z_zeros, z_poles);
     }
 
-    /// <summary>Инициализация коэффициентов передаточной функции Эллиптического фильтра</summary>
-    /// <returns>Кортеж с коэффициентами полинома числителя и знаменателя передаточной функции</returns>
+    /// <summary>Инициализирует коэффициенты передаточной функции эллиптического фильтра</summary>
+    /// <param name="opt">Спецификация фильтра</param>
+    /// <returns>Кортеж с коэффициентами полинома числителя и знаменателя</returns>
     private static (double[] A, double[] B) Initialize(Specification opt)
     {
         var k_W = 1 / opt.kW;
@@ -70,18 +86,20 @@ public class EllipticLowPass : EllipticFilter
         return (A, B);
     }
 
-    /// <summary>Инициализация нового Эллиптического фильтра нижних частот</summary>
+    /// <summary>Инициализирует новый эллиптический фильтр нижних частот</summary>
     /// <param name="dt">Период дискретизации</param>
     /// <param name="fp">Частота пропускания</param>
     /// <param name="fs">Частота заграждения</param>
-    /// <param name="Gp">Затухание в полосе пропускания (0.891250938 = -1 дБ)</param>
-    /// <param name="Gs">Затухание в полосе заграждения (0.01 = -40 дБ)</param>
+    /// <param name="Gp">Затухание в полосе пропускания (по умолчанию -1 дБ)</param>
+    /// <param name="Gs">Затухание в полосе заграждения (по умолчанию -40 дБ)</param>
     public EllipticLowPass(double dt, double fp, double fs, double Gp = 0.891250938, double Gs = 0.01)
         : this(GetSpecification(dt, fp, fs, Gp, Gs)) { }
 
+    /// <summary>Инициализирует новый эллиптический фильтр нижних частот по спецификации</summary>
+    /// <param name="Spec">Спецификация фильтра</param>
     public EllipticLowPass(Specification Spec) : this(Initialize(Spec), Spec) { }
 
-    /// <summary>Инициализация нового Эллиптического фильтра</summary>
+    /// <summary>Инициализирует новый эллиптический фильтр</summary>
     /// <param name="Polynoms">Кортеж, содержащий массив коэффициентов полинома числителя и знаменателя</param>
     /// <param name="Spec">Спецификация фильтра</param>
     private EllipticLowPass((double[] A, double[] B) Polynoms, Specification Spec) : base(Polynoms.B, Polynoms.A, Spec) { }

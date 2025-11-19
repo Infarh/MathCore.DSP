@@ -1,12 +1,11 @@
-﻿
-// ReSharper disable InconsistentNaming
+﻿// ReSharper disable InconsistentNaming
 
 namespace MathCore.DSP.Filters;
 
 /// <summary>Эллиптический полосо-заграждающий фильтр</summary>
 public class EllipticBandStop : EllipticFilter
 {
-    /// <summary>Формирование спецификации фильтра</summary>
+    /// <summary>Формирует спецификацию фильтра</summary>
     /// <param name="dt">Период дискретизации сигнала</param>
     /// <param name="fpl">Частота нижней границы полосы пропускания</param>
     /// <param name="fsl">Частота нижней границы полосы заграждения</param>
@@ -61,7 +60,7 @@ public class EllipticBandStop : EllipticFilter
         return new(dt, fp, fs, Gp, Gs);
     }
 
-    /// <summary>Расчёт коэффициентов полиномов числителя из знаменателя передаточной функции фильтра</summary>
+    /// <summary>Вычисляет коэффициенты полиномов фильтра</summary>
     /// <param name="fsl">Нижняя частота полосы подавления</param>
     /// <param name="fsh">Верхняя частота полосы подавления</param>
     /// <param name="Spec">Спецификация фильтра</param>
@@ -109,7 +108,7 @@ public class EllipticBandStop : EllipticFilter
         return (A, B);
     }
 
-    /// <summary>Инициализация нового эллиптического полосозаграждающего фильтра (ПЗФ)</summary>
+    /// <summary>Инициализирует новый эллиптический полосозаграждающий фильтр (ПЗФ)</summary>
     /// <param name="dt">Период дискретизации цифрового сигнала</param>
     /// <param name="fpl">Нижняя граница полосы пропускания</param>
     /// <param name="fsl">Нижняя граница полосы подавления</param>
@@ -127,18 +126,18 @@ public class EllipticBandStop : EllipticFilter
         double Gs = 0.01)
         : this(fsl, fsh, GetSpecification(dt, fpl, fsl, fsh, fph, Gp, Gs)) { }
 
-    /// <summary>Инициализация нового эллиптического полосозаграждающего фильтра (ПЗФ)</summary>
+    /// <summary>Инициализирует новый эллиптический полосозаграждающий фильтр (ПЗФ) по спецификации</summary>
     /// <param name="fsl">Нижняя граница полосы подавления</param>
     /// <param name="fsh">Верхняя граница полосы подавления</param>
     /// <param name="Spec">Спецификация фильтра</param>
     private EllipticBandStop(double fsl, double fsh, Specification Spec) : this(Initialize(fsl, fsh, Spec), Spec) { }
 
-    /// <summary>Инициализация нового эллиптического полосозаграждающего фильтра (ПЗФ)</summary>
+    /// <summary>Инициализирует новый эллиптический полосозаграждающий фильтр (ПЗФ) по массивам коэффициентов</summary>
     /// <param name="Polynoms">Кортеж с коэффициентами полиномов знаменателя и числителя функции фильтра</param>
     /// <param name="Spec">Спецификация фильтра</param>
     private EllipticBandStop((double[] A, double[] B) Polynoms, Specification Spec) : this(Polynoms.B, Polynoms.A, Spec) { }
 
-    /// <summary>Инициализация нового эллиптического полосозаграждающего фильтра (ПЗФ)</summary>
+    /// <summary>Инициализирует новый эллиптический полосозаграждающий фильтр (ПЗФ) по массивам коэффициентов</summary>
     /// <param name="B">Коэффициенты полинома числителя</param>
     /// <param name="A">Коэффициенты полинома знаменателя</param>
     /// <param name="Spec">Спецификация фильтра</param>
