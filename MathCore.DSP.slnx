@@ -1,0 +1,18 @@
+<Solution>
+  <Folder Name="/.Service/">
+    <File Path=".github/copilot-instructions.md" />
+  </Folder>
+  <Folder Name="/Service/">
+    <File Path="../BuildAndPublish.bat" />
+    <File Path="../BuildAndTest.bat" />
+    <File Path="../BuildRelease.bat" />
+    <File Path="license.txt" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="Tests/Benchmarks/Benchmarks.csproj" />
+    <Project Path="Tests/ConsoleTest/ConsoleTest.csproj" />
+    <Project Path="Tests/MathCore.DSP.Tests/MathCore.DSP.Tests.csproj" />
+    <Project Path="Tests/WpfTest/WpfTest.csproj" />
+  </Folder>
+  <Project Path="MathCore.DSP/MathCore.DSP.csproj" />
+</Solution>
