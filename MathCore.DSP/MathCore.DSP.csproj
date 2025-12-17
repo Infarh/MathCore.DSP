@@ -8,7 +8,7 @@
     </TargetFrameworks>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <LangVersion>preview</LangVersion>
-    <Version>0.0.15</Version>
+    <Version>0.0.15.1</Version>
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageReleaseNotes>
       Миграция на .NET 10.0 и обновление зависимостей.
