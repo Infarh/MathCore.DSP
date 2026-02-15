@@ -11,7 +11,7 @@
     <Version>0.0.16</Version>
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageReleaseNotes>
-      Миграция на .NET 10.0 и обновление зависимостей.
+      Обновление MathCore. Доработка XML-документации.
     </PackageReleaseNotes>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
   </PropertyGroup>
