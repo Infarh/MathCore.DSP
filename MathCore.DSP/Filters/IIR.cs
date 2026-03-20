@@ -10,10 +10,18 @@ namespace MathCore.DSP.Filters;
 /// <summary>Фильтр с бесконечной импульсной характеристикой</summary>
 public class IIR : DigitalFilter
 {
+    private readonly record struct SosSection(double B0, double B1, double B2, double A1, double A2);
+
+    private const int SosOrderThreshold = 32;
+
     /// <summary>Массив коэффициентов полинома числителя</summary>
     private readonly double[] _B;
     /// <summary>Массив коэффициентов полинома знаменателя</summary>
     private readonly double[] _A;
+
+    private readonly SosSection[]? _SosSections;
+    private readonly double[]? _SosState;
+    private readonly double _SosGain;
 
     /// <summary>Массив коэффициентов полинома числителя</summary>
     public ReadOnlyCollection<double> B => AsReadOnly(_B);
@@ -38,11 +46,47 @@ public class IIR : DigitalFilter
         if (B.Length > A.Length) throw new ArgumentException("Размер массива коэффициентов полинома числителя должен быть меньше, либо равен размеру массива коэффициентов полинома знаменателя");
         _B = B;
         _A = A;
+
+        if (Order >= SosOrderThreshold && TryCreateSos(A, B, out var sections, out var gain))
+        {
+            _SosSections = sections;
+            _SosState = new double[sections.Length * 2];
+            _SosGain = gain;
+        }
     }
 
-    public override double Process(double Sample, double[] state) => state.FilterSample(_A, _B, Sample);
+    public override double Process(double Sample, double[] state)
+    {
+        if (_SosSections is null || _SosState is null || !ReferenceEquals(state, State))
+            return state.FilterSample(_A, _B, Sample);
+
+        var x = Sample;
+        for (var section_index = 0; section_index < _SosSections.Length; section_index++)
+        {
+            var section = _SosSections[section_index];
+            var state_index = section_index * 2;
+
+            var s1 = _SosState[state_index];
+            var s2 = _SosState[state_index + 1];
+
+            var y = section.B0 * x + s1;
+            _SosState[state_index] = section.B1 * x - section.A1 * y + s2;
+            _SosState[state_index + 1] = section.B2 * x - section.A2 * y;
+
+            x = y;
+        }
+
+        return x * _SosGain;
+    }
 
     public override double Process(double Sample) => Process(Sample, State);
+
+    public override void Reset()
+    {
+        base.Reset();
+        if (_SosState is not null)
+            Clear(_SosState, 0, _SosState.Length);
+    }
 
     public override Complex FrequencyResponse(double f) => DoubleArrayDSPExtensions.FrequencyResponse(_A, _B, f);
 
@@ -69,4 +113,172 @@ public class IIR : DigitalFilter
                         Multiply(filter._B, _A)), 
                     0.5),
                 A: Multiply(_A, filter._A));
+
+    private static bool TryCreateSos(double[] A, double[] B, out SosSection[] Sections, out double Gain)
+    {
+        Sections = [];
+        Gain = 1;
+
+        try
+        {
+            if (A.Length < 2 || Math.Abs(A[0]) <= double.Epsilon)
+                return false;
+
+            var a0 = A[0];
+            var a_norm = A.ToArray(v => v / a0);
+            var b_norm = B.ToArray(v => v / a0);
+
+            var poles = GetRoots(a_norm);
+            var zeros = GetRoots(b_norm);
+
+            var den_sections = BuildSectionsFromRoots(poles);
+            if (den_sections.Length == 0)
+                return false;
+
+            var num_sections = BuildSectionsFromRoots(zeros);
+            var sections = new SosSection[den_sections.Length];
+
+            for (var i = 0; i < den_sections.Length; i++)
+            {
+                var (_, a1, a2) = den_sections[i];
+                var (b0, b1, b2) = i < num_sections.Length ? num_sections[i] : (1d, 0d, 0d);
+                sections[i] = new(b0, b1, b2, a1, a2);
+            }
+
+            if (!IsValidSos(sections, b_norm[0]))
+                return false;
+
+            Sections = sections;
+            Gain = b_norm[0];
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    private static (double B0, double B1, double B2)[] BuildSectionsFromRoots(Complex[] Roots)
+    {
+        if (Roots.Length == 0)
+            return [];
+
+        var roots = Roots.ToArray();
+        var used = new bool[roots.Length];
+        var sections = new List<(double B0, double B1, double B2)>();
+
+        for (var i = 0; i < roots.Length; i++)
+        {
+            if (used[i]) continue;
+
+            var r1 = roots[i];
+            used[i] = true;
+
+            var pair_index = -1;
+            var min_delta = double.PositiveInfinity;
+            var conjugate = r1.ComplexConjugate;
+            for (var j = 0; j < roots.Length; j++)
+            {
+                if (used[j]) continue;
+                var delta = (roots[j] - conjugate).Abs;
+                if (delta >= min_delta) continue;
+                min_delta = delta;
+                pair_index = j;
+            }
+
+            var r2 = pair_index >= 0 ? roots[pair_index] : Complex.Zero;
+            if (pair_index >= 0)
+                used[pair_index] = true;
+
+            var sum = r1 + r2;
+            var mult = r1 * r2;
+            sections.Add((1, -sum.Re, mult.Re));
+        }
+
+        return sections.ToArray();
+    }
+
+    private static bool IsValidSos(SosSection[] Sections, double Gain)
+    {
+        if (double.IsNaN(Gain) || double.IsInfinity(Gain))
+            return false;
+
+        const double max_abs = 1e6;
+        foreach (var section in Sections)
+        {
+            if (double.IsNaN(section.B0) || double.IsInfinity(section.B0) ||
+                double.IsNaN(section.B1) || double.IsInfinity(section.B1) ||
+                double.IsNaN(section.B2) || double.IsInfinity(section.B2) ||
+                double.IsNaN(section.A1) || double.IsInfinity(section.A1) ||
+                double.IsNaN(section.A2) || double.IsInfinity(section.A2))
+                return false;
+
+            if (Math.Abs(section.B0) > max_abs || Math.Abs(section.B1) > max_abs || Math.Abs(section.B2) > max_abs ||
+                Math.Abs(section.A1) > max_abs || Math.Abs(section.A2) > max_abs)
+                return false;
+        }
+
+        return true;
+    }
+
+    private static Complex[] GetRoots(double[] Coefficients)
+    {
+        var n = Coefficients.Length - 1;
+        while (n > 0 && Math.Abs(Coefficients[n]) < 1e-18)
+            n--;
+
+        if (n <= 0)
+            return [];
+
+        var c = new double[n + 1];
+        Array.Copy(Coefficients, c, n + 1);
+
+        var lead = c[n];
+        for (var i = 0; i <= n; i++)
+            c[i] /= lead;
+
+        var roots = new Complex[n];
+        var radius = 0.5;
+        for (var i = 0; i < n; i++)
+            roots[i] = Complex.Exp(radius, Consts.pi2 * i / n);
+
+        const int max_iterations = 256;
+        const double eps = 1e-12;
+
+        for (var iteration = 0; iteration < max_iterations; iteration++)
+        {
+            var max_delta = 0d;
+
+            for (var i = 0; i < n; i++)
+            {
+                var p = Evaluate(c, roots[i]);
+                var d = Complex.Real;
+                for (var j = 0; j < n; j++)
+                {
+                    if (i == j) continue;
+                    d *= roots[i] - roots[j];
+                }
+
+                if (d == Complex.Zero) continue;
+
+                var next = roots[i] - p / d;
+                var delta = (next - roots[i]).Abs;
+                if (delta > max_delta) max_delta = delta;
+                roots[i] = next;
+            }
+
+            if (max_delta < eps)
+                break;
+        }
+
+        return roots;
+
+        static Complex Evaluate(double[] c, Complex x)
+        {
+            Complex y = c[^1];
+            for (var i = c.Length - 2; i >= 0; i--)
+                y = y * x + c[i];
+            return y;
+        }
+    }
 }
