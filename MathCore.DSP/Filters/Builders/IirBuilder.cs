@@ -1,9 +1,23 @@
-﻿namespace MathCore.DSP.Filters.Builders;
+﻿using static System.Math;
+
+namespace MathCore.DSP.Filters.Builders;
 
 /// <summary>Корневой fluent-построитель IIR-фильтров</summary>
 /// <param name="Dt">Период дискретизации</param>
 public readonly record struct IirBuilder(double Dt)
 {
+    /// <summary>Создать построитель по частоте дискретизации</summary>
+    /// <param name="SamplingFrequency">Частота дискретизации</param>
+    /// <returns>Построитель IIR-фильтров</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Частота дискретизации должна быть больше нуля</exception>
+    public static IirBuilder FromSamplingFrequency(double SamplingFrequency)
+    {
+        if (SamplingFrequency <= 0)
+            throw new ArgumentOutOfRangeException(nameof(SamplingFrequency), SamplingFrequency, "Частота дискретизации должна быть больше нуля");
+
+        return new(1 / SamplingFrequency);
+    }
+
     /// <summary>Построитель семейства Баттерворта</summary>
     public IirFamilyBuilder Butterworth => new(Dt, IirFilterFamily.Butterworth, ChebyshevType.I);
 
@@ -54,6 +68,68 @@ public readonly record struct IirFamilyBuilder(double Dt, IirFilterFamily Family
     /// <param name="PassHighFrequency">Верхняя частота пропускания</param>
     public IirSpecificationBuilder BandStop(double PassLowFrequency, double StopLowFrequency, double StopHighFrequency, double PassHighFrequency) =>
         new(Dt, Family, FrequencyPassType.BandStop, ChebyshevType, PassLowFrequency, StopLowFrequency, PassHighFrequency, StopHighFrequency, 0.891250938, 0.01);
+
+    /// <summary>Создать построитель ППФ по центральной частоте и ширине полосы пропускания</summary>
+    /// <param name="CenterFrequency">Центральная частота полосы пропускания</param>
+    /// <param name="PassbandWidth">Ширина полосы пропускания</param>
+    /// <param name="TransitionWidth">Ширина переходной области с каждой стороны</param>
+    /// <returns>Построитель ППФ</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Параметры частот должны быть положительными</exception>
+    public IirSpecificationBuilder BandPassByCenter(double CenterFrequency, double PassbandWidth, double TransitionWidth)
+    {
+        if (CenterFrequency <= 0)
+            throw new ArgumentOutOfRangeException(nameof(CenterFrequency), CenterFrequency, "Центральная частота должна быть больше нуля");
+
+        if (PassbandWidth <= 0)
+            throw new ArgumentOutOfRangeException(nameof(PassbandWidth), PassbandWidth, "Ширина полосы пропускания должна быть больше нуля");
+
+        if (TransitionWidth <= 0)
+            throw new ArgumentOutOfRangeException(nameof(TransitionWidth), TransitionWidth, "Ширина переходной области должна быть больше нуля");
+
+        var pass_low_frequency = CenterFrequency - PassbandWidth / 2;
+        if (pass_low_frequency <= 0)
+            throw new ArgumentOutOfRangeException(nameof(PassbandWidth), PassbandWidth, "Ширина полосы пропускания приводит к неположительной нижней частоте");
+
+        var pass_high_frequency = CenterFrequency + PassbandWidth / 2;
+        var stop_low_frequency = pass_low_frequency - TransitionWidth;
+        if (stop_low_frequency <= 0)
+            throw new ArgumentOutOfRangeException(nameof(TransitionWidth), TransitionWidth, "Ширина переходной области приводит к неположительной нижней частоте заграждения");
+
+        var stop_high_frequency = pass_high_frequency + TransitionWidth;
+
+        return BandPass(stop_low_frequency, pass_low_frequency, pass_high_frequency, stop_high_frequency);
+    }
+
+    /// <summary>Создать построитель ПЗФ по центральной частоте и ширине полосы заграждения</summary>
+    /// <param name="CenterFrequency">Центральная частота полосы заграждения</param>
+    /// <param name="StopbandWidth">Ширина полосы заграждения</param>
+    /// <param name="TransitionWidth">Ширина переходной области с каждой стороны</param>
+    /// <returns>Построитель ПЗФ</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Параметры частот должны быть положительными</exception>
+    public IirSpecificationBuilder BandStopByCenter(double CenterFrequency, double StopbandWidth, double TransitionWidth)
+    {
+        if (CenterFrequency <= 0)
+            throw new ArgumentOutOfRangeException(nameof(CenterFrequency), CenterFrequency, "Центральная частота должна быть больше нуля");
+
+        if (StopbandWidth <= 0)
+            throw new ArgumentOutOfRangeException(nameof(StopbandWidth), StopbandWidth, "Ширина полосы заграждения должна быть больше нуля");
+
+        if (TransitionWidth <= 0)
+            throw new ArgumentOutOfRangeException(nameof(TransitionWidth), TransitionWidth, "Ширина переходной области должна быть больше нуля");
+
+        var stop_low_frequency = CenterFrequency - StopbandWidth / 2;
+        if (stop_low_frequency <= 0)
+            throw new ArgumentOutOfRangeException(nameof(StopbandWidth), StopbandWidth, "Ширина полосы заграждения приводит к неположительной нижней частоте");
+
+        var stop_high_frequency = CenterFrequency + StopbandWidth / 2;
+        var pass_low_frequency = stop_low_frequency - TransitionWidth;
+        if (pass_low_frequency <= 0)
+            throw new ArgumentOutOfRangeException(nameof(TransitionWidth), TransitionWidth, "Ширина переходной области приводит к неположительной нижней частоте пропускания");
+
+        var pass_high_frequency = stop_high_frequency + TransitionWidth;
+
+        return BandStop(pass_low_frequency, stop_low_frequency, stop_high_frequency, pass_high_frequency);
+    }
 }
 
 /// <summary>Построитель IIR-фильтра по полной спецификации</summary>
@@ -88,6 +164,51 @@ public readonly record struct IirSpecificationBuilder(
     /// <param name="Type">Тип фильтра Чебышева</param>
     public IirSpecificationBuilder WithChebyshevType(ChebyshevType Type) => this with { ChebyshevType = Type };
 
+    /// <summary>Задать коэффициенты передачи в полосах по неравномерности и затуханию в децибелах</summary>
+    /// <param name="PassbandRippleDb">Неравномерность в полосе пропускания в дБ</param>
+    /// <param name="StopbandAttenuationDb">Затухание в полосе заграждения в дБ</param>
+    /// <returns>Построитель с обновлёнными коэффициентами</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Значения в дБ должны быть положительными</exception>
+    public IirSpecificationBuilder WithGainsInDb(double PassbandRippleDb, double StopbandAttenuationDb)
+    {
+        if (PassbandRippleDb <= 0)
+            throw new ArgumentOutOfRangeException(nameof(PassbandRippleDb), PassbandRippleDb, "Неравномерность в полосе пропускания должна быть больше нуля");
+
+        if (StopbandAttenuationDb <= 0)
+            throw new ArgumentOutOfRangeException(nameof(StopbandAttenuationDb), StopbandAttenuationDb, "Затухание в полосе заграждения должно быть больше нуля");
+
+        var pass_gain = Pow(10, -PassbandRippleDb / 20);
+        var stop_gain = Pow(10, -StopbandAttenuationDb / 20);
+
+        return this with { PassGain = pass_gain, StopGain = stop_gain };
+    }
+
+    /// <summary>Задать коэффициент передачи в полосе пропускания по неравномерности в дБ</summary>
+    /// <param name="PassbandRippleDb">Неравномерность в полосе пропускания в дБ</param>
+    /// <returns>Построитель с обновлённым коэффициентом</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Неравномерность должна быть положительной</exception>
+    public IirSpecificationBuilder WithPassbandRippleDb(double PassbandRippleDb)
+    {
+        if (PassbandRippleDb <= 0)
+            throw new ArgumentOutOfRangeException(nameof(PassbandRippleDb), PassbandRippleDb, "Неравномерность в полосе пропускания должна быть больше нуля");
+
+        var pass_gain = Pow(10, -PassbandRippleDb / 20);
+        return this with { PassGain = pass_gain };
+    }
+
+    /// <summary>Задать коэффициент передачи в полосе заграждения по затуханию в дБ</summary>
+    /// <param name="StopbandAttenuationDb">Затухание в полосе заграждения в дБ</param>
+    /// <returns>Построитель с обновлённым коэффициентом</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Затухание должно быть положительным</exception>
+    public IirSpecificationBuilder WithStopbandAttenuationDb(double StopbandAttenuationDb)
+    {
+        if (StopbandAttenuationDb <= 0)
+            throw new ArgumentOutOfRangeException(nameof(StopbandAttenuationDb), StopbandAttenuationDb, "Затухание в полосе заграждения должно быть больше нуля");
+
+        var stop_gain = Pow(10, -StopbandAttenuationDb / 20);
+        return this with { StopGain = stop_gain };
+    }
+
     /// <summary>Создать экземпляр фильтра</summary>
     /// <returns>Экземпляр IIR-фильтра</returns>
     public Filter Create() => (Family, PassType) switch
@@ -121,6 +242,28 @@ public readonly record struct IirSpecificationBuilder(
 
         for (var i = 0; i < Count; i++)
             yield return Create();
+    }
+
+    /// <summary>Попытаться создать экземпляр фильтра без выброса исключения наружу</summary>
+    /// <param name="Filter">Созданный экземпляр фильтра или null</param>
+    /// <returns>True, если фильтр успешно создан</returns>
+    public bool TryCreate(out Filter? Filter)
+    {
+        try
+        {
+            Filter = Create();
+            return true;
+        }
+        catch (ArgumentException)
+        {
+            Filter = null;
+            return false;
+        }
+        catch (InvalidOperationException)
+        {
+            Filter = null;
+            return false;
+        }
     }
 
     /// <summary>Выполнить неявное преобразование в фильтр</summary>

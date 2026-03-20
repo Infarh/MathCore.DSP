@@ -72,4 +72,58 @@ public class IirFluentBuilderTests : UnitTest
         Assert.AreEqual(2, filters.Length);
         Assert.AreNotSame(filters[0], filters[1]);
     }
+
+    [TestMethod]
+    public void CreateBySamplingFrequencyFactory()
+    {
+        const double fd = 5_000;
+
+        var filter = Filter.IIRBySamplingFrequency(fd)
+            .Butterworth
+            .LowPass(500, 1_500)
+            .Create();
+
+        Assert.IsInstanceOfType(filter, typeof(global::MathCore.DSP.Filters.ButterworthLowPass));
+    }
+
+    [TestMethod]
+    public void CreateBandPassByCenterWithDbGains()
+    {
+        const double dt = 1d / 10_000;
+
+        var filter = Filter.IIR(dt)
+            .Elliptic
+            .BandPassByCenter(1_500, 1_000, 500)
+            .WithGainsInDb(1, 40)
+            .Create();
+
+        Assert.IsInstanceOfType(filter, typeof(global::MathCore.DSP.Filters.EllipticBandPass));
+    }
+
+    [TestMethod]
+    public void TryCreateReturnsFalseForInvalidSpecification()
+    {
+        const double dt = 1d / 10_000;
+
+        var is_created = Filter.IIR(dt)
+            .Butterworth
+            .LowPass(2_000, 1_000)
+            .TryCreate(out var filter);
+
+        Assert.IsFalse(is_created);
+        Assert.IsNull(filter);
+    }
+
+    [TestMethod]
+    public void CreateBandStopByCenter()
+    {
+        const double dt = 1d / 10_000;
+
+        var filter = Filter.IIR(dt)
+            .Chebyshev(ChebyshevType.II)
+            .BandStopByCenter(1_500, 1_000, 500)
+            .Create();
+
+        Assert.IsInstanceOfType(filter, typeof(global::MathCore.DSP.Filters.ChebyshevBandStop));
+    }
 }

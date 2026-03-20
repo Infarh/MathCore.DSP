@@ -8,6 +8,12 @@ public abstract class Filter
 {
     public static IirBuilder IIR(double dt) => new(dt);
 
+    /// <summary>Создать построитель IIR-фильтров по частоте дискретизации</summary>
+    /// <param name="fd">Частота дискретизации</param>
+    /// <returns>Построитель IIR-фильтров</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Частота дискретизации должна быть больше нуля</exception>
+    public static IirBuilder IIRBySamplingFrequency(double fd) => IirBuilder.FromSamplingFrequency(fd);
+
     public static LowPassBuilder LowPass(double dt) => new(dt);
     public static HighPassBuilder HighPass(double dt) => new(dt);
     public static BandPassBuilder BandPass(double dt) => new(dt);
