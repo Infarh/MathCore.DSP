@@ -136,8 +136,10 @@ public class IIR : DigitalFilter
                 return false;
 
             var num_sections = BuildSectionsFromRoots(zeros);
-            var sections = new SosSection[den_sections.Length];
+            if (num_sections.Length > den_sections.Length)
+                return false;
 
+            var sections = new SosSection[den_sections.Length];
             for (var i = 0; i < den_sections.Length; i++)
             {
                 var (_, a1, a2) = den_sections[i];
@@ -145,11 +147,14 @@ public class IIR : DigitalFilter
                 sections[i] = new(b0, b1, b2, a1, a2);
             }
 
-            if (!IsValidSos(sections, b_norm[0]))
+            var gain = b_norm[0];
+            DistributeGain(sections, ref gain);
+
+            if (!IsValidSos(sections, gain))
                 return false;
 
             Sections = sections;
-            Gain = b_norm[0];
+            Gain = gain;
             return true;
         }
         catch
@@ -163,39 +168,83 @@ public class IIR : DigitalFilter
         if (Roots.Length == 0)
             return [];
 
-        var roots = Roots.ToArray();
-        var used = new bool[roots.Length];
+        const double imag_eps = 1e-9;
+
+        var complex_roots = new List<Complex>(Roots.Length);
+        var real_roots = new List<double>(Roots.Length);
+
+        foreach (var root in Roots)
+            if (Math.Abs(root.Im) <= imag_eps)
+                real_roots.Add(root.Re);
+            else
+                complex_roots.Add(root);
+
         var sections = new List<(double B0, double B1, double B2)>();
 
-        for (var i = 0; i < roots.Length; i++)
+        while (complex_roots.Count > 0)
         {
-            if (used[i]) continue;
-
-            var r1 = roots[i];
-            used[i] = true;
+            var r1 = complex_roots[0];
+            complex_roots.RemoveAt(0);
 
             var pair_index = -1;
             var min_delta = double.PositiveInfinity;
             var conjugate = r1.ComplexConjugate;
-            for (var j = 0; j < roots.Length; j++)
+            for (var i = 0; i < complex_roots.Count; i++)
             {
-                if (used[j]) continue;
-                var delta = (roots[j] - conjugate).Abs;
+                var delta = (complex_roots[i] - conjugate).Abs;
                 if (delta >= min_delta) continue;
                 min_delta = delta;
-                pair_index = j;
+                pair_index = i;
             }
 
-            var r2 = pair_index >= 0 ? roots[pair_index] : Complex.Zero;
-            if (pair_index >= 0)
-                used[pair_index] = true;
+            if (pair_index < 0)
+            {
+                real_roots.Add(r1.Re);
+                continue;
+            }
+
+            var r2 = complex_roots[pair_index];
+            complex_roots.RemoveAt(pair_index);
 
             var sum = r1 + r2;
             var mult = r1 * r2;
             sections.Add((1, -sum.Re, mult.Re));
         }
 
+        real_roots.Sort((x, y) => Math.Abs(y).CompareTo(Math.Abs(x)));
+        for (var i = 0; i < real_roots.Count; i += 2)
+        {
+            var r1 = real_roots[i];
+            var r2 = i + 1 < real_roots.Count ? real_roots[i + 1] : 0d;
+            sections.Add((1, -(r1 + r2), r1 * r2));
+        }
+
         return sections.ToArray();
+    }
+
+    private static void DistributeGain(SosSection[] Sections, ref double Gain)
+    {
+        if (Sections.Length == 0 || Gain == 0 || double.IsNaN(Gain) || double.IsInfinity(Gain))
+            return;
+
+        var section_gain = Math.Pow(Math.Abs(Gain), 1d / Sections.Length);
+        if (double.IsNaN(section_gain) || double.IsInfinity(section_gain) || section_gain == 0)
+            return;
+
+        var sign = Math.Sign(Gain);
+        for (var i = 0; i < Sections.Length; i++)
+        {
+            var s = Sections[i];
+            var scale = i == 0 ? section_gain * sign : section_gain;
+            Sections[i] = new(
+                B0: s.B0 * scale,
+                B1: s.B1 * scale,
+                B2: s.B2 * scale,
+                A1: s.A1,
+                A2: s.A2);
+        }
+
+        Gain = 1;
     }
 
     private static bool IsValidSos(SosSection[] Sections, double Gain)
@@ -204,6 +253,8 @@ public class IIR : DigitalFilter
             return false;
 
         const double max_abs = 1e6;
+        const double max_pole_radius = 1.0001;
+
         foreach (var section in Sections)
         {
             if (double.IsNaN(section.B0) || double.IsInfinity(section.B0) ||
@@ -216,6 +267,24 @@ public class IIR : DigitalFilter
             if (Math.Abs(section.B0) > max_abs || Math.Abs(section.B1) > max_abs || Math.Abs(section.B2) > max_abs ||
                 Math.Abs(section.A1) > max_abs || Math.Abs(section.A2) > max_abs)
                 return false;
+
+            var discriminant = section.A1 * section.A1 - 4 * section.A2;
+            if (discriminant >= 0)
+            {
+                var sqrt = Math.Sqrt(discriminant);
+                var z1 = (-section.A1 + sqrt) / 2;
+                var z2 = (-section.A1 - sqrt) / 2;
+                if (Math.Abs(z1) > max_pole_radius || Math.Abs(z2) > max_pole_radius)
+                    return false;
+            }
+            else
+            {
+                var re = -section.A1 / 2;
+                var im = Math.Sqrt(-discriminant) / 2;
+                var radius = Math.Sqrt(re * re + im * im);
+                if (radius > max_pole_radius)
+                    return false;
+            }
         }
 
         return true;
