@@ -21,13 +21,13 @@ public abstract class AnalogBasedFilter : IIR
         /// <param name="Z">Нули/полюса прототипа (нормированного ФНЧ)</param>
         /// <param name="wp">Новая частота среза</param>
         /// <returns>Нули/полюса нового фильтра ФНЧ</returns>
-        public static IEnumerable<Complex> ToLow(IEnumerable<Complex> Z, double wp) => Z.Select(z => z / wp);
+        public static IEnumerable<Complex> ToLow(IEnumerable<Complex> Z, double wp) => Z.Select(z => z * wp);
 
         /// <summary>Преобразование нулей/полюсов фильтра ФНЧ-ФВЧ</summary>
         /// <param name="Z">Нули/полюса прототипа (нормированного ФНЧ)</param>
         /// <param name="wp">Новая частота среза</param>
         /// <returns>Нули/полюса нового фильтра ФВЧ</returns>
-        public static IEnumerable<Complex> ToHigh(IEnumerable<Complex> Z, double wp) => Z.Select(z => z * wp);
+        public static IEnumerable<Complex> ToHigh(IEnumerable<Complex> Z, double wp) => Z.Select(z => wp / z);
 
         /// <summary>Установить значения новых полюсов/нулей</summary>
         /// <param name="p">Исходное значение</param>
@@ -55,7 +55,7 @@ public abstract class AnalogBasedFilter : IIR
             if (Zeros.Length > Poles.Length) throw new ArgumentException("Число нулей не должна быть больше числа полюсов", nameof(Zeros));
 
             var (wpl, wph) = (pi2 * fpl, pi2 * fph);
-            var (dw05, wc2) = ((wph - wph) / 2, wpl * wph);
+            var (dw05, wc2) = ((wph - wpl) / 2, wpl * wph);
 
             // На каждый исходный полюс формируется пара новых полюсов
             // Число нулей равно удвоенному числу исходных нулей
@@ -67,7 +67,7 @@ public abstract class AnalogBasedFilter : IIR
             for (var i = 0; i < Poles.Length; i++)
             {
                 var pdw = dw05 * Poles[i];
-                Set(pdw, Complex.Sqrt(pdw.Power - wc2),
+                Set(pdw, Complex.Sqrt(pdw.Pow2() - wc2),
                     out poles[2 * i],
                     out poles[2 * i + 1]);
             }
@@ -75,7 +75,7 @@ public abstract class AnalogBasedFilter : IIR
             for (var i = 0; i < Zeros.Length; i++)
             {
                 var pdw = dw05 * Zeros[i];
-                Set(pdw, Complex.Sqrt(pdw.Power - wc2),
+                Set(pdw, Complex.Sqrt(pdw.Pow2() - wc2),
                     out zeros[2 * i],
                     out zeros[2 * i + 1]);
             }
@@ -104,7 +104,7 @@ public abstract class AnalogBasedFilter : IIR
             if (count_0 > count_p) throw new ArgumentException("Число нулей не должна быть больше числа полюсов", nameof(Zeros));
 
             var (wpl, wph) = (pi2 * fpl, pi2 * fph);
-            var (dw05, wc2) = ((wph - wph) / 2, wpl * wph);
+            var (dw05, wc2) = ((wph - wpl) / 2, wpl * wph);
 
             // На каждый исходный полюс формируется пара новых полюсов
             // Число нулей равно удвоенному числу исходных нулей
@@ -121,7 +121,7 @@ public abstract class AnalogBasedFilter : IIR
             for (var i = 0; i < count_p; i++)
             {
                 var pdw = dw05 / Poles[i];
-                Set(pdw, Complex.Sqrt(pdw.Power - wc2),
+                Set(pdw, Complex.Sqrt(pdw.Pow2() - wc2),
                     out poles[2 * i],
                     out poles[2 * i + 1]);
             }
@@ -129,7 +129,7 @@ public abstract class AnalogBasedFilter : IIR
             for (var i = 0; i < count_0; i++)
             {
                 var pdw = dw05 / Zeros[i];
-                Set(pdw, Complex.Sqrt(pdw.Power - wc2),
+                Set(pdw, Complex.Sqrt(pdw.Pow2() - wc2),
                     out zeros[2 * i],
                     out zeros[2 * i + 1]);
             }

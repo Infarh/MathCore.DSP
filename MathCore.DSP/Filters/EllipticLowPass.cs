@@ -35,7 +35,7 @@ public class EllipticLowPass : EllipticFilter
     /// <returns>Кортеж перечислений комплексных нулей и полюсов</returns>
     public static (IEnumerable<Complex> Zeros, IEnumerable<Complex> Poles) GetPoles(double dt, double fp, double fs, double Gp = 0.891250938, double Gs = 0.01)
     {
-        var N = GetOrder(fp, fs, Gp, Gs);
+        var N = GetOrder(dt, fp, fs, Gp, Gs);
 
         var EpsP = 1 / (Gp * Gp) - 1;
         var EpsS = 1 / (Gs * Gs) - 1;
