@@ -150,7 +150,7 @@ public class IIR : DigitalFilter
             var gain = b_norm[0];
             DistributeGain(sections, ref gain);
 
-            if (!IsValidSos(sections, gain))
+            if (!IsValidSos(sections, gain, a_norm, b_norm))
                 return false;
 
             Sections = sections;
@@ -247,8 +247,12 @@ public class IIR : DigitalFilter
         Gain = 1;
     }
 
-    private static bool IsValidSos(SosSection[] Sections, double Gain)
+    private static bool IsValidSos(SosSection[] Sections, double Gain, double[] ANormalized, double[] BNormalized)
     {
+        ArgumentNullException.ThrowIfNull(Sections);
+        ArgumentNullException.ThrowIfNull(ANormalized);
+        ArgumentNullException.ThrowIfNull(BNormalized);
+
         if (double.IsNaN(Gain) || double.IsInfinity(Gain))
             return false;
 
@@ -285,6 +289,42 @@ public class IIR : DigitalFilter
                 if (radius > max_pole_radius)
                     return false;
             }
+        }
+
+        var a_from_sections = new[] { 1d };
+        var b_from_sections = new[] { Gain };
+        foreach (var section in Sections)
+        {
+            a_from_sections = Multiply(a_from_sections, [1d, section.A1, section.A2]);
+            b_from_sections = Multiply(b_from_sections, [section.B0, section.B1, section.B2]);
+        }
+
+        if (!IsPolynomialClose(a_from_sections, ANormalized))
+            return false;
+
+        if (!IsPolynomialClose(b_from_sections, BNormalized))
+            return false;
+
+        return true;
+    }
+
+    private static bool IsPolynomialClose(double[] Actual, double[] Expected)
+    {
+        const double abs_eps = 1e-8;
+        const double rel_eps = 1e-4;
+
+        if (Actual.Length != Expected.Length)
+            return false;
+
+        for (var i = 0; i < Actual.Length; i++)
+        {
+            var actual = Actual[i];
+            var expected = Expected[i];
+            var delta = Math.Abs(actual - expected);
+            var scale = Math.Max(1, Math.Abs(expected));
+            if (delta <= abs_eps) continue;
+            if (delta / scale <= rel_eps) continue;
+            return false;
         }
 
         return true;
