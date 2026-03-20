@@ -126,4 +126,35 @@ public class IirFluentBuilderTests : UnitTest
 
         Assert.IsInstanceOfType(filter, typeof(global::MathCore.DSP.Filters.ChebyshevBandStop));
     }
+
+    [TestMethod]
+    public void CreateByDslWithSamplingFrequencyPassStopBands()
+    {
+        var filter = Filter.IIR()
+            .WithSamplingFrequency(10_000)
+            .Butterworth
+            .BandPass()
+            .WithPassband(1_000, 2_000)
+            .WithStopband(500, 2_500)
+            .ToSpecification()
+            .Create();
+
+        Assert.IsInstanceOfType(filter, typeof(global::MathCore.DSP.Filters.ButterworthBandPass));
+    }
+
+    [TestMethod]
+    public void CreateByDslWithSamplingAndDbConfiguration()
+    {
+        var filter = Filter.IIR()
+            .WithSampling(1d / 10_000)
+            .Elliptic
+            .LowPass()
+            .WithPassband(1_000)
+            .WithStopband(2_000)
+            .ToSpecification()
+            .WithGainsInDb(1, 40)
+            .Create();
+
+        Assert.IsInstanceOfType(filter, typeof(global::MathCore.DSP.Filters.EllipticLowPass));
+    }
 }

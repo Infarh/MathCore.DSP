@@ -6,6 +6,10 @@ namespace MathCore.DSP.Filters;
 /// <summary>Фильтр</summary>
 public abstract class Filter
 {
+    /// <summary>Создать DSL-построитель IIR-фильтров</summary>
+    /// <returns>Построитель этапа задания дискретизации</returns>
+    public static IirSamplingBuilder IIR() => new();
+
     public static IirBuilder IIR(double dt) => new(dt);
 
     /// <summary>Создать построитель IIR-фильтров по частоте дискретизации</summary>
