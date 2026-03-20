@@ -6,6 +6,8 @@ namespace MathCore.DSP.Filters;
 /// <summary>Фильтр</summary>
 public abstract class Filter
 {
+    public static IirBuilder IIR(double dt) => new(dt);
+
     public static LowPassBuilder LowPass(double dt) => new(dt);
     public static HighPassBuilder HighPass(double dt) => new(dt);
     public static BandPassBuilder BandPass(double dt) => new(dt);
