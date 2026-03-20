@@ -3,7 +3,6 @@
 namespace MathCore.DSP.Tests.Filters;
 
 [TestClass]
-[Ignore("Диагностические стресс-тесты устойчивости; включить после внесения исправлений численной устойчивости")]
 public class IirCoefficientsStabilityTests
 {
     private sealed record StressCase(string Name, double Dt, Func<DSP.Filters.IIR> Factory);
@@ -17,6 +16,7 @@ public class IirCoefficientsStabilityTests
         RunStressValidation(AssertFrequencyResponseIsFinite);
 
     [TestMethod]
+    [Ignore("Диагностический тест: для высоких порядков требуется секционная реализация (SOS) вместо прямой формы")]
     public void ImpulseResponse_ShouldRemainFinite_OnStressSpecifications() =>
         RunStressValidation((case_name, filter, dt) => AssertImpulseResponseIsFinite(case_name, filter));
 

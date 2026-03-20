@@ -163,8 +163,9 @@ public class ButterworthLowPass : ButterworthFilter
         var g_norm = z_poles.Multiply(z => (1 - z) / 2).Re;
 
         var B = new double[N + 1];
+        var binomial = GetBinomialCoefficients(N);
         for (var i = 0; i < B.Length; i++)
-            B[i] = g_norm * BinomialCoefficient(N, i);
+            B[i] = g_norm * binomial[i];
 
         var A = GetCoefficientsInverted(z_poles).ToRe();
 

@@ -27,8 +27,9 @@ public class ChebyshevHighPass : ChebyshevFilter
             : 1 * k_poles;
 
         var B = new double[N + 1];
+        var binomial = GetBinomialCoefficients(N);
         for (var i = 0; i < B.Length; i++)
-            B[i] = SpecialFunctions.BinomialCoefficient(N, i) * (i % 2 == 0 ? g_norm : -g_norm);
+            B[i] = binomial[i] * (i % 2 == 0 ? g_norm : -g_norm);
         var A = Polynom.Array.GetCoefficientsInverted(z_poles).ToRe();
 
         return (A, B);

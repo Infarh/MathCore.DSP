@@ -113,9 +113,10 @@ public class ChebyshevLowPass : ChebyshevFilter
 
         var g_norm = (N.IsOdd() ? 1 : Spec.Gp) / (2.Pow(N) / z_poles.Multiply(z => 1 - z).Re);
 
-        var B = Enumerable
-           .Range(0, N + 1)
-           .ToArray(i => g_norm * BinomialCoefficient(N, i));
+        var binomial = GetBinomialCoefficients(N);
+        var B = new double[N + 1];
+        for (var i = 0; i < B.Length; i++)
+            B[i] = g_norm * binomial[i];
 
         return (A, B);
     }

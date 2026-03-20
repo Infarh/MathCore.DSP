@@ -26,8 +26,9 @@ public class ButterworthHighPass((double[] A, double[] B) config, AnalogBasedFil
         var g_norm = z_poles.Multiply(z => (1 + z) / 2).Abs;
 
         var B = new double[N + 1];
+        var binomial = GetBinomialCoefficients(N);
         for (var i = 0; i < B.Length; i++)
-            B[i] = BinomialCoefficient(N, i) * (i % 2 == 0 ? g_norm : -g_norm);
+            B[i] = binomial[i] * (i % 2 == 0 ? g_norm : -g_norm);
         var A = GetCoefficientsInverted(z_poles).ToRe();
 
         return (A, B);

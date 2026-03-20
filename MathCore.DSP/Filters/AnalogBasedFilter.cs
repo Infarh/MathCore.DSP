@@ -145,6 +145,23 @@ public abstract class AnalogBasedFilter : IIR
         }
     }
 
+    /// <summary>Получить биномиальные коэффициенты C(N,k) в вещественном формате без целочисленного переполнения</summary>
+    /// <param name="N">Порядок бинома</param>
+    /// <returns>Массив коэффициентов C(N,0..N)</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Если N меньше 0</exception>
+    protected static double[] GetBinomialCoefficients(int N)
+    {
+        if (N < 0) throw new ArgumentOutOfRangeException(nameof(N), N, "Порядок бинома не может быть отрицательным");
+
+        var coefficients = new double[N + 1];
+        coefficients[0] = 1;
+
+        for (var k = 1; k <= N; k++)
+            coefficients[k] = coefficients[k - 1] * (N - (k - 1d)) / k;
+
+        return coefficients;
+    }
+
     /// <summary>Спецификация фильтра</summary>
     public readonly ref struct Specification
     {
