@@ -198,6 +198,36 @@ public readonly record struct IirSpecificationBuilder(
     /// <summary>Выполнить неявное преобразование в фильтр</summary>
     /// <param name="Builder">Построитель фильтра</param>
     public static implicit operator Filter(IirSpecificationBuilder Builder) => Builder.Create();
+
+    /// <summary>Сформировать объект спецификации фильтра</summary>
+    /// <returns>Спецификация фильтра</returns>
+    public IirFilterSpecification BuildSpecification() => GetSpecification();
+
+    /// <summary>Попытаться сформировать объект спецификации фильтра без выброса исключения наружу</summary>
+    /// <param name="Specification">Сформированная спецификация фильтра или null</param>
+    /// <returns>True, если спецификация успешно сформирована</returns>
+    public bool TryGetSpecification(out IirFilterSpecification? Specification)
+    {
+        try
+        {
+            Specification = GetSpecification();
+            return true;
+        }
+        catch (ArgumentException)
+        {
+            Specification = null;
+            return false;
+        }
+        catch (InvalidOperationException)
+        {
+            Specification = null;
+            return false;
+        }
+    }
+
+    /// <summary>Сформировать экземпляр фильтра</summary>
+    /// <returns>Экземпляр IIR-фильтра</returns>
+    public Filter BuildFilter() => Create();
 }
 
 /// <summary>Построитель IIR-фильтров выбранного семейства</summary>
@@ -454,9 +484,52 @@ public readonly record struct IirPassbandStopbandBuilder(
     /// <returns>Спецификация фильтра</returns>
     public IirFilterSpecification GetSpecification() => ToSpecification().GetSpecification();
 
+    /// <summary>Сформировать объект спецификации фильтра</summary>
+    /// <returns>Спецификация фильтра</returns>
+    public IirFilterSpecification BuildSpecification() => GetSpecification();
+
+    /// <summary>Попытаться сформировать объект спецификации фильтра без выброса исключения наружу</summary>
+    /// <param name="Specification">Сформированная спецификация фильтра или null</param>
+    /// <returns>True, если спецификация успешно сформирована</returns>
+    public bool TryGetSpecification(out IirFilterSpecification? Specification)
+    {
+        try
+        {
+            Specification = GetSpecification();
+            return true;
+        }
+        catch (ArgumentException)
+        {
+            Specification = null;
+            return false;
+        }
+        catch (InvalidOperationException)
+        {
+            Specification = null;
+            return false;
+        }
+    }
+
     /// <summary>Создать фильтр на основе DSL-спецификации</summary>
     /// <returns>Экземпляр IIR-фильтра</returns>
     public Filter Create() => GetSpecification().CreateFilter();
+
+    /// <summary>Сформировать экземпляр фильтра</summary>
+    /// <returns>Экземпляр IIR-фильтра</returns>
+    public Filter BuildFilter() => Create();
+
+    /// <summary>Создать несколько независимых экземпляров фильтра</summary>
+    /// <param name="Count">Количество экземпляров</param>
+    /// <returns>Перечисление экземпляров фильтра</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Количество экземпляров меньше единицы</exception>
+    public IEnumerable<Filter> CreateMany(int Count)
+    {
+        if (Count < 1)
+            throw new ArgumentOutOfRangeException(nameof(Count), Count, "Количество экземпляров должно быть больше нуля");
+
+        for (var i = 0; i < Count; i++)
+            yield return Create();
+    }
 }
 
 /// <summary>Построитель RC-фильтров</summary>

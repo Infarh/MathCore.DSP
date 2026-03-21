@@ -218,4 +218,45 @@ public class IirFluentBuilderTests : UnitTest
         Assert.IsInstanceOfType(specification, typeof(RcHighPassSpecification));
         Assert.IsInstanceOfType(filter, typeof(RCHighPass));
     }
+
+    [TestMethod]
+    public void BuildSpecificationAliasReturnsSpecification()
+    {
+        const double dt = 1d / 5_000;
+
+        var specification = Filter.IIR(dt)
+            .Butterworth
+            .LowPass(500, 1_500)
+            .BuildSpecification();
+
+        Assert.IsInstanceOfType(specification, typeof(ButterworthLowPassSpecification));
+    }
+
+    [TestMethod]
+    public void BuildFilterAliasReturnsFilter()
+    {
+        var filter = Filter.IIR()
+            .WithSamplingFrequency(10_000)
+            .Elliptic
+            .BandPass()
+            .WithPassband(1_000, 2_000)
+            .WithStopband(500, 2_500)
+            .BuildFilter();
+
+        Assert.IsInstanceOfType(filter, typeof(global::MathCore.DSP.Filters.EllipticBandPass));
+    }
+
+    [TestMethod]
+    public void TryGetSpecificationReturnsFalseForIncompleteDsl()
+    {
+        var success = Filter.IIR()
+            .WithSamplingFrequency(10_000)
+            .Butterworth
+            .LowPass()
+            .WithPassband(1_000)
+            .TryGetSpecification(out var specification);
+
+        Assert.IsFalse(success);
+        Assert.IsNull(specification);
+    }
 }
