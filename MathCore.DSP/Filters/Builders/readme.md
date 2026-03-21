@@ -1,87 +1,172 @@
-﻿# Builders фильтров
+﻿# Fluent-интерфейс построения IIR-фильтров
 
-Директория содержит набор "строителей" (Builder-типы) для создания дискретных цифровых фильтров различных семейств (Баттерворта, Чебышева, эллиптических и простых RC) с параметризацией через удобный fluent/record‑подход.
+Актуальный API построения IIR-фильтров расположен в `IirBuilder` и связанных типах.
 
-## Назначение
-Builder-структуры инкапсулируют параметры проектирования фильтра (тип полосы пропускания, частоты, коэффициенты усиления/затухания, порядок и допуски) и подготавливают экземпляры конечных фильтров (`Filter`) через метод `Create()` или неявное преобразование оператора `implicit`.
+## Точки входа
 
-## Состав
-- `FrequencyPassType` – перечисление типов полосы: ФНЧ, ФВЧ, ППФ, ПЗФ
-- Универсальные ref builders (параметрические без метода создания в текущей версии):
-  - `ButterworthBuilder`
-  - `ChebyshevBuilder`
-  - `EllipticBuilder`
-- Специализированные builders нижних частот:
-  - `LowPassBuilder` – корневой строитель; производные:
-    - `LowPassButterworthBuilder`
-    - `LowPassChebyshevBuilder`
-    - `LowPassEllipticBuilder`
-    - `LowPassRCBuilder` (RC-фильтр первого порядка)
-    - `LowPassRCExponentialBuilder` (вариант с экспоненциальной аппроксимацией)
-- Специализированные builders верхних частот:
-  - `HighPassBuilder` – корневой строитель; производные:
-    - `HighPassButterworthBuilder`
-    - `HighPassChebyshevBuilder`
-- Заготовки полосных фильтров:
-  - `BandPassBuilder`
-  - `BandStopBuilder`
+Есть три основных варианта старта:
 
-## Общие параметры
-Большинство builders оперируют:
-- `dt` – период дискретизации (сек)
-- `fd` – частота дискретизации (Гц) (взаимосвязана с `dt`)
-- `fp`, `fs` – граничные частоты пропускания / заграждения
-- `Gp`, `Gs` – коэффициенты передачи в полосах (линейные, не в дБ)
-- `Rp`, `Rs` – неравномерность (ripples) / затухание (дБ)
-- `Order` – желаемый порядок (если требуется принудительно)
+- `Filter.IIR(double dt)` — старт с периодом дискретизации
+- `Filter.IIRBySamplingFrequency(double fd)` — старт с частотой дискретизации
+- `Filter.IIR().WithSampling(...)` / `Filter.IIR().WithSamplingFrequency(...)` — декларативный DSL-старт
 
-## Использование
-### Пример: ФНЧ Баттерворта
+## Поддерживаемые семейства и виды
+
+Семейства:
+
+- `Butterworth`
+- `Chebyshev(...)`
+- `Elliptic`
+- `RC`
+- `RLC`
+
+Типы полос для IIR-семейств (`Butterworth/Chebyshev/Elliptic`):
+
+- `LowPass`
+- `HighPass`
+- `BandPass`
+- `BandStop`
+
+## Базовые сценарии
+
+### 1) Быстрое создание фильтра
+
 ```csharp
-var dt = 1 / 8000d; // период дискретизации
-var builder = new LowPassBuilder(dt)
-    .Butterworth(fs: 1500, fp: 1000, Gp: 1, Gs: 0.1);
+using MathCore.DSP.Filters;
 
-Filter filter = builder; // неявное преобразование
-// Или явное создание:
-var bw_lp = builder.Create();
-```
-### Пример: ФВЧ Чебышева
-```csharp
-var dt = 1 / 44100d;
-var cheb_hp_builder = new HighPassBuilder(dt)
-    .Chebyshev(fs: 500, fp: 1000, Gp: 1, Gs: 0.05);
-
-Filter cheb_hp = cheb_hp_builder; // implicit
-```
-### Пример: RC фильтр нижних частот
-```csharp
-var dt = 1 / 1000d;
-var rc_builder = new LowPassBuilder(dt).RC(f0: 10);
-Filter rc = rc_builder; // создание RC фильтра
-```
-### Пример: RC экспоненциальный
-```csharp
-var dt = 1 / 1000d;
-var rc_exp_builder = new LowPassBuilder(dt).RCExponential(f0: 10);
-Filter rc_exp = rc_exp_builder;
+var filter = Filter.IIR(1d / 10_000)
+    .Butterworth
+    .LowPass(1_000, 2_000)
+    .Create();
 ```
 
-## Особенности
-- Запись через `record struct` облегчает иммутабельность и копирование с изменением (`with`)
-- Неявные операторы преобразования упрощают получение готового фильтра
-- Для универсальных builders (`ButterworthBuilder`, `ChebyshevBuilder`, `EllipticBuilder`) далее может быть расширена функциональность методами расчёта и генерации коэффициентов
+### 2) Создание по `fd`
 
-## План расширений
-1. Реализация методов `Create()` для универсальных builders с автоматическим подбором порядка по допускам
-2. Добавление полосных (ППФ/ПЗФ) вариантов с расчётом преобразования частот
-3. Включение генерации АЧХ/ФЧХ/Импульсной характеристики прямо из builder
+```csharp
+using MathCore.DSP.Filters;
 
-## Быстрый старт
-1. Выберите базовый builder по типу полосы (`LowPassBuilder`, `HighPassBuilder` и т.д.)
-2. Вызовите метод семейства фильтра (`Butterworth`, `Chebyshev`, `RC` ...)
-3. Неявно преобразуйте к `Filter` или вызовите `Create()`
-4. Используйте полученный фильтр для обработки выборок (методы исходного класса `Filter`)
+var filter = Filter.IIRBySamplingFrequency(10_000)
+    .Elliptic
+    .BandPass(500, 1_000, 2_000, 2_500)
+    .WithGainsInDb(1, 40)
+    .Create();
+```
 
----
-При добавлении новых типов фильтров выдерживайте единый стиль: минимализм, иммутабельность параметров, русские XML‑комментарии и неявный оператор преобразования к `Filter`.
+### 3) DSL-сценарий `WithPassband/WithStopband`
+
+```csharp
+using MathCore.DSP.Filters;
+
+var filter = Filter.IIR()
+    .WithSamplingFrequency(10_000)
+    .Chebyshev(ChebyshevType.II)
+    .BandStop()
+    .WithPassband(500, 2_500)
+    .WithStopband(1_000, 2_000)
+    .BuildFilter();
+```
+
+## Работа со спецификацией
+
+Интерфейс поддерживает раздельные этапы:
+
+1. Сформировать спецификацию
+2. Позже построить фильтр из спецификации
+
+### 1) Получить спецификацию из builder
+
+```csharp
+using MathCore.DSP.Filters;
+using MathCore.DSP.Filters.Builders;
+
+IirFilterSpecification specification = Filter.IIR(1d / 10_000)
+    .Butterworth
+    .BandPass(500, 1_000, 2_000, 2_500)
+    .BuildSpecification();
+```
+
+### 2) Собрать фильтр из спецификации
+
+```csharp
+using MathCore.DSP.Filters;
+using MathCore.DSP.Filters.Builders;
+
+Filter filter = specification.CreateFilter();
+```
+
+### 3) Безопасный Try-паттерн
+
+```csharp
+using MathCore.DSP.Filters;
+using MathCore.DSP.Filters.Builders;
+
+var success = Filter.IIR()
+    .WithSamplingFrequency(10_000)
+    .Butterworth
+    .LowPass()
+    .WithPassband(1_000)
+    .TryGetSpecification(out var specification);
+
+if (success)
+{
+    var filter = specification!.CreateFilter();
+}
+```
+
+## Настройка коэффициентов передачи
+
+Поддерживаются оба варианта:
+
+- линейные коэффициенты: `WithGains(Gp, Gs)`
+- значения в дБ: `WithGainsInDb(passRippleDb, stopAttenuationDb)`
+
+Дополнительно:
+
+- `WithPassbandRippleDb(...)`
+- `WithStopbandAttenuationDb(...)`
+
+## Иерархия спецификаций
+
+Общая базовая абстракция:
+
+- `IirFilterSpecification`
+
+Вертикальная иерархия по семействам:
+
+- `ButterworthSpecification`
+- `ChebyshevSpecification`
+- `EllipticSpecification`
+
+Горизонтальные интерфейсы:
+
+- `IIirSamplingSpecification`
+- `IIirGainSpecification`
+- `IIirFamilySpecification`
+- `IIirPassTypeSpecification`
+- `IIirLowHighFrequenciesSpecification`
+- `IIirBandFrequenciesSpecification`
+- `IChebyshevTypeSpecification`
+
+Для простых веток также есть отдельные спецификации:
+
+- `RcLowPassSpecification`
+- `RcExponentialLowPassSpecification`
+- `RcHighPassSpecification`
+- `RlcBandPassSpecification`
+- `RlcBandStopSpecification`
+
+## RC/RLC примеры
+
+```csharp
+using MathCore.DSP.Filters;
+
+var rc = Filter.IIR(1d / 1_000).RC.HighPass(50).Create();
+var rlc = Filter.IIR(1d / 1_000).RLC.BandPass(120, 20).Create();
+```
+
+## Alias-методы
+
+Для читаемости доступны алиасы:
+
+- `BuildSpecification()` == `GetSpecification()`
+- `BuildFilter()` == `Create()`
