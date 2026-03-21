@@ -134,27 +134,31 @@ public readonly record struct IirSpecificationBuilder(
         return this with { StopGain = stop_gain };
     }
 
-    /// <summary>Создать экземпляр фильтра</summary>
-    /// <returns>Экземпляр IIR-фильтра</returns>
-    public Filter Create() => (Family, PassType) switch
+    /// <summary>Получить объект спецификации фильтра</summary>
+    /// <returns>Спецификация фильтра</returns>
+    public IirFilterSpecification GetSpecification() => (Family, PassType) switch
     {
-        (IirFilterFamily.Butterworth, FrequencyPassType.LowPass) => new ButterworthLowPass(Dt, PassLowFrequency, StopLowFrequency, PassGain, StopGain),
-        (IirFilterFamily.Butterworth, FrequencyPassType.HighPass) => new ButterworthHighPass(Dt, StopLowFrequency, PassLowFrequency, PassGain, StopGain),
-        (IirFilterFamily.Butterworth, FrequencyPassType.BandPass) => new ButterworthBandPass(Dt, StopLowFrequency, PassLowFrequency, PassHighFrequency, StopHighFrequency, PassGain, StopGain),
-        (IirFilterFamily.Butterworth, FrequencyPassType.BandStop) => new ButterworthBandStop(Dt, PassLowFrequency, StopLowFrequency, StopHighFrequency, PassHighFrequency, PassGain, StopGain),
+        (IirFilterFamily.Butterworth, FrequencyPassType.LowPass) => new ButterworthLowPassSpecification(Dt, PassLowFrequency, StopLowFrequency, PassGain, StopGain),
+        (IirFilterFamily.Butterworth, FrequencyPassType.HighPass) => new ButterworthHighPassSpecification(Dt, StopLowFrequency, PassLowFrequency, PassGain, StopGain),
+        (IirFilterFamily.Butterworth, FrequencyPassType.BandPass) => new ButterworthBandPassSpecification(Dt, StopLowFrequency, PassLowFrequency, PassHighFrequency, StopHighFrequency, PassGain, StopGain),
+        (IirFilterFamily.Butterworth, FrequencyPassType.BandStop) => new ButterworthBandStopSpecification(Dt, PassLowFrequency, StopLowFrequency, StopHighFrequency, PassHighFrequency, PassGain, StopGain),
 
-        (IirFilterFamily.Chebyshev, FrequencyPassType.LowPass) => new ChebyshevLowPass(Dt, PassLowFrequency, StopLowFrequency, PassGain, StopGain, ChebyshevType),
-        (IirFilterFamily.Chebyshev, FrequencyPassType.HighPass) => new ChebyshevHighPass(Dt, StopLowFrequency, PassLowFrequency, PassGain, StopGain, ChebyshevType),
-        (IirFilterFamily.Chebyshev, FrequencyPassType.BandPass) => new ChebyshevBandPass(Dt, StopLowFrequency, PassLowFrequency, PassHighFrequency, StopHighFrequency, PassGain, StopGain, ChebyshevType),
-        (IirFilterFamily.Chebyshev, FrequencyPassType.BandStop) => new ChebyshevBandStop(Dt, PassLowFrequency, StopLowFrequency, StopHighFrequency, PassHighFrequency, PassGain, StopGain, ChebyshevType),
+        (IirFilterFamily.Chebyshev, FrequencyPassType.LowPass) => new ChebyshevLowPassSpecification(Dt, PassLowFrequency, StopLowFrequency, PassGain, StopGain, ChebyshevType),
+        (IirFilterFamily.Chebyshev, FrequencyPassType.HighPass) => new ChebyshevHighPassSpecification(Dt, StopLowFrequency, PassLowFrequency, PassGain, StopGain, ChebyshevType),
+        (IirFilterFamily.Chebyshev, FrequencyPassType.BandPass) => new ChebyshevBandPassSpecification(Dt, StopLowFrequency, PassLowFrequency, PassHighFrequency, StopHighFrequency, PassGain, StopGain, ChebyshevType),
+        (IirFilterFamily.Chebyshev, FrequencyPassType.BandStop) => new ChebyshevBandStopSpecification(Dt, PassLowFrequency, StopLowFrequency, StopHighFrequency, PassHighFrequency, PassGain, StopGain, ChebyshevType),
 
-        (IirFilterFamily.Elliptic, FrequencyPassType.LowPass) => new EllipticLowPass(Dt, PassLowFrequency, StopLowFrequency, PassGain, StopGain),
-        (IirFilterFamily.Elliptic, FrequencyPassType.HighPass) => new EllipticHighPass(Dt, StopLowFrequency, PassLowFrequency, PassGain, StopGain),
-        (IirFilterFamily.Elliptic, FrequencyPassType.BandPass) => new EllipticBandPass(Dt, StopLowFrequency, PassLowFrequency, PassHighFrequency, StopHighFrequency, PassGain, StopGain),
-        (IirFilterFamily.Elliptic, FrequencyPassType.BandStop) => new EllipticBandStop(Dt, PassLowFrequency, StopLowFrequency, StopHighFrequency, PassHighFrequency, PassGain, StopGain),
+        (IirFilterFamily.Elliptic, FrequencyPassType.LowPass) => new EllipticLowPassSpecification(Dt, PassLowFrequency, StopLowFrequency, PassGain, StopGain),
+        (IirFilterFamily.Elliptic, FrequencyPassType.HighPass) => new EllipticHighPassSpecification(Dt, StopLowFrequency, PassLowFrequency, PassGain, StopGain),
+        (IirFilterFamily.Elliptic, FrequencyPassType.BandPass) => new EllipticBandPassSpecification(Dt, StopLowFrequency, PassLowFrequency, PassHighFrequency, StopHighFrequency, PassGain, StopGain),
+        (IirFilterFamily.Elliptic, FrequencyPassType.BandStop) => new EllipticBandStopSpecification(Dt, PassLowFrequency, StopLowFrequency, StopHighFrequency, PassHighFrequency, PassGain, StopGain),
 
         _ => throw new InvalidOperationException($"Неподдерживаемая комбинация Family={Family} PassType={PassType}")
     };
+
+    /// <summary>Создать экземпляр фильтра</summary>
+    /// <returns>Экземпляр IIR-фильтра</returns>
+    public Filter Create() => GetSpecification().CreateFilter();
 
     /// <summary>Создать несколько независимых экземпляров фильтра</summary>
     /// <param name="Count">Количество экземпляров</param>
@@ -446,9 +450,13 @@ public readonly record struct IirPassbandStopbandBuilder(
         };
     }
 
+    /// <summary>Получить объект спецификации фильтра</summary>
+    /// <returns>Спецификация фильтра</returns>
+    public IirFilterSpecification GetSpecification() => ToSpecification().GetSpecification();
+
     /// <summary>Создать фильтр на основе DSL-спецификации</summary>
     /// <returns>Экземпляр IIR-фильтра</returns>
-    public Filter Create() => ToSpecification().Create();
+    public Filter Create() => GetSpecification().CreateFilter();
 }
 
 /// <summary>Построитель RC-фильтров</summary>
@@ -488,8 +496,12 @@ public readonly record struct IirRlcBuilder(double Dt)
 /// <param name="CutoffFrequency">Частота среза</param>
 public readonly record struct RcLowPassSpecificationBuilder(double Dt, double CutoffFrequency)
 {
+    /// <summary>Получить объект спецификации фильтра</summary>
+    /// <returns>Спецификация фильтра</returns>
+    public RcLowPassSpecification GetSpecification() => new(Dt, CutoffFrequency);
+
     /// <summary>Создать экземпляр фильтра</summary>
-    public RCLowPass Create() => new(Dt, CutoffFrequency);
+    public RCLowPass Create() => (RCLowPass)GetSpecification().CreateFilter();
 
     /// <summary>Создать несколько независимых экземпляров фильтра</summary>
     /// <param name="Count">Количество экземпляров</param>
@@ -514,8 +526,12 @@ public readonly record struct RcLowPassSpecificationBuilder(double Dt, double Cu
 /// <param name="CutoffFrequency">Частота среза</param>
 public readonly record struct RcExponentialLowPassSpecificationBuilder(double Dt, double CutoffFrequency)
 {
+    /// <summary>Получить объект спецификации фильтра</summary>
+    /// <returns>Спецификация фильтра</returns>
+    public RcExponentialLowPassSpecification GetSpecification() => new(Dt, CutoffFrequency);
+
     /// <summary>Создать экземпляр фильтра</summary>
-    public RCExponentialLowPass Create() => new(Dt, CutoffFrequency);
+    public RCExponentialLowPass Create() => (RCExponentialLowPass)GetSpecification().CreateFilter();
 
     /// <summary>Создать несколько независимых экземпляров фильтра</summary>
     /// <param name="Count">Количество экземпляров</param>
@@ -540,8 +556,12 @@ public readonly record struct RcExponentialLowPassSpecificationBuilder(double Dt
 /// <param name="CutoffFrequency">Частота среза</param>
 public readonly record struct RcHighPassSpecificationBuilder(double Dt, double CutoffFrequency)
 {
+    /// <summary>Получить объект спецификации фильтра</summary>
+    /// <returns>Спецификация фильтра</returns>
+    public RcHighPassSpecification GetSpecification() => new(Dt, CutoffFrequency);
+
     /// <summary>Создать экземпляр фильтра</summary>
-    public RCHighPass Create() => new(CutoffFrequency, Dt);
+    public RCHighPass Create() => (RCHighPass)GetSpecification().CreateFilter();
 
     /// <summary>Создать несколько независимых экземпляров фильтра</summary>
     /// <param name="Count">Количество экземпляров</param>
@@ -567,8 +587,12 @@ public readonly record struct RcHighPassSpecificationBuilder(double Dt, double C
 /// <param name="Bandwidth">Полоса пропускания</param>
 public readonly record struct RlcBandPassSpecificationBuilder(double Dt, double ResonanceFrequency, double Bandwidth)
 {
+    /// <summary>Получить объект спецификации фильтра</summary>
+    /// <returns>Спецификация фильтра</returns>
+    public RlcBandPassSpecification GetSpecification() => new(Dt, ResonanceFrequency, Bandwidth);
+
     /// <summary>Создать экземпляр фильтра</summary>
-    public RLCBandPass Create() => new(ResonanceFrequency, Bandwidth, Dt);
+    public RLCBandPass Create() => (RLCBandPass)GetSpecification().CreateFilter();
 
     /// <summary>Создать несколько независимых экземпляров фильтра</summary>
     /// <param name="Count">Количество экземпляров</param>
@@ -594,8 +618,12 @@ public readonly record struct RlcBandPassSpecificationBuilder(double Dt, double 
 /// <param name="Bandwidth">Полоса заграждения</param>
 public readonly record struct RlcBandStopSpecificationBuilder(double Dt, double ResonanceFrequency, double Bandwidth)
 {
+    /// <summary>Получить объект спецификации фильтра</summary>
+    /// <returns>Спецификация фильтра</returns>
+    public RlcBandStopSpecification GetSpecification() => new(Dt, ResonanceFrequency, Bandwidth);
+
     /// <summary>Создать экземпляр фильтра</summary>
-    public RLCBandStop Create() => new(ResonanceFrequency, Bandwidth, Dt);
+    public RLCBandStop Create() => (RLCBandStop)GetSpecification().CreateFilter();
 
     /// <summary>Создать несколько независимых экземпляров фильтра</summary>
     /// <param name="Count">Количество экземпляров</param>

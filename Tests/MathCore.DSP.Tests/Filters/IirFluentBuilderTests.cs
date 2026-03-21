@@ -1,4 +1,5 @@
 ﻿using MathCore.DSP.Filters;
+using MathCore.DSP.Filters.Builders;
 
 namespace MathCore.DSP.Tests.Filters;
 
@@ -156,5 +157,65 @@ public class IirFluentBuilderTests : UnitTest
             .Create();
 
         Assert.IsInstanceOfType(filter, typeof(global::MathCore.DSP.Filters.EllipticLowPass));
+    }
+
+    [TestMethod]
+    public void GetSpecificationReturnsButterworthLowPassSpecification()
+    {
+        const double dt = 1d / 5_000;
+
+        var specification = Filter.IIR(dt)
+            .Butterworth
+            .LowPass(500, 1_500)
+            .GetSpecification();
+
+        Assert.IsInstanceOfType(specification, typeof(ButterworthLowPassSpecification));
+    }
+
+    [TestMethod]
+    public void SpecificationBuildsFilter()
+    {
+        const double dt = 1d / 10_000;
+
+        var specification = Filter.IIR(dt)
+            .Chebyshev(ChebyshevType.II)
+            .BandStop(500, 1_000, 2_000, 2_500)
+            .GetSpecification();
+
+        var filter = specification.CreateFilter();
+
+        Assert.IsInstanceOfType(filter, typeof(global::MathCore.DSP.Filters.ChebyshevBandStop));
+    }
+
+    [TestMethod]
+    public void DslSpecificationImplementsHorizontalInterfaces()
+    {
+        var specification = Filter.IIR()
+            .WithSamplingFrequency(10_000)
+            .Elliptic
+            .BandPass()
+            .WithPassband(1_000, 2_000)
+            .WithStopband(500, 2_500)
+            .GetSpecification();
+
+        Assert.IsInstanceOfType(specification, typeof(IIirBandFrequenciesSpecification));
+        Assert.IsInstanceOfType(specification, typeof(IIirGainSpecification));
+        Assert.IsInstanceOfType(specification, typeof(IIirFamilySpecification));
+    }
+
+    [TestMethod]
+    public void RcBuilderReturnsSpecificationAndBuildsFilter()
+    {
+        const double dt = 1d / 1_000;
+
+        var specification = Filter.IIR(dt)
+            .RC
+            .HighPass(50)
+            .GetSpecification();
+
+        var filter = specification.CreateFilter();
+
+        Assert.IsInstanceOfType(specification, typeof(RcHighPassSpecification));
+        Assert.IsInstanceOfType(filter, typeof(RCHighPass));
     }
 }
