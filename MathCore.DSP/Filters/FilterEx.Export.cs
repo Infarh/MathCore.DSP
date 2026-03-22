@@ -463,19 +463,25 @@ public static partial class FilterEx
 
     private static double[][] BuildSectionsFromRoots(Complex[] Roots)
     {
-        if (Roots is null) throw new ArgumentNullException(nameof(Roots));
+        ArgumentNullException.ThrowIfNull(Roots);
         if (Roots.Length == 0) return [];
 
         const double imag_eps = 1e-9;
+        const double zero_eps = 1e-18;
 
         var complex_roots = new List<Complex>(Roots.Length);
         var real_roots = new List<double>(Roots.Length);
 
-        foreach (var root in Roots)
+        foreach (var root0 in Roots)
+        {
+            if (root0.Abs <= zero_eps) continue;
+
+            var root = Complex.Real / root0;
             if (Math.Abs(root.Im) <= imag_eps)
                 real_roots.Add(root.Re);
             else
                 complex_roots.Add(root);
+        }
 
         var sections = new List<double[]>();
 

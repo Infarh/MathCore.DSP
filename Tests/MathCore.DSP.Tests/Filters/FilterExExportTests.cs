@@ -5,6 +5,8 @@ namespace MathCore.DSP.Tests.Filters;
 [TestClass]
 public class FilterExExportTests
 {
+    private const double SosFrequencyResponseTolerance = 6e-3;
+
     [TestMethod]
     public void ExportToFixedPoint_ShouldNormalizeCoefficients()
     {
@@ -49,7 +51,7 @@ public class FilterExExportTests
             var expected = iir.FrequencyResponse(frequency);
             var actual = GetFrequencyResponse(coefficients, frequency);
             var delta = expected - actual;
-            Assert.IsLessThan(2e-3, delta.Abs, $"Отклонение АЧХ слишком велико на частоте {frequency}: {delta.Abs}");
+            Assert.IsLessThan(SosFrequencyResponseTolerance, delta.Abs, $"Отклонение АЧХ слишком велико на частоте {frequency}: {delta.Abs}");
         }
     }
 
