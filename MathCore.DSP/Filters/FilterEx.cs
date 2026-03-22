@@ -1,6 +1,6 @@
 ﻿namespace MathCore.DSP.Filters;
 
-public static class FilterEx
+public static partial class FilterEx
 {
     public static IEnumerable<Complex> FrequencyResponse(this Filter filter, double f1, double f2, double df)
     {
