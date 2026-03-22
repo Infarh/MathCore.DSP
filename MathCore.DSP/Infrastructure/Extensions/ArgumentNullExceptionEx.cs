@@ -1,4 +1,4 @@
-﻿#if !NET8_0_OR_GREATER
+﻿#if NETSTANDARD2_0
 using System.Runtime.CompilerServices;
 
 namespace MathCore.DSP.Infrastructure;
@@ -7,7 +7,7 @@ internal static class ArgumentNullExceptionEx
 {
     extension(ArgumentNullException)
     {
-        public static void ThrowIfNull(object? argument, [CallerArgumentExpression("argument")] string? ParamName = null)
+        public static void ThrowIfNull(object? argument, [CallerArgumentExpression(nameof(argument))] string? ParamName = null)
         {
             if (argument != null)
                 return;

@@ -62,6 +62,7 @@
 
   <ItemGroup>
     <Using Include="MathCore.DSP.Infrastructure" />
+    <Using Include="MathCore.DSP.Infrastructure.Extensions" />
   </ItemGroup>
 
   <ItemGroup>
