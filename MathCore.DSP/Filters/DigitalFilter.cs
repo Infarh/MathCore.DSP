@@ -106,7 +106,7 @@ public abstract class DigitalFilter : Filter
     /// <returns>Нормирующий множитель</returns>
     public static double GetNormalizeCoefficient(IEnumerable<Complex> poles, double dt)
     {
-        if (poles is null) throw new ArgumentNullException(nameof(poles));
+        ArgumentNullException.ThrowIfNull(poles);
 
         var k = 2 / dt;
         var (re, im) = poles.Multiply(p => k - p);

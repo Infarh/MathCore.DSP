@@ -53,7 +53,7 @@ public static class FT
     /// <param name="IsInverse">Обратное преобразование</param>
     public static Complex[] GetFourierTransform(this double[] Values, bool IsInverse = false)
     {
-        if (Values is null) throw new ArgumentNullException(nameof(Values));
+        ArgumentNullException.ThrowIfNull(Values);
 
         var N = Values.Length;
         var spectrum = new Complex[N];
@@ -82,7 +82,7 @@ public static class FT
     /// <param name="progress">Метод информирования о прогрессе операции</param>
     public static Complex[] GetFourierTransform(this double[] Values, bool IsInverse, Action<double>? progress)
     {
-        if (Values is null) throw new ArgumentNullException(nameof(Values));
+        ArgumentNullException.ThrowIfNull(Values);
 
         var N = Values.Length;
         var spectrum = new Complex[N];
@@ -112,7 +112,7 @@ public static class FT
     /// <param name="Inverse">Обратное преобразование</param>
     public static Complex[] GetFourierTransform(this Complex[] Values, bool Inverse = false)
     {
-        if (Values is null) throw new ArgumentNullException(nameof(Values));
+        ArgumentNullException.ThrowIfNull(Values);
 
         var spectrum = new Complex[Values.Length];
         var N = spectrum.Length;
@@ -140,7 +140,7 @@ public static class FT
     /// <param name="progress">Метод индикации прогресса выполнения</param>
     public static Complex[] GetFourierTransform(this Complex[] Values, bool Inverse, Action<double>? progress)
     {
-        if (Values is null) throw new ArgumentNullException(nameof(Values));
+        ArgumentNullException.ThrowIfNull(Values);
 
         var spectrum = new Complex[Values.Length];
         var N = spectrum.Length;

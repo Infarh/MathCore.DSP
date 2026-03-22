@@ -2,10 +2,7 @@
 namespace MathCore.DSP.Filters;
 
 /// <summary>Всепропускающий фильтр</summary>
+/// <remarks>Инициализация нового экземпляра <see cref="AllPassFilter"/></remarks>
+/// <param name="k">Коэффициент передачи</param>
 // http://www.dsplib.ru/content/allpass/allpass.html
-public class AllPassFilter : IIR
-{
-    /// <summary>Инициализация нового экземпляра <see cref="AllPassFilter"/></summary>
-    /// <param name="k">Коэффициент передачи</param>
-    public AllPassFilter(double k) : base(B: [k, 1], A: [1, k]) { }
-}
+public class AllPassFilter(double k) : IIR(B: [k, 1], A: [1, k]);

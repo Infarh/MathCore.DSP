@@ -1,6 +1,4 @@
-﻿using static MathCore.Polynom.Array;
-
-namespace MathCore.DSP.Filters;
+﻿namespace MathCore.DSP.Filters;
 
 public static partial class FilterEx
 {
@@ -117,7 +115,7 @@ public static partial class FilterEx
     /// <exception cref="NotSupportedException">Если фильтр не является <see cref="IIR"/></exception>
     public static FixedPointIirCoefficients ExportToFixedPoint(this Filter Filter, int BitDepth = 16, int? FractionalBits = null)
     {
-        if (Filter is null) throw new ArgumentNullException(nameof(Filter));
+        ArgumentNullException.ThrowIfNull(Filter);
 
         return Filter is IIR iir
             ? iir.ExportToFixedPoint(BitDepth, FractionalBits)
@@ -132,7 +130,7 @@ public static partial class FilterEx
     /// <exception cref="ArgumentNullException">Если <paramref name="Filter"/> равен <see langword="null"/></exception>
     public static FixedPointIirCoefficients ExportToFixedPoint(this IIR Filter, int BitDepth = 16, int? FractionalBits = null)
     {
-        if (Filter is null) throw new ArgumentNullException(nameof(Filter));
+        ArgumentNullException.ThrowIfNull(Filter);
 
         ValidateBitDepth(BitDepth);
 
@@ -157,7 +155,7 @@ public static partial class FilterEx
     /// <exception cref="NotSupportedException">Если фильтр не является <see cref="IIR"/></exception>
     public static FixedPointIirSosCoefficients ExportToFixedPointSos(this Filter Filter, int BitDepth = 16, int? FractionalBits = null)
     {
-        if (Filter is null) throw new ArgumentNullException(nameof(Filter));
+        ArgumentNullException.ThrowIfNull(Filter);
 
         return Filter is IIR iir
             ? iir.ExportToFixedPointSos(BitDepth, FractionalBits)
@@ -173,7 +171,7 @@ public static partial class FilterEx
     /// <exception cref="InvalidOperationException">Если не удалось выполнить секционное разложение фильтра</exception>
     public static FixedPointIirSosCoefficients ExportToFixedPointSos(this IIR Filter, int BitDepth = 16, int? FractionalBits = null)
     {
-        if (Filter is null) throw new ArgumentNullException(nameof(Filter));
+        ArgumentNullException.ThrowIfNull(Filter);
 
         ValidateBitDepth(BitDepth);
 
@@ -222,8 +220,8 @@ public static partial class FilterEx
 
     private static (double[] B, double[] A) Normalize(IReadOnlyList<double> B, IReadOnlyList<double> A)
     {
-        if (B is null) throw new ArgumentNullException(nameof(B));
-        if (A is null) throw new ArgumentNullException(nameof(A));
+        ArgumentNullException.ThrowIfNull(B);
+        ArgumentNullException.ThrowIfNull(A);
         if (B.Count == 0) throw new ArgumentException("Размер массива коэффициентов числителя должен быть больше 0", nameof(B));
         if (A.Count < 2) throw new ArgumentException("Размер массива коэффициентов знаменателя должен быть больше 1", nameof(A));
 
@@ -242,8 +240,8 @@ public static partial class FilterEx
 
     private static void EnsureFinite(IEnumerable<double> Values, string ParamName)
     {
-        if (Values is null) throw new ArgumentNullException(nameof(Values));
-        if (ParamName is null) throw new ArgumentNullException(nameof(ParamName));
+        ArgumentNullException.ThrowIfNull(Values);
+        ArgumentNullException.ThrowIfNull(ParamName);
 
         foreach (var value in Values)
             if (!IsFinite(value))
@@ -254,13 +252,13 @@ public static partial class FilterEx
 
     private static void ValidateBitDepth(int BitDepth)
     {
-        if (BitDepth < 2 || BitDepth > 62)
+        if (BitDepth is < 2 or > 62)
             throw new ArgumentOutOfRangeException(nameof(BitDepth), BitDepth, "Разрядность коэффициентов должна находиться в диапазоне от 2 до 62 бит");
     }
 
     private static int ResolveFractionalBits(IReadOnlyList<double> Coefficients, int BitDepth, int? FractionalBits)
     {
-        if (Coefficients is null) throw new ArgumentNullException(nameof(Coefficients));
+        ArgumentNullException.ThrowIfNull(Coefficients);
 
         if (FractionalBits is { } explicit_fractional_bits)
         {
@@ -399,7 +397,7 @@ public static partial class FilterEx
 
     private static Complex[] GetRoots(double[] Coefficients)
     {
-        if (Coefficients is null) throw new ArgumentNullException(nameof(Coefficients));
+        ArgumentNullException.ThrowIfNull(Coefficients);
 
         var n = Coefficients.Length - 1;
         while (n > 0 && Math.Abs(Coefficients[n]) < 1e-18)
@@ -528,7 +526,7 @@ public static partial class FilterEx
 
     private static void DistributeGain(SosSection[] Sections, ref double Gain)
     {
-        if (Sections is null) throw new ArgumentNullException(nameof(Sections));
+        ArgumentNullException.ThrowIfNull(Sections);
         if (Sections.Length == 0 || Gain == 0 || double.IsNaN(Gain) || double.IsInfinity(Gain))
             return;
 

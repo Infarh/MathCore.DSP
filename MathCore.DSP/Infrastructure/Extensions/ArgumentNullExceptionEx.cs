@@ -1,7 +1,7 @@
 ﻿#if NETSTANDARD2_0
 using System.Runtime.CompilerServices;
 
-namespace MathCore.DSP.Infrastructure;
+namespace MathCore.DSP.Infrastructure.Extensions;
 
 internal static class ArgumentNullExceptionEx
 {

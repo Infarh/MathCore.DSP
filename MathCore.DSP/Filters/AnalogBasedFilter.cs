@@ -49,8 +49,8 @@ public abstract class AnalogBasedFilter : IIR
             Complex[] Zeros,
             double fpl, double fph)
         {
-            if (Poles is null) throw new ArgumentNullException(nameof(Poles));
-            if (Zeros is null) throw new ArgumentNullException(nameof(Zeros));
+            ArgumentNullException.ThrowIfNull(Poles);
+            ArgumentNullException.ThrowIfNull(Zeros);
             if (Poles.Length == 0) throw new ArgumentException("Размер вектора полюсов должен быть больше 0", nameof(Poles));
             if (Zeros.Length > Poles.Length) throw new ArgumentException("Число нулей не должна быть больше числа полюсов", nameof(Zeros));
 
@@ -96,8 +96,8 @@ public abstract class AnalogBasedFilter : IIR
             Complex[] Zeros,
             double fpl, double fph)
         {
-            if (Poles is null) throw new ArgumentNullException(nameof(Poles));
-            if (Zeros is null) throw new ArgumentNullException(nameof(Zeros));
+            ArgumentNullException.ThrowIfNull(Poles);
+            ArgumentNullException.ThrowIfNull(Zeros);
             var count_p = Poles.Length;
             var count_0 = Zeros.Length;
             if (count_p == 0) throw new ArgumentException("Размер вектора полюсов должен быть больше 0", nameof(Poles));
