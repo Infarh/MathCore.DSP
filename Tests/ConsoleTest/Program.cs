@@ -6,6 +6,7 @@ using System.Numerics;
 const int capture_seconds = 2;
 const double sample_rate_hz = 10_000_000;
 const uint center_frequency_hz = 90_000_000;
+const double station_offset_hz = 800_000;
 const uint lna_gain_db = 24;
 const uint vga_gain_db = 24;
 
@@ -49,6 +50,27 @@ try
 	Console.WriteLine($"DC после: I={stage2_after.mean_i:F5}, Q={stage2_after.mean_q:F5}, Pdc={stage2_after.dc_power:F6}");
 	Console.WriteLine($"Ослабление DC (dB): {ToDb(stage2_before.dc_power / Math.Max(stage2_after.dc_power, 1e-18)):F2}");
 	Console.WriteLine("Этап 2 завершён");
+
+	Console.WriteLine();
+	Console.WriteLine("Этап 3. Гетеродин +0.8 МГц");
+
+	var shifted_iq = MixByHeterodyne(iq_after_dc.after_dc, station_offset_hz, sample_rate_hz);
+
+	var validation_count = Math.Min(1_000_000, shifted_iq.Length);
+	var before_slice = iq_after_dc.after_dc.AsSpan(0, validation_count);
+	var after_slice = shifted_iq.AsSpan(0, validation_count);
+
+	var channel_power_before = EstimateChannelPower(before_slice, sample_rate_hz, station_offset_hz, 150_000);
+	var zero_power_before = EstimateChannelPower(before_slice, sample_rate_hz, 0, 150_000);
+
+	var channel_power_after = EstimateChannelPower(after_slice, sample_rate_hz, station_offset_hz, 150_000);
+	var zero_power_after = EstimateChannelPower(after_slice, sample_rate_hz, 0, 150_000);
+
+	Console.WriteLine($"До сдвига: P(800кГц)={channel_power_before:E6}, P(0)={zero_power_before:E6}");
+	Console.WriteLine($"После сдвига: P(800кГц)={channel_power_after:E6}, P(0)={zero_power_after:E6}");
+	Console.WriteLine($"Усиление целевого канала в нуле (dB): {ToDb(zero_power_after / Math.Max(zero_power_before, 1e-18)):F2}");
+	Console.WriteLine($"Подавление 800кГц после сдвига (dB): {ToDb(channel_power_before / Math.Max(channel_power_after, 1e-18)):F2}");
+	Console.WriteLine("Этап 3 завершён");
 }
 finally
 {
@@ -192,3 +214,48 @@ static (double mean_i, double mean_q, double dc_power) ComputeComplexMetrics(Com
 }
 
 static double ToDb(double Ratio) => 10 * Math.Log10(Math.Max(Ratio, 1e-18));
+
+static Complex[] MixByHeterodyne(Complex[] Source, double ShiftHz, double SampleRateHz)
+{
+	var result = new Complex[Source.Length];
+	var dphase = -2 * Math.PI * ShiftHz / SampleRateHz;
+
+	for (var index = 0; index < Source.Length; index++)
+	{
+		var phase = dphase * index;
+		var lo = Complex.FromPolarCoordinates(1, phase);
+		result[index] = Source[index] * lo;
+	}
+
+	return result;
+}
+
+static double EstimateChannelPower(ReadOnlySpan<Complex> Source, double SampleRateHz, double CenterHz, double BandwidthHz)
+{
+	var phase_step = -2 * Math.PI * CenterHz / SampleRateHz;
+	var alpha = Math.Min(1, 2 * Math.PI * BandwidthHz / SampleRateHz);
+
+	var i_lp = 0d;
+	var q_lp = 0d;
+	var pwr_sum = 0d;
+
+	for (var index = 0; index < Source.Length; index++)
+	{
+		var phase = phase_step * index;
+		var lo_i = Math.Cos(phase);
+		var lo_q = Math.Sin(phase);
+
+		var sample_i = Source[index].Real;
+		var sample_q = Source[index].Imaginary;
+
+		var mix_i = sample_i * lo_i - sample_q * lo_q;
+		var mix_q = sample_i * lo_q + sample_q * lo_i;
+
+		i_lp += alpha * (mix_i - i_lp);
+		q_lp += alpha * (mix_q - q_lp);
+
+		pwr_sum += i_lp * i_lp + q_lp * q_lp;
+	}
+
+	return pwr_sum / Source.Length;
+}
