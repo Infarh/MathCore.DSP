@@ -8,26 +8,26 @@ namespace MathCore.DSP.SDR;
 public static class SdrSignalProcessing
 {
     /// <summary>Рассчитать базовые метрики interleaved IQ-потока int8</summary>
-    /// <param name="RawIq">Байтовый буфер формата I,Q,I,Q</param>
+    /// <param name="IQ">Байтовый буфер формата I,Q,I,Q</param>
     /// <returns>Кортеж средних, RMS, доли клиппинга и средней мощности</returns>
     /// <exception cref="ArgumentNullException">Буфер исходных данных не задан</exception>
     /// <exception cref="ArgumentException">Длина буфера не кратна двум</exception>
     /// <remarks>
     /// Пример использования:
     /// <code><![CDATA[
-    /// var metrics = SdrSignalProcessing.ComputeIq8Metrics(raw_iq);
+    /// var metrics = SdrSignalProcessing.ComputeIQ8Metrics(raw_iq);
     /// Console.WriteLine($"Mean I={metrics.mean_i:F4}, Mean Q={metrics.mean_q:F4}");
     /// ]]></code>
     /// </remarks>
-    public static (double mean_i, double mean_q, double rms_i, double rms_q, double clip_ratio, double avg_power) ComputeIq8Metrics(byte[] RawIq)
+    public static (double mean_i, double mean_q, double rms_i, double rms_q, double clip_ratio, double avg_power) ComputeIQ8Metrics(byte[] IQ)
     {
-        ArgumentNullException.ThrowIfNull(RawIq);
+        ArgumentNullException.ThrowIfNull(IQ);
 
-        if ((RawIq.Length & 1) != 0)
-            throw new ArgumentException("Размер массива IQ должен быть кратен двум", nameof(RawIq));
+        if ((IQ.Length & 1) != 0)
+            throw new ArgumentException("Размер массива IQ должен быть кратен двум", nameof(IQ));
 
-        if (RawIq.Length == 0)
-            return (0, 0, 0, 0, 0, 0);
+        if (IQ.Length == 0)
+            return default;
 
         var i_sum = 0d;
         var q_sum = 0d;
@@ -36,11 +36,11 @@ public static class SdrSignalProcessing
         var pwr_sum = 0d;
         var clip_count = 0;
 
-        var count = RawIq.Length / 2;
-        for (var index = 0; index < RawIq.Length; index += 2)
+        var count = IQ.Length / 2;
+        for (var index = 0; index < IQ.Length; index += 2)
         {
-            var i_value = unchecked((sbyte)RawIq[index]);
-            var q_value = unchecked((sbyte)RawIq[index + 1]);
+            var i_value = unchecked((sbyte)IQ[index]);
+            var q_value = unchecked((sbyte)IQ[index + 1]);
 
             i_sum += i_value;
             q_sum += q_value;
@@ -71,11 +71,11 @@ public static class SdrSignalProcessing
     /// <remarks>
     /// Пример использования:
     /// <code><![CDATA[
-    /// var dc_metrics = SdrSignalProcessing.ComputeComplexDcMetrics(iq_after_dc);
+    /// var dc_metrics = SdrSignalProcessing.ComputeComplexDCMetrics(iq_after_dc);
     /// Console.WriteLine($"Pdc={dc_metrics.dc_power:E6}");
     /// ]]></code>
     /// </remarks>
-    public static (double mean_i, double mean_q, double dc_power) ComputeComplexDcMetrics(ComplexN[] Samples)
+    public static (double mean_i, double mean_q, double dc_power) ComputeComplexDCMetrics(ComplexN[] Samples)
     {
         ArgumentNullException.ThrowIfNull(Samples);
 
@@ -108,7 +108,7 @@ public static class SdrSignalProcessing
     public static double ToDb(double Ratio) => 10 * Math.Log10(Math.Max(Ratio, 1e-18));
 
     /// <summary>Убрать DC-компоненту из interleaved IQ-потока int8</summary>
-    /// <param name="RawIq">Байтовый буфер формата I,Q,I,Q</param>
+    /// <param name="IQ">Байтовый буфер формата I,Q,I,Q</param>
     /// <param name="Alpha">Коэффициент сглаживания экспоненциальной оценки среднего в диапазоне (0;1]</param>
     /// <returns>Массив комплексных IQ-отсчётов после подавления DC</returns>
     /// <exception cref="ArgumentNullException">Буфер исходных данных не задан</exception>
@@ -117,20 +117,20 @@ public static class SdrSignalProcessing
     /// <remarks>
     /// Пример использования:
     /// <code><![CDATA[
-    /// var iq_after_dc = SdrSignalProcessing.RemoveDcFromInterleavedIq8(raw_iq, Alpha: 0.0025);
+    /// var iq_after_dc = SdrSignalProcessing.RemoveDcFromInterleavedIQ8(raw_iq, Alpha: 0.0025);
     /// ]]></code>
     /// </remarks>
-    public static ComplexN[] RemoveDcFromInterleavedIq8(byte[] RawIq, double Alpha)
+    public static ComplexN[] RemoveDcFromInterleavedIQ8(byte[] IQ, double Alpha)
     {
-        ArgumentNullException.ThrowIfNull(RawIq);
+        ArgumentNullException.ThrowIfNull(IQ);
 
         if (Alpha <= 0 || Alpha > 1)
             throw new ArgumentOutOfRangeException(nameof(Alpha), Alpha, "Коэффициент сглаживания должен быть в диапазоне (0;1]");
 
-        if ((RawIq.Length & 1) != 0)
-            throw new ArgumentException("Размер массива IQ должен быть кратен двум", nameof(RawIq));
+        if ((IQ.Length & 1) != 0)
+            throw new ArgumentException("Размер массива IQ должен быть кратен двум", nameof(IQ));
 
-        var count = RawIq.Length / 2;
+        var count = IQ.Length / 2;
         var result = new ComplexN[count];
 
         var mean_i = 0d;
@@ -138,8 +138,8 @@ public static class SdrSignalProcessing
 
         for (var index = 0; index < count; index++)
         {
-            var i_value = unchecked((sbyte)RawIq[2 * index]);
-            var q_value = unchecked((sbyte)RawIq[2 * index + 1]);
+            var i_value = unchecked((sbyte)IQ[2 * index]);
+            var q_value = unchecked((sbyte)IQ[2 * index + 1]);
 
             var i_d = (double)i_value;
             var q_d = (double)q_value;
@@ -221,11 +221,9 @@ public static class SdrSignalProcessing
         for (var index = 0; index < Source.Length; index++)
         {
             var phase = phase_step * index;
-            var lo_i = Math.Cos(phase);
-            var lo_q = Math.Sin(phase);
+            var (lo_q, lo_i) = Math.SinCos(phase); 
 
-            var sample_i = Source[index].Real;
-            var sample_q = Source[index].Imaginary;
+            var (sample_i, sample_q) = (Source[index].Real, Source[index].Imaginary);
 
             var mix_i = sample_i * lo_i - sample_q * lo_q;
             var mix_q = sample_i * lo_q + sample_q * lo_i;
@@ -275,16 +273,18 @@ public static class SdrSignalProcessing
         var cutoff_hz = PassbandHz + TransitionHz * 0.5;
         var fc = cutoff_hz / SampleRateHz;
 
+        var w = 2 * Math.PI / (TapCount - 1);
+        var w_fc = 2 * Math.PI * fc;
         for (var n = 0; n < TapCount; n++)
         {
             var k = n - middle;
             var sinc = k == 0
                 ? 2 * fc
-                : Math.Sin(2 * Math.PI * fc * k) / (Math.PI * k);
+                : Math.Sin(w_fc * k) / (Math.PI * k);
 
             var window = 0.42
-                       - 0.5 * Math.Cos(2 * Math.PI * n / (TapCount - 1))
-                       + 0.08 * Math.Cos(4 * Math.PI * n / (TapCount - 1));
+                       - 0.5 * Math.Cos(w * n)
+                       + 0.08 * Math.Cos(2 * w * n);
 
             taps[n] = sinc * window;
         }
@@ -343,7 +343,7 @@ public static class SdrSignalProcessing
             output.Add(new(i_acc, q_acc));
         }
 
-        return output.ToArray();
+        return [..output];
     }
 
     /// <summary>Выполнить рациональный ресемплинг комплексного сигнала по windowed-sinc ядру</summary>
@@ -389,6 +389,7 @@ public static class SdrSignalProcessing
             var q_acc = 0d;
             var w_sum = 0d;
 
+            var w = Math.PI / (HalfTaps + 1);
             for (var tap = -HalfTaps; tap <= HalfTaps; tap++)
             {
                 var src_index = src_center + tap;
@@ -400,7 +401,7 @@ public static class SdrSignalProcessing
                     ? 1d
                     : Math.Sin(Math.PI * x) / (Math.PI * x);
 
-                var window = 0.54 + 0.46 * Math.Cos(Math.PI * x / (HalfTaps + 1));
+                var window = 0.54 + 0.46 * Math.Cos(w * x);
                 var weight = sinc * window;
 
                 var sample = Source[src_index];
@@ -513,7 +514,7 @@ public static class SdrSignalProcessing
             output.Add(acc);
         }
 
-        return output.ToArray();
+        return [..output];
     }
 
     /// <summary>Рассчитать RMS вещественного сигнала</summary>

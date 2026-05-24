@@ -35,7 +35,7 @@ try
         vga_gain_db,
         out var rx_statistics);
 
-    var stage1_metrics = SdrSignalProcessing.ComputeIq8Metrics(captured_data); // Базовые метрики качества входного тракта
+    var stage1_metrics = SdrSignalProcessing.ComputeIQ8Metrics(captured_data); // Базовые метрики качества входного тракта
 
     Console.WriteLine($"Получено байт: {captured_data.Length}");
     Console.WriteLine($"Получено IQ-отсчётов: {captured_data.Length / 2}");
@@ -52,10 +52,10 @@ try
     Console.WriteLine();
     Console.WriteLine("Этап 2. Подавление DC-пика");
 
-    var iq_after_dc = SdrSignalProcessing.RemoveDcFromInterleavedIq8(captured_data, Alpha: 0.0025); // Подавляем пик на нулевой частоте
+    var iq_after_dc = SdrSignalProcessing.RemoveDcFromInterleavedIQ8(captured_data, Alpha: 0.0025); // Подавляем пик на нулевой частоте
 
     var stage2_before = (mean_i: stage1_metrics.mean_i, mean_q: stage1_metrics.mean_q, dc_power: stage1_metrics.mean_i * stage1_metrics.mean_i + stage1_metrics.mean_q * stage1_metrics.mean_q);
-    var stage2_after = SdrSignalProcessing.ComputeComplexDcMetrics(iq_after_dc);
+    var stage2_after = SdrSignalProcessing.ComputeComplexDCMetrics(iq_after_dc);
 
     Console.WriteLine($"DC до: I={stage2_before.mean_i:F5}, Q={stage2_before.mean_q:F5}, Pdc={stage2_before.dc_power:F6}");
     Console.WriteLine($"DC после: I={stage2_after.mean_i:F5}, Q={stage2_after.mean_q:F5}, Pdc={stage2_after.dc_power:F6}");
