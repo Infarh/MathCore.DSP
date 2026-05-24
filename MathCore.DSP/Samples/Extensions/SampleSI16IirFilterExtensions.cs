@@ -162,6 +162,209 @@ public static class SampleSI16IirFilterExtensions
         return result;
     }
 
+    /// <summary>Отфильтровать interleaved IQ-поток из входного потока в выходной поток</summary>
+    /// <param name="Source">Входной поток с данными формата I,Q,I,Q</param>
+    /// <param name="Destination">Выходной поток для записи отфильтрованных данных</param>
+    /// <param name="Buffer">Рабочий буфер чтения/записи</param>
+    /// <param name="A">Массив коэффициентов обратной связи</param>
+    /// <param name="B">Массив коэффициентов прямой связи</param>
+    /// <param name="StateI">Вектор состояния фильтра синфазной компоненты</param>
+    /// <param name="StateQ">Вектор состояния фильтра квадратурной компоненты</param>
+    /// <returns>Количество записанных байт</returns>
+    /// <exception cref="ArgumentNullException">Передана пустая ссылка в одном из параметров</exception>
+    /// <exception cref="InvalidOperationException">Размер буфера меньше 2 байт</exception>
+    /// <exception cref="IOException">Общая длина данных во входном потоке нечётная</exception>
+    public static long FilterIIRInterleaved(
+        this Stream Source,
+        Stream Destination,
+        byte[] Buffer,
+        double[] A,
+        double[] B,
+        double[] StateI,
+        double[] StateQ)
+    {
+        ArgumentNullException.ThrowIfNull(Source);
+        ArgumentNullException.ThrowIfNull(Destination);
+        ArgumentNullException.ThrowIfNull(Buffer);
+        ValidateArguments(A, B, StateI, StateQ);
+
+        if (Buffer.Length < 2)
+            throw new InvalidOperationException("Размер рабочего буфера должен быть не меньше 2 байт");
+
+        var pair_buffer = new byte[2];
+        var has_carry = false;
+        byte carry_byte = 0;
+        long written_bytes = 0;
+
+        while (true)
+        {
+            var readed = Source.Read(Buffer, 0, Buffer.Length);
+            if (readed == 0)
+                break;
+
+            var offset = 0;
+            if (has_carry)
+            {
+                var i_filtered = StateI.FilterSample(A, B, unchecked((sbyte)carry_byte));
+                var q_filtered = StateQ.FilterSample(A, B, unchecked((sbyte)Buffer[0]));
+
+                pair_buffer[0] = unchecked((byte)ClampToSByte(i_filtered));
+                pair_buffer[1] = unchecked((byte)ClampToSByte(q_filtered));
+
+                Destination.Write(pair_buffer, 0, 2);
+                written_bytes += 2;
+
+                has_carry = false;
+                offset = 1;
+            }
+
+            var count = readed - offset;
+            var even_count = count & ~1;
+
+            if (even_count > 0)
+            {
+                var source_span = Buffer.AsSpan(offset, even_count);
+                var destination_span = Buffer.AsSpan(offset, even_count);
+
+                FilterIIRInterleaved(source_span, destination_span, A, B, StateI, StateQ);
+
+                Destination.Write(Buffer, offset, even_count);
+                written_bytes += even_count;
+            }
+
+            if (count != even_count)
+            {
+                carry_byte = Buffer[offset + even_count];
+                has_carry = true;
+            }
+        }
+
+        if (has_carry)
+            throw new IOException("Общая длина данных во входном потоке interleaved IQ должна быть чётной");
+
+        return written_bytes;
+    }
+
+    /// <summary>Отфильтровать interleaved IQ-поток из входного потока в выходной поток с автоматическим созданием векторов состояния</summary>
+    /// <param name="Source">Входной поток с данными формата I,Q,I,Q</param>
+    /// <param name="Destination">Выходной поток для записи отфильтрованных данных</param>
+    /// <param name="Buffer">Рабочий буфер чтения/записи</param>
+    /// <param name="A">Массив коэффициентов обратной связи</param>
+    /// <param name="B">Массив коэффициентов прямой связи</param>
+    /// <returns>Количество записанных байт</returns>
+    public static long FilterIIRInterleaved(this Stream Source, Stream Destination, byte[] Buffer, double[] A, double[] B)
+    {
+        ArgumentNullException.ThrowIfNull(A);
+
+        return FilterIIRInterleaved(Source, Destination, Buffer, A, B, new double[A.Length], new double[A.Length]);
+    }
+
+    /// <summary>Асинхронно отфильтровать interleaved IQ-поток из входного потока в выходной поток</summary>
+    /// <param name="Source">Входной поток с данными формата I,Q,I,Q</param>
+    /// <param name="Destination">Выходной поток для записи отфильтрованных данных</param>
+    /// <param name="Buffer">Рабочий буфер чтения/записи</param>
+    /// <param name="A">Массив коэффициентов обратной связи</param>
+    /// <param name="B">Массив коэффициентов прямой связи</param>
+    /// <param name="StateI">Вектор состояния фильтра синфазной компоненты</param>
+    /// <param name="StateQ">Вектор состояния фильтра квадратурной компоненты</param>
+    /// <param name="Cancellation">Маркер отмены операции</param>
+    /// <returns>Количество записанных байт</returns>
+    /// <exception cref="ArgumentNullException">Передана пустая ссылка в одном из параметров</exception>
+    /// <exception cref="InvalidOperationException">Размер буфера меньше 2 байт</exception>
+    /// <exception cref="IOException">Общая длина данных во входном потоке нечётная</exception>
+    public static async Task<long> FilterIIRInterleavedAsync(
+        this Stream Source,
+        Stream Destination,
+        byte[] Buffer,
+        double[] A,
+        double[] B,
+        double[] StateI,
+        double[] StateQ,
+        CancellationToken Cancellation = default)
+    {
+        ArgumentNullException.ThrowIfNull(Source);
+        ArgumentNullException.ThrowIfNull(Destination);
+        ArgumentNullException.ThrowIfNull(Buffer);
+        ValidateArguments(A, B, StateI, StateQ);
+
+        if (Buffer.Length < 2)
+            throw new InvalidOperationException("Размер рабочего буфера должен быть не меньше 2 байт");
+
+        var pair_buffer = new byte[2];
+        var has_carry = false;
+        byte carry_byte = 0;
+        long written_bytes = 0;
+
+        while (true)
+        {
+            var readed = await Source.ReadAsync(Buffer, 0, Buffer.Length, Cancellation).ConfigureAwait(false);
+            if (readed == 0)
+                break;
+
+            var offset = 0;
+            if (has_carry)
+            {
+                var i_filtered = StateI.FilterSample(A, B, unchecked((sbyte)carry_byte));
+                var q_filtered = StateQ.FilterSample(A, B, unchecked((sbyte)Buffer[0]));
+
+                pair_buffer[0] = unchecked((byte)ClampToSByte(i_filtered));
+                pair_buffer[1] = unchecked((byte)ClampToSByte(q_filtered));
+
+                await Destination.WriteAsync(pair_buffer, 0, 2, Cancellation).ConfigureAwait(false);
+                written_bytes += 2;
+
+                has_carry = false;
+                offset = 1;
+            }
+
+            var count = readed - offset;
+            var even_count = count & ~1;
+
+            if (even_count > 0)
+            {
+                var source_span = Buffer.AsSpan(offset, even_count);
+                var destination_span = Buffer.AsSpan(offset, even_count);
+
+                FilterIIRInterleaved(source_span, destination_span, A, B, StateI, StateQ);
+
+                await Destination.WriteAsync(Buffer, offset, even_count, Cancellation).ConfigureAwait(false);
+                written_bytes += even_count;
+            }
+
+            if (count != even_count)
+            {
+                carry_byte = Buffer[offset + even_count];
+                has_carry = true;
+            }
+        }
+
+        if (has_carry)
+            throw new IOException("Общая длина данных во входном потоке interleaved IQ должна быть чётной");
+
+        return written_bytes;
+    }
+
+    /// <summary>Асинхронно отфильтровать interleaved IQ-поток из входного потока в выходной поток с автоматическим созданием векторов состояния</summary>
+    /// <param name="Source">Входной поток с данными формата I,Q,I,Q</param>
+    /// <param name="Destination">Выходной поток для записи отфильтрованных данных</param>
+    /// <param name="Buffer">Рабочий буфер чтения/записи</param>
+    /// <param name="A">Массив коэффициентов обратной связи</param>
+    /// <param name="B">Массив коэффициентов прямой связи</param>
+    /// <param name="Cancellation">Маркер отмены операции</param>
+    /// <returns>Количество записанных байт</returns>
+    public static Task<long> FilterIIRInterleavedAsync(
+        this Stream Source,
+        Stream Destination,
+        byte[] Buffer,
+        double[] A,
+        double[] B,
+        CancellationToken Cancellation = default)
+    {
+        ArgumentNullException.ThrowIfNull(A);
+
+        return FilterIIRInterleavedAsync(Source, Destination, Buffer, A, B, new double[A.Length], new double[A.Length], Cancellation);
+    }
+
     private static void ValidateArguments(IEnumerable<SampleSI16> Samples, double[] A, double[] B, double[] StateI, double[] StateQ)
     {
         ArgumentNullException.ThrowIfNull(Samples);

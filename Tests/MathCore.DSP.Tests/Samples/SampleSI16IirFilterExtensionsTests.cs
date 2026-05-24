@@ -143,6 +143,94 @@ public class SampleSI16IirFilterExtensionsTests
         }
     }
 
+    [TestMethod]
+    public void FilterIIRInterleaved_Stream_MatchesSpanProcessing()
+    {
+        var random = new Random(31);
+        var raw_iq = new byte[257 * 2];
+        random.NextBytes(raw_iq);
+
+        var a = new[] { 1.0, -0.81, 0.21 };
+        var b = new[] { 0.11, 0.05, 0.02 };
+
+        var expected = raw_iq.AsSpan().FilterIIRInterleaved(a, b);
+
+        using var source = new MemoryStream(raw_iq, writable: false);
+        using var destination = new MemoryStream();
+
+        var written = source.FilterIIRInterleaved(destination, new byte[15], a, b, new double[a.Length], new double[a.Length]);
+        var actual = destination.ToArray();
+
+        Assert.AreEqual(expected.Length, (int)written);
+        CollectionAssert.AreEqual(expected, actual);
+    }
+
+    [TestMethod]
+    public void FilterIIRInterleaved_Stream_ThrowsIfTotalLengthIsOdd()
+    {
+        var raw_iq = new byte[] { 1, 2, 3, 4, 5 };
+        var a = new[] { 1.0, -0.5 };
+        var b = new[] { 0.5, 0.1 };
+
+        using var source = new MemoryStream(raw_iq, writable: false);
+        using var destination = new MemoryStream();
+
+        try
+        {
+            source.FilterIIRInterleaved(destination, new byte[4], a, b, new double[a.Length], new double[a.Length]);
+            Assert.Fail("Ожидалось исключение IOException");
+        }
+        catch (IOException)
+        {
+            // Ожидаемое поведение
+        }
+    }
+
+    [TestMethod]
+    public async Task FilterIIRInterleavedAsync_Stream_MatchesSyncVersion()
+    {
+        var random = new Random(37);
+        var raw_iq = new byte[333 * 2];
+        random.NextBytes(raw_iq);
+
+        var a = new[] { 1.0, -0.74, 0.19 };
+        var b = new[] { 0.14, 0.06, 0.01 };
+
+        using var source_sync = new MemoryStream(raw_iq, writable: false);
+        using var destination_sync = new MemoryStream();
+        source_sync.FilterIIRInterleaved(destination_sync, new byte[13], a, b, new double[a.Length], new double[a.Length]);
+        var expected = destination_sync.ToArray();
+
+        using var source_async = new MemoryStream(raw_iq, writable: false);
+        using var destination_async = new MemoryStream();
+        var written = await source_async.FilterIIRInterleavedAsync(destination_async, new byte[13], a, b, new double[a.Length], new double[a.Length]);
+        var actual = destination_async.ToArray();
+
+        Assert.AreEqual(expected.Length, (int)written);
+        CollectionAssert.AreEqual(expected, actual);
+    }
+
+    [TestMethod]
+    public async Task FilterIIRInterleavedAsync_Stream_ThrowsIfTotalLengthIsOdd()
+    {
+        var raw_iq = new byte[] { 1, 2, 3, 4, 5 };
+        var a = new[] { 1.0, -0.5 };
+        var b = new[] { 0.5, 0.1 };
+
+        using var source = new MemoryStream(raw_iq, writable: false);
+        using var destination = new MemoryStream();
+
+        try
+        {
+            await source.FilterIIRInterleavedAsync(destination, new byte[4], a, b, new double[a.Length], new double[a.Length]);
+            Assert.Fail("Ожидалось исключение IOException");
+        }
+        catch (IOException)
+        {
+            // Ожидаемое поведение
+        }
+    }
+
     private static sbyte ClampToSByte(double value) => value switch
     {
         > sbyte.MaxValue => sbyte.MaxValue,
