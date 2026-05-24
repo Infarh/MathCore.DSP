@@ -1,12 +1,21 @@
 ﻿
 using MathCore.HackRF;
 using MathCore.HackRF.Streaming;
+using NAudio.Wave;
+using System.Diagnostics;
 using System.Numerics;
 
-const int capture_seconds = 2;
+const int capture_seconds = 1;
 const double sample_rate_hz = 10_000_000;
 const uint center_frequency_hz = 90_000_000;
 const double station_offset_hz = 800_000;
+const double stage4_passband_hz = 75_000;
+const double stage4_transition_hz = 25_000;
+const int stage4_decimation = 25;
+const int stage5_interpolation = 12;
+const int stage5_decimation = 5;
+const int stage6_decimation = 10;
+const int stage7_decimation = 2;
 const uint lna_gain_db = 24;
 const uint vga_gain_db = 24;
 
@@ -43,8 +52,8 @@ try
 
 	var iq_after_dc = RemoveDcPeak(captured_data, alpha: 0.0025);
 
-	var stage2_before = ComputeComplexMetrics(iq_after_dc.before_dc);
-	var stage2_after = ComputeComplexMetrics(iq_after_dc.after_dc);
+	var stage2_before = (mean_i: stage1_metrics.mean_i, mean_q: stage1_metrics.mean_q, dc_power: stage1_metrics.mean_i * stage1_metrics.mean_i + stage1_metrics.mean_q * stage1_metrics.mean_q);
+	var stage2_after = ComputeComplexMetrics(iq_after_dc);
 
 	Console.WriteLine($"DC до: I={stage2_before.mean_i:F5}, Q={stage2_before.mean_q:F5}, Pdc={stage2_before.dc_power:F6}");
 	Console.WriteLine($"DC после: I={stage2_after.mean_i:F5}, Q={stage2_after.mean_q:F5}, Pdc={stage2_after.dc_power:F6}");
@@ -54,10 +63,10 @@ try
 	Console.WriteLine();
 	Console.WriteLine("Этап 3. Гетеродин +0.8 МГц");
 
-	var shifted_iq = MixByHeterodyne(iq_after_dc.after_dc, station_offset_hz, sample_rate_hz);
+	var shifted_iq = MixByHeterodyne(iq_after_dc, station_offset_hz, sample_rate_hz);
 
 	var validation_count = Math.Min(1_000_000, shifted_iq.Length);
-	var before_slice = iq_after_dc.after_dc.AsSpan(0, validation_count);
+	var before_slice = iq_after_dc.AsSpan(0, validation_count);
 	var after_slice = shifted_iq.AsSpan(0, validation_count);
 
 	var channel_power_before = EstimateChannelPower(before_slice, sample_rate_hz, station_offset_hz, 150_000);
@@ -71,6 +80,65 @@ try
 	Console.WriteLine($"Усиление целевого канала в нуле (dB): {ToDb(zero_power_after / Math.Max(zero_power_before, 1e-18)):F2}");
 	Console.WriteLine($"Подавление 800кГц после сдвига (dB): {ToDb(channel_power_before / Math.Max(channel_power_after, 1e-18)):F2}");
 	Console.WriteLine("Этап 3 завершён");
+
+	Console.WriteLine();
+	Console.WriteLine("Этап 4. ФНЧ + децимация x25");
+
+	var stage4_sample_rate_hz = sample_rate_hz / stage4_decimation;
+	var stage4_taps = DesignLowPassFir(sample_rate_hz, stage4_passband_hz, stage4_transition_hz, tap_count: 401);
+	var stage4_iq = LowPassDecimateComplex(shifted_iq, stage4_taps, stage4_decimation);
+
+	var stage4_center_power = EstimateChannelPower(stage4_iq, stage4_sample_rate_hz, 0, 75_000);
+	var stage4_edge_power = EstimateChannelPower(stage4_iq, stage4_sample_rate_hz, 170_000, 20_000);
+
+	Console.WriteLine($"Выходная частота дискретизации: {stage4_sample_rate_hz:F0} Гц");
+	Console.WriteLine($"Выходных IQ-отсчётов: {stage4_iq.Length}");
+	Console.WriteLine($"P(center)= {stage4_center_power:E6}");
+	Console.WriteLine($"P(edge 170кГц)= {stage4_edge_power:E6}");
+	Console.WriteLine($"Center/Edge (dB): {ToDb(stage4_center_power / Math.Max(stage4_edge_power, 1e-18)):F2}");
+	Console.WriteLine("Этап 4 завершён");
+
+	Console.WriteLine();
+	Console.WriteLine("Этап 5. Ресемплинг x12/x5");
+
+	var stage5_sample_rate_hz = stage4_sample_rate_hz * stage5_interpolation / stage5_decimation;
+	var stage5_iq = ResampleRational(stage4_iq, stage5_interpolation, stage5_decimation, half_taps: 16);
+
+	var stage5_center_power = EstimateChannelPower(stage5_iq, stage5_sample_rate_hz, 0, 75_000);
+	var stage5_edge_power = EstimateChannelPower(stage5_iq, stage5_sample_rate_hz, 300_000, 30_000);
+
+	Console.WriteLine($"Выходная частота дискретизации: {stage5_sample_rate_hz:F0} Гц");
+	Console.WriteLine($"Выходных IQ-отсчётов: {stage5_iq.Length}");
+	Console.WriteLine($"P(center)= {stage5_center_power:E6}");
+	Console.WriteLine($"P(edge 300кГц)= {stage5_edge_power:E6}");
+	Console.WriteLine($"Center/Edge (dB): {ToDb(stage5_center_power / Math.Max(stage5_edge_power, 1e-18)):F2}");
+	Console.WriteLine("Этап 5 завершён");
+
+	Console.WriteLine();
+	Console.WriteLine("Этап 6. FM-демодуляция + децимация x10");
+
+	var stage6_sample_rate_hz = stage5_sample_rate_hz / stage6_decimation;
+	var stage6_audio = FmDemodulateAndDecimate(stage5_iq, stage5_sample_rate_hz, stage6_decimation, 45_000, 10_000, 161);
+
+	var stage6_rms = ComputeRms(stage6_audio);
+	Console.WriteLine($"Частота дискретизации после демодуляции: {stage6_sample_rate_hz:F0} Гц");
+	Console.WriteLine($"Отсчётов аудио: {stage6_audio.Length}");
+	Console.WriteLine($"RMS аудио (96к): {stage6_rms:F2}");
+	Console.WriteLine("Этап 6 завершён");
+
+	Console.WriteLine();
+	Console.WriteLine("Этап 7. Подготовка 48 кГц и вывод на динамики");
+
+	var stage7_sample_rate_hz = stage6_sample_rate_hz / stage7_decimation;
+	var stage7_taps = DesignLowPassFir(stage6_sample_rate_hz, 15_000, 5_000, 127);
+	var stage7_audio = LowPassDecimateReal(stage6_audio, stage7_taps, stage7_decimation);
+
+	var stage7_audio_norm = NormalizeAudio(stage7_audio, 0.8);
+	Console.WriteLine($"Частота дискретизации финального аудио: {stage7_sample_rate_hz:F0} Гц");
+	Console.WriteLine($"Отсчётов финального аудио: {stage7_audio_norm.Length}");
+
+	PlayAudio(stage7_audio_norm, (int)stage7_sample_rate_hz);
+	Console.WriteLine("Этап 7 завершён");
 }
 finally
 {
@@ -169,10 +237,9 @@ static (double mean_i, double mean_q, double rms_i, double rms_q, double clip_ra
 		avg_power: pwr_sum / count);
 }
 
-static (Complex[] before_dc, Complex[] after_dc) RemoveDcPeak(byte[] RawIq, double alpha)
+static Complex[] RemoveDcPeak(byte[] RawIq, double alpha)
 {
 	var count = RawIq.Length / 2;
-	var before_dc = new Complex[count];
 	var after_dc = new Complex[count];
 
 	var mean_i = 0d;
@@ -186,15 +253,13 @@ static (Complex[] before_dc, Complex[] after_dc) RemoveDcPeak(byte[] RawIq, doub
 		var i_d = (double)i_value;
 		var q_d = (double)q_value;
 
-		before_dc[i] = new Complex(i_d, q_d);
-
 		mean_i += alpha * (i_d - mean_i);
 		mean_q += alpha * (q_d - mean_q);
 
 		after_dc[i] = new Complex(i_d - mean_i, q_d - mean_q);
 	}
 
-	return (before_dc, after_dc);
+	return after_dc;
 }
 
 static (double mean_i, double mean_q, double dc_power) ComputeComplexMetrics(Complex[] Samples)
@@ -258,4 +323,208 @@ static double EstimateChannelPower(ReadOnlySpan<Complex> Source, double SampleRa
 	}
 
 	return pwr_sum / Source.Length;
+}
+
+static double[] DesignLowPassFir(double SampleRateHz, double PassbandHz, double TransitionHz, int tap_count)
+{
+	if ((tap_count & 1) == 0)
+		throw new ArgumentException("Размер фильтра должен быть нечётным", nameof(tap_count));
+
+	var taps = new double[tap_count];
+	var middle = tap_count / 2;
+	var cutoff_hz = PassbandHz + TransitionHz * 0.5;
+	var fc = cutoff_hz / SampleRateHz;
+
+	for (var n = 0; n < tap_count; n++)
+	{
+		var k = n - middle;
+		var sinc = k == 0
+			? 2 * fc
+			: Math.Sin(2 * Math.PI * fc * k) / (Math.PI * k);
+
+		// Blackman окно для стабильного подавления боковых лепестков
+		var w = 0.42
+			  - 0.5 * Math.Cos(2 * Math.PI * n / (tap_count - 1))
+			  + 0.08 * Math.Cos(4 * Math.PI * n / (tap_count - 1));
+
+		taps[n] = sinc * w;
+	}
+
+	var sum = taps.Sum();
+	if (sum != 0)
+	{
+		for (var n = 0; n < taps.Length; n++)
+			taps[n] /= sum;
+	}
+
+	return taps;
+}
+
+static Complex[] LowPassDecimateComplex(Complex[] Source, double[] Taps, int Decimation)
+{
+	var half = Taps.Length / 2;
+	var output = new List<Complex>(Source.Length / Decimation + 1);
+
+	for (var n = half; n < Source.Length - half; n += Decimation)
+	{
+		var i_acc = 0d;
+		var q_acc = 0d;
+
+		for (var k = -half; k <= half; k++)
+		{
+			var tap = Taps[k + half];
+			var sample = Source[n - k];
+			i_acc += sample.Real * tap;
+			q_acc += sample.Imaginary * tap;
+		}
+
+		output.Add(new Complex(i_acc, q_acc));
+	}
+
+	return output.ToArray();
+}
+
+static Complex[] ResampleRational(Complex[] Source, int Interpolation, int Decimation, int half_taps)
+{
+	var output_length = (int)Math.Floor(Source.Length * (double)Interpolation / Decimation);
+	var output = new Complex[output_length];
+
+	for (var out_index = 0; out_index < output_length; out_index++)
+	{
+		var src_position = out_index * (double)Decimation / Interpolation;
+		var src_center = (int)Math.Floor(src_position);
+		var frac = src_position - src_center;
+
+		var i_acc = 0d;
+		var q_acc = 0d;
+		var w_sum = 0d;
+
+		for (var tap = -half_taps; tap <= half_taps; tap++)
+		{
+			var src_index = src_center + tap;
+			if (src_index < 0 || src_index >= Source.Length)
+				continue;
+
+			var x = tap - frac;
+			var sinc = Math.Abs(x) < 1e-12
+				? 1d
+				: Math.Sin(Math.PI * x) / (Math.PI * x);
+
+			// Hamming окно ограничивает длину sinc-ядра и стабилизирует рябь
+			var window = 0.54 + 0.46 * Math.Cos(Math.PI * x / (half_taps + 1));
+			var weight = sinc * window;
+
+			var sample = Source[src_index];
+			i_acc += sample.Real * weight;
+			q_acc += sample.Imaginary * weight;
+			w_sum += weight;
+		}
+
+		if (Math.Abs(w_sum) > 1e-15)
+		{
+			i_acc /= w_sum;
+			q_acc /= w_sum;
+		}
+
+		output[out_index] = new Complex(i_acc, q_acc);
+	}
+
+	return output;
+}
+
+static double[] FmDemodulateAndDecimate(
+	Complex[] Source,
+	double SourceSampleRateHz,
+	int Decimation,
+	double PassbandHz,
+	double TransitionHz,
+	int TapCount)
+{
+	var demodulated = new double[Source.Length - 1];
+	var scale = SourceSampleRateHz / (2 * Math.PI);
+
+	for (var index = 1; index < Source.Length; index++)
+	{
+		var cross = Complex.Conjugate(Source[index - 1]) * Source[index];
+		var phase = Math.Atan2(cross.Imaginary, cross.Real);
+		demodulated[index - 1] = phase * scale;
+	}
+
+	var taps = DesignLowPassFir(SourceSampleRateHz, PassbandHz, TransitionHz, TapCount);
+	return LowPassDecimateReal(demodulated, taps, Decimation);
+}
+
+static double[] LowPassDecimateReal(double[] Source, double[] Taps, int Decimation)
+{
+	var half = Taps.Length / 2;
+	var output = new List<double>(Source.Length / Decimation + 1);
+
+	for (var n = half; n < Source.Length - half; n += Decimation)
+	{
+		var acc = 0d;
+
+		for (var k = -half; k <= half; k++)
+			acc += Source[n - k] * Taps[k + half];
+
+		output.Add(acc);
+	}
+
+	return output.ToArray();
+}
+
+static double ComputeRms(double[] Source)
+{
+	if (Source.Length == 0)
+		return 0;
+
+	var sum = 0d;
+	for (var i = 0; i < Source.Length; i++)
+		sum += Source[i] * Source[i];
+
+	return Math.Sqrt(sum / Source.Length);
+}
+
+static float[] NormalizeAudio(double[] Source, double target_peak)
+{
+	var max_abs = 0d;
+	for (var i = 0; i < Source.Length; i++)
+		max_abs = Math.Max(max_abs, Math.Abs(Source[i]));
+
+	var scale = max_abs > 1e-12 ? target_peak / max_abs : 1;
+	var result = new float[Source.Length];
+
+	for (var i = 0; i < Source.Length; i++)
+		result[i] = (float)(Source[i] * scale);
+
+	return result;
+}
+
+static void PlayAudio(float[] Audio, int SampleRate)
+{
+	var wave_format = new WaveFormat(SampleRate, 16, 1);
+	using var wave_out = new WaveOutEvent();
+	var provider = new BufferedWaveProvider(wave_format)
+	{
+		DiscardOnBufferOverflow = true
+	};
+
+	var pcm16 = new byte[Audio.Length * 2];
+	for (var i = 0; i < Audio.Length; i++)
+	{
+		var sample = (short)Math.Clamp(Math.Round(Audio[i] * short.MaxValue), short.MinValue, short.MaxValue);
+		pcm16[2 * i] = (byte)(sample & 0xff);
+		pcm16[2 * i + 1] = (byte)((sample >> 8) & 0xff);
+	}
+
+	provider.AddSamples(pcm16, 0, pcm16.Length);
+	wave_out.Init(provider);
+	wave_out.Play();
+
+	var playback_timeout_ms = (int)(Audio.Length * 1000d / SampleRate) + 3000;
+	var timer = Stopwatch.StartNew();
+
+	while ((wave_out.PlaybackState == PlaybackState.Playing || provider.BufferedBytes > 0) && timer.ElapsedMilliseconds < playback_timeout_ms)
+		Thread.Sleep(50);
+
+	wave_out.Stop();
 }
