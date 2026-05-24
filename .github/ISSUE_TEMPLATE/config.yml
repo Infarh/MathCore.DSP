@@ -1,5 +1,0 @@
-blank_issues_enabled: true
-contact_links:
-  - name: IQ Filters Tracking Doc
-    url: https://github.com/Infarh/MathCore.DSP/blob/dev/docs/IQFiltersTracking.md
-    about: Общий план этапов и критериев приемки
