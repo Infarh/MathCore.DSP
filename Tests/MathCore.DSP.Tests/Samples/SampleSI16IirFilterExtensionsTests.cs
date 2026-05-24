@@ -80,6 +80,69 @@ public class SampleSI16IirFilterExtensionsTests
         }
     }
 
+    [TestMethod]
+    public void FilterIIRInterleaved_MatchesSampleSI16Filtering()
+    {
+        var random = new Random(17);
+        var raw_iq = new byte[256 * 2];
+        random.NextBytes(raw_iq);
+
+        var samples = new SampleSI16[raw_iq.Length / 2];
+        for (var i = 0; i < samples.Length; i++)
+            samples[i] = new(unchecked((sbyte)raw_iq[2 * i]), unchecked((sbyte)raw_iq[2 * i + 1]));
+
+        var a = new[] { 1.0, -0.78, 0.16 };
+        var b = new[] { 0.15, 0.05, 0.01 };
+
+        var expected_samples = samples.AsEnumerable().FilterIIR(a, b).ToArray();
+
+        var actual_raw = raw_iq.AsSpan().FilterIIRInterleaved(a, b);
+
+        Assert.AreEqual(raw_iq.Length, actual_raw.Length);
+        for (var i = 0; i < expected_samples.Length; i++)
+        {
+            Assert.AreEqual(unchecked((byte)expected_samples[i].I), actual_raw[2 * i], $"Неверная I-компонента на позиции {i}");
+            Assert.AreEqual(unchecked((byte)expected_samples[i].Q), actual_raw[2 * i + 1], $"Неверная Q-компонента на позиции {i}");
+        }
+    }
+
+    [TestMethod]
+    public void FilterIIRInterleaved_InPlaceAndOutPlace_ReturnSameResult()
+    {
+        var random = new Random(23);
+        var raw_iq = new byte[128 * 2];
+        random.NextBytes(raw_iq);
+
+        var a = new[] { 1.0, -0.62 };
+        var b = new[] { 0.25, 0.11 };
+
+        var expected = raw_iq.AsSpan().FilterIIRInterleaved(a, b);
+
+        var actual = raw_iq.ToArray();
+        actual.AsSpan().FilterIIRInterleaved(a, b, new double[a.Length], new double[a.Length]);
+
+        CollectionAssert.AreEqual(expected, actual);
+    }
+
+    [TestMethod]
+    public void FilterIIRInterleaved_ThrowsIfInputLengthIsOdd()
+    {
+        var raw_iq = new byte[] { 1, 2, 3 };
+        var destination = new byte[raw_iq.Length];
+        var a = new[] { 1.0, -0.5 };
+        var b = new[] { 0.5, 0.1 };
+
+        try
+        {
+            raw_iq.AsSpan().FilterIIRInterleaved(destination, a, b, new double[a.Length], new double[a.Length]);
+            Assert.Fail("Ожидалось исключение InvalidOperationException");
+        }
+        catch (InvalidOperationException)
+        {
+            // Ожидаемое поведение
+        }
+    }
+
     private static sbyte ClampToSByte(double value) => value switch
     {
         > sbyte.MaxValue => sbyte.MaxValue,
