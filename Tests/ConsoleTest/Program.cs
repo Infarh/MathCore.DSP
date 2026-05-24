@@ -1,6 +1,7 @@
 ﻿
 using MathCore.HackRF;
 using MathCore.HackRF.Streaming;
+using System.Numerics;
 
 const int capture_seconds = 2;
 const double sample_rate_hz = 10_000_000;
@@ -35,6 +36,19 @@ try
 	Console.WriteLine($"Rx dropped blocks: {rx_statistics.DroppedBlocks}");
 	Console.WriteLine($"Rx max processing ms: {rx_statistics.MaxProcessingMilliseconds:F3}");
 	Console.WriteLine($"Этап 1 завершён");
+
+	Console.WriteLine();
+	Console.WriteLine("Этап 2. Подавление DC-пика");
+
+	var iq_after_dc = RemoveDcPeak(captured_data, alpha: 0.0025);
+
+	var stage2_before = ComputeComplexMetrics(iq_after_dc.before_dc);
+	var stage2_after = ComputeComplexMetrics(iq_after_dc.after_dc);
+
+	Console.WriteLine($"DC до: I={stage2_before.mean_i:F5}, Q={stage2_before.mean_q:F5}, Pdc={stage2_before.dc_power:F6}");
+	Console.WriteLine($"DC после: I={stage2_after.mean_i:F5}, Q={stage2_after.mean_q:F5}, Pdc={stage2_after.dc_power:F6}");
+	Console.WriteLine($"Ослабление DC (dB): {ToDb(stage2_before.dc_power / Math.Max(stage2_after.dc_power, 1e-18)):F2}");
+	Console.WriteLine("Этап 2 завершён");
 }
 finally
 {
@@ -132,3 +146,49 @@ static (double mean_i, double mean_q, double rms_i, double rms_q, double clip_ra
 		clip_ratio: (double)clip_count / (count * 2),
 		avg_power: pwr_sum / count);
 }
+
+static (Complex[] before_dc, Complex[] after_dc) RemoveDcPeak(byte[] RawIq, double alpha)
+{
+	var count = RawIq.Length / 2;
+	var before_dc = new Complex[count];
+	var after_dc = new Complex[count];
+
+	var mean_i = 0d;
+	var mean_q = 0d;
+
+	for (var i = 0; i < count; i++)
+	{
+		var i_value = unchecked((sbyte)RawIq[2 * i]);
+		var q_value = unchecked((sbyte)RawIq[2 * i + 1]);
+
+		var i_d = (double)i_value;
+		var q_d = (double)q_value;
+
+		before_dc[i] = new Complex(i_d, q_d);
+
+		mean_i += alpha * (i_d - mean_i);
+		mean_q += alpha * (q_d - mean_q);
+
+		after_dc[i] = new Complex(i_d - mean_i, q_d - mean_q);
+	}
+
+	return (before_dc, after_dc);
+}
+
+static (double mean_i, double mean_q, double dc_power) ComputeComplexMetrics(Complex[] Samples)
+{
+	var i_sum = 0d;
+	var q_sum = 0d;
+
+	for (var i = 0; i < Samples.Length; i++)
+	{
+		i_sum += Samples[i].Real;
+		q_sum += Samples[i].Imaginary;
+	}
+
+	var mean_i = i_sum / Samples.Length;
+	var mean_q = q_sum / Samples.Length;
+	return (mean_i, mean_q, mean_i * mean_i + mean_q * mean_q);
+}
+
+static double ToDb(double Ratio) => 10 * Math.Log10(Math.Max(Ratio, 1e-18));
