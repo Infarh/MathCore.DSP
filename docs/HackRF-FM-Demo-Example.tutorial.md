@@ -37,6 +37,10 @@ hackrf_info.exe
 Рабочий файл примера:
 - `Tests/ConsoleTest/Program.cs`
 
+Библиотечные инструменты, перенесённые в основной проект:
+- `MathCore.DSP/SDR/SdrSignalProcessing.cs`
+- `MathCore.DSP/SDR/SdrDebugSpectrum.cs`
+
 Документ с общим описанием эксперимента:
 - `docs/HackRF-FM-Demo-Example.md`
 
@@ -61,26 +65,25 @@ hackrf_info.exe
 
 ## Добавляем отладочный FFT-инструмент
 
-Чтобы видеть спектр в отладчике, добавьте в `Program.cs` вспомогательные функции (их можно держать под `#if DEBUG`).
+Чтобы видеть спектр в отладчике, используйте готовый инструмент `SdrDebugSpectrum` из основного проекта.
 
-### Функция: SnapshotSpectrum
-Идея: взять блок комплексных отсчетов, сделать FFT и вернуть массив амплитуд по частотным бинам.
+### Готовый API для спектра
 
-Пример API (псевдокод):
+Пример вызова:
 
 ```csharp
-static (double[] freq_hz, double[] power_db) SnapshotSpectrum(
-    Complex[] samples,
-    double sample_rate_hz,
-    int fft_size = 8192)
+var (freq_hz, power_db) = SdrDebugSpectrum.GetSpectrumSnapshot(
+  iq_data,
+  SampleRateHz: 10_000_000,
+  FftSize: 32768);
+
+var peak = SdrDebugSpectrum.FindPeakInRange(freq_hz, power_db, 600_000, 1_000_000);
 ```
 
-Что делает:
-1. Берет первые `fft_size` отсчетов
-2. Умножает на окно (например, Hann)
-3. Считает FFT
-4. Строит массив частот `freq_hz`
-5. Строит массив мощностей `power_db`
+Инструмент автоматически:
+1. Применяет окно Ханна (опционально)
+2. Считает БПФ
+3. Возвращает массив частотных бинов и мощностей в dB
 
 В отладчике после каждого этапа смотрите:
 - где главный пик
@@ -276,6 +279,17 @@ static (double[] freq_hz, double[] power_db) SnapshotSpectrum(
 3. FFT-скриншоты минимум для этапов 2, 3, 4, 6
 4. Таблица метрик по этапам (Fs, длина, RMS, ключевые dB)
 5. Краткий вывод о качестве приема и устойчивости конвейера
+
+---
+
+## Где смотреть XML-примеры
+
+Все ключевые методы в `SdrSignalProcessing` и `SdrDebugSpectrum` имеют XML-документацию с примерами в блоке `remarks`.
+
+Для просмотра в IDE:
+1. Откройте вызов метода в `Program.cs`
+2. Наведите курсор на имя метода
+3. В подсказке раскройте секцию `remarks` с примером
 
 ---
 
