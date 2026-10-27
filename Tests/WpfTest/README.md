@@ -31,6 +31,19 @@ dotnet run --project Tests/WpfTest/WpfTest.csproj -- --selftest
 
 Результат самопроверки записывается в `%TEMP%\MathCore.DSP.WpfTest.selftest.log`, код завершения `0` соответствует успеху.
 
+## Публикация
+
+Скрипты расположены в каталоге проекта и используют профили из `Properties/PublishProfiles`:
+
+| Скрипт | Профиль | Результат |
+| --- | --- | --- |
+| `Publish-small.bat` | `Small.pubxml` | Framework-dependent сборка (`!release\WpfTest-Small`) |
+| `Publish-full-x64.bat` | `Full-x64.pubxml` | Self-contained single-file x64 (`!release\WpfTest-Full-x64`) |
+| `Publish-full-x32.bat` | `Full-x32.pubxml` | Self-contained single-file x86 (`!release\WpfTest-Full-x32`) |
+| `Publish.bat` | все | Последовательно запускает все три сценария |
+
+Каждый скрипт формирует zip-архив в каталоге `!release`.
+
 ## Формат файла коэффициентов
 
 Поддерживается JSON:

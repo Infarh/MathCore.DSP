@@ -339,3 +339,6 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 /MathCore.DSP/MathCore.DSP.xml
+
+# Результаты публикации тестового приложения
+\!release/
