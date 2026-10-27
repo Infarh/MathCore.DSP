@@ -1,4 +1,4 @@
-﻿<Window x:Class="WpfTest.Views.MainWindow"
+<Window x:Class="WpfTest.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -9,7 +9,7 @@
         Title="{Binding Title}"
         Width="1600" Height="960" MinWidth="1180" MinHeight="760"
         WindowStartupLocation="CenterScreen"
-        Background="{StaticResource WindowBackgroundBrush}"
+        Background="{DynamicResource WindowBackgroundBrush}"
         FontFamily="{StaticResource AppFont}"
         TextOptions.TextFormattingMode="Display"
         UseLayoutRounding="True"
@@ -42,7 +42,7 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid Background="{StaticResource WindowBackgroundBrush}">
+    <Grid Background="{DynamicResource WindowBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -57,8 +57,8 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <Border Width="44" Height="44" CornerRadius="12" Background="{StaticResource AccentBrush}" VerticalAlignment="Center">
-                <fa:ImageAwesome Icon="Solid_WaveSquare" Height="20" Foreground="#08111F" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Border Width="44" Height="44" CornerRadius="12" Background="{DynamicResource AccentBrush}" VerticalAlignment="Center">
+                <fa:ImageAwesome Icon="Solid_WaveSquare" Height="20" Foreground="{DynamicResource AccentForegroundBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Border>
 
             <StackPanel Grid.Column="1" Margin="14,0,0,0" VerticalAlignment="Center">
@@ -71,10 +71,14 @@
                 <Border Style="{StaticResource Chip}">
                     <TextBlock Style="{StaticResource ChipText}" Text="{Binding FilterSummary}"/>
                 </Border>
-                <Border Style="{StaticResource Chip}" Background="#12253F" BorderBrush="#265080">
-                    <TextBlock Style="{StaticResource ChipText}" Foreground="{StaticResource AccentBrush}"
+                <Border Style="{StaticResource Chip}" Background="{DynamicResource ChipAccentBackgroundBrush}" BorderBrush="{DynamicResource ChipAccentBorderBrush}">
+                    <TextBlock Style="{StaticResource ChipText}" Foreground="{DynamicResource AccentBrush}"
                                Text="{Binding FilterOrder, StringFormat='Порядок: {0}'}"/>
                 </Border>
+
+                <Button Command="{Binding ToggleThemeCommand}" Style="{StaticResource ThemeToggleButton}" ToolTip="{Binding ThemeToolTip}">
+                    <fa:ImageAwesome Icon="{Binding ThemeIcon}" Height="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Button>
             </StackPanel>
         </Grid>
 
@@ -107,7 +111,7 @@
                                   ItemTemplate="{StaticResource FilterFamilyTemplate}"/>
                         <TextBlock Text="{Binding SelectedFamily.Description}" Style="{StaticResource HintText}" Margin="2,6,0,0"/>
 
-                        <Border Height="1" Background="{StaticResource BorderBrush}" Margin="0,16,0,16"/>
+                        <Border Height="1" Background="{DynamicResource BorderBrush}" Margin="0,16,0,16"/>
 
                         <TextBlock Text="ПАРАМЕТРЫ" Style="{StaticResource SectionTitle}"/>
 
@@ -198,7 +202,7 @@
                             </Grid>
                         </StackPanel>
 
-                        <Border Height="1" Background="{StaticResource BorderBrush}" Margin="0,16,0,16"
+                        <Border Height="1" Background="{DynamicResource BorderBrush}" Margin="0,16,0,16"
                                 Visibility="{Binding IsGainParametersVisible, Converter={StaticResource BoolToVisibility}}"/>
 
                         <StackPanel Visibility="{Binding IsGainParametersVisible, Converter={StaticResource BoolToVisibility}}">
@@ -229,7 +233,7 @@
                             </Grid>
                         </StackPanel>
 
-                        <Border Height="1" Background="{StaticResource BorderBrush}" Margin="0,16,0,16"/>
+                        <Border Height="1" Background="{DynamicResource BorderBrush}" Margin="0,16,0,16"/>
 
                         <TextBlock Text="КОЭФФИЦИЕНТЫ" Style="{StaticResource SectionTitle}"/>
                         <TextBlock Text="{Binding CoefficientsSummary}" Style="{StaticResource HintText}" Margin="2,-2,0,8"/>
@@ -257,14 +261,14 @@
                                    Style="{StaticResource HintText}" Margin="2,8,0,0"
                                    Visibility="{Binding IsCustomFamily, Converter={StaticResource BoolToVisibility}}"/>
 
-                        <Border Background="{StaticResource InputBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}"
+                        <Border Background="{DynamicResource InputBackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}"
                                 BorderThickness="1" CornerRadius="8" Padding="10" Margin="0,10,0,0" MaxHeight="150">
                             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                                 <ScrollViewer.Resources>
                                     <Style TargetType="ScrollBar" BasedOn="{StaticResource SlimScrollBar}"/>
                                 </ScrollViewer.Resources>
                                 <TextBlock Text="{Binding CoefficientsText}" FontFamily="{StaticResource MonoFont}"
-                                           FontSize="10.5" Foreground="{StaticResource TextSecondaryBrush}"
+                                           FontSize="10.5" Foreground="{DynamicResource TextSecondaryBrush}"
                                            TextWrapping="Wrap"/>
                             </ScrollViewer>
                         </Border>
@@ -350,7 +354,7 @@
                                     </Button>
 
                                     <StackPanel Grid.Column="1" Margin="14,0,14,0" VerticalAlignment="Center">
-                                        <TextBlock Text="{Binding AudioFileName}" Foreground="{StaticResource TextPrimaryBrush}"
+                                        <TextBlock Text="{Binding AudioFileName}" Foreground="{DynamicResource TextPrimaryBrush}"
                                                    FontSize="13.5" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
                                         <TextBlock Text="{Binding AudioInfo}" Style="{StaticResource HintText}" Margin="0,2,0,0"/>
                                     </StackPanel>
@@ -411,7 +415,7 @@
                                         <TextBlock Grid.Column="1" Text="{Binding AudioStatus}" Style="{StaticResource HintText}"
                                                    VerticalAlignment="Center" Margin="16,0" TextTrimming="CharacterEllipsis"/>
 
-                                        <TextBlock Grid.Column="2" Text="Выполняется…" Foreground="{StaticResource WarningBrush}"
+                                        <TextBlock Grid.Column="2" Text="Выполняется…" Foreground="{DynamicResource WarningBrush}"
                                                    FontSize="11.5" VerticalAlignment="Center"
                                                    Visibility="{Binding IsAudioBusy, Converter={StaticResource BoolToVisibility}}"/>
                                     </Grid>
@@ -449,10 +453,10 @@
                 <Ellipse Width="7" Height="7" VerticalAlignment="Center">
                     <Ellipse.Style>
                         <Style TargetType="Ellipse">
-                            <Setter Property="Fill" Value="{StaticResource SecondaryBrush}"/>
+                            <Setter Property="Fill" Value="{DynamicResource SecondaryBrush}"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding HasError}" Value="True">
-                                    <Setter Property="Fill" Value="{StaticResource DangerBrush}"/>
+                                    <Setter Property="Fill" Value="{DynamicResource DangerBrush}"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -462,10 +466,10 @@
                 <TextBlock Grid.Column="1" Text="{Binding StatusMessage}" FontSize="11.5" Margin="8,0,0,0" VerticalAlignment="Center">
                     <TextBlock.Style>
                         <Style TargetType="TextBlock">
-                            <Setter Property="Foreground" Value="{StaticResource TextMutedBrush}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding HasError}" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource DangerBrush}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource DangerBrush}"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>

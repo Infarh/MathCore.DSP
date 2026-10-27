@@ -1,0 +1,25 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Светлая палитра -->
+    <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#F3F6FB"/>
+    <SolidColorBrush x:Key="PanelBackgroundBrush" Color="#E8EEF7"/>
+    <SolidColorBrush x:Key="CardBackgroundBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="CardHoverBrush" Color="#EDF3FC"/>
+    <SolidColorBrush x:Key="InputBackgroundBrush" Color="#F7F9FD"/>
+    <SolidColorBrush x:Key="BorderBrush" Color="#D3DCEA"/>
+    <SolidColorBrush x:Key="AccentBrush" Color="#2F7DE1"/>
+    <SolidColorBrush x:Key="AccentSoftBrush" Color="#DCEAFC"/>
+    <SolidColorBrush x:Key="AccentForegroundBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="SecondaryBrush" Color="#0E9E78"/>
+    <SolidColorBrush x:Key="WarningBrush" Color="#C77A00"/>
+    <SolidColorBrush x:Key="DangerBrush" Color="#D64560"/>
+    <SolidColorBrush x:Key="DangerBorderBrush" Color="#F0C6CE"/>
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="#16202F"/>
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#4A5A72"/>
+    <SolidColorBrush x:Key="TextMutedBrush" Color="#7B8AA0"/>
+    <SolidColorBrush x:Key="ScrollBarThumbBrush" Color="#B9C6D8"/>
+    <SolidColorBrush x:Key="ChipAccentBackgroundBrush" Color="#E3EEFC"/>
+    <SolidColorBrush x:Key="ChipAccentBorderBrush" Color="#B9D4F5"/>
+
+</ResourceDictionary>

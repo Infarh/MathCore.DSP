@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using OxyPlot;
 
+using WpfTest.Infrastructure;
 using WpfTest.Models;
 using WpfTest.Services;
 using WpfTest.Services.Interfaces;
@@ -62,6 +63,10 @@ public sealed class MainWindowViewModel : TitledViewModel
     private string _AudioStatus = "Загрузите аудиофайл, чтобы применить к нему текущий фильтр";
     private bool _IsAudioBusy;
 
+    private bool _IsLightTheme;
+    private string _ThemeIcon = "Solid_Moon";
+    private string _ThemeToolTip = "Включить светлую тему";
+
     /// <summary>Инициализация модели представления лаборатории фильтров</summary>
     /// <param name="Design">Сервис синтеза фильтров</param>
     /// <param name="Analysis">Сервис расчёта характеристик</param>
@@ -96,6 +101,7 @@ public sealed class MainWindowViewModel : TitledViewModel
         SaveCoefficientsCommand = new LambdaCommand(SaveCoefficients, () => _DesignResult is not null);
         LoadCoefficientsCommand = new LambdaCommand(LoadCoefficients);
         ResetCommand = new LambdaCommand(Reset);
+        ToggleThemeCommand = new LambdaCommand(ToggleTheme);
 
         OpenAudioCommand = new LambdaCommandAsync(OpenAudioAsync, () => !_IsAudioBusy);
         ApplyAudioFilterCommand = new LambdaCommandAsync(ApplyAudioFilterAsync, () => !_IsAudioBusy && _AudioSource is not null && _DesignResult is not null);
@@ -369,6 +375,31 @@ public sealed class MainWindowViewModel : TitledViewModel
 
     #endregion
 
+    #region Оформление
+
+    /// <summary>Признак светлой темы</summary>
+    public bool IsLightTheme
+    {
+        get => _IsLightTheme;
+        private set => Set(ref _IsLightTheme, value);
+    }
+
+    /// <summary>Иконка переключателя темы</summary>
+    public string ThemeIcon
+    {
+        get => _ThemeIcon;
+        private set => Set(ref _ThemeIcon, value!);
+    }
+
+    /// <summary>Подсказка переключателя темы</summary>
+    public string ThemeToolTip
+    {
+        get => _ThemeToolTip;
+        private set => Set(ref _ThemeToolTip, value!);
+    }
+
+    #endregion
+
     #region Команды
 
     /// <summary>Команда сохранения коэффициентов в файл</summary>
@@ -379,6 +410,9 @@ public sealed class MainWindowViewModel : TitledViewModel
 
     /// <summary>Команда сброса параметров</summary>
     public ICommand ResetCommand { get; }
+
+    /// <summary>Команда переключения темы</summary>
+    public ICommand ToggleThemeCommand { get; }
 
     /// <summary>Команда открытия аудиофайла</summary>
     public ICommand OpenAudioCommand { get; }
@@ -522,6 +556,8 @@ public sealed class MainWindowViewModel : TitledViewModel
 
     private void UpdateAnalysis()
     {
+        RestylePlots();
+
         try
         {
             var settings = CreateSettings();
@@ -551,9 +587,34 @@ public sealed class MainWindowViewModel : TitledViewModel
         }
     }
 
-    private void Reset()
+    private void ToggleTheme()
+    {        _SamplingFrequency = __DefaultSamplingFrequency;
+        IsLightTheme = ThemeManager.Toggle();
+        ThemeIcon = IsLightTheme ? "Solid_Sun" : "Solid_Moon";
+        ThemeToolTip = IsLightTheme ? "Включить тёмную тему" : "Включить светлую тему";
+
+        UpdateAnalysis();
+
+        FilterPlotFactory.UpdateWaveformPlot(AudioInputPlot, _AudioSource, FilterPlotFactory.Muted);
+        FilterPlotFactory.UpdateWaveformPlot(AudioOutputPlot, _AudioFiltered, FilterPlotFactory.Accent);
+    }
+
+    /// <summary>Применить палитру текущей темы ко всем графикам</summary>
+    public void ApplyTheme() => RestylePlots();
+
+    private void RestylePlots()
     {
-        _SamplingFrequency = __DefaultSamplingFrequency;
+        var palette = ThemeManager.CurrentPalette;
+        FilterPlotFactory.Restyle(MagnitudePhasePlot, palette);
+        FilterPlotFactory.Restyle(ImpulsePlot, palette);
+        FilterPlotFactory.Restyle(GroupDelayPlot, palette);
+        FilterPlotFactory.Restyle(PoleZeroPlot, palette);
+        FilterPlotFactory.Restyle(AudioInputPlot, palette);
+        FilterPlotFactory.Restyle(AudioOutputPlot, palette);
+    }
+
+    private void Reset()
+    {        _SamplingFrequency = __DefaultSamplingFrequency;
         OnPropertyChanged(nameof(SamplingFrequency));
         OnPropertyChanged(nameof(NyquistFrequency));
 

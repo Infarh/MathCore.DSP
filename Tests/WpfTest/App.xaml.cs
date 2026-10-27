@@ -47,7 +47,9 @@ public partial class App
         try
         {
             var locator = (ViewModels.ViewModelLocator)Resources["Locator"];
-            var window = new Views.MainWindow { DataContext = locator.MainModel };
+            var model = locator.MainModel;
+            var window = new Views.MainWindow { DataContext = model };
+            model.ApplyTheme();
             MainWindow = window;
             window.Show();
         }

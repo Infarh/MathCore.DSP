@@ -9,25 +9,72 @@ using WpfTest.Models;
 
 namespace WpfTest.Services;
 
+/// <summary>Цветовая палитра графиков</summary>
+/// <param name="Accent">Основной цвет графиков</param>
+/// <param name="Secondary">Дополнительный цвет графиков</param>
+/// <param name="Warning">Цвет предупреждений</param>
+/// <param name="Danger">Цвет полюсов</param>
+/// <param name="Text">Цвет текста</param>
+/// <param name="Muted">Цвет второстепенного текста</param>
+/// <param name="Grid">Цвет линий сетки</param>
+/// <param name="AxisLine">Цвет осей</param>
+/// <param name="LegendBackground">Цвет фона легенды</param>
+public sealed record PlotPalette(
+    OxyColor Accent,
+    OxyColor Secondary,
+    OxyColor Warning,
+    OxyColor Danger,
+    OxyColor Text,
+    OxyColor Muted,
+    OxyColor Grid,
+    OxyColor AxisLine,
+    OxyColor LegendBackground);
+
 /// <summary>Формирование и обновление графиков характеристик фильтра</summary>
 public static class FilterPlotFactory
 {
+    /// <summary>Тёмная палитра графиков</summary>
+    public static readonly PlotPalette DarkPalette = new(
+        Accent: OxyColor.Parse("#5AA9FF"),
+        Secondary: OxyColor.Parse("#4BE1B0"),
+        Warning: OxyColor.Parse("#FFB454"),
+        Danger: OxyColor.Parse("#FF6B8A"),
+        Text: OxyColor.Parse("#DCE6F5"),
+        Muted: OxyColor.Parse("#8894AA"),
+        Grid: OxyColor.Parse("#243049"),
+        AxisLine: OxyColor.Parse("#3A4A6B"),
+        LegendBackground: OxyColor.Parse("#CC161C2B"));
+
+    /// <summary>Светлая палитра графиков</summary>
+    public static readonly PlotPalette LightPalette = new(
+        Accent: OxyColor.Parse("#2F7DE1"),
+        Secondary: OxyColor.Parse("#0E9E78"),
+        Warning: OxyColor.Parse("#C77A00"),
+        Danger: OxyColor.Parse("#D64560"),
+        Text: OxyColor.Parse("#16202F"),
+        Muted: OxyColor.Parse("#5C6B82"),
+        Grid: OxyColor.Parse("#DCE3EE"),
+        AxisLine: OxyColor.Parse("#B7C3D4"),
+        LegendBackground: OxyColor.Parse("#E6FFFFFF"));
+
     /// <summary>Основной цвет графиков</summary>
-    public static readonly OxyColor Accent = OxyColor.Parse("#5AA9FF");
+    public static OxyColor Accent { get; private set; } = DarkPalette.Accent;
     /// <summary>Дополнительный цвет графиков</summary>
-    public static readonly OxyColor Secondary = OxyColor.Parse("#4BE1B0");
+    public static OxyColor Secondary { get; private set; } = DarkPalette.Secondary;
     /// <summary>Цвет предупреждений</summary>
-    public static readonly OxyColor Warning = OxyColor.Parse("#FFB454");
+    public static OxyColor Warning { get; private set; } = DarkPalette.Warning;
     /// <summary>Цвет полюсов</summary>
-    public static readonly OxyColor Danger = OxyColor.Parse("#FF6B8A");
+    public static OxyColor Danger { get; private set; } = DarkPalette.Danger;
     /// <summary>Цвет текста</summary>
-    public static readonly OxyColor Text = OxyColor.Parse("#DCE6F5");
+    public static OxyColor Text { get; private set; } = DarkPalette.Text;
     /// <summary>Цвет второстепенного текста</summary>
-    public static readonly OxyColor Muted = OxyColor.Parse("#8894AA");
+    public static OxyColor Muted { get; private set; } = DarkPalette.Muted;
     /// <summary>Цвет линий сетки</summary>
-    public static readonly OxyColor Grid = OxyColor.Parse("#243049");
+    public static OxyColor Grid { get; private set; } = DarkPalette.Grid;
     /// <summary>Цвет осей</summary>
-    public static readonly OxyColor AxisLine = OxyColor.Parse("#3A4A6B");
+    public static OxyColor AxisLine { get; private set; } = DarkPalette.AxisLine;
+
+    private static PlotPalette __Palette = DarkPalette;
 
     private const string __MagnitudeKey = "magnitude";
     private const int __PhaseSegmentsCount = 12;
@@ -36,6 +83,23 @@ public static class FilterPlotFactory
     private const string __PolesKey = "poles";
     private const string __ZerosKey = "zeros";
     private const string __WaveformKey = "waveform";
+
+    /// <summary>Применить палитру к вновь создаваемым графикам</summary>
+    /// <param name="Palette">Цветовая палитра</param>
+    public static void ApplyTheme(PlotPalette Palette)
+    {
+        ArgumentNullException.ThrowIfNull(Palette);
+
+        __Palette = Palette;
+        Accent = Palette.Accent;
+        Secondary = Palette.Secondary;
+        Warning = Palette.Warning;
+        Danger = Palette.Danger;
+        Text = Palette.Text;
+        Muted = Palette.Muted;
+        Grid = Palette.Grid;
+        AxisLine = Palette.AxisLine;
+    }
 
     /// <summary>Создать график АЧХ и ФЧХ</summary>
     /// <returns>Модель графика</returns>
@@ -482,6 +546,84 @@ public static class FilterPlotFactory
         return (upper, lower);
     }
 
+    /// <summary>Применить палитру к оформлению существующего графика</summary>
+    /// <param name="Model">Модель графика</param>
+    /// <param name="Palette">Цветовая палитра</param>
+    public static void Restyle(PlotModel Model, PlotPalette Palette)
+    {
+        ArgumentNullException.ThrowIfNull(Model);
+        ArgumentNullException.ThrowIfNull(Palette);
+
+        Model.TextColor = Palette.Text;
+        Model.TitleColor = Palette.Text;
+
+        foreach (var axis in Model.Axes)
+        {
+            axis.TextColor = Palette.Muted;
+            axis.TitleColor = Palette.Muted;
+            axis.AxislineColor = Palette.AxisLine;
+            axis.TicklineColor = Palette.AxisLine;
+            axis.MajorGridlineColor = Palette.Grid;
+            axis.MinorGridlineColor = Palette.Grid;
+        }
+
+        foreach (var legend in Model.Legends)
+        {
+            legend.LegendBackground = Palette.LegendBackground;
+            legend.LegendBorder = Palette.Grid;
+            legend.LegendTextColor = Palette.Text;
+        }
+
+        foreach (var series in Model.Series.OfType<LineSeries>())
+        {
+            if (series.Tag is string tag && tag.StartsWith("phase-", StringComparison.Ordinal))
+                series.Color = Palette.Secondary;
+            else if (Equals(series.Tag, __GroupDelayKey))
+                series.Color = Palette.Secondary;
+            else
+                series.Color = Palette.Accent;
+        }
+
+        foreach (var series in Model.Series.OfType<StemSeries>())
+        {
+            series.Color = Palette.Accent;
+            series.MarkerFill = Palette.Accent;
+            series.MarkerStroke = Palette.Accent;
+        }
+
+        foreach (var series in Model.Series.OfType<ScatterSeries>())
+        {
+            if (Equals(series.Tag, __PolesKey)) series.MarkerStroke = Palette.Danger;
+            else if (Equals(series.Tag, __ZerosKey)) series.MarkerStroke = Palette.Secondary;
+        }
+
+        foreach (var annotation in Model.Annotations)
+        {
+            annotation.TextColor = Palette.Muted;
+
+            switch (annotation)
+            {
+                case EllipseAnnotation ellipse:
+                    ellipse.Stroke = Palette.AxisLine;
+                    break;
+
+                case LineAnnotation { Tag: "pass-low" or "pass-high" } pass:
+                    pass.Color = Palette.Accent;
+                    break;
+
+                case LineAnnotation { Tag: "stop-low" or "stop-high" } stop:
+                    stop.Color = Palette.Warning;
+                    break;
+
+                case LineAnnotation line:
+                    line.Color = Palette.Grid;
+                    break;
+            }
+        }
+
+        Model.InvalidatePlot(true);
+    }
+
     private static PlotModel CreateModel() => new()
     {
         Background = OxyColors.Transparent,
@@ -499,7 +641,7 @@ public static class FilterPlotFactory
             {
                 LegendPosition = LegendPosition.TopRight,
                 LegendPlacement = LegendPlacement.Inside,
-                LegendBackground = OxyColor.Parse("#CC161C2B"),
+                LegendBackground = __Palette.LegendBackground,
                 LegendBorder = Grid,
                 LegendBorderThickness = 1,
                 LegendTextColor = Text,
