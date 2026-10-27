@@ -221,7 +221,8 @@ public static class SdrSignalProcessing
         for (var index = 0; index < Source.Length; index++)
         {
             var phase = phase_step * index;
-            var (lo_q, lo_i) = Math.SinCos(phase); 
+            var lo_q = Math.Sin(phase); // sin и cos отдельно для совместимости с netstandard2.0
+            var lo_i = Math.Cos(phase);
 
             var (sample_i, sample_q) = (Source[index].Real, Source[index].Imaginary);
 

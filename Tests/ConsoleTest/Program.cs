@@ -219,7 +219,7 @@ static void PlayAudio(float[] Audio, int SampleRate)
 {
     // Формируем одноканальный PCM16-поток для NAudio
     var wave_format = new WaveFormat(SampleRate, 16, 1);
-    using var wave_out = new WaveOutEvent();
+    using var wave_out = new WaveOut(); // NAudio 3: WaveOutEvent переименован в WaveOut
     var provider = new BufferedWaveProvider(wave_format)
     {
         DiscardOnBufferOverflow = true
